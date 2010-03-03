@@ -1,7 +1,8 @@
 #include "estadoImagenFija.h"
 #include "juego.h"
 
-estadoImagenFija::estadoImagenFija (Juego * p, Gosu::Graphics * graphics, wstring nombreImagen) : estado(p, graphics), nombreImagen(nombreImagen){
+estadoImagenFija::estadoImagenFija (Juego * p, wstring nombreImagen) 
+  : estado(p), nombreImagen(nombreImagen){
     cout << "* Se crea estadoImagenFija" << endl;
 }
 
@@ -12,7 +13,7 @@ void estadoImagenFija::lanzar(){
     alphaActual = 0;
 
     // Poblamos el puntero de la imagen de fondo
-    imgFondo.reset(new Gosu::Image(*graph, nombreImagen));
+    imgFondo.reset(new Gosu::Image(padre -> graphics(), nombreImagen));
 }
 
 void estadoImagenFija::update(){

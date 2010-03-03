@@ -7,6 +7,7 @@
 #include "estado.h"
 #include "estadoIntro.h"
 #include "estadoAutor.h"
+#include "estadoMenu.h"
 
 
 #define ANCHO 800
@@ -18,7 +19,7 @@ class Juego : public Gosu::Window{
     boost::scoped_ptr <estado> estadoActual;
 public:
     Juego() : Window(ANCHO, ALTO, FULLSCREEN, FPS){
-	estadoActual.reset(new estadoAutor(this, &graphics()));
+	estadoActual.reset(new estadoAutor(this));
 	cout << "Juego()" << endl;
 	estadoActual -> lanzar();
     }
@@ -34,9 +35,10 @@ public:
 
     void cambiarEstado(std::string destino){
 	if(destino == "estadoIntro"){
-	    estadoActual.reset(new estadoIntro(this, &graphics() ));
-	}else{
-//	    estadoActual.reset(new estadoDos());
+	    estadoActual.reset(new estadoIntro(this));
+	}
+	else if(destino == "estadoMenu"){
+	    estadoActual.reset(new estadoMenu(this));
 	}
 	estadoActual -> lanzar();
     }
