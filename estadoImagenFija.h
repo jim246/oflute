@@ -16,7 +16,7 @@ class estadoImagenFija : public estado{
     short alphaActual;
     unsigned long tiempoEsperaInicial;
 public:
-    estadoImagenFija(Juego * p, Gosu::Graphics * graphics, wstring nombreImagen);
+    estadoImagenFija(Juego * p, wstring nombreImagen);
     void lanzar ();
     void update();
     void draw();

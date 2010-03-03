@@ -7,7 +7,7 @@
 class estadoIntro : public estadoImagenFija{
 
 public:
-    estadoIntro(Juego * p, Gosu::Graphics * graphics);
+    estadoIntro(Juego * p);
     void accionPosterior();
 };
 

@@ -1,8 +1,8 @@
 #include "estadoAutor.h"
 #include "juego.h"
 
-estadoAutor::estadoAutor (Juego * p, Gosu::Graphics * graphics) : 
-    estadoImagenFija(p, graphics, 
+estadoAutor::estadoAutor (Juego * p) : 
+    estadoImagenFija(p,
 		     Gosu::resourcePrefix() + L"media/estadoAutor.png"){
     cout << "* Se crea estado autor" << endl;
 }
