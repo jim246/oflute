@@ -19,6 +19,7 @@ class Juego : public Gosu::Window{
 public:
     Juego() : Window(ANCHO, ALTO, FULLSCREEN, FPS){
 	estadoActual.reset(new estadoAutor(this, &graphics()));
+	cout << "Juego()" << endl;
 	estadoActual -> lanzar();
     }
 
