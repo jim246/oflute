@@ -1,25 +1,20 @@
 CC=g++
-CFLAGS=-Igosu `gosu/bin/gosu-config --cxxflags`
-LDFLAGS=-lrt -lasound -ljack -lpthread -Igosu `gosu/bin/gosu-config --libs --cxxflags` -lportaudio gosu/lib/libgosu.a
-OBJECTS=FFT.o versionConGosu.o 
+CFLAGS=-Igosu `gosu/bin/gosu-config --cxxflags` -g -Itinyxml
+LDFLAGS=-Igosu `gosu/bin/gosu-config --libs --cxxflags` gosu/lib/libgosu.a #tinyxml/tinyxml.a -lboost_regex -g
+OBJECTS=main.o estadoImagenFija.o estadoAutor.o estadoIntro.o
 EXE=programa
 
-actual: FFT.o versionConGosu.o
+actual: $(OBJECTS)
 	$(CC) $? $(LDFLAGS) -o $(EXE)
 
 
-
-FFT.o: FFT.cpp
+main.o: estado.h juego.h
+estadoIntro.o: estadoIntro.h estado.h estadoImagenFija.h estadoImagenFija.o
+estadoAutor.o: estadoAutor.h estado.h estadoImagenFija.h estadoImagenFija.o
+estadoImagenFija.o: estadoImagenFija.h estado.h
 
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $@
-
-
-legacy:
-	g++ FFT.cpp -c -o FFT.o 
-	g++ -lrt -lasound -ljack -lpthread -Igosu \
-	`gosu/bin/gosu-config --libs --cxxflags` \
-	-o programa versionConGosu.cpp -lportaudio gosu/lib/libgosu.a FFT.o
 
 clean:
 	rm -rf $(OBJECTS) $(EXE)
