@@ -7,6 +7,7 @@
 using namespace std;
 
 
+
 class Juego;
 
 class estado{
@@ -19,6 +20,9 @@ public:
     virtual void update() = 0;
     virtual void draw() = 0;
     virtual void buttonDown(Gosu::Button){};
+    virtual ~estado(){
+	cout << "** estado::DESTRUCTOR" << endl;
+    };
 };
 
 #endif /* _ESTADO_H_ */

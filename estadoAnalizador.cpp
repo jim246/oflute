@@ -1,9 +1,10 @@
 #include "estadoAnalizador.h"
 #include "juego.h"
+#include "colores.h"
 
 //int posFinalesY[] = {281, 333, 386, 441, 494 };
 estadoAnalizador::estadoAnalizador (Juego * p) : estado(p){
-    cout << "* Se crea estadoAnalizador" << endl;
+    cout << Colores::Verde + "estadoAnalizador::CONSTRUCTOR" + Colores::Reset << endl;
     lanzado = false;
 }
 
@@ -14,16 +15,22 @@ void estadoAnalizador::lanzar(){
     // Poblamos el puntero de las imágenes
     imgFondo.reset(new Gosu::Image(padre -> graphics(), 
 				   Gosu::resourcePrefix() + L"media/analizadorAssets/baseAnalizador.png"));
-    analizador.reset(new Analizador());
-    analizador -> configurarFlujo();
-    analizador -> iniciarAnalisis();
+    
+    if (!analizador . configurarFlujo()){
+	cout << "*** Error al configurar el flujo." << endl;
+    }
+
+    if(!analizador . iniciarAnalisis()){
+	cout << "*** Error al iniciar el análisis." << endl;
+    }//*/
 }
 
 void estadoAnalizador::update(){
     if(!lanzado) 
 	return;
-
-    cout << analizador -> notaActual() << endl;
+//    cout << "estadoAnalizador::update()" << endl;
+    //int a = analizador . notaActual();
+//    cout << analizador . notaActual() << endl;
 }
 
 void estadoAnalizador::draw(){
@@ -43,4 +50,8 @@ void estadoAnalizador::buttonDown(Gosu::Button boton){
 	padre -> close();
 //	accionPosterior();
     }
+}
+
+estadoAnalizador::~estadoAnalizador(){
+    cout << Colores::Rojo + "estadoAnalizador::~estadoAnalizador()" + Colores::Reset << endl;
 }

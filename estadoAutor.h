@@ -9,6 +9,7 @@ class estadoAutor : public estadoImagenFija{
 public:
     estadoAutor(Juego * p);
     void accionPosterior();
+    ~estadoAutor();
 };
 
 #endif /* _ESTADOAUTOR_H_ */
