@@ -22,9 +22,7 @@ public:
     void draw();
     void buttonDown(Gosu::Button boton);
     virtual void accionPosterior(){}
-    /*~estadoImagenFija(){
-	cout << "FISIKITO" << endl;
-    }//*/
+    virtual ~estadoImagenFija();
 };
 
 #endif /* _ESTADOIMAGENFIJA_H_ */

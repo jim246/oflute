@@ -2,9 +2,13 @@
 #define _ANALIZADOR_H_
 
 #include "global.h"
-#include <portaudio.h>
+#include "portaudio.h"
 
 #include <map>
+
+typedef int MY_TYPE;
+#define TIPO paInt16;
+
 
 class tipoBuffer{
 public:
@@ -27,7 +31,9 @@ public:
     tipoBuffer miBuffer;
 
 private:
-    bool iniciado;
+    bool iniciado, silencio;
+
+    PaError err;
 
     // Vector de harmónicos más importantes en la nota
     float mayores[5];
@@ -48,6 +54,12 @@ private:
 			    const PaStreamCallbackTimeInfo * timeInfo,
 			    PaStreamCallbackFlags statusFlags,
 			    void * data);
+    int updateBuffer2(const void * inB, 
+			    void * outB, 
+			    unsigned long nFrames, 
+			    const PaStreamCallbackTimeInfo * timeInfo,
+		      PaStreamCallbackFlags statusFlags);
+		
 };
 
 

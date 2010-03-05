@@ -21,6 +21,7 @@ public:
     void update();
     void draw();
     void buttonDown(Gosu::Button boton);
+    ~estadoMenu();
 };
 
 #endif

@@ -3,7 +3,7 @@
 
 estadoImagenFija::estadoImagenFija (Juego * p, wstring nombreImagen) 
   : estado(p), nombreImagen(nombreImagen){
-    cout << "* Se crea estadoImagenFija" << endl;
+    cout << "** estadoImagenFija::CONSTRUCTOR" << endl;
 }
 
 void estadoImagenFija::lanzar(){
@@ -65,4 +65,8 @@ void estadoImagenFija::buttonDown(Gosu::Button boton){
     }else{
 	cout << "KABOOM" << endl;
     }
+}
+
+estadoImagenFija::~estadoImagenFija(){
+    cout << "** estadoImagenFija::DESTRUCTOR" << endl;
 }

@@ -5,7 +5,7 @@
 
 int posFinalesY[] = {281, 333, 386, 441, 494 };
 estadoMenu::estadoMenu (Juego * p) : estado(p){
-    cout << "* Se crea estadoMenu" << endl;
+    cout << "** estadoMenu::CONSTRUCTOR" << endl;
 }
 
 void estadoMenu::lanzar(){
@@ -97,13 +97,17 @@ void estadoMenu::draw(){
 void estadoMenu::buttonDown(Gosu::Button boton){
     if(!lanzado) 
 	return;
-    if (boton == Gosu::kbEscape){
+    if (boton == Gosu::kbReturn){
 	padre -> close();
     }
-    else if(boton == Gosu::kbReturn){
+    else if(boton == Gosu::kbEscape){
 	padre -> cambiarEstado("estadoAnalizador");
     }
     else{
 	cout << "KABOOM" << endl;
     }
+}
+
+estadoMenu::~estadoMenu(){
+    cout << "estadoMenu::DESTRUCTOR" << endl << endl;
 }

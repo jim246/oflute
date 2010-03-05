@@ -4,7 +4,14 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+
+#include "colores.h"
+
+
 using namespace std;
+
 
 Analizador::Analizador() : iniciado(false)
 {
@@ -20,135 +27,49 @@ Analizador::Analizador() : iniciado(false)
 }
 
 bool Analizador::configurarFlujo(){
-    if(iniciado) return false;
-    iniciado = true;
+    PaStreamParameters inParameters, outParameters;
 
-    // Inicializamos PortAudio
-    PaError err = Pa_Initialize();
+    err = Pa_Initialize();
 
-    // Comprobamos que se ha inicialiazado
-    if(err != paNoError){
-	cerr << "ERROR: " 
-	     << Pa_GetErrorText(err) 
-	     << "(" << (int) err << ")" << endl;
-	return false;
-    }
+    if(err != paNoError) std::cout << "ERROR: " << (int) err << std::endl;
 
-    cout << "* PortAudio inicializado" << endl;
+    err = Pa_OpenDefaultStream(&stream,
+			       2,
+			       0,
+			       paInt16,
+			       44100,
+			       256,
+			       updateBuffer,
+			       (void*) this);
 
-    // Listamos los dispositivos compatibles
-    int numDevices;	
-    numDevices = Pa_GetDeviceCount();
-
-    // Comprobamos el número de dispositivos
-    if( numDevices < 0 ){
-	cerr << "ERROR en Pa_GetDeviceCount: " 
-	     << Pa_GetErrorText(err) 
-	     << "(" << (int) err << ")" << endl;
-	return false;
-    }
-
-    /*
-      const   PaDeviceInfo *deviceInfo;
-      for( int i=0; i<numDevices; i++ )
-      {
-      deviceInfo = Pa_GetDeviceInfo( i );
-      std::cout << "Nombre: " << deviceInfo->name << std::endl
-      << "SampleRate:" << deviceInfo->defaultSampleRate << std::endl
-      << "MaxInputChannels: " << deviceInfo->maxInputChannels << std::endl << std::endl;
-      } //*/
-    
-
-
-    // Parámetros para el flujo de salida - NO UTILIZADO
-
-    /*
-      PaStreamParameters outParameters;
-      outParameters.device = Pa_GetDefaultOutputDevice();
-      outParameters.channelCount = 2;
-      outParameters.sampleFormat = paInt16;
-      outParameters.hostApiSpecificStreamInfo = NULL;
-      outParameters.suggestedLatency = Pa_GetDeviceInfo( outParameters.device ) -> defaultLowOutputLatency; 
-      // */
-
-    // Parámetros para el flujo de entrada
-    PaStreamParameters inParameters;
-
-    // Dispositivo de entrada por defecto
-    inParameters.device = Pa_GetDefaultInputDevice();
-
-    // Entrada estéreo aunque el micrófono sea mono
-    inParameters.channelCount = 2;
-
-    // Tipo de datos para los samples
-    inParameters.sampleFormat = paInt16;
-    
-    inParameters.hostApiSpecificStreamInfo = NULL;
-
-    // Latencia, la menor posible
-    inParameters.suggestedLatency = Pa_GetDeviceInfo( inParameters.device )->defaultLowInputLatency;
-
-    // Comprobamos que el sistema acepta esta configuración
-    err = Pa_IsFormatSupported(&inParameters, NULL, 44100);
-	
-    if(err != paNoError){
-	cout << "ERROR en Pa_IsFormatSupported: " << Pa_GetErrorText(err) << std::endl;
-	return false;
-    }
-
-    // Abrimos el flujo
-    err = Pa_OpenStream(
-	&stream,
-	&inParameters,
-	NULL, // &outParameters,
-	44100, // Frecuencia de muestreo
-	256, // Capacidad del buffer
-	paClipOff,
-	updateBuffer,
-	this);
-    
     std::cout << "* Duración del búffer: " << 256.0/44100.0*1000 << "ms" << std::endl;
 
-    if(err != paNoError){
-	cerr << "ERROR: " 
-	     << Pa_GetErrorText(err) 
-	     << "(" << (int) err << ")" << endl;
-	return false;
-    }
+    if(err != paNoError) std::cout << "ERROR" << std::endl;
 
-} //
+    return true;
+} 
 
 
 
 
 bool Analizador::iniciarAnalisis(){
-    if(!iniciado) return false;
-    PaError err;
-    // Hacemos andar el flujo
     err = Pa_StartStream(stream);
-
-    // Comprobamos si hay errores
     if(err != paNoError){
-	cerr << "ERROR al iniciar el flujo: " 
-	     << Pa_GetErrorText(err) 
-	     << "(" << (int) err << ")" << endl;
+	std::cout << "ERROR" << std::endl;
 	return false;
     }
-
-    cout << "* Flujo UP AND RUNNING" << endl;
-
+    std::cout << "UP and running" << std::endl;
+    
     const PaStreamInfo * info = Pa_GetStreamInfo(stream);
-    std::cout << "** Input latency: " << info->inputLatency << std::endl
-	      << "** Output latency: " << info -> outputLatency << std::endl;
+    std::cout << "Input latency: " << info->inputLatency << std::endl
+	      << "Output latency: " << info -> outputLatency << std::endl;
+
+    return true;
 } // Fin de iniciarAnalisis
 
 t_altura Analizador::notaActual(){
     if(!iniciado) return Silencio;
-    if(mayores[0] == 0){
-	return Silencio;
-    }else{
-	return asociarNota(mayores[0]);
-    }
+    return Do5;
 }
 
 
@@ -156,16 +77,22 @@ bool Analizador::detenerAnalisis(){
     if(iniciado){
 	// Paramos el flujo
 	PaError err = Pa_StopStream(stream);
-	if(err != paNoError)
+	if(err != paNoError){
 	    cerr << "ERROR al detener el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+	    return false;
+	}
 
 	// Cerramos el flujo
 	err = Pa_CloseStream(stream);
-	if(err != paNoError)
+	if(err != paNoError){
 	    cerr << "ERROR al cerrar el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+	    return false;
+	}
 
 	iniciado = false;
     }
+
+    return true;
 }
 
 
@@ -176,20 +103,42 @@ int Analizador::updateBuffer(const void * inB,
 			     PaStreamCallbackFlags statusFlags,
 			     void * data)
 {
-
-    const int * nInB = (const int *) inB;
+    
     Analizador * puntero = (Analizador*) data;
 
+    return puntero -> updateBuffer2(inB, outB, nFrames, timeInfo, statusFlags);
+}
+
+int Analizador::updateBuffer2(const void * inB, 
+			     void * outB, 
+			     unsigned long nFrames, 
+			     const PaStreamCallbackTimeInfo * timeInfo,
+			     PaStreamCallbackFlags statusFlags)
+{
+    const MY_TYPE * nInB = (const MY_TYPE *) inB;
+	    
+    /*	
+	double sumaR = 0, sumaL = 0;
+
+	for(unsigned int i = 0; i < nFrames; ++i){
+	sumaR += pow(*nOutB++ = *nInB++, 2);		
+	sumaL += pow(*nOutB++ = *nInB++, 2);		
+	}
+	// Marcamos 3000 como máximo 
+	puntero -> fR = sqrt(sumaR/nFrames) / 3000; // /32768.0 * 100;
+	puntero -> fL = sqrt(sumaL/nFrames) / 3000; // /32768.0 * 100; //*/
+    
+	    
     for(unsigned int i = 0; i < nFrames; i+=2){
-	puntero->miBuffer.in[puntero->miBuffer.pos++] = *nInB++;
+	miBuffer.in[miBuffer.pos++] = *nInB++;
 	nInB++;
-	puntero->miBuffer.pos ++;
+	miBuffer.pos ++;
     }
 	    
-    if(puntero->miBuffer.pos > 4095){
-	puntero->miBuffer.pos = 0;
-	WindowFunc(3, 4096, puntero->miBuffer.in);
-	PowerSpectrum(4096, puntero->miBuffer.in, puntero->miBuffer.out);
+    if(miBuffer.pos > 4095){
+	miBuffer.pos = 0;
+	WindowFunc(3, 4096, miBuffer.in);
+	PowerSpectrum(4096, miBuffer.in, miBuffer.out);
 	float maxValue[] = {0,0,0};
 	float maxPos[3];
 		
@@ -198,38 +147,30 @@ int Analizador::updateBuffer(const void * inB,
 	for(int i = 450*2048/22050; i < 2048; ++i){
 	    for (int j = 0; j < 3; j++)
 	    {
-		if(puntero->miBuffer.out[i] > maxValue[j]){
-		    maxValue[j] = puntero->miBuffer.out[i];
+		if(miBuffer.out[i] > maxValue[j]){
+		    maxValue[j] = miBuffer.out[i];
 		    maxPos[j] = i;
 		    break;
 		}
 	    }			
 	    if(i*22050/2048 > 1500) break;
 	}
-	
-	/*
+		
 	std::cout << '\xd' << "Datos:" << std::setw(12) << maxPos[0]*22050/2048 
 		  << std::setw(12) << maxPos[1]*22050/2048 
 		  << std::setw(12) << maxPos[2]*22050/2048 
 		  << std::setw(12) << maxValue[0]
-		  << std::flush;		
-	//*/
+		  << std::flush;	//
 
-	if( maxValue[0] < 1e+16){
-	    puntero -> mayores[0] = 0;
-	}else{
-	    puntero -> mayores[0] = maxPos[0] * 22050 / 2048;
-	    puntero -> mayores[1] = maxPos[1] * 22050 / 2048;
-	    puntero -> mayores[2] = maxPos[2] * 22050 / 2048;
-	}
-	//puntero->outputLog << maxPos << std::endl;
+	 mayores[0] = maxPos[0] * 22050 / 2048;
+	 mayores[1] = maxPos[1] * 22050 / 2048;
+	 mayores[2] = maxPos[2] * 22050 / 2048;
+	//outputLog << maxPos << std::endl;
 
-
-	//
-    }
+	silencio = ((maxValue[0] < 1e+16)?true:false);
+    }//*/
 
     return paContinue;
-
 
 }
 

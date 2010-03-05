@@ -9,6 +9,7 @@ class estadoIntro : public estadoImagenFija{
 public:
     estadoIntro(Juego * p);
     void accionPosterior();
+    ~estadoIntro();
 };
 
 #endif /* _ESTADOINTRO_H_ */

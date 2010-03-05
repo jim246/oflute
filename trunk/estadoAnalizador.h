@@ -13,7 +13,7 @@ class Juego;
 class estadoAnalizador : public estado{
     bool lanzado;
     boost::scoped_ptr<Gosu::Image> imgFondo;
-    boost::scoped_ptr<Analizador> analizador;
+    Analizador analizador;
     
 public:
     estadoAnalizador(Juego * p);
@@ -21,7 +21,7 @@ public:
     void update();
     void draw();
     void buttonDown(Gosu::Button boton);
-    
+    ~estadoAnalizador();
 };
 
 #endif
