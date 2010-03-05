@@ -142,6 +142,16 @@ bool Analizador::iniciarAnalisis(){
 	      << "** Output latency: " << info -> outputLatency << std::endl;
 } // Fin de iniciarAnalisis
 
+t_altura Analizador::notaActual(){
+    if(!iniciado) return Silencio;
+    if(mayores[0] == 0){
+	return Silencio;
+    }else{
+	return asociarNota(mayores[0]);
+    }
+}
+
+
 bool Analizador::detenerAnalisis(){
     if(iniciado){
 	// Paramos el flujo
@@ -205,14 +215,17 @@ int Analizador::updateBuffer(const void * inB,
 		  << std::flush;		
 	//*/
 
-	
-	puntero -> mayores[0] = maxPos[0] * 22050 / 2048;
-	puntero -> mayores[1] = maxPos[1] * 22050 / 2048;
-	puntero -> mayores[2] = maxPos[2] * 22050 / 2048;
+	if( maxValue[0] < 1e+16){
+	    puntero -> mayores[0] = 0;
+	}else{
+	    puntero -> mayores[0] = maxPos[0] * 22050 / 2048;
+	    puntero -> mayores[1] = maxPos[1] * 22050 / 2048;
+	    puntero -> mayores[2] = maxPos[2] * 22050 / 2048;
+	}
 	//puntero->outputLog << maxPos << std::endl;
 
 
-	//puntero -> silencio = ((maxValue[0] < 1e+16)?true:false);
+	//
     }
 
     return paContinue;
