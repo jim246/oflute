@@ -14,11 +14,16 @@ void estadoAnalizador::lanzar(){
     // Poblamos el puntero de las imágenes
     imgFondo.reset(new Gosu::Image(padre -> graphics(), 
 				   Gosu::resourcePrefix() + L"media/analizadorAssets/baseAnalizador.png"));
+    analizador.reset(new Analizador());
+    analizador -> configurarFlujo();
+    analizador -> iniciarAnalisis();
 }
 
 void estadoAnalizador::update(){
     if(!lanzado) 
 	return;
+
+    cout << analizador -> notaActual() << endl;
 }
 
 void estadoAnalizador::draw(){
