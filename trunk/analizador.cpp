@@ -53,6 +53,7 @@ bool Analizador::configurarFlujo(){
 
 
 bool Analizador::iniciarAnalisis(){
+    cout << Colores::Rojo + "### Analizador::iniciarAnalisis ###" + Colores::Reset << endl;
     err = Pa_StartStream(stream);
     if(err != paNoError){
 	std::cout << "ERROR" << std::endl;
@@ -128,15 +129,15 @@ int Analizador::updateBuffer2(const void * inB,
 	puntero -> fR = sqrt(sumaR/nFrames) / 3000; // /32768.0 * 100;
 	puntero -> fL = sqrt(sumaL/nFrames) / 3000; // /32768.0 * 100; //*/
     
-	    
+//    cout << miBuffer.pos << endl;
+    
     for(unsigned int i = 0; i < nFrames; i+=2){
 	miBuffer.in[miBuffer.pos++] = *nInB++;
 	nInB++;
 	miBuffer.pos ++;
     }
-	    
+   
     if(miBuffer.pos > 4095){
-	miBuffer.pos = 0;
 	WindowFunc(3, 4096, miBuffer.in);
 	PowerSpectrum(4096, miBuffer.in, miBuffer.out);
 	float maxValue[] = {0,0,0};
