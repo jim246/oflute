@@ -6,6 +6,7 @@
 estadoAnalizador::estadoAnalizador (Juego * p) : estado(p){
     cout << Colores::Verde + "estadoAnalizador::CONSTRUCTOR" + Colores::Reset << endl;
     lanzado = false;
+    analizador = new Analizador();
 }
 
 void estadoAnalizador::lanzar(){
@@ -13,14 +14,13 @@ void estadoAnalizador::lanzar(){
     lanzado = true;
 
     // Poblamos el puntero de las imágenes
-    imgFondo.reset(new Gosu::Image(padre -> graphics(), 
-				   Gosu::resourcePrefix() + L"media/analizadorAssets/baseAnalizador.png"));
+//    imgFondo.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/baseAnalizador.png"));
     
-    if (!analizador . configurarFlujo()){
+    if (!analizador -> configurarFlujo()){
 	cout << "*** Error al configurar el flujo." << endl;
     }
 
-    if(!analizador . iniciarAnalisis()){
+    if(!analizador -> iniciarAnalisis()){
 	cout << "*** Error al iniciar el análisis." << endl;
     }//*/
 }
@@ -28,18 +28,17 @@ void estadoAnalizador::lanzar(){
 void estadoAnalizador::update(){
     if(!lanzado) 
 	return;
+
 //    cout << "estadoAnalizador::update()" << endl;
-    //int a = analizador . notaActual();
-//    cout << analizador . notaActual() << endl;
+    //int a = analizador -> notaActual();
+//    cout << analizador -> notaActual() << endl;
 }
 
 void estadoAnalizador::draw(){
     if(!lanzado) 
 	return;
 
-    imgFondo -> draw(0,0,1,
-		     1,1,
-		     Gosu::Color(255,255,255,255));      
+    //  imgFondo -> draw(0,0,1);
 }
 
 void estadoAnalizador::buttonDown(Gosu::Button boton){

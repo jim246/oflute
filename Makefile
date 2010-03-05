@@ -1,6 +1,7 @@
 CC=g++
-CFLAGS=-Igosu `gosu/bin/gosu-config --cxxflags` -g -Itinyxml
-LDFLAGS=-Igosu `gosu/bin/gosu-config --libs --cxxflags` gosu/lib/libgosu.a -lportaudio -g 
+CFLAGS=-Igosu `gosu/bin/gosu-config --cxxflags` -g -Itinyxml -Iportaudio/include
+LDFLAGS=-Igosu `gosu/bin/gosu-config --libs --cxxflags` gosu/lib/libgosu.a \
+	-lrt -lasound -ljack -lpthread portaudio/lib/.libs/libportaudio.a -g 
 #tinyxml/tinyxml.a -lboost_regex -g
 OBJECTS=main.o juego.o estadoImagenFija.o estadoAutor.o estadoIntro.o \
 	estadoMenu.o FFT.o analizador.o estadoAnalizador.o colores.o
