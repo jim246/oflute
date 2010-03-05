@@ -98,10 +98,12 @@ void estadoMenu::buttonDown(Gosu::Button boton){
     if(!lanzado) 
 	return;
     if (boton == Gosu::kbEscape){
-//	padre -> cambiarEstado("estadoIntro");
 	padre -> close();
-//	accionPosterior();
-    }else{
+    }
+    else if(boton == Gosu::kbReturn){
+	padre -> cambiarEstado("estadoAnalizador");
+    }
+    else{
 	cout << "KABOOM" << endl;
     }
 }

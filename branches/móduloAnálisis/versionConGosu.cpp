@@ -79,20 +79,6 @@ public:
 	    notas[1076.66] = "Do 6";
 	    notas[1195.09] = "Re 6";
 
-/*
-
-	    notas["Do5"] = 523.25;
-	    notas["Re5"] = 592.163;
-	    notas["Mi5"] = 656.763;
-	    notas["Fa5"] = 699.829;
-	    notas["Sol5"] = 785.692;
-	    notas["La5"] = 893.628;
-	    notas["Si5"] = 1001.29;
-	    notas["Do6"] = 106.66;
-	    notas["Re6"] = 1195.09; //*/
-
-	    //outputLog.open("lecturaFFT");
-
 	    setCaption(L"oFlute");
 	    std::wstring fichero = Gosu::sharedResourcePrefix();
 

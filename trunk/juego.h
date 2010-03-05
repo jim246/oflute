@@ -8,6 +8,7 @@
 #include "estadoIntro.h"
 #include "estadoAutor.h"
 #include "estadoMenu.h"
+#include "estadoAnalizador.h"
 
 
 #define ANCHO 800
@@ -39,6 +40,8 @@ public:
 	}
 	else if(destino == "estadoMenu"){
 	    estadoActual.reset(new estadoMenu(this));
+	}else if(destino == "estadoAnalizador"){
+	    estadoActual.reset(new estadoAnalizador(this));
 	}
 	estadoActual -> lanzar();
     }
