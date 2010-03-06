@@ -118,26 +118,13 @@ int Analizador::updateBuffer2(const void * inB,
 {
     const MY_TYPE * nInB = (const MY_TYPE *) inB;
 	    
-    /*	
-	double sumaR = 0, sumaL = 0;
-
-	for(unsigned int i = 0; i < nFrames; ++i){
-	sumaR += pow(*nOutB++ = *nInB++, 2);		
-	sumaL += pow(*nOutB++ = *nInB++, 2);		
-	}
-	// Marcamos 3000 como máximo 
-	puntero -> fR = sqrt(sumaR/nFrames) / 3000; // /32768.0 * 100;
-	puntero -> fL = sqrt(sumaL/nFrames) / 3000; // /32768.0 * 100; //*/
-    
-//    cout << miBuffer.pos << endl;
-    
     for(unsigned int i = 0; i < nFrames; i+=2){
 	miBuffer.in[miBuffer.pos++] = *nInB++;
 	nInB++;
 	miBuffer.pos ++;
     }
    
-    if(miBuffer.pos > 4095){
+/*    if(miBuffer.pos > 4095){
 	WindowFunc(3, 4096, miBuffer.in);
 	PowerSpectrum(4096, miBuffer.in, miBuffer.out);
 	float maxValue[] = {0,0,0};
