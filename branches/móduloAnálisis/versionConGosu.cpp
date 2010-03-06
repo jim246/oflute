@@ -1,10 +1,10 @@
 #include <Gosu/Gosu.hpp>
-#include <Gosu/AutoLink.hpp> // Makes life easier for Windows users compiling this.
+//#include <Gosu/AutoLink.hpp> // Makes life easier for Windows users compiling this.
 
 #include <boost/scoped_ptr.hpp> // Used throughout Gosu and this tutorial.
 #include <boost/shared_ptr.hpp> // Learn them, they're moving into standard C++!
 #include <boost/lexical_cast.hpp> // Could also use <sstream>, just for int <-> string conversion
-#include <boost/format.hpp>
+//#include <boost/format.hpp>
 
 #include <cmath>
 #include <cstdlib>
@@ -18,13 +18,6 @@
 
 
 #include "portaudio.h"
-
-#ifdef STATIC_LINK
-
-#include "pa_linux_alsa.h"
-#include "src/common/pa_types.h"
-
-#endif
 
 #include "FFT.h"
 
@@ -52,7 +45,7 @@ class GameWindow : public Gosu::Window
     std::map<double, std::string> notas;
     PaStream * stream;
     PaError err;
-    bool silencio;
+    bool silencio, lanzado;
     
 public:
     tipoBuffer miBuffer;
@@ -65,7 +58,7 @@ public:
 	  imagenL(graphics(), L"barra.png"),
 	  imagen3(graphics(), L"barra.png"),
 	  fuente(graphics(), Gosu::defaultFontName(), 50),
-	  silencio(false),
+	  silencio(false),lanzado(false),
 	  numSamples(2048)
 	{
 
@@ -82,7 +75,6 @@ public:
 	    setCaption(L"oFlute");
 	    std::wstring fichero = Gosu::sharedResourcePrefix();
 
-#ifdef AUDIO_ON
 	    PaStreamParameters inParameters, outParameters;
 
 	    err = Pa_Initialize();
@@ -125,7 +117,10 @@ public:
 	    inParameters.suggestedLatency = Pa_GetDeviceInfo( inParameters.device )->defaultLowInputLatency;
 
 	    err = Pa_IsFormatSupported(&inParameters, &outParameters, 44100);
-	
+
+	    deviceInfo = Pa_GetDeviceInfo (inParameters.device);
+	    std::cout << deviceInfo -> name << std::endl;
+	    
 	    if(err != paNoError){
 		std::cout << "ERROR: " << Pa_GetErrorText(err) << std::endl;
 		exit(1);
@@ -143,14 +138,8 @@ public:
 
 	    std::cout << "* Duración del búffer: " << 256.0/44100.0*1000 << "ms" << std::endl;
 
-#ifdef STATIC_LINK
-	    std::cout << "SizeOf paInt16: " << sizeof(PaInt16) << std::endl;
-	    PaAlsa_EnableRealtimeScheduling(stream, true);
-#endif
 	    if(err != paNoError) std::cout << "ERROR" << std::endl;
-	    // controlAudio -> openStream(&outputParameters, &inputParameters, FORMAT,
-	    // 			   44100, &framesDelBuffer, &(this->(*pointer)) );
-#endif
+
 	}
 
     ~GameWindow(){
@@ -169,8 +158,6 @@ public:
     }
 
     void lanzarAudio(){
-#ifdef AUDIO_ON
-//	controlAudio -> startStream();
 	err = Pa_StartStream(stream);
 	if(err != paNoError) std::cout << "ERROR" << std::endl;
 	std::cout << "UP and running" << std::endl;
@@ -178,7 +165,6 @@ public:
 	const PaStreamInfo * info = Pa_GetStreamInfo(stream);
 	std::cout << "Input latency: " << info->inputLatency << std::endl
 		  << "Output latency: " << info -> outputLatency << std::endl;
-#endif
     }
     
 #ifdef AUDIO_ON
@@ -193,16 +179,18 @@ public:
 	    const MY_TYPE * nInB = (const MY_TYPE *) inB;
 	    GameWindow * puntero = (GameWindow *) data;
 	    
-/*	    double sumaR = 0, sumaL = 0;
+	    /*	
+		double sumaR = 0, sumaL = 0;
 
-	    for(unsigned int i = 0; i < nFrames; ++i){
-	    sumaR += pow(*nOutB++ = *nInB++, 2);		
-	    sumaL += pow(*nOutB++ = *nInB++, 2);		
+		for(unsigned int i = 0; i < nFrames; ++i){
+		sumaR += pow(*nOutB++ = *nInB++, 2);		
+		sumaL += pow(*nOutB++ = *nInB++, 2);		
 	    }
 	    // Marcamos 3000 como máximo 
 	    puntero -> fR = sqrt(sumaR/nFrames) / 3000; // /32768.0 * 100;
-	    puntero -> fL = sqrt(sumaL/nFrames) / 3000; // /32768.0 * 100; //*/
-
+	    puntero -> fL = sqrt(sumaL/nFrames) / 3000; // /32768.0 * 100; 
+	    //*/
+	    
 	    for(unsigned int i = 0; i < nFrames; i+=2){
 		puntero->miBuffer.in[puntero->miBuffer.pos++] = *nInB++;
 		nInB++;
@@ -214,7 +202,7 @@ public:
 		WindowFunc(3, 4096, puntero->miBuffer.in);
 		PowerSpectrum(4096, puntero->miBuffer.in, puntero->miBuffer.out);
 		float maxValue[] = {0,0,0};
-		float maxPos[3],maxvalor=0;
+		float maxPos[3];
 		
 		// Lo ponemos para que empiece a mirar frecuencias a partir de 450Hz
 		// 
@@ -249,6 +237,10 @@ public:
 #endif
     void update()
 	{
+	    if(!lanzado){
+		lanzarAudio();
+		lanzado = true;
+	    }
 	}
 
     void draw()
@@ -256,7 +248,7 @@ public:
 
 	    // fR y fL estarán entre 450 y 1500 que son las frecuencias que abarcamos
 	    // el intervalo desplazado sería 0 - 1050
-	    if(silencio) return;
+	    if(silencio || !lanzado) return;
 
 	    imagenR.draw(50,
 			 10 + 400 * ((mayores[0] - 450)/1050), // x, y
@@ -304,7 +296,6 @@ public:
 int main(int argc, char* argv[])
 {
     GameWindow window;
-    window.lanzarAudio();
     window.show();
 
 }
