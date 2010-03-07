@@ -19,13 +19,14 @@ class Juego;
 
 class tipoBuffer{
 public:
-    tipoBuffer():pos(0){}
+    tipoBuffer():pos(0),silencio(false){}
     int pos;
     float in[4200]; // 4096
     float out[2048];
 
     // Vector de harmónicos más importantes en la nota
     float mayores[5];
+    bool silencio;
 };
 
 class estadoAnalizador : public estado{

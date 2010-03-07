@@ -93,7 +93,11 @@ void estadoAnalizador::draw(){
     case Re6:
 	p = imgRe6; break;
     }
-    p -> draw(584,138,2);
+
+    if(!miBuffer.silencio)
+	p -> draw(584,138,2);
+
+
     imgFondo -> draw(0,0,1);
 }
 
@@ -230,7 +234,7 @@ int estadoAnalizador::updateBuffer(const void * inB,
 	 miBuffer . mayores[2] = maxPos[2] * 22050 / 2048;
 	//outputLog << maxPos << std::endl;
 
-//	 puntero -> silencio = ((maxValue[0] < 1e+16)?true:false);//*/
+	 miBuffer . silencio = ((maxValue[0] < 1e+16)?true:false);//*/
     }//*/
 
     return paContinue;
