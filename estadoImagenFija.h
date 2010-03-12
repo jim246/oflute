@@ -7,7 +7,7 @@
 
 class Juego;
 
-class estadoImagenFija : public estado{
+class EstadoImagenFija : public Estado{
     bool lanzado;
     wstring nombreImagen;
     boost::scoped_ptr<Gosu::Image> imgFondo;
@@ -16,13 +16,13 @@ class estadoImagenFija : public estado{
     short alphaActual;
     unsigned long tiempoEsperaInicial;
 public:
-    estadoImagenFija(Juego * p, wstring nombreImagen);
+    EstadoImagenFija(Juego * p, wstring nombreImagen);
     void lanzar ();
     void update();
     void draw();
     void buttonDown(Gosu::Button boton);
     virtual void accionPosterior(){}
-    virtual ~estadoImagenFija();
+    virtual ~EstadoImagenFija();
 };
 
 #endif /* _ESTADOIMAGENFIJA_H_ */

@@ -7,7 +7,7 @@
 
 class Juego;
 
-class estadoMenu : public estado{
+class EstadoMenu : public Estado{
     bool lanzado;
     boost::scoped_ptr<Gosu::Image> imgFondo, btn1, btn2, btn3, btn4, btnUca;
 
@@ -16,12 +16,12 @@ class estadoMenu : public estado{
     unsigned long tiempoEsperaInicial;
     float posY[5]; //, posFinalesX[5];
 public:
-    estadoMenu(Juego * p);
+    EstadoMenu(Juego * p);
     void lanzar ();
     void update();
     void draw();
     void buttonDown(Gosu::Button boton);
-    ~estadoMenu();
+    ~EstadoMenu();
 };
 
 #endif

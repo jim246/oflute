@@ -4,12 +4,12 @@
 #include <cmath>
 
 int posFinalesY[] = {281, 333, 386, 441, 494 };
-estadoMenu::estadoMenu (Juego * p) : estado(p){
-    cout << "** estadoMenu::CONSTRUCTOR" << endl;
+EstadoMenu::EstadoMenu (Juego * p) : Estado(p){
+    cout << "** EstadoMenu::CONSTRUCTOR" << endl;
 }
 
-void estadoMenu::lanzar(){
-    cout << "* estadoMenu lanzado" << endl;
+void EstadoMenu::lanzar(){
+    cout << "* EstadoMenu lanzado" << endl;
     lanzado = true;
     estadoAnim = 0;
     alphaActual = 0;
@@ -36,7 +36,7 @@ void estadoMenu::lanzar(){
     
 }
 
-void estadoMenu::update(){
+void EstadoMenu::update(){
     if(!lanzado) 
 	return;
 
@@ -80,7 +80,7 @@ void estadoMenu::update(){
     }
 }
 
-void estadoMenu::draw(){
+void EstadoMenu::draw(){
     if(!lanzado) 
 	return;
 
@@ -94,7 +94,7 @@ void estadoMenu::draw(){
     
 }
 
-void estadoMenu::buttonDown(Gosu::Button boton){
+void EstadoMenu::buttonDown(Gosu::Button boton){
     if(!lanzado) 
 	return;
     if (boton == Gosu::kbReturn){
@@ -108,6 +108,6 @@ void estadoMenu::buttonDown(Gosu::Button boton){
     }
 }
 
-estadoMenu::~estadoMenu(){
-    cout << "estadoMenu::DESTRUCTOR" << endl << endl;
+EstadoMenu::~EstadoMenu(){
+    cout << "EstadoMenu::DESTRUCTOR" << endl << endl;
 }

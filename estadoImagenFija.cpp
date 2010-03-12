@@ -1,13 +1,13 @@
 #include "estadoImagenFija.h"
 #include "juego.h"
 
-estadoImagenFija::estadoImagenFija (Juego * p, wstring nombreImagen) 
-  : estado(p), nombreImagen(nombreImagen){
-    cout << "** estadoImagenFija::CONSTRUCTOR" << endl;
+EstadoImagenFija::EstadoImagenFija (Juego * p, wstring nombreImagen) 
+  : Estado(p), nombreImagen(nombreImagen){
+    cout << "** EstadoImagenFija::CONSTRUCTOR" << endl;
 }
 
-void estadoImagenFija::lanzar(){
-    cout << "* estadoImagenFija lanzado" << endl;
+void EstadoImagenFija::lanzar(){
+    cout << "* EstadoImagenFija lanzado" << endl;
     lanzado = true;
     estadoAnim = 0;
     alphaActual = 0;
@@ -16,7 +16,7 @@ void estadoImagenFija::lanzar(){
     imgFondo.reset(new Gosu::Image(padre -> graphics(), nombreImagen));
 }
 
-void estadoImagenFija::update(){
+void EstadoImagenFija::update(){
     if(!lanzado) return;
     short step = 6;
 
@@ -49,14 +49,14 @@ void estadoImagenFija::update(){
     }
 }
 
-void estadoImagenFija::draw(){
+void EstadoImagenFija::draw(){
     if(!lanzado) 
 	return;
     
     imgFondo -> draw(0,0,1,1,1,Gosu::Color(alphaActual,255,255,255));
 }
 
-void estadoImagenFija::buttonDown(Gosu::Button boton){
+void EstadoImagenFija::buttonDown(Gosu::Button boton){
     if(!lanzado) return;
     if (boton == Gosu::kbEscape){
 //	padre -> cambiarEstado("estadoIntro");
@@ -67,6 +67,6 @@ void estadoImagenFija::buttonDown(Gosu::Button boton){
     }
 }
 
-estadoImagenFija::~estadoImagenFija(){
-    cout << "** estadoImagenFija::DESTRUCTOR" << endl;
+EstadoImagenFija::~EstadoImagenFija(){
+    cout << "** EstadoImagenFija::DESTRUCTOR" << endl;
 }

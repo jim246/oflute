@@ -1,16 +1,16 @@
 #include "estadoIntro.h"
 #include "juego.h"
 
-estadoIntro::estadoIntro (Juego * p) : 
-    estadoImagenFija(p,
+EstadoIntro::EstadoIntro (Juego * p) : 
+    EstadoImagenFija(p,
 		     Gosu::resourcePrefix() + L"media/estadoIntro.png"){
-    cout << "** estadoIntro::CONSTRUCTOR" << endl;
+    cout << "** EstadoIntro::CONSTRUCTOR" << endl;
 }
 
-void estadoIntro::accionPosterior(){
+void EstadoIntro::accionPosterior(){
     padre -> cambiarEstado ("estadoMenu");
 }
 
-estadoIntro::~estadoIntro(){
-    cout << "** estadoIntro::DESTRUCTOR" << endl;
+EstadoIntro::~EstadoIntro(){
+    cout << "** EstadoIntro::DESTRUCTOR" << endl;
 }

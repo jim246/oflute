@@ -2,16 +2,16 @@
 #include "juego.h"
 #include "colores.h"
 
-estadoAutor::estadoAutor (Juego * p) : 
-    estadoImagenFija(p,
+EstadoAutor::EstadoAutor (Juego * p) : 
+    EstadoImagenFija(p,
 		     Gosu::resourcePrefix() + L"media/estadoAutor.png"){
-    cout << Colores::Verde + "** estadoAutor::CONSTRUCTOR" + Colores::Reset << endl;
+    cout << Colores::Verde + "** EstadoAutor::CONSTRUCTOR" + Colores::Reset << endl;
 }
 
-void estadoAutor::accionPosterior(){
+void EstadoAutor::accionPosterior(){
     padre -> cambiarEstado("estadoIntro");
 }
 
-estadoAutor::~estadoAutor(){
-    cout << Colores::Rojo  + "** estadoAutor::DESTRUCTOR" + Colores::Reset << endl;
+EstadoAutor::~EstadoAutor(){
+    cout << Colores::Rojo  + "** EstadoAutor::DESTRUCTOR" + Colores::Reset << endl;
 }
