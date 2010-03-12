@@ -10,7 +10,7 @@
 Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
     cout << "********* Juego::CONSTRUCTOR" << endl;
 
-    estadoActual.reset ( new estadoAutor(this) );
+    estadoActual.reset ( new EstadoAutor(this) );
     estadoActual -> lanzar();
 }
 
@@ -27,15 +27,15 @@ void Juego::cambiarEstado(std::string destino){
     cout << "**** juego::cambiarEstado(" << destino << ")" << endl;
 
     if(destino == "estadoIntro"){
-	estadoActual.reset(new estadoIntro(this));
+	estadoActual.reset(new EstadoIntro(this));
     }
 	
     else if(destino == "estadoMenu"){
-	estadoActual.reset(new estadoMenu(this));
+	estadoActual.reset(new EstadoMenu(this));
     }
 
     else if(destino == "estadoAnalizador"){
-	estadoActual.reset(new estadoAnalizador(this));
+	estadoActual.reset(new EstadoAnalizador(this));
     }
 	
     estadoActual -> lanzar();

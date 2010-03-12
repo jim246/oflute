@@ -29,7 +29,7 @@ public:
     bool silencio;
 };
 
-class estadoAnalizador : public estado{
+class EstadoAnalizador : public Estado{
     bool lanzado;
     boost::scoped_ptr<Gosu::Image> imgFondo;
     boost::shared_ptr<Gosu::Image> imgDo5, imgRe5, imgMi5, imgFa5, imgSol5, imgLa5, imgSi5, imgDo6, imgRe6;
@@ -64,7 +64,7 @@ public:
     int numSamples;
 
     static tipoBuffer miBuffer;
-    estadoAnalizador(Juego * p);
+    EstadoAnalizador(Juego * p);
     void lanzar ();
     void update();
     void draw();
@@ -73,7 +73,7 @@ public:
     bool iniciarAnalisis();
     t_altura notaActual();
     bool detenerAnalisis();
-    ~estadoAnalizador();
+    ~EstadoAnalizador();
 };
 
 #endif

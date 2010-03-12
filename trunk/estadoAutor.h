@@ -4,12 +4,12 @@
 #include "estadoImagenFija.h"
 #include "boost/scoped_ptr.hpp"
 
-class estadoAutor : public estadoImagenFija{
+class EstadoAutor : public EstadoImagenFija{
 
 public:
-    estadoAutor(Juego * p);
+    EstadoAutor(Juego * p);
     void accionPosterior();
-    ~estadoAutor();
+    ~EstadoAutor();
 };
 
 #endif /* _ESTADOAUTOR_H_ */

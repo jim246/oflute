@@ -18,11 +18,11 @@ using namespace std;
 typedef int MY_TYPE;
 #define TIPO paInt16;
 
-tipoBuffer estadoAnalizador::miBuffer;
+tipoBuffer EstadoAnalizador::miBuffer;
 
 //int posFinalesY[] = {281, 333, 386, 441, 494 };
-estadoAnalizador::estadoAnalizador (Juego * p) : estado(p), numSamples(2048){
-    cout << "estadoAnalizador::CONSTRUCTOR" << endl;
+EstadoAnalizador::EstadoAnalizador (Juego * p) : Estado(p), numSamples(2048){
+    cout << "EstadoAnalizador::CONSTRUCTOR" << endl;
     lanzado = true;    
     lanzar();
     miBuffer.pos = 0;
@@ -50,8 +50,8 @@ estadoAnalizador::estadoAnalizador (Juego * p) : estado(p), numSamples(2048){
 
 }
 
-void estadoAnalizador::lanzar(){
-    cout << "* estadoAnalizador lanzado" << endl;
+void EstadoAnalizador::lanzar(){
+    cout << "* EstadoAnalizador lanzado" << endl;
     lanzado = true;
 
     if (!configurarFlujo()){
@@ -63,12 +63,12 @@ void estadoAnalizador::lanzar(){
     }//*/
 }
 
-void estadoAnalizador::update(){
+void EstadoAnalizador::update(){
     if(!lanzado) 
 	lanzar();
 }
 
-void estadoAnalizador::draw(){
+void EstadoAnalizador::draw(){
     if(!lanzado) 
 	return;
 
@@ -101,7 +101,7 @@ void estadoAnalizador::draw(){
     imgFondo -> draw(0,0,1);
 }
 
-void estadoAnalizador::buttonDown(Gosu::Button boton){
+void EstadoAnalizador::buttonDown(Gosu::Button boton){
     if(!lanzado) 
 	return;
     if (boton == Gosu::kbEscape){
@@ -109,11 +109,11 @@ void estadoAnalizador::buttonDown(Gosu::Button boton){
     }
 }
 
-estadoAnalizador::~estadoAnalizador(){
-    cout << "estadoAnalizador::~estadoAnalizador()" << endl;
+EstadoAnalizador::~EstadoAnalizador(){
+    cout << "EstadoAnalizador::~EstadoAnalizador()" << endl;
 }
 
-bool estadoAnalizador::configurarFlujo(){
+bool EstadoAnalizador::configurarFlujo(){
 //    PaStreamParameters inParameters, outParameters;
 
     cout << "- Intentando Pa_Initialize..." << flush;
@@ -143,8 +143,8 @@ bool estadoAnalizador::configurarFlujo(){
     return true;
 } 
 
-bool estadoAnalizador::iniciarAnalisis(){
-    cout << "### estadoAnalizador::iniciarAnalisis ###" << endl;
+bool EstadoAnalizador::iniciarAnalisis(){
+    cout << "### EstadoAnalizador::iniciarAnalisis ###" << endl;
     err = Pa_StartStream(stream);
     if(err != paNoError){
 	std::cout << "ERROR" << std::endl;
@@ -159,7 +159,7 @@ bool estadoAnalizador::iniciarAnalisis(){
     return true;
 } // Fin de iniciarAnalisis
 
-bool estadoAnalizador::detenerAnalisis(){
+bool EstadoAnalizador::detenerAnalisis(){
     if(iniciado){
 	// Paramos el flujo
 	PaError err = Pa_StopStream(stream);
@@ -182,7 +182,7 @@ bool estadoAnalizador::detenerAnalisis(){
 }
 
 
-int estadoAnalizador::updateBuffer(const void * inB, 
+int EstadoAnalizador::updateBuffer(const void * inB, 
 			     void * outB, 
 			     unsigned long nFrames, 
 			     const PaStreamCallbackTimeInfo * timeInfo,
@@ -190,7 +190,7 @@ int estadoAnalizador::updateBuffer(const void * inB,
 			     void * data)
 {
     
-    estadoAnalizador * puntero = (estadoAnalizador*) data;
+    EstadoAnalizador * puntero = (EstadoAnalizador*) data;
     const MY_TYPE * nInB = (const MY_TYPE *) inB;
 	    
     for(unsigned int i = 0; i < nFrames; i+=2){
@@ -241,11 +241,11 @@ int estadoAnalizador::updateBuffer(const void * inB,
 
 }
 
-t_altura estadoAnalizador::notaActual(){
+t_altura EstadoAnalizador::notaActual(){
     return asociarNota(miBuffer .mayores[0]);
 }
 
-t_altura estadoAnalizador::asociarNota(double frecuencia){
+t_altura EstadoAnalizador::asociarNota(double frecuencia){
     std::map<double, t_altura> diferencias;
     std::map<double, t_altura>::iterator iter;
 
