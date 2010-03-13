@@ -2,15 +2,21 @@
 
 #include "estado.h"
 
-#include "estadoIntro.h"
-#include "estadoAutor.h"
+#include "estadoImagenFija.h"
+// #include "estadoIntro.h"
+// #include "estadoAutor.h"
+
 #include "estadoMenu.h"
 #include "estadoAnalizador.h"
 
 Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
     cout << "********* Juego::CONSTRUCTOR" << endl;
 
-    estadoActual.reset ( new EstadoAutor(this) );
+    estadoActual.reset ( 
+	new EstadoImagenFija(this,
+			     Gosu::resourcePrefix() + L"media/estadoAutor.png",
+			     "estadoIntro")
+	);
     estadoActual -> lanzar();
 }
 
@@ -27,7 +33,11 @@ void Juego::cambiarEstado(std::string destino){
     cout << "**** juego::cambiarEstado(" << destino << ")" << endl;
 
     if(destino == "estadoIntro"){
-	estadoActual.reset(new EstadoIntro(this));
+	estadoActual.reset(
+	    new EstadoImagenFija(this,
+				 Gosu::resourcePrefix() + L"media/estadoIntro.png",
+				 "estadoMenu")
+	    );
     }
 	
     else if(destino == "estadoMenu"){

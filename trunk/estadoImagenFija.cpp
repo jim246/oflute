@@ -1,8 +1,8 @@
 #include "estadoImagenFija.h"
 #include "juego.h"
 
-EstadoImagenFija::EstadoImagenFija (Juego * p, wstring nombreImagen) 
-  : Estado(p), nombreImagen(nombreImagen){
+EstadoImagenFija::EstadoImagenFija (Juego * p, wstring nombreImagen, string estadoSiguiente) 
+    : Estado(p), nombreImagen(nombreImagen), estadoSiguiente(estadoSiguiente){
     cout << "** EstadoImagenFija::CONSTRUCTOR" << endl;
 }
 
@@ -65,6 +65,10 @@ void EstadoImagenFija::buttonDown(Gosu::Button boton){
     }else{
 	cout << "KABOOM" << endl;
     }
+}
+
+void EstadoImagenFija::accionPosterior(){
+    padre -> cambiarEstado(estadoSiguiente);
 }
 
 EstadoImagenFija::~EstadoImagenFija(){
