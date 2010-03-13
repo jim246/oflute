@@ -36,6 +36,7 @@ class Juego;
  *
  * Esta clase abstracta tiene los métodos a los que llamará la clase de control (Juego).
  * Cada estado deberá implementar estos métodos con las acciones que crea conveniente.
+ * No puede instanciarse por sí misma, debe crearse una clase heredada.
 */
 
 class Estado{
@@ -47,14 +48,25 @@ protected:
     **/
     Juego * padre;
 public:
+    /**
+       @brief Constructor - Crea un estado.
+
+       Recibe un puntero a Juego, que será quien lleve el control de los estados.
+
+       @param p puntero a la clase Juego que controla la aplicación
+    **/
     Estado(Juego * p):padre(p){};
 
     /// Si es necesario lanzar acciones independientes del constructor, irán aquí.
     virtual void lanzar(){};
 
-    /// Virtual puro. 
+    /// Virtual puro. Cada estado implementa la lógica de control aquí.
     virtual void update() = 0;
+
+    /// Virtual puro. Cada estado implementa el redibujado aquí.
     virtual void draw() = 0;
+
+    /// Opcionalmente los estados pueden responder a la entrada redefiniendo este método.
     virtual void buttonDown(Gosu::Button){};
     virtual ~Estado(){
 	cout << "** Estado::DESTRUCTOR" << endl;

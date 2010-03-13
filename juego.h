@@ -47,6 +47,11 @@ class Estado;
 class Juego : public Gosu::Window{
     boost::scoped_ptr <Estado> estadoActual;
 public:
+    /** 
+     * @brief Constructor, inicio básico.
+     *
+     * Carga en memoria el primer estado y lo lanza.
+     */
     Juego();
 
     /**
@@ -84,6 +89,11 @@ public:
      * @param boton El botón que se ha pulsado.
      **/
     void buttonDown(Gosu::Button boton);
+
+    /** 
+     * @brief Destructor básico.
+     *
+     **/
     ~Juego();
 };
 
