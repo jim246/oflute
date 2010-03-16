@@ -4,7 +4,7 @@
 EstadoImagenFija::EstadoImagenFija (Juego * p, 
 				    wstring nombreImagen, 
 				    string estadoSiguiente, 
-				    unsigned tiempoEspera = 1000) 
+				    unsigned tiempoEspera) 
     : Estado(p), 
       nombreImagen(nombreImagen), 
       estadoSiguiente(estadoSiguiente),
