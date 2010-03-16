@@ -1,8 +1,14 @@
 #include "estadoImagenFija.h"
 #include "juego.h"
 
-EstadoImagenFija::EstadoImagenFija (Juego * p, wstring nombreImagen, string estadoSiguiente) 
-    : Estado(p), nombreImagen(nombreImagen), estadoSiguiente(estadoSiguiente){
+EstadoImagenFija::EstadoImagenFija (Juego * p, 
+				    wstring nombreImagen, 
+				    string estadoSiguiente, 
+				    unsigned tiempoEspera = 1000) 
+    : Estado(p), 
+      nombreImagen(nombreImagen), 
+      estadoSiguiente(estadoSiguiente),
+      tiempoEspera(tiempoEspera){
     cout << "** EstadoImagenFija::CONSTRUCTOR" << endl;
 }
 
@@ -33,7 +39,7 @@ void EstadoImagenFija::update(){
 
     // 1: Manteniendo
     else if(estadoAnim == 1){
-	if(Gosu::milliseconds() - tiempoEsperaInicial > 1000){
+	if(Gosu::milliseconds() - tiempoEsperaInicial > tiempoEspera){
 	    estadoAnim = 2;
 	}
     }
