@@ -1,6 +1,7 @@
 CC=g++
-CFLAGS=-Igosu `gosu/bin/gosu-config --cxxflags` -g -Itinyxml -Iportaudio/include
-LDFLAGS=-Igosu `gosu/bin/gosu-config --libs --cxxflags` gosu/lib/libgosu.a -lportaudio
+CFLAGS=-I. -Igosu `gosu/bin/gosu-config --cxxflags` -g -Itinyxml -Iportaudio/include -ISDL_ttf
+#LDFLAGS=-Igosu `gosu/bin/gosu-config --libs --cxxflags` gosu/lib/libgosu.a -lportaudio SDL_ttf/.libs/libSDL_ttf.a
+LDFLAGS=-Igosu `gosu/bin/gosu-config --libs --cxxflags` gosu/lib/libgosu.a -lportaudio -lSDL_ttf
 
 #-lrt -lasound -ljack -lpthread portaudio/lib/.libs/libportaudio.a -g 
 #tinyxml/tinyxml.a -lboost_regex -g
@@ -21,7 +22,7 @@ main.o: estado.h juego.h
 #estadoIntro.o: estadoIntro.h estado.h estadoImagenFija.h estadoImagenFija.o juego.h
 #estadoAutor.o: estadoAutor.h estado.h estadoImagenFija.h estadoImagenFija.o juego.h
 estadoImagenFija.o: estadoImagenFija.h estado.h juego.h
-estadoMenu.o: estado.h estadoMenu.h juego.h
+estadoMenu.o: estado.h estadoMenu.h juego.h customFont.h
 estadoAnalizador.o: estado.h estadoAnalizador.h juego.h
 
 colores.o: colores.h
