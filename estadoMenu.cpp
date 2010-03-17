@@ -28,6 +28,12 @@ void EstadoMenu::lanzar(){
     btnUca.reset(new Gosu::Image(padre -> graphics(), 
 				   Gosu::resourcePrefix() + L"media/menuAssets/btnUca.png"));
 
+
+    std::wstring resPref = Gosu::resourcePrefix();
+    
+    miFuente.reset(new customFont(padre -> graphics(),
+				  Gosu::resourcePrefix() + L"media/fuente1.ttf",
+				  27));
     // Inicialmente todos los botones se encuentran bajo el borde inferior de la pantalla
     for (int i = 0; i < 5; ++i)
     {
@@ -86,12 +92,28 @@ void EstadoMenu::draw(){
 
     imgFondo -> draw(0,0,1,1,1,Gosu::Color(alphaActual,255,255,255));
     
-    btn1 -> draw(0, posY[0], 2);
+    btn1 -> draw(0, posY[0], 2); 
     btn2 -> draw(0, posY[1], 3);
     btn3 -> draw(0, posY[2], 4);
     btn4 -> draw(0, posY[3], 5);
-    btnUca -> draw(0, posY[4], 6);
-    
+    btnUca -> draw(0, posY[4], 6); //*/
+
+    //  miFuente -> setHinting(0);
+    miFuente -> draw("Pulse escape para continuar hacia el analizador", 10, 10, 7,
+		     Gosu::Color(255,0,0,0));
+/*
+    miFuente -> setHinting(1);
+    miFuente -> draw("Pulse escape para continuar hacia el analizador", 10, 330, 7,
+		     Gosu::Color(255,255,255,255));
+
+    miFuente -> setHinting(2);
+    miFuente -> draw("Pulse escape para continuar hacia el analizador", 10, 360, 7,
+		     Gosu::Color(255,255,255,255));
+
+    miFuente -> setHinting(3);
+    miFuente -> draw("Pulse escape para continuar hacia el analizador", 10, 390, 7,
+		     Gosu::Color(255,255,255,255));
+//*/    
 }
 
 void EstadoMenu::buttonDown(Gosu::Button boton){
