@@ -28,7 +28,7 @@
 #include <boost/lexical_cast.hpp>
 
 #include <SDL.h>
-#include <SDL_ttf/SDL_ttf.h>
+#include <SDL/SDL_ttf.h>
 
 #include <iostream>
 
@@ -95,7 +95,7 @@ public:
     }
     void setHinting(unsigned i){
 	if(i > 3) return;
-	TTF_SetFontHinting(font, i);
+//	TTF_SetFontHinting(font, i);
     }
     double textWidth(const std::string& text){
 	double retorno;
