@@ -37,7 +37,7 @@ using std::endl;
 
 class customFont {
     Gosu::Graphics& graphics;
-    std::string fontName;
+    std::wstring fontName;
     unsigned fontHeight;
 
     boost::scoped_ptr<Gosu::Bitmap> mapaBMP;
@@ -61,7 +61,10 @@ class customFont {
     }
 
 public:
-    customFont (Gosu::Graphics &graphics, const std::string &fontName, unsigned fontHeight) :
+    customFont (Gosu::Graphics &graphics, 
+		const std::wstring &fontName, 
+		unsigned fontHeight,
+		unsigned fontFlags = 0) :
 	graphics(graphics), fontName(fontName), fontHeight(fontHeight){
 	
 	if( TTF_Init() < 0){
@@ -69,7 +72,13 @@ public:
 	    exit(-1);
 	}
 
-	font = TTF_OpenFont(fontName.c_str(), fontHeight);
+	font = TTF_OpenFont(Gosu::wstringToUTF8(fontName).c_str(), fontHeight);
+
+	if(fontFlags != 0){
+	    TTF_SetFontStyle(font, fontFlags);
+	}
+	 
+
 
 	if(font == NULL){
 	    cerr << "ERROR when trying to open font." << endl;
@@ -77,14 +86,17 @@ public:
 	}
     }
 
-    inline std::string name() const{
+    inline std::wstring name() const{
 	return fontName;
     }
 
     inline unsigned height() const{
 	return fontHeight;
     }
-
+    void setHinting(unsigned i){
+	if(i > 3) return;
+//	TTF_SetFontHinting(font, i);
+    }
     double textWidth(const std::string& text){
 	double retorno;
 	SDL_Surface * textSurface = createSurface(text, Gosu::Color::WHITE);

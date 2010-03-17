@@ -11,8 +11,8 @@ public:
     boost::scoped_ptr<customFont> myFont;
 
     pruebaFuentes() : Gosu::Window(640, 480, false),
-		      myFont(new customFont(graphics(), "consola.ttf", 30)){
-	cout << "* pruebaFuentes::CONSTRUCTOR" << endl;
+		      myFont(new customFont(graphics(), L"consola.ttf", 30, Gosu::ffUnderline)){
+	cout << ">>> pruebaFuentes::CONSTRUCTOR" << endl;
 
     }
 
@@ -35,6 +35,10 @@ public:
 	if(boton == Gosu::kbEscape){
 	    close();
 	}
+    }
+
+    ~pruebaFuentes(){
+	cout << "<<< pruebaFuentes::DESTRUCTOR" << endl;
     }
 };
 
