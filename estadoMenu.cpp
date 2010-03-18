@@ -34,6 +34,8 @@ void EstadoMenu::lanzar(){
     miFuente.reset(new customFont(padre -> graphics(),
 				  Gosu::resourcePrefix() + L"media/fuente1.ttf",
 				  27));
+
+    anim.reset(new Animacion(0, 600, 0, 281, 20, Animacion::tEaseOutQuart));
     // Inicialmente todos los botones se encuentran bajo el borde inferior de la pantalla
     for (int i = 0; i < 5; ++i)
     {
@@ -72,7 +74,9 @@ void EstadoMenu::update(){
 
     // 1: Sacando btn1
     else if(estadoAnim > 0 && estadoAnim < 6){
-	for (int i = 0; i < 5; ++i)
+	anim -> update();
+	posY[0] = anim -> getY();
+/*	for (int i = 0; i < 5; ++i)
 	{
 	    posY[i] += (posFinalesY[i] - posY[i]) / 10;
 //	    cout << posY[i] << endl;
@@ -82,7 +86,7 @@ void EstadoMenu::update(){
 		estadoAnim++;
 		cout << "Cambiando a estado: " << estadoAnim << endl;
 	    }
-	}
+	}//*/
     }
 }
 
