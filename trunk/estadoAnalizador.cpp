@@ -21,10 +21,8 @@ typedef int MY_TYPE;
 tipoBuffer EstadoAnalizador::miBuffer;
 
 //int posFinalesY[] = {281, 333, 386, 441, 494 };
-EstadoAnalizador::EstadoAnalizador (Juego * p) : Estado(p), numSamples(2048){
-    cout << "EstadoAnalizador::CONSTRUCTOR" << endl;
-    lanzado = true;    
-    lanzar();
+EstadoAnalizador::EstadoAnalizador (Juego * p) : Estado(p),  firstFrame(true), running(false), numSamples(2048){
+    cout << "+++ [CONSTRUCTOR] EstadoAnalizador" << endl;
     miBuffer.pos = 0;
 
     notas[523.25] = Do5;
@@ -37,7 +35,20 @@ EstadoAnalizador::EstadoAnalizador (Juego * p) : Estado(p), numSamples(2048){
     notas[1076.66] = Do6;
     notas[1195.09] = Re6;
 
+    cartelCargando.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/imgCargando.png"));
+     
+//    draw();
+    cargarRecursos();
+    lanzar();
+
+
+}
+
+void EstadoAnalizador::cargarRecursos(){
+
+
     imgFondo.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/baseAnalizador.png"));
+
     imgDo5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/do5.png"));
     imgRe5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/re5.png"));
     imgMi5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/mi5.png"));
@@ -48,12 +59,17 @@ EstadoAnalizador::EstadoAnalizador (Juego * p) : Estado(p), numSamples(2048){
     imgDo6.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/do6.png"));
     imgRe6.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/re6.png"));
 
+    //*/
 }
-
 void EstadoAnalizador::lanzar(){
     cout << "* EstadoAnalizador lanzado" << endl;
     lanzado = true;
+}
 
+void EstadoAnalizador::activar(){
+    if(running) return;
+    running = true;
+    
     if (!configurarFlujo()){
 	cout << "*** Error al configurar el flujo." << endl;
     }
@@ -63,14 +79,23 @@ void EstadoAnalizador::lanzar(){
     }//*/
 }
 
+
 void EstadoAnalizador::update(){
-    if(!lanzado) 
-	lanzar();
+    if(!firstFrame && !running)
+	activar();
 }
 
 void EstadoAnalizador::draw(){
-    if(!lanzado) 
+    if(!lanzado){
+
 	return;
+    }
+    if(firstFrame){
+	cartelCargando -> draw(ANCHO/2 - 200/2,
+			       ALTO/2 - 50/2, 1);
+	firstFrame = false;
+	return;
+    }
 
     boost::shared_ptr<Gosu::Image> p;
     switch(notaActual()){
@@ -92,10 +117,13 @@ void EstadoAnalizador::draw(){
 	p = imgDo6; break;
     case Re6:
 	p = imgRe6; break;
+    case Silencio:
+	break;
     }
 
-    if(!miBuffer.silencio)
+    if(!miBuffer.silencio){
 	p -> draw(584,138,2);
+    } //*/
 
 
     imgFondo -> draw(0,0,1);
@@ -190,7 +218,7 @@ int EstadoAnalizador::updateBuffer(const void * inB,
 			     void * data)
 {
     
-    EstadoAnalizador * puntero = (EstadoAnalizador*) data;
+//    EstadoAnalizador * puntero = (EstadoAnalizador*) data;
     const MY_TYPE * nInB = (const MY_TYPE *) inB;
 	    
     for(unsigned int i = 0; i < nFrames; i+=2){

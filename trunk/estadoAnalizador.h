@@ -54,8 +54,9 @@ class EstadoAnalizador : public Estado{
     bool lanzado;
     boost::scoped_ptr<Gosu::Image> imgFondo;
     boost::shared_ptr<Gosu::Image> imgDo5, imgRe5, imgMi5, imgFa5, imgSol5, imgLa5, imgSi5, imgDo6, imgRe6;
+    boost::scoped_ptr<Gosu::Image> cartelCargando;
 
-    bool iniciado, silencio;
+    bool iniciado, silencio, firstFrame, running;
 
     // Flujo principal
     PaStream * stream;
@@ -67,6 +68,8 @@ class EstadoAnalizador : public Estado{
 
     // Devuelve la nota asociada a una frecuencia
     t_altura asociarNota(double frecuencia);
+
+    void activar();
 
     // Función callback    
     static int updateBuffer(const void * inB, 
@@ -81,6 +84,7 @@ class EstadoAnalizador : public Estado{
 			    const PaStreamCallbackTimeInfo * timeInfo,
 		      PaStreamCallbackFlags statusFlags);
     
+    void cargarRecursos();
 public:
     int numSamples;
 

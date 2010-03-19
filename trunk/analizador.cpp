@@ -27,7 +27,7 @@ Analizador::Analizador() : iniciado(false)
 }
 
 bool Analizador::configurarFlujo(){
-    PaStreamParameters inParameters, outParameters;
+//    PaStreamParameters inParameters, outParameters;
 
     err = Pa_Initialize();
 
