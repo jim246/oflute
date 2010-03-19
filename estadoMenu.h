@@ -42,7 +42,9 @@ class EstadoMenu : public Estado{
     bool lanzado;
     boost::scoped_ptr<Gosu::Image> imgFondo, btn1, btn2, btn3, btn4, btnUca;
     boost::scoped_ptr<customFont> miFuente;
-    boost::scoped_ptr<Animacion> anim;
+
+    boost::scoped_ptr<Animacion> anim1, anim2, anim3, anim4, anim5;
+
     int estadoAnim;
     short alphaActual;
     unsigned long tiempoEsperaInicial;

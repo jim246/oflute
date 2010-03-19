@@ -6,7 +6,7 @@ LDFLAGS=-Igosu `gosu/bin/gosu-config --libs --cxxflags` gosu/lib/libgosu.a -lpor
 #tinyxml/tinyxml.a -lboost_regex -g
 
 OBJECTS=main.o juego.o estadoImagenFija.o \
-	estadoMenu.o FFT.o analizador.o estadoAnalizador.o colores.o
+	estadoMenu.o FFT.o analizador.o estadoAnalizador.o colores.o animacion.o
 
 EXE=programa
 
@@ -21,6 +21,7 @@ main.o: estado.h juego.h
 estadoImagenFija.o: estadoImagenFija.h estado.h juego.h
 estadoMenu.o: estado.h estadoMenu.h juego.h customFont.h animacion.h
 estadoAnalizador.o: estado.h estadoAnalizador.h juego.h
+animacion.o:animacion.h
 
 colores.o: colores.h
 

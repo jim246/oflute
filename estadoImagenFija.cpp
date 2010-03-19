@@ -9,7 +9,7 @@ EstadoImagenFija::EstadoImagenFija (Juego * p,
       nombreImagen(nombreImagen), 
       estadoSiguiente(estadoSiguiente),
       tiempoEspera(tiempoEspera){
-    cout << "** EstadoImagenFija::CONSTRUCTOR" << endl;
+    cout << "+++ [CONSTRUCTOR] EstadoImagenFija" << endl;
 }
 
 void EstadoImagenFija::lanzar(){
@@ -78,5 +78,5 @@ void EstadoImagenFija::accionPosterior(){
 }
 
 EstadoImagenFija::~EstadoImagenFija(){
-    cout << "** EstadoImagenFija::DESTRUCTOR" << endl;
+    cout << "--- [DESTRUCTOR] EstadoImagenFija" << endl;
 }

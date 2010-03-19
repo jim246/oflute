@@ -55,7 +55,9 @@ public:
 
        @param p puntero a la clase Juego que controla la aplicación
     **/
-    Estado(Juego * p):padre(p){};
+    Estado(Juego * p):padre(p){
+	cout << "+++ [CONSTRUCTOR] Estado" << endl;
+    };
 
     /// Si es necesario lanzar acciones independientes del constructor, irán aquí.
     virtual void lanzar(){};
@@ -69,7 +71,7 @@ public:
     /// Opcionalmente los estados pueden responder a la entrada redefiniendo este método.
     virtual void buttonDown(Gosu::Button){};
     virtual ~Estado(){
-	cout << "** Estado::DESTRUCTOR" << endl;
+	cout << "--- [DESTRUCTOR] Estado" << endl;
     };
 };
 

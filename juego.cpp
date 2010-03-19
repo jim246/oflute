@@ -10,7 +10,7 @@
 #include "estadoAnalizador.h"
 
 Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
-    cout << "********* Juego::CONSTRUCTOR" << endl;
+    cout << "+++ [CONSTRUCTOR] Juego" << endl;
 
     estadoActual.reset ( 
 	new EstadoImagenFija(this,
@@ -38,17 +38,19 @@ void Juego::cambiarEstado(std::string destino){
 				 Gosu::resourcePrefix() + L"media/estadoIntro.png",
 				 "estadoMenu")
 	    );
+	estadoActual -> lanzar();
     }
 	
     else if(destino == "estadoMenu"){
 	estadoActual.reset(new EstadoMenu(this));
+	estadoActual -> lanzar();
     }
 
     else if(destino == "estadoAnalizador"){
 	estadoActual.reset(new EstadoAnalizador(this));
     }
 	
-    estadoActual -> lanzar();
+
 }
     
 void Juego::buttonDown(Gosu::Button boton){
@@ -56,5 +58,5 @@ void Juego::buttonDown(Gosu::Button boton){
 }    
 
 Juego::~Juego(){
-    cout << "********* Juego::DESTRUCTOR" << endl;
+    cout << "--- [DESTRUCTOR] Juego" << endl;
 }

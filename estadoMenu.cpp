@@ -5,7 +5,7 @@
 
 int posFinalesY[] = {281, 333, 386, 441, 494 };
 EstadoMenu::EstadoMenu (Juego * p) : Estado(p){
-    cout << "** EstadoMenu::CONSTRUCTOR" << endl;
+    cout << "+++ [CONSTRUCTOR] EstadoMenu" << endl;
 }
 
 void EstadoMenu::lanzar(){
@@ -35,7 +35,16 @@ void EstadoMenu::lanzar(){
 				  Gosu::resourcePrefix() + L"media/fuente1.ttf",
 				  27));
 
-    anim.reset(new Animacion(0, 600, 0, 281, 20, Animacion::tEaseOutQuart));
+    anim1.reset(new Animacion(0, 600, // X inicial, Y inicial
+			     0, 281, // X final, Y final
+			     30, Animacion::tEaseOutQuart)); // duración, tipo
+
+
+    anim2.reset(new Animacion(0, 600, 0, 333, 30, Animacion::tEaseOutQuart, 10)); //*/
+    anim3.reset(new Animacion(0, 600, 0, 386, 30, Animacion::tEaseOutQuart, 20)); //*/
+    anim4.reset(new Animacion(0, 600, 0, 441, 30, Animacion::tEaseOutQuart, 30)); //*/
+    anim5.reset(new Animacion(0, 600, 0, 494, 30, Animacion::tEaseOutQuart, 40)); //*/
+
     // Inicialmente todos los botones se encuentran bajo el borde inferior de la pantalla
     for (int i = 0; i < 5; ++i)
     {
@@ -74,8 +83,18 @@ void EstadoMenu::update(){
 
     // 1: Sacando btn1
     else if(estadoAnim > 0 && estadoAnim < 6){
-	anim -> update();
-	posY[0] = anim -> getY();
+	anim1 -> update();
+	anim2 -> update();
+	anim3 -> update();
+	anim4 -> update();
+	anim5 -> update();
+
+	posY[0] = anim1 -> getY();
+	posY[1] = anim2 -> getY();
+	posY[2] = anim3 -> getY();
+	posY[3] = anim4 -> getY();
+	posY[4] = anim5 -> getY();
+
 /*	for (int i = 0; i < 5; ++i)
 	{
 	    posY[i] += (posFinalesY[i] - posY[i]) / 10;
@@ -94,8 +113,16 @@ void EstadoMenu::draw(){
     if(!lanzado) 
 	return;
 
-    imgFondo -> draw(0,0,1,1,1,Gosu::Color(alphaActual,255,255,255));
-    
+    cout << '\xd';
+    for (int i = 0; i < 5; ++i)
+    {
+	cout << i << ":" << posY[i] << "\t";
+    }
+    cout << flush; //*/
+
+
+    imgFondo -> draw(0,0,1);
+
     btn1 -> draw(0, posY[0], 2); 
     btn2 -> draw(0, posY[1], 3);
     btn3 -> draw(0, posY[2], 4);
@@ -135,5 +162,5 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 }
 
 EstadoMenu::~EstadoMenu(){
-    cout << "EstadoMenu::DESTRUCTOR" << endl << endl;
-}
+    cout << "--- [DESTRUCTOR] EstadoMenu" << endl << endl;
+}//*/

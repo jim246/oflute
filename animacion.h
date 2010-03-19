@@ -24,6 +24,9 @@
 #define _ANIMACION_H_
 
 #include <cmath>
+#include <iostream>
+using namespace std;
+
 
 class Animacion{
 public:
@@ -31,145 +34,41 @@ public:
 		   tEaseInCubic, tEaseOutCubic, tEaseInOutCubic,
 		   tEaseInQuart, tEaseOutQuart, tEaseInOutQuart};
 
-    Animacion(unsigned iX, unsigned iY, unsigned fX, unsigned fY, int d, tipoAnim anim = tEaseInQuad):
-	inicialX(iX), inicialY(iY), finalX(fX), finalY(fY), time(0), duration(d),  
-	changeX(finalX - inicialX), changeY(finalY - inicialY),
-	currX(inicialX), currY(inicialY), anim(anim){
-	cout << ">>> Animación::CONSTRUCTOR" << endl;
-    }
+    Animacion(unsigned iX, unsigned iY, 
+	      unsigned fX, unsigned fY, int d, 
+	      tipoAnim anim = tEaseInQuad, int e=0);
 
-    void init(){ time = 0; }
+    void init();
 
 // ######################################################
 // Ecuaciones de tweening
 
-    float easeInQuad (float t, float b, float c, float d) {
-	t/=d;
-	return c*t*t + b;
-    };
-
-    float easeOutQuad(float t, float b, float c, float d) {
-	t/=d;
-	return -c *(t)*(t-2) + b;
-    };
+    float easeInQuad (float t, float b, float c, float d);
+    float easeOutQuad(float t, float b, float c, float d);
+    float easeInOutQuad(float t, float b, float c, float d);
     
-    float easeInOutQuad(float t, float b, float c, float d) {
-	t /= d/2;
-	if (t < 1){
-	    return c/2*t*t + b;
-	}else{
-	    --t;
-	    return -c/2 * ((t)*(t-2) - 1) + b;
-	}
-    };
-    
-    float easeInCubic(float t, float b, float c, float d) {
-	t/=d;
-	return c*(t)*t*t + b;
-    };
-
-    float easeOutCubic(float t, float b, float c, float d) {
-	t=t/d-1;
-	return c*(t*t*t + 1) + b;
-    };
-
-    float easeInOutCubic(float t, float b, float c, float d) {
-	t/=d/2;
-	if ((t) < 1){
-	    return c/2*t*t*t + b;
-	}else{
-	    t-=2;
-	    return c/2*((t)*t*t + 2) + b;
-	}
-    };
+    float easeInCubic(float t, float b, float c, float d) ;
+    float easeOutCubic(float t, float b, float c, float d) ;
+    float easeInOutCubic(float t, float b, float c, float d);
 
 
-    float easeInQuart(float t, float b, float c, float d) {
-	t/=d;
-	return c*(t)*t*t*t + b;
-    };
+    float easeInQuart(float t, float b, float c, float d) ;
+    float easeOutQuart(float t, float b, float c, float d) ;
+    float easeInOutQuart(float t, float b, float c, float d);
 
-    float easeOutQuart(float t, float b, float c, float d) {
-	t=t/d-1;
-	return -c * ((t)*t*t*t - 1) + b;
-    };
+    float getX();
+    float getY();
 
-    float easeInOutQuart(float t, float b, float c, float d) {
-	t/=d/2;
-	if ((t) < 1){
-	    return c/2*t*t*t*t + b;
-	}else{
-	    t-=2;
-	    return -c/2 * ((t)*t*t*t - 2) + b;
-	}
-    };
-
-    float getX() { return currX; }
-    float getY() { return currY; }
-
-    void update(){
-	if(time > duration){
-	    currX = finalX;
-	    currY = finalY;
-	}else{
-	    switch(anim){
-	    case tEaseInQuad:
-		currX = easeInQuad(time, inicialX, changeX, duration);
-		currY = easeInQuad(time++, inicialY, changeY, duration);
-		break;
-	    case tEaseOutQuad:
-		currX = easeOutQuad(time, inicialX, changeX, duration);
-		currY = easeOutQuad(time++, inicialY, changeY, duration);
-		break;
-	    case tEaseInOutQuad:
-		currX = easeInOutQuad(time, inicialX, changeX, duration);
-		currY = easeInOutQuad(time++, inicialY, changeY, duration);
-		break;
-
-	    case tEaseInCubic:
-		currX = easeInCubic(time, inicialX, changeX, duration);
-		currY = easeInCubic(time++, inicialY, changeY, duration);
-		break;
-	    case tEaseOutCubic:
-		currX = easeOutCubic(time, inicialX, changeX, duration);
-		currY = easeOutCubic(time++, inicialY, changeY, duration);
-		break;
-	    case tEaseInOutCubic:
-		currX = easeInOutCubic(time, inicialX, changeX, duration);
-		currY = easeInOutCubic(time++, inicialY, changeY, duration);
-		break;
-
-
-	    case tEaseInQuart:
-		currX = easeInQuart(time, inicialX, changeX, duration);
-		currY = easeInQuart(time++, inicialY, changeY, duration);
-		break;
-	    case tEaseOutQuart:
-		currX = easeOutQuart(time, inicialX, changeX, duration);
-		currY = easeOutQuart(time++, inicialY, changeY, duration);
-		break;
-	    case tEaseInOutQuart:
-		currX = easeInOutQuart(time, inicialX, changeX, duration);
-		currY = easeInOutQuart(time++, inicialY, changeY, duration);
-		break;
-	    }
-	}
-    }
-
+    void update();
     
 
-    ~Animacion(){
-	cout << "<<< Animación::DESTRUCTOR" << endl;
-    }
+    ~Animacion();
 
 private:
     unsigned inicialX, inicialY, finalX, finalY;
-    unsigned time, duration;
-    int changeX, changeY;
-    
+    int time, duration, esperaInicial;
     float currX, currY;
-    float (*puntero) (float, float, float, float);
-
+    int changeX, changeY;
     tipoAnim anim;
 
 };
