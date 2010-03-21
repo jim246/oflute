@@ -17,6 +17,8 @@ Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
 			     Gosu::resourcePrefix() + L"media/estadoAutor.png",
 			     "estadoIntro")
 	);
+
+    cursor.reset( new Gosu::Image(graphics(), Gosu::resourcePrefix() + L"media/pointerCursor.png"));
     estadoActual -> lanzar();
 }
 
@@ -25,6 +27,7 @@ void Juego::update(){
 }
 
 void Juego::draw(){
+    cursor -> draw(input().mouseX(), input().mouseY(), 999);
     estadoActual -> draw();
 }
 

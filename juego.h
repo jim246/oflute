@@ -46,6 +46,7 @@ class Estado;
 
 class Juego : public Gosu::Window{
     boost::scoped_ptr <Estado> estadoActual;
+    boost::scoped_ptr <Gosu::Image> cursor;
 public:
     /** 
      * @brief Constructor, inicio básico.

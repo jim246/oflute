@@ -24,6 +24,9 @@
 
 #include "estado.h"
 #include "customFont.h"
+
+#include "botonMenu.h"
+
 #include "animacion.h"
 
 #include "boost/scoped_ptr.hpp"
@@ -40,7 +43,8 @@ class Juego;
  */
 class EstadoMenu : public Estado{
     bool lanzado;
-    boost::scoped_ptr<Gosu::Image> imgFondo, btn1, btn2, btn3, btn4, btnUca;
+    boost::scoped_ptr<Gosu::Image> imgFondo, btnUca;
+    boost::scoped_ptr<BotonMenu> btn1, btn2, btn3, btn4;
     boost::scoped_ptr<customFont> miFuente;
 
     boost::scoped_ptr<Animacion> anim1, anim2, anim3, anim4, anim5;
