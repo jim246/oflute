@@ -32,15 +32,20 @@
 
 #include <iostream>
 
+#include <cstdio>
+
+using std::cout;
 using std::cerr;
 using std::endl;
 
 class customFont {
     Gosu::Graphics& graphics;
+    Gosu::Color lastColor;
+
     std::wstring fontName;
     unsigned fontHeight;
 
-    boost::scoped_ptr<Gosu::Bitmap> mapaBMP;
+    
     boost::scoped_ptr<Gosu::Image> imagen;
     TTF_Font * font;
 
@@ -48,8 +53,9 @@ class customFont {
 
     SDL_Surface * createSurface(const std::string& text, Gosu::Color c){
 	SDL_Surface * textSurface;
-	SDL_Color fontColor = {c.red(), c.green(), c.blue()};
-	
+//	cout << (int)c.red() << " " << (int) c.green() << " " << (int)c.blue() << endl;
+	SDL_Color fontColor = {(int)c.red(), (int)c.green(), (int)c.blue()};
+
 	textSurface = TTF_RenderUTF8_Blended(font, text.c_str(), fontColor);
 	
 	if(textSurface == NULL){
@@ -65,7 +71,8 @@ public:
 		const std::wstring &fontName, 
 		unsigned fontHeight,
 		unsigned fontFlags = 0) :
-	graphics(graphics), fontName(fontName), fontHeight(fontHeight){
+	graphics(graphics), lastColor(Gosu::Color::WHITE), fontName(fontName), 
+	fontHeight(fontHeight), lastText(""){
 	
 	if( TTF_Init() < 0){
 	    cerr << "ERROR when initialising TTF engine." << endl;
@@ -74,12 +81,19 @@ public:
 
 	font = TTF_OpenFont(Gosu::wstringToUTF8(fontName).c_str(), fontHeight);
 
+	if(font == NULL){
+	    cout << "ERROR on TTF_OpenFont: " << TTF_GetError() << endl;
+	    exit(-1);
+	}
+
 	if(fontFlags != 0){
-	    TTF_SetFontStyle(font, fontFlags);
+	    int style = 0;
+	    if(fontFlags & Gosu::ffBold){
+		style |= TTF_STYLE_BOLD;
+	    }
+//	    TTF_SetFontStyle(font, style);
 	}
 	 
-
-
 	if(font == NULL){
 	    cerr << "ERROR when trying to open font." << endl;
 	    exit(-1);
@@ -95,26 +109,38 @@ public:
     }
     void setHinting(unsigned i){
 	if(i > 3) return;
-//	TTF_SetFontHinting(font, i);
     }
+
     double textWidth(const std::string& text){
 	double retorno;
-	SDL_Surface * textSurface = createSurface(text, Gosu::Color::WHITE);
-	if(textSurface == NULL){
-	    retorno = -1;
+	if(text != lastText){
+	    SDL_Surface * textSurface = createSurface(text, lastColor);
+	    if(textSurface == NULL){
+		retorno = -1;
+	    }else{
+		retorno = textSurface -> w;
+	    }
+	    
+	    SDL_FreeSurface (textSurface);
 	}else{
-	    retorno = textSurface -> w;
+	    retorno = imagen -> width();
 	}
-	
-	SDL_FreeSurface (textSurface);
-
+	    
 	return retorno;
     }
 
-    void draw(const std::string& text, double x, double y, Gosu::ZPos z, Gosu::Color c = Gosu::Color::WHITE){
+    void draw(const std::string& text, double x, double y, 
+	      Gosu::ZPos z, Gosu::Color c){
+
+	/*
+	cout << "text:" << text << '\t'
+	     << "lastTexT:" << lastText << '\t'
+	     << ((text==lastText)?"no_redraw":"redraw") << endl; //*/
+	
+
 
 	// Avoid redrawing the text if it hasn't changed
-	if(text != lastText){
+	if(text != lastText || lastColor != c){
 	    SDL_Surface * textSurface = createSurface(text, c);
 	    
 	    if(textSurface == NULL){
@@ -124,7 +150,7 @@ public:
 	    int w = textSurface -> w,
 		h = textSurface -> h;
 
-	    mapaBMP.reset(new Gosu::Bitmap());
+	    boost::scoped_ptr<Gosu::Bitmap> mapaBMP (new Gosu::Bitmap());
 	    mapaBMP -> resize(w, h);
 
 	    unsigned * source = (unsigned *) textSurface -> pixels;
@@ -135,14 +161,15 @@ public:
 		    *dest++ = *source++;
 		}
 	    }
-
-	    SDL_FreeSurface (textSurface);
 	    imagen.reset(new Gosu::Image(graphics, *mapaBMP));
+	    SDL_FreeSurface (textSurface);
 	}
 
-	imagen -> draw(x,y,z);
+	
+	imagen -> draw(x,y,z, 1,1, Gosu::Color(c.alpha(), 255, 255, 255));
 
 	lastText = text;	
+	lastColor = c;
     }
 
     ~customFont(){

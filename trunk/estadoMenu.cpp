@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-int posFinalesY[] = {281, 333, 386, 441, 494 };
+int posFinalesY[] = {281, 332, 383, 434, 485 };
 EstadoMenu::EstadoMenu (Juego * p) : Estado(p){
     cout << "+++ [CONSTRUCTOR] EstadoMenu" << endl;
 }
@@ -17,16 +17,31 @@ void EstadoMenu::lanzar(){
     // Poblamos el puntero de las imágenes
     imgFondo.reset(new Gosu::Image(padre -> graphics(), 
 				   Gosu::resourcePrefix() + L"media/menuAssets/menuBase.png"));
-    btn1.reset(new Gosu::Image(padre -> graphics(), 
+
+/*    btn1.reset(new Gosu::Image(padre -> graphics(), 
 				   Gosu::resourcePrefix() + L"media/menuAssets/btn1.png"));
     btn2.reset(new Gosu::Image(padre -> graphics(), 
 				   Gosu::resourcePrefix() + L"media/menuAssets/btn2.png"));
     btn3.reset(new Gosu::Image(padre -> graphics(), 
 				   Gosu::resourcePrefix() + L"media/menuAssets/btn3.png"));
     btn4.reset(new Gosu::Image(padre -> graphics(), 
-				   Gosu::resourcePrefix() + L"media/menuAssets/btn4.png"));
+    Gosu::resourcePrefix() + L"media/menuAssets/btn4.png")); //
+//*/
+
+    int pInit = 290;
+    for (int i = 0; i < 5; ++i)
+    {
+	posFinalesY[i] = pInit + i*51;
+    }
+
     btnUca.reset(new Gosu::Image(padre -> graphics(), 
-				   Gosu::resourcePrefix() + L"media/menuAssets/btnUca.png"));
+				 Gosu::resourcePrefix() + L"media/menuAssets/btnUca.png"));//*/
+
+    btn1.reset(new BotonMenu(padre -> graphics(), "Analizador de notas", Gosu::Color(255,3,69,90)));
+    btn2.reset(new BotonMenu(padre -> graphics(), "Canciones (Inactivo)", Gosu::Color(255,34,139,114)));
+    btn3.reset(new BotonMenu(padre -> graphics(), "Opciones (Inactivo)", Gosu::Color(255,188,216,56)));
+    btn4.reset(new BotonMenu(padre -> graphics(), "Salir", Gosu::Color(255,245,215,19)));
+
 
 
     std::wstring resPref = Gosu::resourcePrefix();
@@ -36,14 +51,14 @@ void EstadoMenu::lanzar(){
 				  27));
 
     anim1.reset(new Animacion(0, 600, // X inicial, Y inicial
-			     0, 281, // X final, Y final
+			     0, posFinalesY[0], // X final, Y final
 			     30, Animacion::tEaseOutQuart)); // duración, tipo
 
 
-    anim2.reset(new Animacion(0, 600, 0, 333, 30, Animacion::tEaseOutQuart, 10)); //*/
-    anim3.reset(new Animacion(0, 600, 0, 386, 30, Animacion::tEaseOutQuart, 20)); //*/
-    anim4.reset(new Animacion(0, 600, 0, 441, 30, Animacion::tEaseOutQuart, 30)); //*/
-    anim5.reset(new Animacion(0, 600, 0, 494, 30, Animacion::tEaseOutQuart, 40)); //*/
+    anim2.reset(new Animacion(0, 600, 0, posFinalesY[1], 30, Animacion::tEaseOutQuart, 10)); //*/
+    anim3.reset(new Animacion(0, 600, 0, posFinalesY[2], 30, Animacion::tEaseOutQuart, 20)); //*/
+    anim4.reset(new Animacion(0, 600, 0, posFinalesY[3], 30, Animacion::tEaseOutQuart, 30)); //*/
+    anim5.reset(new Animacion(0, 600, 0, posFinalesY[4], 30, Animacion::tEaseOutQuart, 40)); //*/
 
     // Inicialmente todos los botones se encuentran bajo el borde inferior de la pantalla
     for (int i = 0; i < 5; ++i)
@@ -95,31 +110,12 @@ void EstadoMenu::update(){
 	posY[3] = anim4 -> getY();
 	posY[4] = anim5 -> getY();
 
-/*	for (int i = 0; i < 5; ++i)
-	{
-	    posY[i] += (posFinalesY[i] - posY[i]) / 10;
-//	    cout << posY[i] << endl;
-	    
-	    if(abs(posFinalesY[i] - (posY[i])) < 0.01){
-		posY[i] = posFinalesY[i];
-		estadoAnim++;
-		cout << "Cambiando a estado: " << estadoAnim << endl;
-	    }
-	}//*/
     }
 }
 
 void EstadoMenu::draw(){
     if(!lanzado) 
 	return;
-
-    cout << '\xd';
-    for (int i = 0; i < 5; ++i)
-    {
-	cout << i << ":" << posY[i] << "\t";
-    }
-    cout << flush; //*/
-
 
     imgFondo -> draw(0,0,1);
 
@@ -155,6 +151,11 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
     }
     else if(boton == Gosu::kbEscape){
 	padre -> cambiarEstado("estadoAnalizador");
+    }
+    else if(boton == Gosu::msLeft){
+	int x = padre -> input().mouseX();
+	int y = padre -> input().mouseY();
+	cout << "*** LMB @ (" << x << "," << y << ")" << endl;
     }
     else{
 	cout << "KABOOM" << endl;
