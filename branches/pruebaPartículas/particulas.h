@@ -30,7 +30,7 @@ public:
 	partc1 . reset(new Gosu::Image(g, L"partc1.png"));
 	partc2 . reset(new Gosu::Image(g, L"partc2.png"));
 
-	anim . reset(new Animacion(0, 0, 1, 1, duracion, Animacion::tEaseOutQuart));
+	anim . reset(new Animacion(0, 0, 1, 1, duracion, Animacion::tEaseOutCubic));
 		     
 	// Si tenemos n partículas, tenemos que crear un vector
 	// con el ángulo de cada partícula,
@@ -49,7 +49,7 @@ public:
 	    angulos[i] = Gosu::random(0, 360);
 	    distancias[i] = Gosu::random(0,1);
 	    tipo[i] = (Gosu::random(0,1) < 0.5)?true:false;
-	    tamanyo[i] = Gosu::random(0,1);
+	    tamanyo[i] = Gosu::random(0,2);
 	}
 
 	anim . reset(new Animacion(0, 0, 1, 1, duracion, Animacion::tEaseOutQuart));
@@ -57,14 +57,21 @@ public:
     void draw(int origX, int origY){
 	float pos = anim -> getX();
 
-	color.setAlpha(255 * (1-pos));
+	    // Lo suyo es que se vayan desvaneciendo cuando esté ya algo alejado del centro, es decir, cuando pos se acerque a 1
+
+	float lim = 0.70;
+
+	if(pos >= lim){
+ 
+	    color.setAlpha ( 255 * (1 - (pos - lim) / (1 - lim)));
+	}else{
+	    color.setAlpha(255);
+	}
 
 	for (unsigned i = 0; i < cantidadParticulas; ++i)
 	{
 	    // Coeficiente del tamaño
 	    float coefTam = tamanyo[i] * (1 - pos);
-	    
-
 	    
 	    if(tipo[i]){
 		partc1 -> draw(origX + Gosu::offsetX(angulos[i], pos * distancias[i] * distancia) - partc1 -> width() * coefTam / 2,
