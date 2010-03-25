@@ -1,29 +1,56 @@
-// main.cpp --- Fichero inicial de oFlute
+#include "Gosu/Gosu.hpp"
+#include <iostream>
 
-// Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
+#include <boost/scoped_ptr.hpp>
 
-// Autor: José Tomás Tocino García
 
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
+#include "particulas.h"
 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
 
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-// 02110-1301, USA.
+class pruebaParticle : public Gosu::Window{
+    boost::scoped_ptr<SistemaParticulas> SP;
+public:
+    pruebaParticle() : Gosu::Window(640, 480, false){
+	cout << "+++ pruebaParticle::CONSTRUCTOR" << endl;
+	SP . reset(new SistemaParticulas(graphics(), 150, 120, 300, Gosu::Color(255,125,125)));
+    }
 
-#include "juego.h"
+    void update(){
+
+    }
+    
+    void draw(){
+	Gosu::Color c (255,255,255);
+
+/*
+	graphics() . drawQuad(0,0,c,
+			      640, 0, c,
+			      640, 480, c,
+			      0, 480, c, 
+			      1); //*/
+
+	SP -> draw(320, 240);
+    }
+
+    void buttonDown(Gosu::Button boton){
+	if(boton == Gosu::kbEscape){
+	    close();
+	}else{
+	    SP -> inicializar();
+	}
+    }
+
+    ~pruebaParticle(){
+	cout << "--- pruebaParticle::DESTRUCTOR" << endl;
+    }
+};
+
 
 int main(int argc, char *argv[])
 {
-    Juego juego;
-    juego.show();
+    
+    pruebaParticle P;
+    P.show();
     return 0;
 }
+
