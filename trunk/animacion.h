@@ -32,7 +32,8 @@ class Animacion{
 public:
     enum tipoAnim {tEaseInQuad, tEaseOutQuad, tEaseInOutQuad,
 		   tEaseInCubic, tEaseOutCubic, tEaseInOutCubic,
-		   tEaseInQuart, tEaseOutQuart, tEaseInOutQuart};
+		   tEaseInQuart, tEaseOutQuart, tEaseInOutQuart,
+		   tEaseOutBack};
 
     Animacion(unsigned iX, unsigned iY, 
 	      unsigned fX, unsigned fY, int d, 
@@ -55,6 +56,8 @@ public:
     float easeInQuart(float t, float b, float c, float d) ;
     float easeOutQuart(float t, float b, float c, float d) ;
     float easeInOutQuart(float t, float b, float c, float d);
+
+    float easeOutBack(float t, float b, float c, float d);
 
     float getX();
     float getY();

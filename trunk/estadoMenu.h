@@ -43,11 +43,10 @@ class Juego;
  */
 class EstadoMenu : public Estado{
     bool lanzado;
-    boost::scoped_ptr<Gosu::Image> imgFondo, btnUca;
+    boost::scoped_ptr<Gosu::Image> imgFondo, btnUca, logoCusl;
     boost::scoped_ptr<BotonMenu> btn1, btn2, btn3, btn4;
-    boost::scoped_ptr<customFont> miFuente;
 
-    boost::scoped_ptr<Animacion> anim1, anim2, anim3, anim4, anim5;
+    boost::scoped_ptr<Animacion> anim1, anim2, anim3, anim4, anim5, animLogoCusl;
 
     int estadoAnim;
     short alphaActual;

@@ -33,22 +33,12 @@
 
 #include "global.h"
 
+#include "analizador.h"
+
 #include <string>
 #include <map>
 
 class Juego;
-
-class tipoBuffer{
-public:
-    tipoBuffer():pos(0),silencio(false){}
-    int pos;
-    float in[4200]; // 4096
-    float out[2048];
-
-    // Vector de harmónicos más importantes en la nota
-    float mayores[5];
-    bool silencio;
-};
 
 class EstadoAnalizador : public Estado{
     bool lanzado;
@@ -56,48 +46,20 @@ class EstadoAnalizador : public Estado{
     boost::shared_ptr<Gosu::Image> imgDo5, imgRe5, imgMi5, imgFa5, imgSol5, imgLa5, imgSi5, imgDo6, imgRe6;
     boost::scoped_ptr<Gosu::Image> cartelCargando;
 
-    bool iniciado, silencio, firstFrame, running;
+    boost::scoped_ptr<Analizador> analizador;
 
-    // Flujo principal
-    PaStream * stream;
-
-    PaError err;
-
-    // Mapa de frecuencias y notas
-    std::map<double, t_altura> notas;
-
-    // Devuelve la nota asociada a una frecuencia
-    t_altura asociarNota(double frecuencia);
+    bool firstFrame, running;
 
     void activar();
 
-    // Función callback    
-    static int updateBuffer(const void * inB, 
-			    void * outB, 
-			    unsigned long nFrames, 
-			    const PaStreamCallbackTimeInfo * timeInfo,
-			    PaStreamCallbackFlags statusFlags,
-			    void * data);
-    int updateBuffer2(const void * inB, 
-			    void * outB, 
-			    unsigned long nFrames, 
-			    const PaStreamCallbackTimeInfo * timeInfo,
-		      PaStreamCallbackFlags statusFlags);
-    
     void cargarRecursos();
 public:
-    int numSamples;
 
-    static tipoBuffer miBuffer;
     EstadoAnalizador(Juego * p);
     void lanzar ();
     void update();
     void draw();
     void buttonDown(Gosu::Button boton);
-    bool configurarFlujo();
-    bool iniciarAnalisis();
-    t_altura notaActual();
-    bool detenerAnalisis();
     ~EstadoAnalizador();
 };
 
