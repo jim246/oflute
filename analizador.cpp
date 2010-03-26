@@ -12,6 +12,7 @@
 
 using namespace std;
 
+tipoBuffer Analizador::miBuffer;
 
 Analizador::Analizador() : iniciado(false)
 {
@@ -29,9 +30,14 @@ Analizador::Analizador() : iniciado(false)
 bool Analizador::configurarFlujo(){
 //    PaStreamParameters inParameters, outParameters;
 
+    cout << "*** [Analizador] Intentando Pa_Initialize... " << flush;
     err = Pa_Initialize();
 
     if(err != paNoError) std::cout << "ERROR: " << (int) err << std::endl;
+
+    cout << "OK" << endl;
+
+    cout << "*** [Analizador] Intentando Pa_OpenDefaultStream..." << flush;
 
     err = Pa_OpenDefaultStream(&stream,
 			       2,
@@ -42,9 +48,11 @@ bool Analizador::configurarFlujo(){
 			       updateBuffer,
 			       (void*) this);
 
-    std::cout << "* Duración del búffer: " << 256.0/44100.0*1000 << "ms" << std::endl;
-
     if(err != paNoError) std::cout << "ERROR" << std::endl;
+
+    cout << "OK" << endl;
+
+    std::cout << "* Duración del búffer: " << 256.0/44100.0*1000 << "ms" << std::endl;
 
     return true;
 } 
@@ -53,7 +61,7 @@ bool Analizador::configurarFlujo(){
 
 
 bool Analizador::iniciarAnalisis(){
-    cout << Colores::Rojo + "### Analizador::iniciarAnalisis ###" + Colores::Reset << endl;
+    cout << "### Analizador::iniciarAnalisis ###" << endl;
     err = Pa_StartStream(stream);
     if(err != paNoError){
 	std::cout << "ERROR" << std::endl;
@@ -67,12 +75,6 @@ bool Analizador::iniciarAnalisis(){
 
     return true;
 } // Fin de iniciarAnalisis
-
-t_altura Analizador::notaActual(){
-    if(!iniciado) return Silencio;
-    return Do5;
-}
-
 
 bool Analizador::detenerAnalisis(){
     if(iniciado){
@@ -105,28 +107,21 @@ int Analizador::updateBuffer(const void * inB,
 			     void * data)
 {
     
-    Analizador * puntero = (Analizador*) data;
-
-    return puntero -> updateBuffer2(inB, outB, nFrames, timeInfo, statusFlags);
-}
-
-int Analizador::updateBuffer2(const void * inB, 
-			     void * outB, 
-			     unsigned long nFrames, 
-			     const PaStreamCallbackTimeInfo * timeInfo,
-			     PaStreamCallbackFlags statusFlags)
-{
+//    EstadoAnalizador * puntero = (EstadoAnalizador*) data;
     const MY_TYPE * nInB = (const MY_TYPE *) inB;
 	    
     for(unsigned int i = 0; i < nFrames; i+=2){
-	miBuffer.in[miBuffer.pos++] = *nInB++;
+//	cout << "posBuffer: " << miBuffer.pos << endl;
+
+	 miBuffer.in[ miBuffer.pos++] = *nInB++;
 	nInB++;
-	miBuffer.pos ++;
+	miBuffer.pos++;
     }
-   
-/*    if(miBuffer.pos > 4095){
-	WindowFunc(3, 4096, miBuffer.in);
-	PowerSpectrum(4096, miBuffer.in, miBuffer.out);
+
+    if( miBuffer.pos > 4095){
+	 miBuffer.pos = 0; 
+	WindowFunc(3, 4096,  miBuffer.in);
+	PowerSpectrum(4096,  miBuffer.in,  miBuffer.out);
 	float maxValue[] = {0,0,0};
 	float maxPos[3];
 		
@@ -135,8 +130,8 @@ int Analizador::updateBuffer2(const void * inB,
 	for(int i = 450*2048/22050; i < 2048; ++i){
 	    for (int j = 0; j < 3; j++)
 	    {
-		if(miBuffer.out[i] > maxValue[j]){
-		    maxValue[j] = miBuffer.out[i];
+		if( miBuffer.out[i] > maxValue[j]){
+		    maxValue[j] =  miBuffer.out[i];
 		    maxPos[j] = i;
 		    break;
 		}
@@ -150,12 +145,13 @@ int Analizador::updateBuffer2(const void * inB,
 		  << std::setw(12) << maxValue[0]
 		  << std::flush;	//
 
-	 mayores[0] = maxPos[0] * 22050 / 2048;
-	 mayores[1] = maxPos[1] * 22050 / 2048;
-	 mayores[2] = maxPos[2] * 22050 / 2048;
+
+	 miBuffer . mayores[0] = maxPos[0] * 22050 / 2048;
+	 miBuffer . mayores[1] = maxPos[1] * 22050 / 2048;
+	 miBuffer . mayores[2] = maxPos[2] * 22050 / 2048;
 	//outputLog << maxPos << std::endl;
 
-	silencio = ((maxValue[0] < 1e+16)?true:false);
+	 miBuffer . silencio = ((maxValue[0] < 1e+16)?true:false);//*/
     }//*/
 
     return paContinue;
@@ -177,6 +173,10 @@ t_altura Analizador::asociarNota(double frecuencia){
     iter = min_element(diferencias.begin(), diferencias.end());
     return iter -> second;
     
+}
+
+t_altura Analizador::notaActual(){
+    return asociarNota(miBuffer . mayores[0]);
 }
 
 Analizador::~Analizador(){

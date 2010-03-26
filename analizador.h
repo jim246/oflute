@@ -12,10 +12,13 @@ typedef int MY_TYPE;
 
 class tipoBuffer{
 public:
-    tipoBuffer():pos(0){}
+    tipoBuffer():pos(0), silencio(false){}
     int pos;
     float in[4096];
     float out[2048];
+
+    float mayores[5];
+    bool silencio;
 };
 
 
@@ -28,7 +31,7 @@ public:
     bool detenerAnalisis();
     ~Analizador();
 
-    tipoBuffer miBuffer;
+    static tipoBuffer miBuffer;
 
 private:
     bool iniciado, silencio;

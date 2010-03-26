@@ -75,6 +75,13 @@ float Animacion::easeInOutQuart(float t, float b, float c, float d) {
     }
 };
 
+float Animacion::easeOutBack(float t, float b, float c, float d){
+//    float s = 1.70158;
+    float s = 1.3;
+    t = t/d - 1;
+    return c*(t*t*((s+1)*t + s) + 1) + b;
+};
+
 float Animacion::getX() { return currX; }
 float Animacion::getY() { return currY; }
 
@@ -124,6 +131,10 @@ void Animacion::update(){
 	    currX = easeInOutQuart(time - esperaInicial, inicialX, changeX, duration);
 	    currY = easeInOutQuart(time - esperaInicial, inicialY, changeY, duration);
 	    break;
+
+	case tEaseOutBack:
+	    currX = easeOutBack(time - esperaInicial, inicialX, changeX, duration);
+	    currY = easeOutBack(time - esperaInicial, inicialY, changeY, duration);
 	}
     }
     

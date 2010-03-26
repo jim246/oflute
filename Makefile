@@ -20,7 +20,7 @@ juego.o: juego.h
 main.o: estado.h juego.h
 estadoImagenFija.o: estadoImagenFija.h estado.h juego.h
 estadoMenu.o: estado.h estadoMenu.h juego.h customFont.h animacion.h
-estadoAnalizador.o: estado.h estadoAnalizador.h juego.h
+estadoAnalizador.o: estado.h estadoAnalizador.h juego.h analizador.h
 animacion.o:animacion.h
 
 colores.o: colores.h

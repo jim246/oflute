@@ -11,7 +11,7 @@
 
 Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
     cout << "+++ [CONSTRUCTOR] Juego" << endl;
-
+    setCaption(L"oFlute .:.");
     estadoActual.reset ( 
 	new EstadoImagenFija(this,
 			     Gosu::resourcePrefix() + L"media/estadoAutor.png",
