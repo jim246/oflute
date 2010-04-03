@@ -46,7 +46,7 @@ bool Analizador::configurarFlujo(){
 			       44100,
 			       256,
 			       updateBuffer,
-			       (void*) this);
+			       NULL);
 
     if(err != paNoError) std::cout << "ERROR" << std::endl;
 
@@ -79,19 +79,19 @@ bool Analizador::iniciarAnalisis(){
 bool Analizador::detenerAnalisis(){
     if(iniciado){
 	// Paramos el flujo
-	PaError err = Pa_StopStream(stream);
-	if(err != paNoError){
+	err = Pa_StopStream(stream);
+	if(err != paNoError)
 	    cerr << "ERROR al detener el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
-	    return false;
-	}
+
+	cout << "----- Analizador: Flujo parado" << endl;
 
 	// Cerramos el flujo
 	err = Pa_CloseStream(stream);
-	if(err != paNoError){
+	if(err != paNoError)
 	    cerr << "ERROR al cerrar el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
-	    return false;
-	}
 
+	cout << "----- Analizador: Flujo cerrado" << endl;
+	
 	iniciado = false;
     }
 
@@ -181,24 +181,15 @@ t_altura Analizador::notaActual(){
 
 Analizador::~Analizador(){
     PaError err;
-    if(iniciado){
-	// Paramos el flujo
-	err = Pa_StopStream(stream);
-	if(err != paNoError)
-	    cerr << "ERROR al detener el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+    cout << "--- [DESTRUCTOR] Analizador" << endl;
 
-	// Cerramos el flujo
-	err = Pa_CloseStream(stream);
-	if(err != paNoError)
-	    cerr << "ERROR al cerrar el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
-
-	iniciado = false;
-    }
-
+    detenerAnalisis();
     // Cerramos portaudio
     err = Pa_Terminate();
     if(err != paNoError)
 	cerr << "ERROR al cerrar PortAudio: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+
+    cout << "----- Analizador: PortAudio terminado" << endl;
 
     cout << "Borrando Analizador..." << endl;
 }
