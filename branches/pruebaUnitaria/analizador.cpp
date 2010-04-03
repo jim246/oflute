@@ -7,9 +7,6 @@
 #include <iomanip>
 #include <fstream>
 
-#include "colores.h"
-
-
 using namespace std;
 
 tipoBuffer Analizador::miBuffer;
@@ -28,31 +25,28 @@ Analizador::Analizador() : iniciado(false)
 }
 
 bool Analizador::configurarFlujo(){
-//    PaStreamParameters inParameters, outParameters;
 
-    cout << "*** [Analizador] Intentando Pa_Initialize... " << flush;
-    err = Pa_Initialize();
+    portaudio::System &sys = portaudio::System::instance();
 
-    if(err != paNoError) std::cout << "ERROR: " << (int) err << std::endl;
+    std::cout << "PortAudio version number = " << sys.version() << std::endl;
+    std::cout << "PortAudio version text = '" << sys.versionText() << "'" << std::endl;
 
-    cout << "OK" << endl;
+    portaudio::DirectionSpecificStreamParameters paramSalida(
+	sys.defaultInputDevice(),  // dispositivo
+	2, // número de canales
+	portaudio::INT16, // formato
+	false, // entrelazado
+	sys.defaultInputDevice().defaultLowInputLatency(), // latencia sugerida
+	NULL);
 
-    cout << "*** [Analizador] Intentando Pa_OpenDefaultStream..." << flush;
+    portaudio::StreamParameters parametros(
+	paramSalida,
+	portaudio::DirectionSpecificStreamParameters::null(),
+	44100.0,
+	256,
+	paClipOff);
 
-    err = Pa_OpenDefaultStream(&stream,
-			       2,
-			       0,
-			       paInt16,
-			       44100,
-			       256,
-			       updateBuffer,
-			       NULL);
-
-    if(err != paNoError) std::cout << "ERROR" << std::endl;
-
-    cout << "OK" << endl;
-
-    std::cout << "* Duración del búffer: " << 256.0/44100.0*1000 << "ms" << std::endl;
+    flujo.open(parametros, *this);
 
     return true;
 } 
@@ -62,51 +56,56 @@ bool Analizador::configurarFlujo(){
 
 bool Analizador::iniciarAnalisis(){
     cout << "### Analizador::iniciarAnalisis ###" << endl;
-    err = Pa_StartStream(stream);
-    if(err != paNoError){
-	std::cout << "ERROR" << std::endl;
-	return false;
-    }
+
+    flujo.start();
+
     std::cout << "UP and running" << std::endl;
     
-    const PaStreamInfo * info = Pa_GetStreamInfo(stream);
-    std::cout << "Input latency: " << info->inputLatency << std::endl
-	      << "Output latency: " << info -> outputLatency << std::endl;
 
     return true;
 } // Fin de iniciarAnalisis
 
 bool Analizador::detenerAnalisis(){
+    try{
     if(iniciado){
 	// Paramos el flujo
-	err = Pa_StopStream(stream);
-	if(err != paNoError)
-	    cerr << "ERROR al detener el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
-
-	cout << "----- Analizador: Flujo parado" << endl;
-
-	// Cerramos el flujo
-	err = Pa_CloseStream(stream);
-	if(err != paNoError)
-	    cerr << "ERROR al cerrar el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
-
-	cout << "----- Analizador: Flujo cerrado" << endl;
-	
-	iniciado = false;
+	flujo.stop();
+	flujo.close();
     }
+
+    portaudio::System::instance().terminate();
+    
+//    return true;
+}
+	catch (const portaudio::PaException &e)
+	{
+		std::cout << "A PortAudio error occured: " << e.paErrorText() << std::endl;
+	}
+	catch (const portaudio::PaCppException &e)
+	{
+		std::cout << "A PortAudioCpp error occured: " << e.what() << std::endl;
+	}
+	catch (const std::exception &e)
+	{
+		std::cout << "A generic exception occured: " << e.what() << std::endl;
+	}
+	catch (...)
+	{
+		std::cout << "An unknown exception occured." << std::endl;
+	}
 
     return true;
 }
 
 
-int Analizador::updateBuffer(const void * inB, 
+int Analizador::paCallbackFun(const void * inB, 
 			     void * outB, 
 			     unsigned long nFrames, 
 			     const PaStreamCallbackTimeInfo * timeInfo,
-			     PaStreamCallbackFlags statusFlags,
-			     void * data)
+			      PaStreamCallbackFlags statusFlags)
+			     
 {
-    
+    cout << "YO!" << endl;
 //    EstadoAnalizador * puntero = (EstadoAnalizador*) data;
     const MY_TYPE * nInB = (const MY_TYPE *) inB;
 	    
@@ -143,7 +142,7 @@ int Analizador::updateBuffer(const void * inB,
 		  << std::setw(12) << maxPos[1]*22050/2048 
 		  << std::setw(12) << maxPos[2]*22050/2048 
 		  << std::setw(12) << maxValue[0]
-		  << std::flush;	//
+		  << std::endl;	//
 
 
 	 miBuffer . mayores[0] = maxPos[0] * 22050 / 2048;
@@ -176,18 +175,14 @@ t_altura Analizador::asociarNota(double frecuencia){
 }
 
 t_altura Analizador::notaActual(){
+    cout << "Analizador::notaActual" << endl;
     return asociarNota(miBuffer . mayores[0]);
 }
 
 Analizador::~Analizador(){
-    PaError err;
     cout << "--- [DESTRUCTOR] Analizador" << endl;
 
-    detenerAnalisis();
-    // Cerramos portaudio
-    err = Pa_Terminate();
-    if(err != paNoError)
-	cerr << "ERROR al cerrar PortAudio: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+//    detenerAnalisis();
 
     cout << "----- Analizador: PortAudio terminado" << endl;
 

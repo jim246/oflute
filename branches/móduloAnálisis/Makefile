@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-Igosu `gosu/bin/gosu-config --cxxflags` -g
-LDFLAGS=-lrt -lasound -ljack -lpthread -Igosu `gosu/bin/gosu-config --libs --cxxflags` -lportaudio gosu/lib/libgosu.a -g
+LDFLAGS=-lrt -lasound -lpthread -Igosu `gosu/bin/gosu-config --libs --cxxflags` -lportaudio gosu/lib/libgosu.a -g
 OBJECTS=FFT.o versionConGosu.o 
 EXE=programa
 
