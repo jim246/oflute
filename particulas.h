@@ -14,7 +14,7 @@
 class SistemaParticulas{
     Gosu::Graphics & g;
     unsigned cantidadParticulas, duracion, distancia;
-    float * angulos, * distancias, * tamanyo;
+    float * angulos, * distancias, * tamanyo, escala;
     bool * tipo;
 
     Gosu::Color color;
@@ -22,8 +22,8 @@ class SistemaParticulas{
     boost::scoped_ptr<Gosu::Image> partc1, partc2;
     boost::scoped_ptr<Animacion> anim;
 public:
-    SistemaParticulas(Gosu::Graphics& g, unsigned n, unsigned d, unsigned distancia=200, Gosu::Color color = Gosu::Color::WHITE) : 
-	g(g), cantidadParticulas(n), duracion(d), distancia(distancia), color(color){
+    SistemaParticulas(Gosu::Graphics& g, unsigned n, unsigned d, unsigned distancia=200, float escala=1, Gosu::Color color = Gosu::Color::WHITE) : 
+	g(g), cantidadParticulas(n), duracion(d), distancia(distancia), escala(escala), color(color){
 
 	std::srand(std::clock());
 	
@@ -49,7 +49,7 @@ public:
 	    angulos[i] = Gosu::random(0, 360);
 	    distancias[i] = Gosu::random(0,1);
 	    tipo[i] = (Gosu::random(0,1) < 0.5)?true:false;
-	    tamanyo[i] = Gosu::random(0,2);
+	    tamanyo[i] = Gosu::random(0,escala);
 	}
 
 	anim . reset(new Animacion(0, 0, 1, 1, duracion, Animacion::tEaseOutQuart));

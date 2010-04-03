@@ -10,9 +10,11 @@
 class pruebaParticle : public Gosu::Window{
     boost::scoped_ptr<SistemaParticulas> SP;
 public:
-    pruebaParticle() : Gosu::Window(640, 480, false){
+    pruebaParticle() : Gosu::Window(800, 600, false){
 	cout << "+++ pruebaParticle::CONSTRUCTOR" << endl;
-	SP . reset(new SistemaParticulas(graphics(), 150, 120, 300, Gosu::Color(255,125,125)));
+	SP . reset(new SistemaParticulas(graphics(), 150, 160, // cantidad y duración
+					 300, 0.5,  // distancia y escala
+					 Gosu::Color(255,125,125)));
     }
 
     void update(){
