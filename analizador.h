@@ -1,14 +1,10 @@
 #ifndef _ANALIZADOR_H_
 #define _ANALIZADOR_H_
 
-#include "global.h"
-#include "portaudio.h"
-
+#include <portaudiocpp/PortAudioCpp.hxx>
 #include <map>
 
-typedef int MY_TYPE;
-#define TIPO paInt16;
-
+#include "global.h"
 
 class tipoBuffer{
 public:
@@ -23,47 +19,26 @@ public:
 
 
 class Analizador{
-public:
-    Analizador();
-    bool configurarFlujo();
-    bool iniciarAnalisis();
-    t_altura notaActual();
-    bool detenerAnalisis();
-    ~Analizador();
 
-    static tipoBuffer miBuffer;
-
-private:
-    bool iniciado, silencio;
-
-    PaError err;
-
-    // Vector de harmónicos más importantes en la nota
-    float mayores[5];
-
-    // Flujo principal
-    PaStream * stream;
-
-    // Mapa de frecuencias y notas
+    t_altura asociarNota (double frecuencia);
     std::map<double, t_altura> notas;
 
-    // Devuelve la nota asociada a una frecuencia
-    t_altura asociarNota(double frecuencia);
+public:
 
-    // Función callback    
-    static int updateBuffer(const void * inB, 
-			    void * outB, 
-			    unsigned long nFrames, 
-			    const PaStreamCallbackTimeInfo * timeInfo,
-			    PaStreamCallbackFlags statusFlags,
-			    void * data);
-    int updateBuffer2(const void * inB, 
-			    void * outB, 
-			    unsigned long nFrames, 
-			    const PaStreamCallbackTimeInfo * timeInfo,
-		      PaStreamCallbackFlags statusFlags);
-		
+    tipoBuffer * miBuffer;
+
+    Analizador();
+
+    t_altura notaActual();
+
+    int funcionCallback(const void * inB, 
+			void * outB, 
+			unsigned long nFrames, 
+			const PaStreamCallbackTimeInfo * timeInfo,
+			PaStreamCallbackFlags statusFlags);
+
+    ~Analizador();
+
 };
-
 
 #endif /* _ANALIZADOR_H_ */
