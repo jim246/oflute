@@ -2,21 +2,23 @@
 
 using namespace std;
 
+#include "controlSonido.h"
+
 #include "analizador.h"
 
 
 int main(int argc, char *argv[])
 {    
-    Analizador * A = new Analizador();
-    A -> configurarFlujo();
-    A -> iniciarAnalisis();
 
+    ControlSonido C;
+    Analizador A;
+    C . configurarFlujo(A);
+    C . iniciarFlujo();
+    
     double a = 0;
-    while(a++ < 1.e8){}
+    while(a++ < 1.e9){}
 
-    A -> detenerAnalisis();
+    C . detenerFlujo();
 
-    delete A;
-    A = NULL;
     return 0;
 }

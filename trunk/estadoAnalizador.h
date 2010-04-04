@@ -33,6 +33,7 @@
 
 #include "global.h"
 
+#include "controlSonido.h"
 #include "analizador.h"
 
 #include <string>
@@ -46,7 +47,8 @@ class EstadoAnalizador : public Estado{
     boost::shared_ptr<Gosu::Image> imgDo5, imgRe5, imgMi5, imgFa5, imgSol5, imgLa5, imgSi5, imgDo6, imgRe6;
     boost::scoped_ptr<Gosu::Image> cartelCargando;
 
-    boost::scoped_ptr<Analizador> analizador;
+    ControlSonido controlSonido;
+    Analizador analizador;
 
     bool firstFrame, running;
 

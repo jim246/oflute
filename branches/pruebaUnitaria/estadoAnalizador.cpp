@@ -26,9 +26,8 @@ EstadoAnalizador::EstadoAnalizador () :
     cout << "+++ [CONSTRUCTOR] EstadoAnalizador" << endl;
 
     cartelCargando.reset(new Gosu::Image( graphics(), Gosu::resourcePrefix() + L"media/imgCargando.png"));
-    analizador.reset(new Analizador);
 
-//    draw();
+
     cargarRecursos();
     lanzar();
 
@@ -37,7 +36,7 @@ EstadoAnalizador::EstadoAnalizador () :
 
 void EstadoAnalizador::cargarRecursos(){
 
-/*
+
     imgFondo.reset(new Gosu::Image( graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/baseAnalizador.png"));
 
     imgDo5.reset(new Gosu::Image( graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/do5.png"));
@@ -61,11 +60,11 @@ void EstadoAnalizador::activar(){
     if(running) return;
     running = true;
     
-    if (!analizador -> configurarFlujo()){
+    if (!controlSonido . configurarFlujo(analizador)){
 	cout << "*** Error al configurar el flujo." << endl;
     }
 
-    if(!analizador -> iniciarAnalisis()){
+    if(!controlSonido . iniciarFlujo()){
 	cout << "*** Error al iniciar el análisis." << endl;
     }//*/
 }
@@ -83,13 +82,13 @@ void EstadoAnalizador::draw(){
     }
 
     if(firstFrame){
-//	cartelCargando -> draw(ANCHO/2 - 200/2, ALTO/2 - 50/2, 1);
+	cartelCargando -> draw(ANCHO/2 - 200/2, ALTO/2 - 50/2, 1);
 	firstFrame = false;
 	return;
     }
-/*
+
     boost::shared_ptr<Gosu::Image> p;
-    switch(analizador -> notaActual()){
+    switch(analizador . notaActual()){
     case Do5:
 	p = imgDo5; break;
     case Re5:
@@ -112,11 +111,11 @@ void EstadoAnalizador::draw(){
 	break;
     }
 
-    if(!analizador -> miBuffer.silencio){
+//    if(!analizador . miBuffer -> silencio){
 	p -> draw(584,138,2);
-    } //*/
+//    } //*/
 
-/*
+
     imgFondo -> draw(0,0,1); //*/
 }
 
@@ -125,7 +124,7 @@ void EstadoAnalizador::buttonDown(Gosu::Button boton){
 	return;
     if (boton == Gosu::kbEscape){
 	cout << "PRESSED ESCAPE" << endl;
-	analizador -> detenerAnalisis();
+	controlSonido . detenerFlujo();
 	cout << "After detenerAnalisis()" << endl;
 	close();
     }
