@@ -14,7 +14,7 @@
 
 using namespace std;
 
-Analizador::Analizador(){
+Analizador::Analizador() : iniciado(false){
     cout << "+++ [CONSTRUCTOR] Analizador" << endl;
     miBuffer = new tipoBuffer;
 
@@ -28,6 +28,18 @@ Analizador::Analizador(){
     notas[1076.66] = Do6;
     notas[1195.09] = Re6;
 
+    /*
+      Definimos dos constantes para hacer las conversiones desde 
+      posición del vector a frecuencia y viceversa
+    
+    */
+      
+    //Para pasar de pos de vector a frecuencia, multiplicamos por 22050/2048
+    int_to_hz = 22050./2048.; // ~ 10.76660156250000000000000
+
+    // PAra pasar de frecuencia a posición de vector, multiplicamos por 2048/22050
+    hz_to_int = 2048./22050.; // ~ 0.928798185941043083900226
+
 }
 
 
@@ -37,25 +49,30 @@ int Analizador::funcionCallback(const void * inputBuffer,
 				const PaStreamCallbackTimeInfo * timeInfo,
 				PaStreamCallbackFlags statusFlags){
 
-
+    if(!iniciado){
+	cout << "### Analizador::Callback llamado por primera vez" << endl;
+	iniciado = true;
+    }
     const int **nInB = (const int **)(inputBuffer);
-    //int **out = static_cast<int **>(outputBuffer);
+    //
 
-    /*
+    /*   
     // ######################
     // Paso transparente de input a output
     // Para pruebas.
 
+    int **out = static_cast<int **>(outputBuffer);
+    
     for (unsigned int i = 0; i < framesPerBuffer; ++i)
     {
-    out[0][i] = in[0][i];
-    out[1][i] = in[1][i];
+    out[0][i] = nInB[0][i];
+    out[1][i] = nInB[1][i];
     }
     
-    */
+    //*/
 	    
 
-    for (unsigned int i = 0; i < framesPerBuffer; ++i){
+    for (unsigned int i = 0; i < framesPerBuffer; i++){
 //    for(unsigned int i = 0; i < nFrames; i+=2){
 //	cout << "posBuffer: " << miBuffer.pos << endl;
 
@@ -74,7 +91,25 @@ int Analizador::funcionCallback(const void * inputBuffer,
 		
 	// Lo ponemos para que empiece a mirar frecuencias a partir de 450Hz
 	// 
-	for(int i = 450*2048/22050; i < 2048; ++i){
+
+	/*
+	  En el vector devuelto por la función de la FFT, cada posición i 
+	  representa la amplitud de la componente con frecuencia i.
+	  
+	  Realmente i no es directamente la frecuencia. Para conocer la frecuencia 
+	  real, hacemos una regla de tres: Si 2048 (el máximo del vector) es 22050 (la mayor frecuencia que se puede captar)
+	  entonces i es x.
+
+	  En nuestro caso, comenzamos el análisis en 450Hz, que es el límite
+	  inferior que hemos seleccionado empíricamente.
+	  22050 => 2048
+	  450   => x
+	  x = 450*2048/22050 = 41.79591 ~ 41
+
+	*/
+	  
+
+	for(int i = 41; i < 2048; ++i){
 	    for (int j = 0; j < 3; j++)
 	    {
 		if( miBuffer -> out[i] > maxValue[j]){
@@ -83,23 +118,35 @@ int Analizador::funcionCallback(const void * inputBuffer,
 		    break;
 		}
 	    }			
-	    if(i*22050/2048 > 1500) break;
+	    
+	    /*
+	      Hemos seleccionado como límite superior 1500Hz
+	      22050 => 2048
+	      x     => i
+	      x = i * 22050 / 2048 = i * 10.766
+	    */
+
+	    if(i * int_to_hz > 1500.) break;
 	}
+
+	miBuffer -> mayores[0] = maxPos[0]  * int_to_hz;
+	miBuffer -> mayores[1] = maxPos[1]  * int_to_hz;
+	miBuffer -> mayores[2] = maxPos[2]  * int_to_hz;
+
 		
-	std::cout << '\xd' << "Datos:" << std::setw(12) << maxPos[0]*22050/2048 
-		  << std::setw(12) << maxPos[1]*22050/2048 
-		  << std::setw(12) << maxPos[2]*22050/2048 
+	std::cout << '\xd' << "Datos:" 
+		  << std::setw(12) << miBuffer -> mayores[0] 
+		  << std::setw(12) << miBuffer -> mayores[1]  
+		  << std::setw(12) << miBuffer -> mayores[2]  
 		  << std::setw(12) << maxValue[0]
 		  << std::flush;	//
 
 
-	miBuffer -> mayores[0] = maxPos[0] * 22050 / 2048;
-	miBuffer -> mayores[1] = maxPos[1] * 22050 / 2048;
-	miBuffer -> mayores[2] = maxPos[2] * 22050 / 2048;
+
 	//outputLog << maxPos << std::endl;
 
 	miBuffer -> silencio = ((maxValue[0] < 1e+16)?true:false);
-    }
+    } //*/
 
     return paContinue;
 }

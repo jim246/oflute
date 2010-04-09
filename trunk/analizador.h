@@ -22,7 +22,9 @@ class Analizador{
 
     t_altura asociarNota (double frecuencia);
     std::map<double, t_altura> notas;
+    bool iniciado;
 
+    float int_to_hz, hz_to_int;
 public:
 
     tipoBuffer * miBuffer;
