@@ -80,7 +80,7 @@ bool ControlSonido::iniciarFlujo(){
 
     flujo.start();
 
-    std::cout << "UP and running" << std::endl;
+    std::cout << "### ControlSonido::flujo iniciado" << std::endl;
 
     return true;
 } // Fin de iniciarAnalisis
