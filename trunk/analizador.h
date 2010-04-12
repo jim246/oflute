@@ -5,6 +5,8 @@
 #include <map>
 
 #include "global.h"
+#include "configuracion.h"
+
 
 class tipoBuffer{
 public:
@@ -25,6 +27,7 @@ class Analizador{
     bool iniciado;
 
     float int_to_hz, hz_to_int;
+
 public:
 
     tipoBuffer * miBuffer;

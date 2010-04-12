@@ -10,6 +10,7 @@
 // Para usar min_element
 #include <algorithm>
  
+#include "configuracion.h"
 
 
 using namespace std;
@@ -17,6 +18,8 @@ using namespace std;
 Analizador::Analizador() : iniciado(false){
     cout << "+++ [CONSTRUCTOR] Analizador" << endl;
     miBuffer = new tipoBuffer;
+
+    lectorConfiguracion P;
 
     notas[523.25] = Do5;
     notas[592.163] = Re5;
@@ -145,7 +148,7 @@ int Analizador::funcionCallback(const void * inputBuffer,
 
 	//outputLog << maxPos << std::endl;
 
-	miBuffer -> silencio = ((maxValue[0] < 1e+16)?true:false);
+	miBuffer -> silencio = ((maxValue[0] < 1e+18)?true:false);
     } //*/
 
     return paContinue;
