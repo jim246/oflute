@@ -50,7 +50,7 @@ public:
 
 int main(int argc, char *argv[])
 {
-    
+    std::cout << "\n########### PULSE CUALQUIER TECLA PARA QUE APAREZCAN LOS FUEGOS ARTIFICIALES ######\n" << std::endl;	    
     pruebaParticle P;
     P.show();
     return 0;
