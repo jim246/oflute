@@ -33,6 +33,7 @@
 
 using namespace std;
 
+#define TAMANYO 34
 
 class BotonMenu{
     Gosu::Graphics& graphics;
@@ -47,8 +48,8 @@ public:
 	       std::string texto,
 	       Gosu::Color color
 	) : graphics(graphics), color(color), texto(texto), 
-	    fuente(new customFont(graphics, L"media/fuente1.ttf", 30, Gosu::ffBold)),
-	    fuenteSombra(new customFont(graphics, L"media/fuente1.ttf", 30, Gosu::ffBold)),
+	    fuente(new customFont(graphics, L"media/fuente1.ttf", TAMANYO, Gosu::ffBold)),
+	    fuenteSombra(new customFont(graphics, L"media/fuente1.ttf", TAMANYO, Gosu::ffBold)),
 	    imagen(new Gosu::Image(graphics, L"media/btnTemplate.png")){
 	cout << ">>> [CONSTRUCTOR] BotonMenu" << endl;
     }
@@ -59,8 +60,9 @@ public:
 	Gosu::Color p (255,255,255,255);
 
 	int offsetShadow[] = {1,2};
-	fuente -> draw(texto, 800/2 - ancho/2, y+10, z + 0.1, p);
-	fuenteSombra -> draw(texto, 800/2 - ancho/2 + offsetShadow[0], y+10 + offsetShadow[1], z, Gosu::Color(80,0,0,0));
+	int altura = 5;
+	fuente -> draw(texto, 800/2 - ancho/2, y+altura, z + 0.1, p);
+	fuenteSombra -> draw(texto, 800/2 - ancho/2 + offsetShadow[0], y+altura + offsetShadow[1], z, Gosu::Color(80,0,0,0));
     }
 
 };
