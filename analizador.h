@@ -1,3 +1,4 @@
+
 #ifndef _ANALIZADOR_H_
 #define _ANALIZADOR_H_
 
