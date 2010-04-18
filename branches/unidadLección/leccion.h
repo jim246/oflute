@@ -32,6 +32,7 @@ using namespace std;
 #include <boost/shared_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/foreach.hpp>
+#include <boost/format.hpp>
 
 
 #include "texto.h"
@@ -51,6 +52,9 @@ public:
 	: 
 	g(g), ruta(ruta), x(x), y(y), z(z), wait(wait){
 	img.reset(new Gosu::Image(g, Gosu::widen(ruta)));	
+
+	cout << boost::format("** Imagen - ruta:'%s', x:%i, y:%i, z:%i, wait:%i") % ruta % x % y % z % wait << endl;
+	
     }
 
     void draw(){
@@ -63,10 +67,12 @@ class elementoTexto{
     int  wait;
 
 public:
-    elementoTexto(Gosu::Graphics& g, string str, unsigned tam, int x, int y, double z,
-		  int wait, Gosu::Color color, unsigned alineacion, bool sombra) 
+    elementoTexto(Gosu::Graphics& g, string str, string rutaFuente, unsigned tam, int x, int y, double z,
+		  int wait, Gosu::Color color, unsigned alineacion, bool sombra, int opacidadSombra) 
 	: wait(wait){
-	texto.reset(new Texto(g, str, tam, color, alineacion, sombra, 80, x, y, z));
+	texto.reset(new Texto(g, str, rutaFuente, tam, color, alineacion, sombra, opacidadSombra, x, y, z));
+	
+	cout << boost::format("** Texto - fuente:%s, tam:%i, x:%i, y:%i, z:%i, wait:%i, align: %i, sombra: %i\ntexto: %s") % rutaFuente % tam % x % y % z % wait % alineacion % sombra % str << endl;
     }
 
     void draw(){
@@ -128,16 +134,24 @@ public:
 	    .FirstChild("texto").ToElement();
 
 	for(; elemento; elemento = elemento -> NextSiblingElement("texto") ){
-	    string texto;
+	    string texto, rutaFuente;
 	    elemento -> QueryStringAttribute("str", &texto);
 
-	    int tam, x, y, wait, align, sombra;
+	    if(elemento -> QueryStringAttribute("fuente", &rutaFuente) != TIXML_SUCCESS){
+		rutaFuente = "media/fNormal.ttf";
+	    }
+
+	    int tam, x, y, wait, align, sombra, opacSombra;
 	    elemento -> QueryIntAttribute("x", &x);
 	    elemento -> QueryIntAttribute("y", &y);
 	    elemento -> QueryIntAttribute("tam", &tam);
 	    elemento -> QueryIntAttribute("wait", &wait);
 	    elemento -> QueryIntAttribute("align", &align);
 	    elemento -> QueryIntAttribute("sombra", &sombra);
+
+	    if(elemento -> QueryIntAttribute("opacSombra", &opacSombra) != TIXML_SUCCESS){
+		opacSombra = 80;
+	    }
 
 	    double z;
 	    elemento -> QueryDoubleAttribute("z", &z);
@@ -150,9 +164,9 @@ public:
 	    elemento -> QueryIntAttribute("cb", &cb);
 
 	    boost::shared_ptr<elementoTexto> T
-		( new elementoTexto(g, texto, tam, x, y, z,
+		( new elementoTexto(g, texto, rutaFuente, tam, x, y, z,
 				    wait, Gosu::Color(ca, cr, cg, cb), align, 
-				    ((sombra == 1) ? true : false)));
+				    ((sombra == 1) ? true : false), opacSombra));
 	    elementosTxt.push_back(T);
 
 	}

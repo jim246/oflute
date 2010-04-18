@@ -48,8 +48,8 @@ public:
 	       std::string texto,
 	       Gosu::Color color
 	) : graphics(graphics), color(color), texto(texto), 
-	    fuente(new customFont(graphics, L"media/fuente1.ttf", TAMANYO)),
-	    fuenteSombra(new customFont(graphics, L"media/fuente1.ttf", TAMANYO)),
+	    fuente(new customFont(graphics, L"media/fNormal.ttf", TAMANYO)),
+	    fuenteSombra(new customFont(graphics, L"media/fNormal.ttf", TAMANYO)),
 	    imagen(new Gosu::Image(graphics, L"media/btnTemplate.png")){
 	cout << ">>> [CONSTRUCTOR] BotonMenu" << endl;
     }

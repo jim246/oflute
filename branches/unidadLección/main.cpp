@@ -16,7 +16,7 @@ public:
 //    boost::scoped_ptr<Texto> myFont, f2, f3;
 
     boost::scoped_ptr<Leccion> L;
-    pruebaFuentes() : Gosu::Window(640, 480, false)
+    pruebaFuentes() : Gosu::Window(800, 600, false)
 		      /*,
 		      myFont(new Texto(graphics(), "El perro de san roque\nno tiene rabo", 
 				       40, Gosu::Color::WHITE, 

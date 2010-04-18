@@ -179,7 +179,7 @@ public:
 
 	Gosu::Image * imagen = new Gosu::Image(graphics, mapaBMP);
 
-	imagen -> draw(x,y,z);
+	imagen -> draw(x,y,z,1,1,Gosu::Color(c.alpha(), 255, 255, 255));
 
 
 	SDL_FreeSurface (textSurface);
