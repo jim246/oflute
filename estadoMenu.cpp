@@ -32,7 +32,7 @@ void EstadoMenu::lanzar(){
 				 Gosu::resourcePrefix() + L"media/menuAssets/btnUca.png"));//*/
 
     btn1.reset(new BotonMenu(padre -> graphics(), "Analizador de notas (pulse Escape para acceder)", Gosu::Color(255,3,69,90)));
-    btn2.reset(new BotonMenu(padre -> graphics(), "Canciones (Inactivo)", Gosu::Color(255,34,139,114)));
+    btn2.reset(new BotonMenu(padre -> graphics(), "Canciones(Inactivo)", Gosu::Color(255,34,139,114)));
     btn3.reset(new BotonMenu(padre -> graphics(), "Opciones (Inactivo)", Gosu::Color(255,188,216,56)));
     btn4.reset(new BotonMenu(padre -> graphics(), "Salir", Gosu::Color(255,245,215,19)));
 

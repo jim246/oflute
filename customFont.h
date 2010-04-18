@@ -30,6 +30,7 @@
 #include <SDL.h>
 #include <SDL/SDL_ttf.h>
 
+
 #include <iostream>
 
 #include <cstdio>
@@ -46,31 +47,43 @@ class customFont {
     unsigned fontHeight;
 
     
-    boost::scoped_ptr<Gosu::Image> imagen;
+  
     TTF_Font * font;
 
     std::string lastText;
 
-    SDL_Surface * createSurface(const std::string& text, Gosu::Color c){
-	SDL_Surface * textSurface;
+    SDL_Surface * createSurface(const std::string& text, Gosu::Color& c){
+
 //	cout << (int)c.red() << " " << (int) c.green() << " " << (int)c.blue() << endl;
 	SDL_Color fontColor = {(int)c.red(), (int)c.green(), (int)c.blue()};
 
-	textSurface = TTF_RenderUTF8_Blended(font, text.c_str(), fontColor);
+	SDL_Surface * textSurface = TTF_RenderUTF8_Blended(font, text.c_str(), fontColor);
 	
 	if(textSurface == NULL){
 	    cerr << "ERROR when trying to draw the text." << endl;
 	    return NULL;
 	}
 	
+
+
 	return textSurface;
+
+	/*
+	SDL_Surface * alphaedSurface = SDL_DisplayFormat(textSurface);
+
+	if(alphaedSurface == NULL){
+	    cerr << "ERROR" << endl;
+	    return NULL;
+	}
+
+	SDL_FreeSurface(textSurface);
+	return alphaedSurface; //*/
     }
 
 public:
-    customFont (Gosu::Graphics &graphics, 
+    customFont (Gosu::Graphics& graphics, 
 		const std::wstring &fontName, 
-		unsigned fontHeight,
-		unsigned fontFlags = 0) :
+		unsigned fontHeight) :
 	graphics(graphics), lastColor(Gosu::Color::WHITE), fontName(fontName), 
 	fontHeight(fontHeight), lastText(""){
 	
@@ -86,14 +99,6 @@ public:
 	    exit(-1);
 	}
 
-	if(fontFlags != 0){
-	    int style = 0;
-	    if(fontFlags & Gosu::ffBold){
-		style |= TTF_STYLE_BOLD;
-	    }
-//	    TTF_SetFontStyle(font, style);
-	}
-	 
 	if(font == NULL){
 	    cerr << "ERROR when trying to open font." << endl;
 	    exit(-1);
@@ -111,9 +116,13 @@ public:
 	if(i > 3) return;
     }
 
+    int saltoLinea(){
+	return TTF_FontLineSkip(font);
+    }
+
     double textWidth(const std::string& text){
 	double retorno;
-	if(text != lastText){
+//	if(text != lastText){
 	    SDL_Surface * textSurface = createSurface(text, lastColor);
 	    if(textSurface == NULL){
 		retorno = -1;
@@ -121,55 +130,65 @@ public:
 		retorno = textSurface -> w;
 	    }
 	    
-	    SDL_FreeSurface (textSurface);
-	}else{
+//	    SDL_FreeSurface (textSurface);
+//	    textSurface = NULL;
+	    /*}else{
 	    retorno = imagen -> width();
-	}
+	} //*/
 	    
 	return retorno;
     }
 
-    void draw(const std::string& text, double x, double y, 
+    void draw(std::string& text, int x, int y, 
 	      Gosu::ZPos z, Gosu::Color c){
 
 	/*
-	cout << "text:" << text << '\t'
-	     << "lastTexT:" << lastText << '\t'
-	     << ((text==lastText)?"no_redraw":"redraw") << endl; //*/
+	cout << "SURMANOOOOOOOO" << endl;
+	Gosu::Image * imagen = new Gosu::Image(graphics, L"media/estadoAutor.png");
+	cout << "CHARMANDERRRR" << endl;
+	imagen -> draw(x,y,z, 1,1); //Gosu::Color(c.alpha(), 255, 255, 255));
+	cout << "MUERONCAI" << endl; 
+	//*/
+
 	
-
-
-	// Avoid redrawing the text if it hasn't changed
-	if(text != lastText || lastColor != c){
+	
 	    SDL_Surface * textSurface = createSurface(text, c);
-	    
+	
 	    if(textSurface == NULL){
+		cout << "WAT?" << endl;
 		return;
 	    }
 
 	    int w = textSurface -> w,
 		h = textSurface -> h;
 
-	    boost::scoped_ptr<Gosu::Bitmap> mapaBMP (new Gosu::Bitmap());
-	    mapaBMP -> resize(w, h);
+	    Gosu::Bitmap mapaBMP;
 
+//	    boost::scoped_ptr<Gosu::Bitmap> mapaBMP (new Gosu::Bitmap());
+	    mapaBMP . resize(w, h);
+	
 	    unsigned * source = (unsigned *) textSurface -> pixels;
-	    unsigned * dest = mapaBMP -> data();
-
+	    unsigned * dest = mapaBMP . data();
+	
 	    for(int i = 0; i < w; i++){
 		for(int j = 0; j < h; j++){
 		    *dest++ = *source++;
 		}
 	    }
-	    imagen.reset(new Gosu::Image(graphics, *mapaBMP));
-	    SDL_FreeSurface (textSurface);
-	}
+	     
+
+	Gosu::Image * imagen = new Gosu::Image(graphics, mapaBMP);
+
+	imagen -> draw(x,y,z);
+
+
+	SDL_FreeSurface (textSurface);
+//	delete textSurface;
 
 	
-	imagen -> draw(x,y,z, 1,1, Gosu::Color(c.alpha(), 255, 255, 255));
 
-	lastText = text;	
-	lastColor = c;
+/*	lastText = text;	
+	lastColor = c; //*/
     }
 
     ~customFont(){

@@ -1,6 +1,13 @@
 CC=g++
-CFLAGS=-I. -Igosu `gosu/bin/gosu-config --cxxflags` -g #-Itinyxml
-LDFLAGS=-Igosu `gosu/bin/gosu-config --libs --cxxflags` gosu/lib/libgosu.a -lportaudiocpp -lSDL_ttf
+CXXFLAGS+=-I. -Igosu `gosu/bin/gosu-config --cxxflags` -ISDL_ttf
+CXXFLAGS+=-g #-Wall -Wextra
+
+LDFLAGS+=`gosu/bin/gosu-config --libs --cxxflags` 
+
+LDLIBS+=gosu/lib/libgosu.a -lportaudiocpp 
+LDLIBS+=-lSDL_ttf
+
+
 
 #tinyxml/tinyxml.a -lboost_regex -g
 
@@ -9,8 +16,8 @@ OBJECTS=main.o juego.o estadoImagenFija.o \
 
 EXE=programa
 
-actual: $(OBJECTS)
-	$(CC) $? $(LDFLAGS) -o $(EXE)
+all: $(OBJECTS)
+	$(CC) $(LDFLAGS) $^ -o $(EXE) $(LDLIBS)
 
 
 analizador.o: analizador.h
@@ -27,7 +34,7 @@ animacion.o:animacion.h
 colores.o: colores.h
 
 .cpp.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	rm -rf $(OBJECTS) $(EXE)
