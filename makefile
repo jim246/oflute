@@ -6,10 +6,14 @@ OBJECTS=main.o
 
 EXE=programa
 
-actual: $(OBJECTS)
+all: $(OBJECTS)
 	$(CC) $? $(LDFLAGS) -o $(EXE)
 
-main.o: customFont.h
+d: prueba.o
+	$(CC) $? $(LDFLAGS) -o $@
+main.o: customFont.h texto.h
+
+
 .cpp.o:
 	$(CC) $(CFLAGS) -c $< -o $@
 
