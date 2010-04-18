@@ -48,15 +48,15 @@ public:
 	       std::string texto,
 	       Gosu::Color color
 	) : graphics(graphics), color(color), texto(texto), 
-	    fuente(new customFont(graphics, L"media/fuente1.ttf", TAMANYO, Gosu::ffBold)),
-	    fuenteSombra(new customFont(graphics, L"media/fuente1.ttf", TAMANYO, Gosu::ffBold)),
+	    fuente(new customFont(graphics, L"media/fuente1.ttf", TAMANYO)),
+	    fuenteSombra(new customFont(graphics, L"media/fuente1.ttf", TAMANYO)),
 	    imagen(new Gosu::Image(graphics, L"media/btnTemplate.png")){
 	cout << ">>> [CONSTRUCTOR] BotonMenu" << endl;
     }
 
-    void draw(unsigned x, unsigned y, Gosu::ZPos z){
+    void draw(int x, int y, Gosu::ZPos z){
 	imagen -> draw(x, y, z, 1, 1, color);
-	unsigned ancho = fuente -> textWidth(texto);
+	int ancho = fuente -> textWidth(texto);
 	Gosu::Color p (255,255,255,255);
 
 	int offsetShadow[] = {1,2};
