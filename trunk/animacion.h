@@ -29,17 +29,34 @@ using namespace std;
 
 
 class Animacion{
+    int inicialX, inicialY, finalX, finalY;
+    int time, duration, esperaInicial;
+    float currX, currY;
+    int changeX, changeY;
+
 public:
     enum tipoAnim {tEaseInQuad, tEaseOutQuad, tEaseInOutQuad,
 		   tEaseInCubic, tEaseOutCubic, tEaseInOutCubic,
 		   tEaseInQuart, tEaseOutQuart, tEaseInOutQuart,
 		   tEaseOutBack};
 
-    Animacion(unsigned iX, unsigned iY, 
-	      unsigned fX, unsigned fY, int d, 
+    Animacion(int iX, int iY, 
+	      int fX, int fY, int d, 
 	      tipoAnim anim = tEaseInQuad, int e=0);
 
-    void init();
+    inline void init() { time = 0; };
+    inline float getX() { return currX; };
+    inline float getY() { return currY; };
+    
+    inline void setInicialX(int x) { inicialX = x; changeX = finalX - inicialX; }
+    inline void setInicialY(int y) { inicialY = y; changeY = finalY - inicialY; }
+
+    inline void setFinalX(int x) { finalX = x; changeX = finalX - inicialX; }
+    inline void setFinalY(int y) { finalY = y; changeY = finalY - inicialY; }
+
+    inline void setTipoAnimacion(tipoAnim a){ anim = a; }
+
+    inline void setEspera(int e) { esperaInicial = e; }
 
 // ######################################################
 // Ecuaciones de tweening
@@ -59,19 +76,12 @@ public:
 
     float easeOutBack(float t, float b, float c, float d);
 
-    float getX();
-    float getY();
-
     void update();
     
 
     ~Animacion();
 
 private:
-    unsigned inicialX, inicialY, finalX, finalY;
-    int time, duration, esperaInicial;
-    float currX, currY;
-    int changeX, changeY;
     tipoAnim anim;
 
 };

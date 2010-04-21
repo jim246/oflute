@@ -1,6 +1,6 @@
 #include "animacion.h"
 
-Animacion::Animacion(unsigned iX, unsigned iY, unsigned fX, unsigned fY, int d, tipoAnim anim, int e):
+Animacion::Animacion(int iX, int iY, int fX, int fY, int d, tipoAnim anim, int e):
     inicialX(iX), inicialY(iY), finalX(fX), finalY(fY), 
     time(0), duration(d),  esperaInicial(e),
     currX(inicialX), currY(inicialY),
@@ -9,7 +9,7 @@ Animacion::Animacion(unsigned iX, unsigned iY, unsigned fX, unsigned fY, int d, 
     cout << "+++ Animación::CONSTRUCTOR" << endl;
 }
 
-void Animacion::init(){ time = 0; }
+//void Animacion::init(){ time = 0; }
 
 // ######################################################
 // Ecuaciones de tweening
@@ -82,8 +82,9 @@ float Animacion::easeOutBack(float t, float b, float c, float d){
     return c*(t*t*((s+1)*t + s) + 1) + b;
 };
 
+/*
 float Animacion::getX() { return currX; }
-float Animacion::getY() { return currY; }
+float Animacion::getY() { return currY; } //*/
 
 void Animacion::update(){
     if(time - esperaInicial > duration){

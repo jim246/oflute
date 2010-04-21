@@ -31,7 +31,12 @@ public:
 	{
 
 	cout << ">>> pruebaFuentes::CONSTRUCTOR" << endl;
-	L.reset(new Leccion(graphics(), "lec1.xml"));
+	try{
+	    L.reset(new Leccion(graphics(), "lecciones/lec1.xml"));
+	}catch(...){
+	    cout << "CHARMANDER" << endl;
+	    close();
+	}
     }
 
     void update(){
@@ -39,13 +44,6 @@ public:
     }
     
     void draw(){
-
-	Gosu::Color c (128,128,128);
-	graphics() . drawQuad(0,0,c,
-			      640, 0, c,
-			      640, 480, c,
-			      0, 480, c, 
-			      1); //*/
 
 	L -> draw();
 	/*
