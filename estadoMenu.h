@@ -42,16 +42,36 @@ class Juego;
  * Controla la aparición de los botones, su pulsación y demás.
  */
 class EstadoMenu : public Estado{
+    /// Flag que indica si el estado ha sido lanzado
     bool lanzado;
-    boost::scoped_ptr<Gosu::Image> imgFondo, btnUca, logoCusl;
+
+    /// Imagen de fondo
+    boost::scoped_ptr<Gosu::Image> imgFondo;
+
+    /// Botón de "Universidad de Cádiz"
+    boost::scoped_ptr<Gosu::Image> btnUca;
+
+    /// Imagen del logo del CUSL
+    boost::scoped_ptr<Gosu::Image>  logoCusl;
+
+    /// Botones del menú
     boost::scoped_ptr<BotonMenu> btn1, btn2, btn3, btn4;
 
-    boost::scoped_ptr<Animacion> anim1, anim2, anim3, anim4, anim5, animLogoCusl;
+    /// Animaciones para los botones del menú
+    boost::scoped_ptr<Animacion> animaciones[5];
 
+    /// Animaciones para la imagen del CUSL
+    boost::scoped_ptr<Animacion> animLogoCusl;
+
+    /// Animación para la opacidad del fondo
+    boost::scoped_ptr<Animacion> animOpacidadFondo;
+
+    /// Contador para controlar el flujo del menú 
     int estadoAnim;
-    short alphaActual;
-    unsigned long tiempoEsperaInicial;
-    float posY[5]; //, posFinalesX[5];
+
+    std::string estadoDestino;
+    
+    //float posY[5]; //, posFinalesX[5];
 public:
     /// Constructor. Crea un nuevo menú para el juego p.
     EstadoMenu(Juego * p);

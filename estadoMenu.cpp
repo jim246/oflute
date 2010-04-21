@@ -13,7 +13,6 @@ void EstadoMenu::lanzar(){
     cout << "* EstadoMenu lanzado" << endl;
     lanzado = true;
     estadoAnim = 0;
-    alphaActual = 0;
 
     // Poblamos el puntero de las imágenes
     imgFondo.reset(new Gosu::Image(padre -> graphics(), 
@@ -38,25 +37,18 @@ void EstadoMenu::lanzar(){
 
 
 
-    anim1.reset(new Animacion(0, 600, // X inicial, Y inicial
-			     0, posFinalesY[0], // X final, Y final
-			     30, Animacion::tEaseOutQuart)); // duración, tipo
 
+    animOpacidadFondo.reset(new Animacion(0,0,255,0, 30, Animacion::tEaseOutQuad));
 
-    anim2.reset(new Animacion(0, 600, 0, posFinalesY[1], 30, Animacion::tEaseOutQuart, 10)); 
-    anim3.reset(new Animacion(0, 600, 0, posFinalesY[2], 30, Animacion::tEaseOutQuart, 20)); 
-    anim4.reset(new Animacion(0, 600, 0, posFinalesY[3], 30, Animacion::tEaseOutQuart, 30)); 
-    anim5.reset(new Animacion(0, 600, 0, posFinalesY[4], 30, Animacion::tEaseOutQuart, 40)); 
+    animaciones[0].reset(new Animacion(0, 600, 0, posFinalesY[0], 30, Animacion::tEaseOutQuart, 0));
+    animaciones[1].reset(new Animacion(0, 600, 0, posFinalesY[1], 30, Animacion::tEaseOutQuart, 10)); 
+    animaciones[2].reset(new Animacion(0, 600, 0, posFinalesY[2], 30, Animacion::tEaseOutQuart, 20)); 
+    animaciones[3].reset(new Animacion(0, 600, 0, posFinalesY[3], 30, Animacion::tEaseOutQuart, 30)); 
+    animaciones[4].reset(new Animacion(0, 600, 0, posFinalesY[4], 30, Animacion::tEaseOutQuart, 40)); 
 
 
     animLogoCusl.reset(new Animacion(820, 10, 590, 10, 30, Animacion::tEaseOutBack, 40));
 
-    // Inicialmente todos los botones se encuentran bajo el borde inferior de la pantalla
-    for (int i = 0; i < 5; ++i)
-    {
-	posY [i] = 600;
-    }
-    
 }
 
 void EstadoMenu::update(){
@@ -66,43 +58,71 @@ void EstadoMenu::update(){
 /*
   Estados de la animación:
   0: Haciendo fade in del fondo
-  1: Subiendo btn1
-  2: Subiendo btn2
-  3: Subiendo btn3
-  4: Subiendo btn4
-  5: Subiendo btnUca
-  6: A la espera del usuario
+  1: Salen los botones
 */
 
 
-    short step = 5;
-
     // 0: Haciendo el fade in
     if(estadoAnim == 0){
-	alphaActual += step;
+	animOpacidadFondo -> update();
 
-	if(alphaActual > 255){
-	    alphaActual = 255;
+	if(animOpacidadFondo -> getX() == 255){
 	    estadoAnim = 1;
 	}
-
-//	cout << alphaActual << endl;
     }
 
-    // 1: Sacando btn1
-    else if(estadoAnim > 0 && estadoAnim < 6){
-	anim1 -> update();
-	anim2 -> update();
-	anim3 -> update();
-	anim4 -> update();
-	anim5 -> update();
+    // 1: Sacando botones
+    else if(estadoAnim == 1){
+	int j = 0;
+	for (int i = 0; i < 5; ++i)
+	{
+	    animaciones[i] -> update();
+	    if(animaciones[i] -> getY() == posFinalesY[i]) ++j;
+	}
 
-	posY[0] = anim1 -> getY();
-	posY[1] = anim2 -> getY();
-	posY[2] = anim3 -> getY();
-	posY[3] = anim4 -> getY();
-	posY[4] = anim5 -> getY();
+	if(j == 5){
+	    cout << "** Los botones llegaron a su lugar" << endl;
+	    estadoAnim = 5;
+	}
+    }
 
+    // 2: Guardamos los botones
+    
+    else if(estadoAnim == 2){
+	for (int i = 4; i > -1; --i)
+	{
+	    animaciones[i] -> setInicialY( animaciones[i] -> getY() );
+	    animaciones[i] -> setFinalY(600);
+	    animaciones[i] -> setTipoAnimacion(Animacion::tEaseInQuart);
+	    animaciones[i] -> setEspera ((4-i) * 10);
+	    animaciones[i] -> init();
+	}
+
+	estadoAnim = 3;
+    }
+
+    else if(estadoAnim == 3){
+	for (int i = 0; i < 5; ++i)
+	{
+	    animaciones[i] -> update();
+	    int j = 0;
+	    for (int i = 0; i < 5; ++i)
+	    {
+		if(animaciones[i] -> getY() == 600){
+		    ++j;
+		}
+	    }
+
+	    if(j == 5){
+		estadoAnim = 4;
+		cout << "YA" << endl;
+	    }
+	    //posFinalesY[i
+	}
+    }
+
+    else if(estadoAnim == 4){
+	padre -> cambiarEstado(estadoDestino);
     }
 }
 
@@ -110,13 +130,13 @@ void EstadoMenu::draw(){
     if(!lanzado) 
 	return;
 
-    imgFondo -> draw(0,0,1, 1,1, Gosu::Color(alphaActual, 255, 255, 255));
+    imgFondo -> draw(0,0,1, 1,1, Gosu::Color(animOpacidadFondo -> getX(), 255, 255, 255));
 
-    btn1 -> draw(0, posY[0], 2); 
-    btn2 -> draw(0, posY[1], 3);
-    btn3 -> draw(0, posY[2], 4);
-    btn4 -> draw(0, posY[3], 5);
-    btnUca -> draw(0, posY[4], 6); //*/
+    btn1 -> draw(0, animaciones[0] -> getY(), 2); 
+    btn2 -> draw(0, animaciones[1] -> getY(), 3);
+    btn3 -> draw(0, animaciones[2] -> getY(), 4);
+    btn4 -> draw(0, animaciones[3] -> getY(), 5);
+    btnUca -> draw(0, animaciones[4] -> getY(), 6); //*/
 
     animLogoCusl -> update();
 
@@ -131,7 +151,9 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 	padre -> close();
     }
     else if(boton == Gosu::kbEscape){
-	padre -> cambiarEstado("estadoAnalizador");
+	//padre -> cambiarEstado("estadoAnalizador");
+	estadoDestino = "estadoAnalizador";
+	estadoAnim = 2;
     }
     else if(boton == Gosu::msLeft){
 	int x = padre -> input().mouseX();
