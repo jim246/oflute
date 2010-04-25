@@ -46,10 +46,6 @@ public:
     void draw(){
 
 	L -> draw();
-	/*
-	myFont -> draw(1);
-	f2 -> draw(1);
-	f3 -> draw(1); //*/
     }
 
     void buttonDown(Gosu::Button boton){

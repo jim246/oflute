@@ -20,7 +20,7 @@ public:
     double momentoInicial;
 
     // Momento actual
-    double momentoTranscurrido;
+    double t_actual;
 
     /// Duración de una negra en milisegundos según el bpm de la canción
     double duracionNegra;

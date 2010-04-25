@@ -39,10 +39,11 @@ void Nota::update(){
     // posX += cancionPadre -> diferencialHorizontal;
 /*    cout << setprecision(30)
 	 << "Posición inicial: " << posicionInicial << endl
-	 << "Tiempo transcurrido: " <<  cancionPadre -> momentoTranscurrido << endl; //*/
+	 << "Tiempo transcurrido: " <<  cancionPadre -> t_actual << endl; //*/
+
     if(aparece){
 	posX = 181 +
-	    (posicionInicial - cancionPadre -> momentoTranscurrido) // tiempo que queda para que suene
+	    (posicionInicial - cancionPadre -> t_actual) // tiempo que queda para que suene
 	    * avanceMs;
 	if(posX < 0){
 	    cout << "llegué al límite: " << Gosu::milliseconds() << endl;
@@ -63,18 +64,18 @@ Negra::Negra(Nota::t_altura alt, Gosu::Graphics * g, double acum, Cancion * c) :
 
 Corchea::Corchea(Nota::t_altura alt, Gosu::Graphics * g, double acum, Cancion * c) : Nota(alt, g, acum, c){
     figura.reset(new Gosu::Image(*g, L"corchea.png"));
-    duracion = 0.5;  // Es decir, un tiempo = una negra
+    duracion = 0.5;
     cout << "** Se crea una corchea en" << endl;
 }   
 
 
 Blanca::Blanca(Nota::t_altura alt, Gosu::Graphics * g, double acum, Cancion * c) : Nota(alt, g, acum, c){
     figura.reset(new Gosu::Image(*g, L"blanca.png"));
-    duracion = 2;  // Es decir, un tiempo = una negra
+    duracion = 2;  
     cout << "** Se crea una corchea en" << endl;
 }
 
-double Nota::longitudNegra = 150; // píxeles de ancho de una negra
+double Nota::longitudNegra = 300; // píxeles de ancho de una negra
 //double Nota::duracionNegra = 1000;
 
 double Nota::unidad = 1000;

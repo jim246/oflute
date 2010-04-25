@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Song>
   <Title>Aquí va el título</Title>
-  <BPM>60</BPM>
-  <Notes>do5c re5c mi5c fa5c sol5c la5c si5c do6c re6c</Notes>
+  <BPM>45</BPM>
+  <Notes>do5n re5c mi5n fa5n sol5n la5n si5n do6n re6n</Notes>
 </Song>

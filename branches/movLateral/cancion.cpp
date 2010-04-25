@@ -51,7 +51,7 @@ Cancion::Cancion(Gosu::Graphics * g){
     tiempoSeguridad = 650.0 / Nota::longitudNegra * duracionNegra;
 
     cout << "* Duración negra: " << duracionNegra << "ms\n"
-	 << "* Tiempo seguridad: " << tiempoSeguridad << "ms" << endl;
+	 << "* Tiempo lado a lado: " << tiempoSeguridad << "ms" << endl;
 
     // Expresión regular para cazar las notas
     boost::regex myRegExp("(do|re|mi|fa|sol|la|si)(5|6)(r|b|n|c)");
@@ -63,7 +63,7 @@ Cancion::Cancion(Gosu::Graphics * g){
 	string figura = (*myIt)[3];
 	string alturaRead = string((*myIt)[1]) + string((*myIt)[2]);
 
-	Nota::t_altura alturaLocal;
+	Nota::t_altura alturaLocal = Nota::Do5;
 
 	if(alturaRead == "do5") alturaLocal = Nota::Do5;
 	else if(alturaRead == "re5") alturaLocal = Nota::Re5;
@@ -93,7 +93,7 @@ Cancion::Cancion(Gosu::Graphics * g){
 
 	cout << "Nota: " << (*myIt)[1]
 	     << ", octava: " << (*myIt)[2] 
-	     << ", figura: " << (*myIt)[3] << endl;
+	     << ", figura: " << (*myIt)[3] << endl << endl;
     } //*/
 
 
@@ -117,11 +117,11 @@ void Cancion::comenzarCancion(){
 }
 
 void Cancion::update(){
-    momentoTranscurrido = Gosu::milliseconds();
+    t_actual = Gosu::milliseconds();
 
     while((pilaNotas.size() != 0) 
 	  && 
-	  ((pilaNotas.front() -> posicionInicial) - momentoTranscurrido < tiempoSeguridad)){
+	  ((pilaNotas.front() -> posicionInicial) - t_actual < tiempoSeguridad)){
 	vectorNotasInstanciadas.push_back(pilaNotas.front());	
 	pilaNotas.front()->instanciar();
 	pilaNotas.pop();

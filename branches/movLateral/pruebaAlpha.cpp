@@ -17,8 +17,6 @@ using namespace std;
 class MiVentana : public Gosu::Window
 {
     Gosu::Image fondo;
-    int alphaDir, alphaVal, alphaStep, stepHor, stepVer;
-    unsigned int imX, imY;
 
     unsigned long tiempo_inicial, tiempo_transcurrido, tiempo_prep, tiempo_acumulado;
     vector<Nota*> Notas;
@@ -28,9 +26,7 @@ public:
 
     MiVentana()
 	: Window(800, 600, false, FPS),
-	  fondo(graphics(), L"fondo1.png"),
-	  alphaDir(0), alphaVal(0), alphaStep(5), stepHor(10), stepVer(10),
-	  imX(0),imY(0)
+	  fondo(graphics(), L"fondo1.png")
 	{
 	    cout << "* Constructor" << endl;
 	    nuevaCancion.reset(new Cancion(&graphics()));
