@@ -16,7 +16,7 @@
 using namespace std;
 
 Analizador::Analizador() : iniciado(false){
-    cout << "+++ [CONSTRUCTOR] Analizador" << endl;
+    cout << "+++ [Constructor] Analizador" << endl;
     miBuffer = new tipoBuffer;
 
     lectorConfiguracion P;

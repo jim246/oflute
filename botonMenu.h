@@ -43,6 +43,8 @@ class BotonMenu{
     boost::scoped_ptr<customFont> fuente, fuenteSombra;
     boost::scoped_ptr<Gosu::Image> imagen;
 
+    int lastX, lastY;
+
 public:
     BotonMenu (Gosu::Graphics &graphics,
 	       std::string texto,
@@ -50,11 +52,14 @@ public:
 	) : graphics(graphics), color(color), texto(texto), 
 	    fuente(new customFont(graphics, L"media/fNormal.ttf", TAMANYO)),
 	    fuenteSombra(new customFont(graphics, L"media/fNormal.ttf", TAMANYO)),
-	    imagen(new Gosu::Image(graphics, L"media/btnTemplate.png")){
-	cout << ">>> [CONSTRUCTOR] BotonMenu" << endl;
+	    imagen(new Gosu::Image(graphics, L"media/btnTemplate.png")),
+	    lastX(0), lastY(0)	{
+	cout << ">>> [Constructor] BotonMenu" << endl;
     }
 
     void draw(int x, int y, Gosu::ZPos z){
+	lastX = x;
+	lastY = y;
 	imagen -> draw(x, y, z, 1, 1, color);
 	int ancho = fuente -> textWidth(texto);
 	Gosu::Color p (255,255,255,255);
@@ -63,6 +68,15 @@ public:
 	int altura = 5;
 	fuente -> draw(texto, 800/2 - ancho/2, y+altura, z + 0.1, p);
 	fuenteSombra -> draw(texto, 800/2 - ancho/2 + offsetShadow[0], y+altura + offsetShadow[1], z, Gosu::Color(80,0,0,0));
+    }
+
+    bool clicked(int x, int y){
+	if((x >= lastX) && (x <= lastX + (int) imagen -> width()) &&
+	   (y >= lastY) && (y <= lastY + (int) imagen -> height())){
+	    return true;
+	}else{
+	    return false;
+	}
     }
 
 };

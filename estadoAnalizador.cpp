@@ -23,7 +23,7 @@ typedef int MY_TYPE;
 //int posFinalesY[] = {281, 333, 386, 441, 494 };
 EstadoAnalizador::EstadoAnalizador (Juego * p) : 
     Estado(p),  firstFrame(true), running(false){
-    cout << "+++ [CONSTRUCTOR] EstadoAnalizador" << endl;
+    cout << "+++ [Constructor] EstadoAnalizador" << endl;
 
     cartelCargando.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/imgCargando.png"));
 

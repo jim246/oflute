@@ -10,7 +10,7 @@
 #include "estadoAnalizador.h"
 
 Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
-    cout << "+++ [CONSTRUCTOR] Juego" << endl;
+    cout << "+++ [Constructor] Juego" << endl;
     setCaption(L"oFlute .:.");
     estadoActual.reset ( 
 	new EstadoImagenFija(this,
@@ -53,7 +53,9 @@ void Juego::cambiarEstado(std::string destino){
 	estadoActual.reset(new EstadoAnalizador(this));
     }
 	
-
+    else if(destino == "salir"){
+	close();
+    }
 }
     
 void Juego::buttonDown(Gosu::Button boton){

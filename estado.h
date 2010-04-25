@@ -56,7 +56,7 @@ public:
        @param p puntero a la clase Juego que controla la aplicación
     **/
     Estado(Juego * p):padre(p){
-	cout << "+++ [CONSTRUCTOR] Estado" << endl;
+	cout << "+++ [Constructor] Estado" << endl;
     };
 
     /// Si es necesario lanzar acciones independientes del constructor, irán aquí.
