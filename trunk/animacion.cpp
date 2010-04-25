@@ -6,7 +6,7 @@ Animacion::Animacion(int iX, int iY, int fX, int fY, int d, tipoAnim anim, int e
     currX(inicialX), currY(inicialY),
     changeX(finalX - inicialX), changeY(finalY - inicialY),
     anim(anim){
-    cout << "+++ Animación::CONSTRUCTOR" << endl;
+    cout << "+++ Animación::Constructor" << endl;
 }
 
 //void Animacion::init(){ time = 0; }

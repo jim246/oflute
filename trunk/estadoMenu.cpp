@@ -4,16 +4,18 @@
 #include <cmath>
 
 int posFinalesY[] = {281, 332, 383, 434, 485 };
+
 EstadoMenu::EstadoMenu (Juego * p) : Estado(p){
-    cout << "+++ [CONSTRUCTOR] EstadoMenu" << endl;
+    cout << "+++ [Constructor] EstadoMenu" << endl;
     p -> setCaption(L"oFlute .:. Menú principal");
+    
 }
 
 void EstadoMenu::lanzar(){
     cout << "* EstadoMenu lanzado" << endl;
     lanzado = true;
     estadoAnim = 0;
-
+ 
     // Poblamos el puntero de las imágenes
     imgFondo.reset(new Gosu::Image(padre -> graphics(), 
 				   Gosu::resourcePrefix() + L"media/menuAssets/menuBase.png"));
@@ -30,7 +32,7 @@ void EstadoMenu::lanzar(){
     btnUca.reset(new Gosu::Image(padre -> graphics(), 
 				 Gosu::resourcePrefix() + L"media/menuAssets/btnUca.png"));//*/
 
-    btn1.reset(new BotonMenu(padre -> graphics(), "Analizador de notas (pulse Escape para acceder)", Gosu::Color(255,3,69,90)));
+    btn1.reset(new BotonMenu(padre -> graphics(), "Analizador de notas", Gosu::Color(255,3,69,90)));
     btn2.reset(new BotonMenu(padre -> graphics(), "Canciones(Inactivo)", Gosu::Color(255,34,139,114)));
     btn3.reset(new BotonMenu(padre -> graphics(), "Opciones (Inactivo)", Gosu::Color(255,188,216,56)));
     btn4.reset(new BotonMenu(padre -> graphics(), "Salir", Gosu::Color(255,245,215,19)));
@@ -82,46 +84,52 @@ void EstadoMenu::update(){
 
 	if(j == 5){
 	    cout << "** Los botones llegaron a su lugar" << endl;
-	    estadoAnim = 5;
+	    estadoAnim = 2;
 	}
+    }
+    
+    else if(estadoAnim == 2){
+	// Los botones están en su sitio, parados
+	
     }
 
     // 2: Guardamos los botones
     
-    else if(estadoAnim == 2){
+    else if(estadoAnim == 3){
 	for (int i = 4; i > -1; --i)
 	{
 	    animaciones[i] -> setInicialY( animaciones[i] -> getY() );
 	    animaciones[i] -> setFinalY(600);
 	    animaciones[i] -> setTipoAnimacion(Animacion::tEaseInQuart);
+	    animaciones[i] -> setDuracion(20);
+	    
 	    animaciones[i] -> setEspera ((4-i) * 10);
 	    animaciones[i] -> init();
 	}
 
-	estadoAnim = 3;
-    }
-
-    else if(estadoAnim == 3){
-	for (int i = 0; i < 5; ++i)
-	{
-	    animaciones[i] -> update();
-	    int j = 0;
-	    for (int i = 0; i < 5; ++i)
-	    {
-		if(animaciones[i] -> getY() == 600){
-		    ++j;
-		}
-	    }
-
-	    if(j == 5){
-		estadoAnim = 4;
-		cout << "YA" << endl;
-	    }
-	    //posFinalesY[i
-	}
+	estadoAnim = 4;
     }
 
     else if(estadoAnim == 4){
+	
+	int j = 0;
+	for (int i = 0; i < 5; ++i)
+	{
+	    animaciones[i] -> update();
+	    if(animaciones[i] -> getY() == 600){
+		++j;
+	    }
+	}
+
+	if(j == 5){
+	    estadoAnim = 5;
+	    cout << "** Los botones se escondieron." << endl;
+	}
+	
+	
+    }
+
+    else if(estadoAnim == 5){
 	padre -> cambiarEstado(estadoDestino);
     }
 }
@@ -147,17 +155,36 @@ void EstadoMenu::draw(){
 void EstadoMenu::buttonDown(Gosu::Button boton){
     if(!lanzado) 
 	return;
-    if (boton == Gosu::kbReturn){
-	padre -> close();
-    }
-    else if(boton == Gosu::kbEscape){
-	//padre -> cambiarEstado("estadoAnalizador");
-	estadoDestino = "estadoAnalizador";
-	estadoAnim = 2;
-    }
-    else if(boton == Gosu::msLeft){
+
+
+    if(boton == Gosu::kbEscape){
+	estadoDestino = "salir";
+	estadoAnim = 3;
+    } //*/
+    
+    if(boton == Gosu::msLeft){
 	int x = padre -> input().mouseX();
 	int y = padre -> input().mouseY();
+	
+	if(btn1 -> clicked(x,y)){
+	    estadoDestino = "estadoAnalizador";
+	    estadoAnim = 3;
+	}
+
+	else if(btn2 -> clicked(x,y)){
+
+	}
+
+	else if(btn3 -> clicked(x,y)){
+
+	}
+
+	else if(btn4 -> clicked(x,y)){
+	    estadoDestino = "salir";
+	    estadoAnim = 3;
+	}
+
+	
 	cout << "*** LMB @ (" << x << "," << y << ")" << endl;
     }
     else{

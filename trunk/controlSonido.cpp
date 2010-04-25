@@ -30,7 +30,7 @@ Analizador::Analizador() : iniciado(false)
 
 
 ControlSonido::ControlSonido(){
-    cout << "+++ [CONSTRUCTOR] ControlSonido" << endl;
+    cout << "+++ [Constructor] ControlSonido" << endl;
 }
 
 

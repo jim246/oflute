@@ -45,6 +45,8 @@ public:
 	      tipoAnim anim = tEaseInQuad, int e=0);
 
     inline void init() { time = 0; };
+    inline void end() { time = duration + esperaInicial; };
+
     inline float getX() { return currX; };
     inline float getY() { return currY; };
     
@@ -56,6 +58,7 @@ public:
 
     inline void setTipoAnimacion(tipoAnim a){ anim = a; }
 
+    inline void setDuracion(int d) { duration = d; }
     inline void setEspera(int e) { esperaInicial = e; }
 
 // ######################################################
