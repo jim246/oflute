@@ -27,7 +27,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <SDL.h>
+//#include <SDL.h>
 #include <SDL/SDL_ttf.h>
 
 
