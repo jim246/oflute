@@ -3,9 +3,6 @@
 #include "estado.h"
 
 #include "estadoImagenFija.h"
-// #include "estadoIntro.h"
-// #include "estadoAutor.h"
-
 #include "estadoMenu.h"
 #include "estadoAnalizador.h"
 

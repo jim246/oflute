@@ -47,6 +47,12 @@ public:
     inline void init() { time = 0; };
     inline void end() { time = duration + esperaInicial; };
 
+    inline bool finished(){ 
+//	cout << "time: " << time << ", duration: " << duration << ", e: " << esperaInicial << endl;
+	return time >= duration + esperaInicial; 
+    }
+
+
     inline float getX() { return currX; };
     inline float getY() { return currY; };
     
