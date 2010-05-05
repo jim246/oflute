@@ -3,7 +3,7 @@
   <index>1</index>
   <nombre>Este es el nombre</nombre>
   <elementos>
-    <img src="media/lecciones/fondoGenerico.png" x="0" y="0" z="1" animar="1" duracion="20" wait="0"/>
+    <img src="media/fondoGenerico.png" x="0" y="0" z="1" animar="1" duracion="20" wait="0"/>
     <img src="media/lecciones/sombraFoto.png" x="21" y="33" z="1" wait="30"/>
     <img src="media/lecciones/1 dograve.png" x="46" y="57" z="2" wait="15" />
     
