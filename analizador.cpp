@@ -1,26 +1,10 @@
 #include "analizador.h"
-#include "FFT.h"
 
 #include <iostream>
-#include <iomanip>
-
-// Para usar abs
-#include <cmath>
-
-// Para usar min_element
-#include <algorithm>
- 
-#include "configuracion.h"
-
-
 using namespace std;
 
-Analizador::Analizador() : iniciado(false){
-    cout << "+++ [Constructor] Analizador" << endl;
-    miBuffer = new tipoBuffer;
-
-    lectorConfiguracion P;
-
+Analizador::Analizador() : iniciado(false)
+{
     notas[523.25] = Do5;
     notas[592.163] = Re5;
     notas[656.763] = Mi5;
@@ -30,128 +14,202 @@ Analizador::Analizador() : iniciado(false){
     notas[1001.29] = Si5;
     notas[1076.66] = Do6;
     notas[1195.09] = Re6;
+}
+
+bool Analizador::configurarFlujo(){
+    if(iniciado) return false;
+    iniciado = true;
+
+    // Inicializamos PortAudio
+    PaError err = Pa_Initialize();
+
+    // Comprobamos que se ha inicialiazado
+    if(err != paNoError){
+	cerr << "ERROR: " 
+	     << Pa_GetErrorText(err) 
+	     << "(" << (int) err << ")" << endl;
+	return false;
+    }
+
+    cout << "* PortAudio inicializado" << endl;
+
+    // Listamos los dispositivos compatibles
+    int numDevices;	
+    numDevices = Pa_GetDeviceCount();
+
+    // Comprobamos el número de dispositivos
+    if( numDevices < 0 ){
+	cerr << "ERROR en Pa_GetDeviceCount: " 
+	     << Pa_GetErrorText(err) 
+	     << "(" << (int) err << ")" << endl;
+	return false;
+    }
 
     /*
-      Definimos dos constantes para hacer las conversiones desde 
-      posición del vector a frecuencia y viceversa
+      const   PaDeviceInfo *deviceInfo;
+      for( int i=0; i<numDevices; i++ )
+      {
+      deviceInfo = Pa_GetDeviceInfo( i );
+      std::cout << "Nombre: " << deviceInfo->name << std::endl
+      << "SampleRate:" << deviceInfo->defaultSampleRate << std::endl
+      << "MaxInputChannels: " << deviceInfo->maxInputChannels << std::endl << std::endl;
+      } //*/
     
-    */
-      
-    //Para pasar de pos de vector a frecuencia, multiplicamos por 22050/2048
-    int_to_hz = 22050./2048.; // ~ 10.76660156250000000000000
 
-    // PAra pasar de frecuencia a posición de vector, multiplicamos por 2048/22050
-    hz_to_int = 2048./22050.; // ~ 0.928798185941043083900226
 
+    // Parámetros para el flujo de salida - NO UTILIZADO
+
+    /*
+      PaStreamParameters outParameters;
+      outParameters.device = Pa_GetDefaultOutputDevice();
+      outParameters.channelCount = 2;
+      outParameters.sampleFormat = paInt16;
+      outParameters.hostApiSpecificStreamInfo = NULL;
+      outParameters.suggestedLatency = Pa_GetDeviceInfo( outParameters.device ) -> defaultLowOutputLatency; 
+      // */
+
+    // Parámetros para el flujo de entrada
+    PaStreamParameters inParameters;
+
+    // Dispositivo de entrada por defecto
+    inParameters.device = Pa_GetDefaultInputDevice();
+
+    // Entrada estéreo aunque el micrófono sea mono
+    inParameters.channelCount = 2;
+
+    // Tipo de datos para los samples
+    inParameters.sampleFormat = paInt16;
+    
+    inParameters.hostApiSpecificStreamInfo = NULL;
+
+    // Latencia, la menor posible
+    inParameters.suggestedLatency = Pa_GetDeviceInfo( inParameters.device )->defaultLowInputLatency;
+
+    // Comprobamos que el sistema acepta esta configuración
+    err = Pa_IsFormatSupported(&inParameters, NULL, 44100);
+	
+    if(err != paNoError){
+	cout << "ERROR en Pa_IsFormatSupported: " << Pa_GetErrorText(err) << std::endl;
+	return false;
+    }
+
+    // Abrimos el flujo
+    err = Pa_OpenStream(
+	&stream,
+	&inParameters,
+	NULL, // &outParameters,
+	44100, // Frecuencia de muestreo
+	256, // Capacidad del buffer
+	paClipOff,
+	updateBuffer,
+	this);
+    
+    std::cout << "* Duración del búffer: " << 256.0/44100.0*1000 << "ms" << std::endl;
+
+    if(err != paNoError){
+	cerr << "ERROR: " 
+	     << Pa_GetErrorText(err) 
+	     << "(" << (int) err << ")" << endl;
+	return false;
+    }
+
+} //
+
+
+
+
+bool Analizador::iniciarAnalisis(){
+    if(!iniciado) return false;
+    PaError err;
+    // Hacemos andar el flujo
+    err = Pa_StartStream(stream);
+
+    // Comprobamos si hay errores
+    if(err != paNoError){
+	cerr << "ERROR al iniciar el flujo: " 
+	     << Pa_GetErrorText(err) 
+	     << "(" << (int) err << ")" << endl;
+	return false;
+    }
+
+    cout << "* Flujo UP AND RUNNING" << endl;
+
+    const PaStreamInfo * info = Pa_GetStreamInfo(stream);
+    std::cout << "** Input latency: " << info->inputLatency << std::endl
+	      << "** Output latency: " << info -> outputLatency << std::endl;
+} // Fin de iniciarAnalisis
+
+bool Analizador::detenerAnalisis(){
+    if(iniciado){
+	// Paramos el flujo
+	PaError err = Pa_StopStream(stream);
+	if(err != paNoError)
+	    cerr << "ERROR al detener el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+
+	// Cerramos el flujo
+	err = Pa_CloseStream(stream);
+	if(err != paNoError)
+	    cerr << "ERROR al cerrar el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+
+	iniciado = false;
+    }
 }
 
 
-int Analizador::funcionCallback(const void * inputBuffer, 
-				void * outputBuffer, 
-				unsigned long framesPerBuffer, 
-				const PaStreamCallbackTimeInfo * timeInfo,
-				PaStreamCallbackFlags statusFlags){
-
-    if(!iniciado){
-	cout << "### Analizador::Callback llamado por primera vez" << endl;
-	iniciado = true;
+static int Analizador::updateBuffer(const void * inB, 
+				    void * outB, 
+				    unsigned long nFrames, 
+				    const PaStreamCallbackTimeInfo * timeInfo,
+				    PaStreamCallbackFlags statusFlags,
+				    void * data){
+    for(unsigned int i = 0; i < nFrames; i+=2){
+	puntero->miBuffer.in[puntero->miBuffer.pos++] = *nInB++;
+	nInB++;
+	puntero->miBuffer.pos ++;
     }
-    const int **nInB = (const int **)(inputBuffer);
-    //
-
-    /*   
-    // ######################
-    // Paso transparente de input a output
-    // Para pruebas.
-
-    int **out = static_cast<int **>(outputBuffer);
-    
-    for (unsigned int i = 0; i < framesPerBuffer; ++i)
-    {
-    out[0][i] = nInB[0][i];
-    out[1][i] = nInB[1][i];
-    }
-    
-    //*/
 	    
-
-    for (unsigned int i = 0; i < framesPerBuffer; i++){
-//    for(unsigned int i = 0; i < nFrames; i+=2){
-//	cout << "posBuffer: " << miBuffer.pos << endl;
-
-	// in[0][i] es el sonido en el canal izquierdo
-	// in[1][i] es el sonido en el canal derecho
-
-	miBuffer -> in[ miBuffer -> pos++] = nInB[0][i];
-    }
-
-    if( miBuffer -> pos > 4095){
-	miBuffer -> pos = 0; 
-	WindowFunc(3, 4096,  miBuffer -> in);
-	PowerSpectrum(4096,  miBuffer -> in,  miBuffer -> out);
+    if(puntero->miBuffer.pos > 4095){
+	puntero->miBuffer.pos = 0;
+	WindowFunc(3, 4096, puntero->miBuffer.in);
+	PowerSpectrum(4096, puntero->miBuffer.in, puntero->miBuffer.out);
 	float maxValue[] = {0,0,0};
-	float maxPos[3];
+	float maxPos[3],maxvalor=0;
 		
 	// Lo ponemos para que empiece a mirar frecuencias a partir de 450Hz
 	// 
-
-	/*
-	  En el vector devuelto por la función de la FFT, cada posición i 
-	  representa la amplitud de la componente con frecuencia i.
-	  
-	  Realmente i no es directamente la frecuencia. Para conocer la frecuencia 
-	  real, hacemos una regla de tres: Si 2048 (el máximo del vector) es 22050 (la mayor frecuencia que se puede captar)
-	  entonces i es x.
-
-	  En nuestro caso, comenzamos el análisis en 450Hz, que es el límite
-	  inferior que hemos seleccionado empíricamente.
-	  22050 => 2048
-	  450   => x
-	  x = 450*2048/22050 = 41.79591 ~ 41
-
-	*/
-	  
-
-	for(int i = 41; i < 2048; ++i){
+	for(int i = 450*2048/22050; i < 2048; ++i){
 	    for (int j = 0; j < 3; j++)
 	    {
-		if( miBuffer -> out[i] > maxValue[j]){
-		    maxValue[j] =  miBuffer -> out[i];
+		if(puntero->miBuffer.out[i] > maxValue[j]){
+		    maxValue[j] = puntero->miBuffer.out[i];
 		    maxPos[j] = i;
 		    break;
 		}
 	    }			
-	    
-	    /*
-	      Hemos seleccionado como límite superior 1500Hz
-	      22050 => 2048
-	      x     => i
-	      x = i * 22050 / 2048 = i * 10.766
-	    */
-
-	    if(i * int_to_hz > 1500.) break;
+	    if(i*22050/2048 > 1500) break;
 	}
-
-	miBuffer -> mayores[0] = maxPos[0]  * int_to_hz;
-	miBuffer -> mayores[1] = maxPos[1]  * int_to_hz;
-	miBuffer -> mayores[2] = maxPos[2]  * int_to_hz;
-
-		
-	std::cout << '\xd' << "Datos:" 
-		  << std::setw(12) << miBuffer -> mayores[0] 
-		  << std::setw(12) << miBuffer -> mayores[1]  
-		  << std::setw(12) << miBuffer -> mayores[2]  
+	
+	/*
+	std::cout << '\xd' << "Datos:" << std::setw(12) << maxPos[0]*22050/2048 
+		  << std::setw(12) << maxPos[1]*22050/2048 
+		  << std::setw(12) << maxPos[2]*22050/2048 
 		  << std::setw(12) << maxValue[0]
-		  << std::flush;	//
+		  << std::flush;		
+	//*/
+
+	
+	puntero -> mayores[0] = maxPos[0] * 22050 / 2048;
+	puntero -> mayores[1] = maxPos[1] * 22050 / 2048;
+	puntero -> mayores[2] = maxPos[2] * 22050 / 2048;
+	//puntero->outputLog << maxPos << std::endl;
 
 
-
-	//outputLog << maxPos << std::endl;
-
-	miBuffer -> silencio = ((maxValue[0] < 1e+18)?true:false);
-    } //*/
+	puntero -> silencio = ((maxValue[0] < 1e+16)?true:false);
+    }
 
     return paContinue;
+
+
 }
 
 
@@ -171,13 +229,25 @@ t_altura Analizador::asociarNota(double frecuencia){
     
 }
 
-t_altura Analizador::notaActual(){
-//    cout << "Analizador::notaActual" << endl;
-    return asociarNota(miBuffer -> mayores[0]);
-}
-
-
 Analizador::~Analizador(){
-    delete miBuffer;
-    miBuffer = NULL;
+    if(iniciado){
+	// Paramos el flujo
+	PaError err = Pa_StopStream(stream);
+	if(err != paNoError)
+	    cerr << "ERROR al detener el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+
+	// Cerramos el flujo
+	err = Pa_CloseStream(stream);
+	if(err != paNoError)
+	    cerr << "ERROR al cerrar el flujo: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+
+	iniciado = false;
+    }
+
+    // Cerramos portaudio
+    err = Pa_Terminate();
+    if(err != paNoError)
+	cerr << "ERROR al cerrar PortAudio: " << Pa_GetErrorText(err) << "(" << (int) err << ")" << endl;
+
+    cout << "Borrando Analizador..." << endl;
 }
