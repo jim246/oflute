@@ -5,6 +5,8 @@
 #include "estadoImagenFija.h"
 #include "estadoMenu.h"
 #include "estadoAnalizador.h"
+#include "estadoLecciones.h"
+
 
 Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
     cout << "+++ [Constructor] Juego" << endl;
@@ -48,6 +50,10 @@ void Juego::cambiarEstado(std::string destino){
 
     else if(destino == "estadoAnalizador"){
 	estadoActual.reset(new EstadoAnalizador(this));
+    }
+
+    else if(destino == "estadoLecciones"){
+	estadoActual.reset(new EstadoMenuLecciones(this));
     }
 	
     else if(destino == "salir"){

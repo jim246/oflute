@@ -14,6 +14,10 @@ Animacion::Animacion(int iX, int iY, int fX, int fY, int d, tipoAnim anim, int e
 // ######################################################
 // Ecuaciones de tweening
 
+float Animacion::easeLinear(float t, float b, float c, float d){
+    return c * t / d + b;
+}
+
 float Animacion::easeInQuad (float t, float b, float c, float d) {
     t/=d;
     return c*t*t + b;
@@ -93,6 +97,11 @@ void Animacion::update(){
 	return;
     }else if(time >= esperaInicial){
 	switch(anim){
+	case tLinear:
+	    currX = easeLinear(time - esperaInicial, inicialX, changeX, duration);
+	    currY = easeLinear(time - esperaInicial, inicialY, changeY, duration);
+	    break;
+	    
 	case tEaseInQuad:
 	    currX = easeInQuad(time - esperaInicial, inicialX, changeX, duration);
 	    currY = easeInQuad(time - esperaInicial, inicialY, changeY, duration);
