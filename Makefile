@@ -11,8 +11,10 @@ LDLIBS+=-lSDL_ttf
 
 #tinyxml/tinyxml.a -lboost_regex -g
 
-OBJECTS=main.o juego.o estadoImagenFija.o \
-	estadoMenu.o FFT.o analizador.o controlSonido.o estadoAnalizador.o colores.o animacion.o
+OBJECTS+=main.o juego.o estadoImagenFija.o
+OBJECTS+=estadoMenu.o FFT.o analizador.o controlSonido.o 
+OBJECTS+=estadoAnalizador.o colores.o animacion.o
+OBJECTS+=estadoLecciones.o
 
 EXE=programa
 

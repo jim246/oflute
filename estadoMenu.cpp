@@ -26,6 +26,7 @@ void EstadoMenu::lanzar(){
     barraRoja.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/barraInferior.png"));
 
     
+    // Inicializamos las animaciones
     int pInit = 290;
     for (int i = 0; i < 6; ++i)
     {
@@ -36,22 +37,16 @@ void EstadoMenu::lanzar(){
 					   i * 10));
     }
 
-    btnUca.reset(new Gosu::Image(padre -> graphics(), 
-				 Gosu::resourcePrefix() + L"media/menuAssets/btnUca.png"));//*/
+    animOpacidadFondo.reset(new Animacion(0,0,255,0, 30, Animacion::tEaseOutQuad));
+    animLogoCusl.reset(new Animacion(820, 10, 590, 10, 30, Animacion::tEaseOutBack, 40));
+    animLogotipo.reset(new Animacion(0, 0, 255, 0, 30, Animacion::tEaseOutQuart,10));
 
+    // Inicializamos los botones del menú
+    btnUca.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/btnUca.png"));//*/
     btn1.reset(new BotonMenu(padre -> graphics(), "Analizador de notas", Gosu::Color(255,3,69,90)));
     btn2.reset(new BotonMenu(padre -> graphics(), "Canciones(Inactivo)", Gosu::Color(255,34,139,114)));
     btn3.reset(new BotonMenu(padre -> graphics(), "Lecciones", Gosu::Color(255,188,216,56)));
     btn4.reset(new BotonMenu(padre -> graphics(), "Salir", Gosu::Color(255,245,215,19)));
-
-
-
-
-    animOpacidadFondo.reset(new Animacion(0,0,255,0, 30, Animacion::tEaseOutQuad));
-
-    animLogoCusl.reset(new Animacion(820, 10, 590, 10, 30, Animacion::tEaseOutBack, 40));
-    animLogotipo.reset(new Animacion(0, 0, 255, 0, 30, Animacion::tEaseOutQuart,10));
-
 }
 
 void EstadoMenu::update(){
@@ -94,7 +89,7 @@ void EstadoMenu::update(){
 	
     }
 
-    // 2: Guardamos los botones
+    // 3: Inicialización del guardado de los botones, se reinician las animaciones
     
     else if(estadoAnim == 3){
 	for (int i = 5; i > -1; --i)
@@ -116,6 +111,8 @@ void EstadoMenu::update(){
 	animLogoCusl -> setEspera(0);
 	animLogoCusl -> init();
 
+	animLogotipo.reset(new Animacion(255,0,0,0, 30, Animacion::tLinear, 10) );
+
 	estadoAnim = 4;
     }
 
@@ -132,7 +129,9 @@ void EstadoMenu::update(){
 	   animaciones[2] -> finished() &&
 	   animaciones[3] -> finished() &&
 	   animaciones[4] -> finished() &&
-	   animaciones[5] -> finished() ){
+	   animaciones[5] -> finished() &&
+	   animLogoCusl -> finished() &&
+	   animLogotipo -> finished() ){
 	    estadoAnim = 5;
 	    cout << "** Los botones se escondieron." << endl;
 	}

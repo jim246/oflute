@@ -38,7 +38,7 @@ public:
     enum tipoAnim {tEaseInQuad, tEaseOutQuad, tEaseInOutQuad,
 		   tEaseInCubic, tEaseOutCubic, tEaseInOutCubic,
 		   tEaseInQuart, tEaseOutQuart, tEaseInOutQuart,
-		   tEaseOutBack};
+		   tEaseOutBack, tLinear};
 
     Animacion(int iX, int iY, 
 	      int fX, int fY, int d, 
@@ -47,11 +47,7 @@ public:
     inline void init() { time = 0; };
     inline void end() { time = duration + esperaInicial; };
 
-    inline bool finished(){ 
-//	cout << "time: " << time << ", duration: " << duration << ", e: " << esperaInicial << endl;
-	return time >= duration + esperaInicial; 
-    }
-
+    inline bool finished(){ return time >= duration + esperaInicial;  }
 
     inline float getX() { return currX; };
     inline float getY() { return currY; };
@@ -67,8 +63,12 @@ public:
     inline void setDuracion(int d) { duration = d; }
     inline void setEspera(int e) { esperaInicial = e; }
 
+
+
 // ######################################################
 // Ecuaciones de tweening
+
+    float easeLinear(float t, float b, float c, float d);
 
     float easeInQuad (float t, float b, float c, float d);
     float easeOutQuad(float t, float b, float c, float d);
