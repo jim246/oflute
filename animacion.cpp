@@ -1,4 +1,5 @@
 #include "animacion.h"
+#include "log.h"
 
 Animacion::Animacion(int iX, int iY, int fX, int fY, int d, tipoAnim anim, int e):
     inicialX(iX), inicialY(iY), finalX(fX), finalY(fY), 
@@ -6,7 +7,7 @@ Animacion::Animacion(int iX, int iY, int fX, int fY, int d, tipoAnim anim, int e
     currX(inicialX), currY(inicialY),
     changeX(finalX - inicialX), changeY(finalY - inicialY),
     anim(anim){
-    cout << "+++ Animación::Constructor" << endl;
+    lDEBUG << Log::CON("Animación");
 }
 
 //void Animacion::init(){ time = 0; }
@@ -154,6 +155,6 @@ void Animacion::update(){
 
 
 Animacion::~Animacion(){
-    cout << "--- Animación::DESTRUCTOR" << endl;
+    lDEBUG << Log::DES("Animación");
 }
 

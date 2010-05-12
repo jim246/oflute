@@ -1,18 +1,19 @@
 #include "estadoMenu.h"
 #include "juego.h"
+#include "log.h"
 
 #include <cmath>
 
 int posFinalesY[] = {281, 332, 383, 434, 485, 589 };
 
 EstadoMenu::EstadoMenu (Juego * p) : Estado(p){
-    cout << "+++ [Constructor] EstadoMenu" << endl;
+    lDEBUG << Log::CON("EstadoMenu");
     p -> setCaption(L"oFlute .:. Menú principal");
 
 }
 
 void EstadoMenu::lanzar(){
-    cout << "* EstadoMenu lanzado" << endl;
+    lDEBUG << "* EstadoMenu lanzado" ;
     lanzado = true;
     estadoAnim = 0;
  
@@ -79,7 +80,7 @@ void EstadoMenu::update(){
 	}
 
 	if(j == 5){
-	    cout << "** Los botones llegaron a su lugar" << endl;
+	    lDEBUG << "** Los botones llegaron a su lugar" ;
 	    estadoAnim = 2;
 	}
     }
@@ -94,7 +95,6 @@ void EstadoMenu::update(){
     else if(estadoAnim == 3){
 	for (int i = 5; i > -1; --i)
 	{
-	    cout << i << endl;
 	    animaciones[i] -> setInicialY( animaciones[i] -> getY() );
 	    animaciones[i] -> setFinalY(600);
 	    animaciones[i] -> setTipoAnimacion(Animacion::tEaseInQuart);
@@ -133,7 +133,7 @@ void EstadoMenu::update(){
 	   animLogoCusl -> finished() &&
 	   animLogotipo -> finished() ){
 	    estadoAnim = 5;
-	    cout << "** Los botones se escondieron." << endl;
+	    lDEBUG << "** Los botones se escondieron." ;
 	}
 	
 	
@@ -199,13 +199,10 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 	}
 
 	
-	cout << "*** LMB @ (" << x << "," << y << ")" << endl;
-    }
-    else{
-	cout << "KABOOM" << endl;
+	lDEBUG << "*** LMB @ (" << x << "," << y << ")" ;
     }
 }
 
 EstadoMenu::~EstadoMenu(){
-    cout << "--- [DESTRUCTOR] EstadoMenu" << endl << endl;
+    lDEBUG << Log::DES("EstadoMenu");
 }//*/
