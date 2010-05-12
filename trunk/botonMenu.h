@@ -27,6 +27,7 @@
 
 #include <Gosu/Gosu.hpp>
 #include "customFont.h"
+#include "log.h"
 
 #include <string>
 #include <iostream>
@@ -54,7 +55,7 @@ public:
 	    fuenteSombra(new customFont(graphics, L"media/fNormal.ttf", TAMANYO)),
 	    imagen(new Gosu::Image(graphics, L"media/btnTemplate.png")),
 	    lastX(0), lastY(0)	{
-	cout << ">>> [Constructor] BotonMenu" << endl;
+	lDEBUG << Log::CON("BotonMenu");
     }
 
     void draw(int x, int y, Gosu::ZPos z){
@@ -77,6 +78,10 @@ public:
 	}else{
 	    return false;
 	}
+    }
+
+    ~BotonMenu(){
+	lDEBUG << Log::DES("BotonMenu");
     }
 
 };

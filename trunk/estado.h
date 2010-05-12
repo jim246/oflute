@@ -25,6 +25,8 @@
 #include <Gosu/Gosu.hpp>
 #include <iostream>
 
+#include "log.h"
+
 using namespace std;
 
 class Juego;
@@ -55,9 +57,7 @@ public:
 
        @param p puntero a la clase Juego que controla la aplicación
     **/
-    Estado(Juego * p):padre(p){
-	cout << "+++ [Constructor] Estado" << endl;
-    };
+    Estado(Juego * p);
 
     /// Si es necesario lanzar acciones independientes del constructor, irán aquí.
     virtual void lanzar(){};
@@ -70,9 +70,8 @@ public:
 
     /// Opcionalmente los estados pueden responder a la entrada redefiniendo este método.
     virtual void buttonDown(Gosu::Button){};
-    virtual ~Estado(){
-	cout << "--- [DESTRUCTOR] Estado" << endl;
-    };
+
+    virtual ~Estado();
 };
 
 #endif /* _ESTADO_H_ */

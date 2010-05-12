@@ -1,5 +1,6 @@
 #include "estadoImagenFija.h"
 #include "juego.h"
+#include "log.h"
 
 EstadoImagenFija::EstadoImagenFija (Juego * p, 
 				    wstring nombreImagen, 
@@ -9,11 +10,11 @@ EstadoImagenFija::EstadoImagenFija (Juego * p,
       nombreImagen(nombreImagen), 
       estadoSiguiente(estadoSiguiente),
       tiempoEspera(tiempoEspera){
-    cout << "+++ [Constructor] EstadoImagenFija" << endl;
+    lDEBUG << Log::CON("EstadoImagenFija");
 }
 
 void EstadoImagenFija::lanzar(){
-    cout << "* EstadoImagenFija lanzado" << endl;
+    lDEBUG << "EstadoImagenFija lanzado.";
     lanzado = true;
     estadoAnim = 0;
     alphaActual = 0;
@@ -69,7 +70,7 @@ void EstadoImagenFija::buttonDown(Gosu::Button boton){
 //	padre -> close();
 	accionPosterior();
     }else{
-	cout << "KABOOM" << endl;
+	lDEBUG << "Detectada pulsación de tecla.";
     }
 }
 
@@ -78,5 +79,5 @@ void EstadoImagenFija::accionPosterior(){
 }
 
 EstadoImagenFija::~EstadoImagenFija(){
-    cout << "--- [DESTRUCTOR] EstadoImagenFija" << endl;
+    lDEBUG << Log::DES("EstadoImagenFija");
 }

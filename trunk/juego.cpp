@@ -7,9 +7,11 @@
 #include "estadoAnalizador.h"
 #include "estadoLecciones.h"
 
+#include "log.h"
+
 
 Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
-    cout << "+++ [Constructor] Juego" << endl;
+    lDEBUG << Log::CON("Juego");
     setCaption(L"oFlute .:.");
     estadoActual.reset ( 
 	new EstadoImagenFija(this,
@@ -26,13 +28,16 @@ void Juego::update(){
 }
 
 void Juego::draw(){
+    // Dibujamos el cursor en la posición del ratón
+    // Usamos Z=999 para que esté encima de todo
+
     cursor -> draw(input().mouseX(), input().mouseY(), 999);
     estadoActual -> draw();
 }
 
 
 void Juego::cambiarEstado(std::string destino){
-    cout << "**** juego::cambiarEstado(" << destino << ")" << endl;
+    lDEBUG << "\t>>>>>>>>>>>>> Nuevo estado: " << destino;
 
     if(destino == "estadoIntro"){
 	estadoActual.reset(
@@ -66,5 +71,5 @@ void Juego::buttonDown(Gosu::Button boton){
 }    
 
 Juego::~Juego(){
-    cout << "--- [DESTRUCTOR] Juego" << endl;
+    lDEBUG << Log::DES("Juego");
 }
