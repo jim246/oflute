@@ -15,7 +15,7 @@ EstadoMenu::EstadoMenu (Juego * p) : Estado(p){
 void EstadoMenu::lanzar(){
     lDEBUG << "* EstadoMenu lanzado" ;
     lanzado = true;
-    estadoAnim = 0;
+    estadoAnim = eFADEIN;
  
     // Poblamos el puntero de las imágenes
     imgFondo.reset(new Gosu::Image(padre -> graphics(), L"media/fondoGenerico.png"));
@@ -62,16 +62,16 @@ void EstadoMenu::update(){
 
 
     // 0: Haciendo el fade in
-    if(estadoAnim == 0){
+    if(estadoAnim == eFADEIN){
 	animOpacidadFondo -> update();
 
 	if(animOpacidadFondo -> getX() == 255){
-	    estadoAnim = 1;
+	    estadoAnim = eBOTONESIN;
 	}
     }
 
     // 1: Sacando botones
-    else if(estadoAnim == 1){
+    else if(estadoAnim == eBOTONESIN){
 	int j = 0;
 	for (int i = 0; i < 6; ++i)
 	{
@@ -81,18 +81,18 @@ void EstadoMenu::update(){
 
 	if(j == 5){
 	    lDEBUG << "** Los botones llegaron a su lugar" ;
-	    estadoAnim = 2;
+	    estadoAnim = eESTATICO;
 	}
     }
     
-    else if(estadoAnim == 2){
+    else if(estadoAnim == eESTATICO){
 	// Los botones están en su sitio, parados
 	
     }
 
     // 3: Inicialización del guardado de los botones, se reinician las animaciones
     
-    else if(estadoAnim == 3){
+    else if(estadoAnim == eBOTONESOUT){
 	for (int i = 5; i > -1; --i)
 	{
 	    animaciones[i] -> setInicialY( animaciones[i] -> getY() );
@@ -113,10 +113,10 @@ void EstadoMenu::update(){
 
 	animLogotipo.reset(new Animacion(255,0,0,0, 30, Animacion::tLinear, 10) );
 
-	estadoAnim = 4;
+	estadoAnim = eANIMOUT;
     }
 
-    else if(estadoAnim == 4){
+    else if(estadoAnim == eANIMOUT){
 	
 	int j = 0;
 	for (int i = 0; i < 6; ++i)
@@ -132,14 +132,14 @@ void EstadoMenu::update(){
 	   animaciones[5] -> finished() &&
 	   animLogoCusl -> finished() &&
 	   animLogotipo -> finished() ){
-	    estadoAnim = 5;
+	    estadoAnim = eANIMEND;
 	    lDEBUG << "** Los botones se escondieron." ;
 	}
 	
 	
     }
 
-    else if(estadoAnim == 5){
+    else if(estadoAnim == eANIMEND){
 	padre -> cambiarEstado(estadoDestino);
     }
 }
@@ -171,9 +171,32 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 
 
     if(boton == Gosu::kbEscape){
-	estadoDestino = "salir";
-	estadoAnim = 3;
-    } //*/
+	lDEBUG << "Escape pulsado " << VARV(estadoAnim);
+	if(estadoAnim < eESTATICO){
+	    for (int i = 0; i < 6; ++i)
+	    {
+		animaciones[i] -> end();
+	    }
+	    animLogoCusl -> end();
+	    animLogotipo -> end();
+	    estadoAnim = eESTATICO;
+	}
+
+	else if(estadoAnim < eBOTONESOUT){
+	    estadoDestino = "salir";
+	    estadoAnim = eBOTONESOUT;
+	} //*/
+
+	else if(estadoAnim < eANIMEND){
+	    estadoAnim = eANIMEND;
+	    for (int i = 0; i < 6; ++i)
+	    {
+		animaciones[i] -> end();
+	    }
+	    animLogoCusl -> end();
+	    animLogotipo -> end();
+	}
+    }
 
     if(boton == Gosu::msLeft){
 	int x = padre -> input().mouseX();
@@ -181,7 +204,7 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 	
 	if(btn1 -> clicked(x,y)){
 	    estadoDestino = "estadoAnalizador";
-	    estadoAnim = 3;
+	    estadoAnim = eBOTONESOUT;
 	}
 
 	else if(btn2 -> clicked(x,y)){
@@ -190,12 +213,12 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 
 	else if(btn3 -> clicked(x,y)){
 	    estadoDestino = "estadoLecciones";
-	    estadoAnim = 3;
+	    estadoAnim = eBOTONESOUT;
 	}
 
 	else if(btn4 -> clicked(x,y)){
 	    estadoDestino = "salir";
-	    estadoAnim = 3;
+	    estadoAnim = eBOTONESOUT;
 	}
 
 	
