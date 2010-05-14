@@ -45,7 +45,7 @@ public:
 	      tipoAnim anim = tEaseInQuad, int e=0);
 
     inline void init() { time = 0; };
-    inline void end() { time = duration + esperaInicial; };
+    inline void end() { time = duration + esperaInicial; update(); };
 
     inline bool finished(){ return time >= duration + esperaInicial;  }
 

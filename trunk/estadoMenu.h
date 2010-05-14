@@ -86,6 +86,8 @@ class EstadoMenu : public Estado{
     int estadoAnim;
 
     std::string estadoDestino;
+
+    enum {eFADEIN, eBOTONESIN, eESTATICO, eBOTONESOUT, eANIMOUT, eANIMEND};
     
     //float posY[5]; //, posFinalesX[5];
 public:
