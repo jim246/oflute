@@ -1,0 +1,91 @@
+\documentclass[landscape]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+
+\usepackage[top=1cm, bottom=1cm, left=1cm, right=1cm]{geometry}
+
+\usepackage{multicol}
+\setlength{\columnsep}{20pt}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{setspace}
+\onehalfspacing
+
+\setlength{\parskip}{0.4cm}
+
+\title{Mini Guía Emacs para estudiantes de ADA Y POO}
+\author{José Tomás Tocino García}
+\date{}
+
+\begin{document}
+
+\pagestyle{empty}
+\begin{multicols*}{2}
+
+\begin{center}
+\begin{Large}\textbf{$\mu$-Guía Emacs para estudiantes}\end{Large}\\
+\begin{large}José Tomás Tocino García\end{large}\\[0.1cm]
+
+{\small Licencia CC - Reconocimiento - No comercial - Compartir igual.\\
+http://creativecommons.org/licenses/by-nc-sa/2.5/es/}
+ 
+\end{center}
+
+Estoy seguro de que muchos de vosotros estáis hartos de que cada vez que vais a las prácticas, os encontréis con los editores del OpenSuSe (u otra distribución) siempre desconfigurados: Que si el indentado está a 8 espacios, que si la letra se ve demasiado difuminada, que si la fuente no es legible, que si el ratón tiene tanta mierda que la bola no rueda... Por eso, para que la vida sea feliz y aprobéis las prácticas de una vez, os traigo la miniguía definitiva del editor \textbf{Emacs}!! 
+
+Probablemente lo hayáis ejecutado alguna vez y, al intentar cerrarlo, hayáis acabado reiniciando el ordenador. LOL!! Si queréis \textbf{salir del Emacs}, tendréis que pulsar \texttt{control + x}, levantarlo, y luego pulsar \texttt{control + c}. Eso se suele escribir de esta forma: \texttt{C-x C-c}. 
+
+Una vez que hayáis abierto Emacs, podéis escribir \textbf{directamente}, no como el \textit{vi ese raro} que hay que liar una... Inicialmente os aparecerá una página con información sobre Emacs, y si pulsáis cualquier tecla aparecerá un búffer con tres líneas arriba. Este búffer es para tomar notas, si quieres escribir un archivo \textbf{nuevo}, pulsa \texttt{C-x C-f}. En la parte inferior de la ventana os pondrá \texttt{Find file}. Ahí podéis escribir el nombre del nuevo archivo, o introducir la ruta de un archivo que queráis abrir. Sí señores, Emacs utiliza el mismo comando para \textbf{abrir un archivo} y para crear uno nuevo. Seguro que el \textit{vi ese raro} no hace lo mismo.
+
+Podéis \textbf{moveros por el documento} usando las teclas de cursor, pero si realmente te sientes \textit{friki 100\%}, tendrás que usar los comandos que trae el Emacs para moverte por el documento. Son un poco difíciles de aprender, pero hey, nadie dijo que ser programador fuera fácil. Realmente podéis usar las teclas normales para hacer los movimientos corrientes, a saber: teclas de cursor, ctrl + flechas para moverte por palabras, teclas de inicio y fin, av.pág. y re.pág., ctrl + inicio y ctrl + fin, etcétera. Emacs incluye muchas opciones de movimiento, que podéis encontrar en nuestro amigo Google. Las que os interesaría conocer a la hora de programar son:
+\vspace{-0.5cm}
+\begin{itemize}
+ \item \texttt{C-M-a y C-M-e}: La M simboliza la tecla Meta (el alt, vamos). Con \texttt{C-M-a} vamos a la anterior función, y con \texttt{C-M-e} saltamos a la siguiente
+\item \texttt{M-a}: Pasamos al inicio de la sentencia anterior. Útil si la línea está muy indentada y la tecla de inicio nos deja muy lejos.
+\item \texttt{M-e}: Pasamos al final de la setencia siguiente. Interesante si tenemos sentencias de más de una línea (como las cabeceras de funciones con muchos parámetros).
+\end{itemize}
+
+Una vez hayáis escrito vuestra vida y obra, podéis hacerle un favor a la humanidad y cerrar emacs como dijimos antes. Si, en cambio, queréis \textbf{guardar el texto}, tenéis que pulsar \texttt{C-x C-s}. Abajo aparecerá el texto \texttt{Wrote /home/juanito/archivo}, indicando que todo ha ido bien.
+
+\textbf{¿Y eso de los búffers qué es? Pff, mejor me vuelvo al Dev-C++...} ¡De eso nada! Es sencillo: Al abrir un fichero, Emacs coloca su contenido en uno de sus búffers. Lo que iremos editando será ese búffer, no el fichero. Finalmente cuando queramos guardar las modificaciones, grabaremos el contenido del búffer de nuevo al fichero.
+
+En Emacs, editamos los búffers en \textbf{ventanas}. Inicialmente en emacs sólo veremos una ventana que ocupa todo el área, pero podemos tener tantas como queramos. Prueba a coger y pulsar \texttt{C-x 2}. Tachán! Se \textbf{divide horizontalmente} la ventana en dos ventanas con el mismo contenido. Ahora pulsa \texttt{C-x 3}. Como verás, se divide verticalmente la ventana en la que estabas. Si quieres ir saltando de ventana en ventana, pulsa \texttt{C-x o}. Así, podrías tener en una ventana el archivo \texttt{Persona.h}, en otra \texttt{Persona.cpp} y en otra más grande \texttt{main.cpp}, e irlos editando sin tener que mover las manos del teclado.
+
+Puede que al rato te canses de tener tantas ventanas y sólo quieras tener una sóla. Para ello, pulsa \texttt{C-x 0}. Ahora tendrás \textbf{una sóla ventana}, con un búffer abierto en ella, pero a la vez tendrás otros búffers abiertos pero escondidos, con el contenido de los otros archivos. Puedes \textbf{cambiar de búffer} pulsando \texttt{C-x b}. Abajo te aparecerá un mensaje: \texttt{Switch to buffer:}. Tendrás que indicar el nombre del búffer al que quieres cambiar. Puedes pulsar en ese momento la tecla \texttt{Tabulador} para ver la lista de búffers abiertos. Emacs es como el shell bash, puedes empezar a escribir el nombre del búffer y pulsar \texttt{tabulador}, y Emacs intentará autocompletar el nombre para que no tengas que destrozarte los dedos.
+
+Por último, si quieres \textbf{cerrar} un búffer, pulsa \texttt{C-x k}. Te pedirá confirmación, pulsa \texttt{intro} para mandar al búffer a mejor vida.
+
+\textbf{Maldito friki, todavía no me has convencido para que use Emacs en lugar de Microsoft Word.} Bien, habrá que empezar a sacar la artillería pesada.
+
+\vfill
+\pagebreak
+
+\subsection*{Copiando, buscando y compilando}
+\vspace{-0.4cm}
+Suponte que quieres tienes dos ventanas, en una tu práctica de POO que tienes que mandar esta noche, aún sin acabar. En la otra ventana, tienes la práctica de cualquier otro cateto al que hayas conseguido birlársela. Para \textbf{copiar un texto} y pegarlo en otro lado, primero deberás \textbf{marcarlo}. Coloca el cursor al inicio del bloque de texto a copiar y pulsa \texttt{C-Espacio}. Verás que abajo aparece el mensaje \texttt{Mark set}. Ahora coloca el cursor al final del bloque. Si quieres copiar el texto, pulsa \texttt{M-w}, y si quieres \textbf{cortarlo o eliminarlo} pulsa \texttt{C-w}.
+
+Ahora puedes saltar a la otra ventana (recuerda, usando \texttt{C-x o}) y \textbf{pegar el bloque} de texto donde menos se note que no lo has hecho tú. Coloca el cursor donde quieras y pulsa \texttt{C-y}. Voilá! Ya tienes la práctica lista para mandar.
+
+Aich. Parece que el tío al que le has copiado la práctica ha puesto su nombre en varios sitios del código. Puedes hacer una \textbf{búsqueda} pulsando \texttt{C-s} y escribiendo el término a buscar. Mientras vas escribiendo, se irán resaltando las coincidencias. Puedes ir a la \textbf{siguiente} coincidencia pulsando de nuevo \texttt{C-s}, o ir a la \textbf{anterior} con \texttt{C-r}. Puedes terminar la búsqueda con \texttt{C-g}. Este comando, además, \textbf{termina} cualquier otro comando que estés utilizando, así que si te \textbf{entra el pánico} en cualquier momento, pulsa repetidamente \texttt{C-g}.
+
+Emacs no sólo puede buscar, también puede \textbf{reemplazar}, porque Emacs es \textit{awesome}. Para reemplazar, pulsa \texttt{M-\%} (esto es, alt + shift + 5). Emacs te preguntará por la cadena a buscar, y al pulsar intro, te preguntará por la cadena de reemplazo. Seguidamente irá recorriendo todas las ocurrencias de la cadena original, preguntándote si quieres reemplazar. Simplemente pulsa ``y'' o ``n''. Si quieres salir del modo de reemplazo, usa \texttt{C-g}.
+
+Bueno, ya tienes el código preparado. No queda ni rastro del autor original del mismo, seguro que Paco ni se da cuenta. Lo que queda es \textbf{compilarlo}. Como Emacs es \textit{awesome}, puedes compilar directamente desde el editor. Para ello, tendrás que teclear un comando escrito. En Emacs, para \textbf{introducir un comando}, sea cual sea, tienes que pulsar \texttt{M-x}. Seguidamente, podrás escribir el comando. En nuestro caso, tendrías que introducir el comando \texttt{compile}, y pulsar intro. Emacs te pedirá que confirmes el comando que usará para compilar, por defecto \texttt{make -k}. Si no tienes un \texttt{makefile}, podrás cambiar el comando a ejecutar a algo como \texttt{g++ -o programa main.cpp}.
+
+Tras pulsar intro, se abrirá una ventana de Emacs y en ella aparecerá la información de compilación. Si hay errores, aparecerán resaltados. Además, si haces click sobre ellos podrás navegar directamente al archivo y línea en la que se produjo el error. Si al final no hubo error, seguro que estás deseando \textbf{ejecutar el programa} a ver qué tal va. 
+
+Hay dos formas de hacerlo. Por un lado, tienes la posibilidad de tener en una de las ventanas una \textbf{shell completa} en la que introducir comandos. Esto lo puedes hacer pulsando \texttt{M-x} y escribiendo \texttt{shell}. Si lo que realmente te interesa es \textbf{ejecutar un sólo comando}, también puedes hacerlo pulsando \texttt{M-!} (es decir, alt + shift + 1) e introduciendo el comando, por ejemplo \texttt{./programa}. En el minibúffer aparecerán los resultados del ejecutable.
+
+\subsection*{Indentando y comentando}
+\vspace{-0.4cm}
+Esta parte es realmente interesante. Emacs es capaz de \textbf{indentar el código automáticamente}. Puedes tener el código hecho unos zorros, que Emacs te lo pone fino y seguro en un plisplás. Hay muchas formas de hacerlo. La más directa es, simplemente, ir escribiendo. A medida que vas escribiendo, Emacs va indentando el código que escribes. De todas formas, puede que la hayas pifiado en algún sitio y quieres que Emacs te lo indente. Lo único que tienes que hacer es ir a esa línea (no hace falta que sea al inicio de la misma) y pulsar \texttt{tabulador}. Te lo indentará correctamente respecto a las líneas anteriores.
+
+Otra forma sería ir indentar todo el contenido de un \textbf{bloque}, una función por ejemplo. Colocamos el cursor en el brazo de apertura \{, y pulsamos \texttt{C-M-q}. El código dentro del bloque quedará indentado. Por último, podemos indentar un bloque \textbf{seleccionado manualmente}: Nos vamos al inicio, pulsamos \texttt{C-Espacio}, nos vamos al final y metemos el comando \texttt{indent-region} (para meter el comando recuerda que es con \texttt{M-x}).
+
+Por último, podemos hacer algo parecido a la indentación pero para \textbf{comentar las líneas}. Selecciona un bloque con \texttt{C-Espacio}, coloca el cursor al final del mismo y pulsa \texttt{C-c C-c}. El código quedará comentado. Para \textbf{descomentarlo}, puedes usar el comando \texttt{uncomment-region} (con poner \texttt{unc} y pulsar \texttt{tabulador} ya aparece).
+
+Bueno, por ahora eso es todo. Emacs es \textbf{mucho más} que esta $\mu$-guía, pero con lo de aquí puedes tirar \textit{pa'lante} más o menos. Siempre puedes mirar la ayuda del modo pulsando \texttt{C-h m}, o buscar en San Google. ¡Espero que sirva! Un saludo.
+\end{multicols*}
+\end{document}
