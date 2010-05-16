@@ -353,7 +353,7 @@ Copyright (C) 2008 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/om3/cusl4-oflute/trunk/gosu/linux'
+ac_pwd='/home/jose/cusl4-oflute/trunk/gosu/linux'
 srcdir='.'
 test -n "$AWK" || AWK=awk
 # The default lists apply if the user does not specify any file.
@@ -517,8 +517,8 @@ S["EGREP"]="/bin/grep -E"
 S["GREP"]="/bin/grep"
 S["AUDIO_INC"]="-I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT"
 S["AUDIO_LIBS"]="-L/usr/lib -lSDL -lSDL_mixer"
-S["PANGO_LIBS"]="-lpangoft2-1.0 -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lglib-2.0  "
-S["PANGO_CXX_FLAGS"]="-I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include  "
+S["PANGO_LIBS"]="-pthread -lpangoft2-1.0 -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0  "
+S["PANGO_CXX_FLAGS"]="-pthread -I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include  "
 S["x_libraries"]=""
 S["X_INCS"]=""
 S["CPP"]="gcc -E"
