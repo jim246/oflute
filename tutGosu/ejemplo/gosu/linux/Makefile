@@ -1,6 +1,6 @@
 PKG_CONFIG = pkg-config
 
-GOSU_DIR = /home/jose/cusl4-oflute/Tutorial Gosu/ejemplo/gosu/linux/..
+GOSU_DIR = /home/jose/cusl4-oflute/tutGosu/ejemplo/gosu/linux/..
 
 BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 	    Graphics/Bitmap.o InputX.o TextInputX.o			\
