@@ -1,34 +1,60 @@
-/**
- * @file main.cpp
- * 
- * @author José Tomás Tocino García
- * @date 2010
- *
- * Fichero inicial de oFlute
- * 
- * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
- * 
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
+#include "Gosu/Gosu.hpp"
+#include <iostream>
 
-#include "juego.h"
+using namespace std;
+
+#include <boost/scoped_ptr.hpp>
+
+
+class pruebaParticle : public Gosu::Window{
+    boost::scoped_ptr<Gosu::Image> imagen;
+public:
+    pruebaParticle() : Gosu::Window(800, 600, false){
+	cout << "+++ pruebaParticle::CONSTRUCTOR" << endl;
+//	imagen.reset(new Gosu::Image(graphics(), L"do5.png"));
+	Gosu::Bitmap B = Gosu::quickLoadBitmap(L"do5.png");
+
+	unsigned w_ = B.width();
+	unsigned h_ = B.height();
+	for (int i = 0; i < w_; ++i)
+	{
+	    for (int j = 0; j < h_; ++j)
+	    {
+		Gosu::Color c = B.getPixel(i,j);
+		c.setSaturation(0);
+		B.setPixel(i,j,c);
+	    }
+	}
+	imagen.reset(new Gosu::Image(graphics(), B);)
+    }
+
+    void update(){
+
+    }
+    
+    void draw(){
+	Gosu::Color c (255,255,255);
+
+	imagen -> draw(0,0,1);
+    }
+
+    void buttonDown(Gosu::Button boton){
+	if(boton == Gosu::kbEscape){
+	    close();
+	}
+    }
+
+    ~pruebaParticle(){
+	cout << "--- pruebaParticle::DESTRUCTOR" << endl;
+    }
+};
+
 
 int main(int argc, char *argv[])
 {
-    Juego juego;
-    juego.show();
+    std::cout << "\n########### PULSE CUALQUIER TECLA PARA QUE APAREZCAN LOS FUEGOS ARTIFICIALES ######\n" << std::endl;	    
+    pruebaParticle P;
+    P.show();
     return 0;
 }
+
