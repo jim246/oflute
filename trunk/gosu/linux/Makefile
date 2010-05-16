@@ -1,6 +1,6 @@
 PKG_CONFIG = pkg-config
 
-GOSU_DIR = /home/om3/cusl4-oflute/trunk/gosu/linux/..
+GOSU_DIR = /home/jose/cusl4-oflute/trunk/gosu/linux/..
 
 BASE_OBJS = Math.o Utility.o IO.o FileUnix.o TimingUnix.o WindowX.o	\
 	    Graphics/Bitmap.o InputX.o TextInputX.o			\
@@ -22,12 +22,12 @@ OBJS = $(BASE_OBJS) $(NET_OBJS) $(SDLMIXER_OBJ)
 
 XPLS = $(GOSU_DIR)/examples/Tutorial $(GOSU_DIR)/examples/TextInput
 
-CXXFLAGS = -fPIC -I.. -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -Wall -I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include    \
+CXXFLAGS = -fPIC -I.. -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -Wall -pthread -I/usr/include/pango-1.0 -I/usr/include/freetype2 -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include    \
 	   -DHAVE_SYS_STAT_H -DHAVE_EACCESS -I \
 	   -I -DNDEBUG -O3 -pipe -fomit-frame-pointer \
 	   -I/usr/include/SDL
 
-LIBS = -L/usr/lib -lSDL -lSDL_mixer -L -lX11 -lpangoft2-1.0 -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lglib-2.0   -lpng -lstdc++ -lGL #-lboost_thread
+LIBS = -L/usr/lib -lSDL -lSDL_mixer -L -lX11 -pthread -lpangoft2-1.0 -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0   -lpng -lstdc++ -lGL #-lboost_thread
 
 RUBY_LIBS = $(LIBS)   -lm -lc -lcrypt #-lboost_thread
 
