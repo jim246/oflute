@@ -1,0 +1,706 @@
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><title>Class: Gosu::Image</title><link type="text/css" href="../.././rdoc-style.css" rel="stylesheet" media="screen"/><script type="text/javascript">
+// Allison template
+// Copyright 2007, 2008 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file.
+
+var href_base = '../.././rdoc-style.css'.replace(/(.*\/).*/, '$1'); // inline js is good for something  
+
+function $(id) {
+    if (document.getElementById)
+      elem = document.getElementById(id);
+    else if ( document.all )
+      elem = eval("document.all." + id);
+    else
+      return false;
+    return elem;
+}
+
+  function toggle(id) {
+    elem = $(id);
+    elemStyle = elem.style;   
+    if (elemStyle.display == "block") {
+      elemStyle.display = "none"
+    } else {
+      elemStyle.display = "block"
+    }
+    return true;
+  }
+
+  function toggleText(id) {
+    elem = $(id)
+    if (m = elem.innerHTML.match(/(Hide)(.*)/)) {
+      elem.innerHTML = "Show" + m[2];
+    } else if (m = elem.innerHTML.match(/(Show)(.*)/)) {
+      elem.innerHTML = "Hide" + m[2];
+    }
+    return true;
+  }
+
+function span(s, klass) {
+  return '<span class="' + klass + '">' + s + '</span>';
+}
+  
+function highlightSymbols() {
+  pres = document.getElementsByTagName('pre');
+  for(var i = 0; i < pres.length; i++) {
+    pre = pres[i];
+    spans = pre.getElementsByTagName('span');
+    for(var k = 0; k < spans.length; k++) {
+      span = spans[k];
+      if (span.className.match(/ruby-identifier/)) {
+        if (span.innerHTML.match(/^:/)) {
+          span.className += " ruby-symbol";
+        }
+      }
+    }
+  }
+}
+
+ function hasClass(obj) {
+     var result = false;
+     if (obj.getAttributeNode("class") != null) {
+         result = obj.getAttributeNode("class").value;
+     }
+     return result;
+  }   
+
+ function stripe() {
+    var even = true;
+    var color = "#e4ebed";
+    var tables = document.getElementsByTagName('table');
+    if (tables.length == 0) { return; }
+    for (var h = 0; h < tables.length; h++) {
+        var trs = tables[h].getElementsByTagName("tr");
+        for (var i = 0; i < trs.length; i++) {
+          var tds = trs[i].getElementsByTagName("td");
+            for (var j = 0; j < tds.length; j++) {       
+              if (hasClass(tds[j]) != "first") {                
+              var mytd = tds[j];
+              if (even) {
+                mytd.style.backgroundColor = color;
+              }         
+            }
+          }
+          even =  ! even;
+      }
+    }
+  }
+  
+function ajaxGet(url) {
+  url = (href_base + url).replace('/./', '/')
+  var req = false;
+
+  if (window.ActiveXObject) {
+    try {
+      // stupid hack because IE7 disables local Ajax with the native xmlhttprequest object
+      // for security purposes. Yet ActiveX still works. Thanks, Microsoft. I hate you. Die.
+      req = new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    } catch (e) {
+      try {
+        /* IE 6 and maybe 5, don't know, don't care */
+        req = new ActiveXObject("Msxml2.XMLHTTP");
+      } catch (e) {
+        try {
+          req = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (e) {
+          req = false;
+        }
+      }
+    }
+  }
+    
+  /* real browsers */
+  if (!req && window.XMLHttpRequest) {
+    try {
+      req = new XMLHttpRequest();
+    } catch (e) {
+      req = false;
+    }
+  } 
+  
+  if (req) {
+    req.open('GET', url, false);
+    req.send(null);
+    return req.responseText;
+  } else {
+    return "Ajax error";  
+  }
+}
+
+
+function addEvent(elm, evType, fn, useCapture) {
+	if (elm.addEventListener) {
+	  elm.addEventListener(evType, fn, useCapture);  
+  	return true;
+	} else if (elm.attachEvent) {
+  	var r = elm.attachEvent('on' + evType, fn);  
+	  return r;  
+	} else {
+  	elm['on' + evType] = fn;
+	}
+}
+
+function insertIndices() {
+  pages = ["class", "file", "method"]
+  for (x in pages) { 
+    $(pages[x]).innerHTML += ajaxGet('fr_' + pages[x] + '_index.html').replace(/(href=")/g, '$1' + href_base);
+  }
+  /* mouseoverify method links */
+  links = $('method').getElementsByTagName('a');
+  for (var x = 0; x < links.length; x++) {
+    if (m = links[x].innerHTML.match(/(.*)\s\((.*)\)/)) {
+      links[x].innerHTML = m[1] + '<br>';
+      links[x].title = m[2];
+    }
+  }
+  /* this is stupid */
+  $('class').style.display = "block";
+  $('file').style.display = "block";
+  
+  /* has to be here because IE7 does not guarantee the onLoad callback order */
+  abbreviateIndicesInner(["class", "file"], 25, "a");
+  /* same, linkTitle() depends on the class link list */
+  linkTitle();
+}
+
+function abbreviateIndices() {
+  var ids = ["defined_in", "child_of", "includes", "requires", "method", "methods"];
+  abbreviateIndicesInner(ids, 25, 'a');
+  abbreviateIndicesInner(ids, 25, 'span');
+}
+
+function abbreviateIndicesInner(indices, amount, tag) {
+  for (var x = 0; x < indices.length; x++) { 
+    var the_index = $(indices[x]);
+    if (the_index) {
+      links = the_index.getElementsByTagName(tag);
+      for (var y = 0; y < links.length; y++) {
+        var link = links[y];
+        if (link.getElementsByTagName('span').length == 0 && link.getElementsByTagName('a').length == 0) {
+          // avoid nesting
+          link.innerHTML = link.innerHTML.replace(/<br>|\n/gi, '');
+          link.title = link.innerHTML;
+          link.innerHTML = abbreviate(link.innerHTML, amount) + '<br>';
+        }
+      }
+    }
+  }
+}
+
+function linkTitle() {
+  
+  /* grab the correct title element from the index */
+  var index_page = ajaxGet('index.html');
+  title_text = index_page.match(/<title>(.*)<\/title>/m)[1];
+  document.title = title_text + " - " + document.title;
+  var p = $('header').getElementsByTagName('p')[0]
+  if (p.innerHTML.match(/^\s*$/)) {
+    p.innerHTML = title_text;
+  } else {
+    p.innerHTML = title_text + ": " + p.innerHTML;
+  }
+  
+  /* set the link properly */
+  title_link = index_page.match(/<a\s+href="(.*?)"/)[1];
+  var element = $('title');
+  var item_type = "";
+  var item_name = "";
+  if (m = element.innerHTML.match(/(Class:|Module:|File:)\s*(.*)/)) {
+    item_type = m[1];
+    item_name = m[2];
+  } else {
+    item_name = element.innerHTML;
+  }
+  element.innerHTML = '<a href="' + href_base + title_link + '">' + item_type + " " + abbreviate(item_name, 45) + '</a>';
+  element.getElementsByTagName('a')[0].title = item_name
+  
+  /* breadcrumb navigation */
+  items = item_name.split("::");
+  items_new = item_name.split("::");
+  file_links = $('class').getElementsByTagName('a');
+  for (var x = 0; x < items.length - 1; x++ ){
+    var item = items[x];
+    link = ("/classes/" + items.slice(0,x).join("/") + "/" + item + ".html").replace('//', '/');
+    regex = new RegExp(RegExp.escape(link) + '$');
+    for (var y = 0; y < file_links.length; y++) {
+      if (file_links[y].href.match(regex)) {
+         items_new[x] = '<a href="' + href_base + link + '">' + item + '</a>';
+         break;
+      }
+    }  
+  }
+  $('item_name').innerHTML = item_type + ' ' + items_new.join(" :: ");
+}
+
+function abbreviate(s, size) {
+  // Try to get rid of path and extension in any case. These are not
+  // even interesting if there is enough space.
+  
+  s = s.replace(/\..*$/, '');
+  s = s.replace(/.*\//g, '');
+  
+  // Now this is a blatant hack.
+  
+  if (s == 'gosu')
+    return ''; // Noone will ever see the link, harhar!
+
+  while (s.length > size) {
+    var old_s = s;
+    s = s.replace(/\s|\n/mg, '');
+    s = s.replace(/([A-Z])[a-z]+/m, '$1');
+    if (!s || old_s == s) {
+      return "..." + s.substring(s.length - size, s.length);
+    }
+  }
+  return s;
+}
+
+function disableSubmit(event) {
+  var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+  if (keyCode == 13) {
+    return false;
+  } else {
+    return true;
+  }
+}
+  
+function filterList(id, s, event) {
+  
+  /* some weak escaping */
+  s = s.replace(/[^\w\d\.\_\-\/\:\=\[\]\?\!]/g, '');
+  s = RegExp.escape(s);
+  
+  var show_all = false;
+  if (s.match(/^\s*$/)) {
+    show_all = true;
+  }
+  
+  links = $(id).getElementsByTagName('a')
+  regex = new RegExp(s, 'i');
+  
+  for (var x = 0; x < links.length; x++) {
+    var link = links[x];
+    if (show_all) {
+      link.style.display = 'inline';
+    } else {
+       if (link.innerHTML.match(regex)) {        
+         link.style.display = 'inline';
+       } else {
+         link.style.display = 'none';
+       }
+    }
+  }
+  return true;
+}
+
+RegExp.escape = function(text) {
+  if (!arguments.callee.sRE) {
+    var specials = ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'];
+    arguments.callee.sRE = new RegExp(
+      '(\\' + specials.join('|\\') + ')', 'g'
+    );
+  }
+  return text.replace(arguments.callee.sRE, '\\$1');
+}
+
+function hacks() {
+  // show the spacer if necessary, 
+  divs = document.getElementsByTagName('div');
+  for(var x = 0; x < divs.length; x++) {
+    if (divs[x].className && divs[x].className.match(/top/)) {
+      document.getElementById('spacer').style.display = 'block';
+    }
+  }
+  // remove extra colons from tables
+  tds = document.getElementsByTagName('td');
+  for(var x = 0; x < tds.length; x++) {
+    str = tds[x].innerHTML
+    if (str.charAt(str.length - 1) == ":") {
+      tds[x].innerHTML = str.slice(0, str.length - 1)
+    }
+  }
+}
+
+addEvent(window, 'load', insertIndices, false);
+addEvent(window, 'load', abbreviateIndices, false);
+addEvent(window, 'load', stripe, false);
+addEvent(window, 'load', highlightSymbols, false);
+addEvent(window, 'load', hacks, false);
+</script></head><body><div id="container"><div class="curve" id="preheader_curve_0"></div><div class="curve" id="preheader_curve_1"></div><div class="curve" id="preheader_curve_2"></div><div class="curve" id="preheader_curve_3"></div><div class="curve" id="preheader_curve_4"></div><div class="curve" id="preheader_curve_5"></div><div id="header"><span><h1 id="title">
+Class: Gosu::Image
+</h1></span></div><div class="clear"></div><div id="left">
+<div class="navigation darker top" id="child_of"><h3>Child of</h3><span>
+
+Object
+</span></div>
+
+<div class="navigation darker top" id="defined_in"><h3>Defined in</h3>
+
+<a href="../../files/reference/gosu_rb.html">reference/gosu.rb</a>
+
+</div>
+
+
+
+<div class="navigation top" id="methods"><h3>Methods</h3>
+
+
+<a href='#M000053'>
+draw<br/>
+</a>
+
+
+
+
+<a href='#M000055'>
+draw_as_quad<br/>
+</a>
+
+
+
+
+<a href='#M000054'>
+draw_rot<br/>
+</a>
+
+
+
+
+<a href='#M000057'>
+from_text<br/>
+</a>
+
+
+
+
+<a href='#M000056'>
+from_text<br/>
+</a>
+
+
+
+
+<a href='#M000059'>
+gl_tex_info<br/>
+</a>
+
+
+
+
+<a href='#M000058'>
+load_tiles<br/>
+</a>
+
+
+
+
+<a href='#M000052'>
+new<br/>
+</a>
+
+
+
+
+<a href='#M000051'>
+new<br/>
+</a>
+
+
+</div>
+<div id="spacer"></div><div class="navigation darker index" id="class_wrapper"><div class="list_header"><h3>All classes</h3></div><div class="list_header_link"><a href="#" onclick="toggle('class'); toggleText('class_link'); return false;" id="class_link">Hide...</a></div><div class="clear"></div><div id="class"><form><label for="filter_class">Filter:&nbsp;&nbsp;</label><input type="text" onKeyUp="return filterList('class', this.value, event);" onKeyPress="return disableSubmit(event);" id="filter_class"></input></form></div></div><div class="navigation darker index" id="file_wrapper"><div class="list_header"><h3>All files</h3></div><div class="list_header_link"><a href="#" onclick="toggle('file'); toggleText('file_link'); return false;" id="file_link">Hide...</a></div><div class="clear"></div><div id="file"><form><label for="filter_file">Filter:&nbsp;&nbsp;</label><input type="text" onKeyUp="return filterList('file', this.value, event);" onKeyPress="return disableSubmit(event);" id="filter_file"></input></form></div></div><div class="navigation darker index" id="method_wrapper"><div class="list_header"><h3>All methods</h3></div><div class="list_header_link"><a href="#" onclick="toggle('method'); toggleText('method_link'); return false;" id="method_link">Show...</a></div><div class="clear"></div><div id="method"><form><label for="filter_method">Filter:&nbsp;&nbsp;</label><input type="text" onKeyUp="return filterList('method', this.value, event);" onKeyPress="return disableSubmit(event);" id="filter_method"></input></form></div></div></div><div id="content">
+<div id="description"><p>
+Provides functionality for drawing rectangular images.
+</p>
+</div>
+
+
+
+
+<p></p>
+
+
+
+
+<h1>Attributes</h1><p><table><tr><th>Name</th><th>Read/write?</th></tr>
+<tr>
+<td class="highlight">height</td>
+
+
+
+
+<td class="normal">R</td>
+</tr>
+<tr>
+<td class="highlight">width</td>
+
+
+
+
+<td class="normal">R</td>
+</tr>
+</table></p>
+
+
+<h1>Public Class Methods</h1>
+
+
+<a class="small" name="M000057"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000057'>
+
+
+from_text
+
+(window, text, font_name, font_height, line_spacing, max_width, align)
+
+</a>
+</h3>
+<p>
+Creates an <a href="Image.html">Image</a> that is filled with the text
+given to the function.
+</p>
+<p>
+The text may contain line breaks.
+</p>
+<p>
+The text is always rendered in white. If you want to <a
+href="Image.html#M000053">draw</a> it in a different color, just modulate
+it by the target color.
+</p>
+<table>
+<tr><td valign="top">font_name:</td><td>Name of a system font, or a filename to a TTF file (must contain
+&#8217;/&#8217;, does not work on Linux).
+
+</td></tr>
+<tr><td valign="top">font_height:</td><td>Height of the font in pixels.
+
+</td></tr>
+<tr><td valign="top">line_spacing:</td><td>Spacing between two lines of text in pixels.
+
+</td></tr>
+<tr><td valign="top">max_width:</td><td>Width of the bitmap that will be returned. Text will be split into multiple
+lines to avoid drawing over the right border. When a single word is too
+long, it will be truncated.
+
+</td></tr>
+<tr><td valign="top">align:</td><td>One of :left, :right, :center or :justify.
+
+</td></tr>
+</table>
+
+<p class="source_link" id="M000057-show-link"><a href="#" onclick="toggle('M000057-source'); toggleText('M000057-link'); return false;" id="M000057-link">Show source...</a></p><div class="source" id="M000057-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 243</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_text</span>(<span class="ruby-identifier">window</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">font_name</span>, <span class="ruby-identifier">font_height</span>, <span class="ruby-identifier">line_spacing</span>, <span class="ruby-identifier">max_width</span>, <span class="ruby-identifier">align</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000056"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000056'>
+
+
+from_text
+
+(window, text, font_name, font_height)
+
+</a>
+</h3>
+<p>
+Creates an <a href="Image.html">Image</a> containing a line of text.
+</p>
+<p>
+The text is always rendered in white. If you want to <a
+href="Image.html#M000053">draw</a> it in a different color, just modulate
+it by the target color.
+</p>
+<table>
+<tr><td valign="top">font_name:</td><td>Name of a system font, or a filename to a TTF file (must contain
+&#8217;/&#8217;, does not work on Linux).
+
+</td></tr>
+<tr><td valign="top">font_height:</td><td>Height of the font in pixels.
+
+</td></tr>
+</table>
+
+<p class="source_link" id="M000056-show-link"><a href="#" onclick="toggle('M000056-source'); toggleText('M000056-link'); return false;" id="M000056-link">Show source...</a></p><div class="source" id="M000056-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 230</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">from_text</span>(<span class="ruby-identifier">window</span>, <span class="ruby-identifier">text</span>, <span class="ruby-identifier">font_name</span>, <span class="ruby-identifier">font_height</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000058"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000058'>
+
+
+load_tiles
+
+(window, filename_or_rmagick_image, tile_width, tile_height, tileable)
+
+</a>
+</h3>
+<p>
+Convenience function that splits a BMP or PNG file into an array of small
+rectangles and creates images from them. Returns the Array containing <a
+href="Image.html">Image</a> instances.
+</p>
+<table>
+<tr><td valign="top">tile_width:</td><td>If positive, specifies the width of one tile in pixels. If negative, the
+bitmap is divided into -tile_width rows.
+
+</td></tr>
+<tr><td valign="top">tile_height:</td><td>See tile_width.
+
+</td></tr>
+</table>
+
+<p class="source_link" id="M000058-show-link"><a href="#" onclick="toggle('M000058-source'); toggleText('M000058-link'); return false;" id="M000058-link">Show source...</a></p><div class="source" id="M000058-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 250</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_tiles</span>(<span class="ruby-identifier">window</span>, <span class="ruby-identifier">filename_or_rmagick_image</span>, <span class="ruby-identifier">tile_width</span>, <span class="ruby-identifier">tile_height</span>, <span class="ruby-identifier">tileable</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000052"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000052'>
+
+
+new
+
+(window, filename_or_rmagick_image, tileable, src_x, src_y, src_width, src_height)
+
+</a>
+</h3>
+<p>
+Loads an image from a given filename that can be drawn onto the given
+window.
+</p>
+<p>
+This constructor can handle PNG and BMP images. A color key of ff00ff is
+automatically applied to BMP type images. For more flexibility, use PNG
+files.
+</p>
+<p>
+This constructor only loads a sub-rectangle of the given file. Because
+every call of this constructor will open the image again, it is preferable
+to use <a href="Image.html#M000058">Image#load_tiles</a>.
+</p>
+
+<p class="source_link" id="M000052-show-link"><a href="#" onclick="toggle('M000052-source'); toggleText('M000052-link'); return false;" id="M000052-link">Show source...</a></p><div class="source" id="M000052-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 211</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">window</span>, <span class="ruby-identifier">filename_or_rmagick_image</span>, <span class="ruby-identifier">tileable</span>, <span class="ruby-identifier">src_x</span>, <span class="ruby-identifier">src_y</span>, <span class="ruby-identifier">src_width</span>, <span class="ruby-identifier">src_height</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000051"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000051'>
+
+
+new
+
+(window, filename_or_rmagick_image, tileable)
+
+</a>
+</h3>
+<p>
+Loads an image from a given filename that can be drawn onto the given
+window.
+</p>
+<p>
+This constructor can handle PNG and BMP images. A color key of ff00ff is
+automatically applied to BMP type images. For more flexibility, use PNG
+files.
+</p>
+
+<p class="source_link" id="M000051-show-link"><a href="#" onclick="toggle('M000051-source'); toggleText('M000051-link'); return false;" id="M000051-link">Show source...</a></p><div class="source" id="M000051-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 199</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">window</span>, <span class="ruby-identifier">filename_or_rmagick_image</span>, <span class="ruby-identifier">tileable</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+
+<h1>Public Instance Methods</h1>
+
+
+<a class="small" name="M000053"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000053'>
+
+
+draw
+
+(x, y, z, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)
+
+</a>
+</h3>
+<p>
+Draws the image so its upper left corner is at (x; y).
+</p>
+
+<p class="source_link" id="M000053-show-link"><a href="#" onclick="toggle('M000053-source'); toggleText('M000053-link'); return false;" id="M000053-link">Show source...</a></p><div class="source" id="M000053-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 214</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">draw</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span>, <span class="ruby-identifier">z</span>, <span class="ruby-identifier">factor_x</span>=<span class="ruby-value">1</span>, <span class="ruby-identifier">factor_y</span>=<span class="ruby-value">1</span>, <span class="ruby-identifier">color</span>=<span class="ruby-value">0xffffffff</span>, <span class="ruby-identifier">mode</span>=<span class="ruby-identifier">:default</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000055"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000055'>
+
+
+draw_as_quad
+
+(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode=:default)
+
+</a>
+</h3>
+<p>
+Like <a href="Window.html#M000045">Window#draw_quad</a>, but with this
+texture instead of colors. Can be used to implement advanced,
+non-rectangular drawing techniques and takes four points and the modulation
+color at each of them. The points can be in clockwise order, or in a Z
+shape, starting at the top left.
+</p>
+
+<p class="source_link" id="M000055-show-link"><a href="#" onclick="toggle('M000055-source'); toggleText('M000055-link'); return false;" id="M000055-link">Show source...</a></p><div class="source" id="M000055-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 222</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">draw_as_quad</span>(<span class="ruby-identifier">x1</span>, <span class="ruby-identifier">y1</span>, <span class="ruby-identifier">c1</span>, <span class="ruby-identifier">x2</span>, <span class="ruby-identifier">y2</span>, <span class="ruby-identifier">c2</span>, <span class="ruby-identifier">x3</span>, <span class="ruby-identifier">y3</span>, <span class="ruby-identifier">c3</span>, <span class="ruby-identifier">x4</span>, <span class="ruby-identifier">y4</span>, <span class="ruby-identifier">c4</span>, <span class="ruby-identifier">z</span>, <span class="ruby-identifier">mode</span>=<span class="ruby-identifier">:default</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000054"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000054'>
+
+
+draw_rot
+
+(x, y, z, angle, center_x=0.5, center_y=0.5, factor_x=1, factor_y=1, color=0xffffffff, mode=:default)
+
+</a>
+</h3>
+<table>
+<tr><td valign="top">center_x:</td><td>Relative horizontal position of the rotation center on the image. 0 is the
+left border, 1 is the right border, 0.5 is the center (and default)
+
+</td></tr>
+<tr><td valign="top">center_y:</td><td>See center_x.
+
+</td></tr>
+</table>
+
+<p class="source_link" id="M000054-show-link"><a href="#" onclick="toggle('M000054-source'); toggleText('M000054-link'); return false;" id="M000054-link">Show source...</a></p><div class="source" id="M000054-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 218</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">draw_rot</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span>, <span class="ruby-identifier">z</span>, <span class="ruby-identifier">angle</span>, <span class="ruby-identifier">center_x</span>=<span class="ruby-value">0</span><span class="ruby-value">.5</span>, <span class="ruby-identifier">center_y</span>=<span class="ruby-value">0</span><span class="ruby-value">.5</span>, <span class="ruby-identifier">factor_x</span>=<span class="ruby-value">1</span>, <span class="ruby-identifier">factor_y</span>=<span class="ruby-value">1</span>, <span class="ruby-identifier">color</span>=<span class="ruby-value">0xffffffff</span>, <span class="ruby-identifier">mode</span>=<span class="ruby-identifier">:default</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000059"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000059'>
+
+
+gl_tex_info
+
+()
+
+</a>
+</h3>
+<p>
+See examples/OpenGLIntegration.rb.
+</p>
+
+<p class="source_link" id="M000059-show-link"><a href="#" onclick="toggle('M000059-source'); toggleText('M000059-link'); return false;" id="M000059-link">Show source...</a></p><div class="source" id="M000059-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 253</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gl_tex_info</span>; <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+
+
+
+
+</div><div class="clear" id="footer">Allison 2 &copy; 2007 <a href="http://cloudbur.st">Cloudburst, LLC</a><br/>slightly adapted for the Gosu project by Julian Raschke</div></div></body></html>

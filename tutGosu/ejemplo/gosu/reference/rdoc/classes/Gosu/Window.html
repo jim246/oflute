@@ -1,0 +1,911 @@
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"/><title>Class: Gosu::Window</title><link type="text/css" href="../.././rdoc-style.css" rel="stylesheet" media="screen"/><script type="text/javascript">
+// Allison template
+// Copyright 2007, 2008 Cloudburst, LLC. Licensed under the AFL 3. See the included LICENSE file.
+
+var href_base = '../.././rdoc-style.css'.replace(/(.*\/).*/, '$1'); // inline js is good for something  
+
+function $(id) {
+    if (document.getElementById)
+      elem = document.getElementById(id);
+    else if ( document.all )
+      elem = eval("document.all." + id);
+    else
+      return false;
+    return elem;
+}
+
+  function toggle(id) {
+    elem = $(id);
+    elemStyle = elem.style;   
+    if (elemStyle.display == "block") {
+      elemStyle.display = "none"
+    } else {
+      elemStyle.display = "block"
+    }
+    return true;
+  }
+
+  function toggleText(id) {
+    elem = $(id)
+    if (m = elem.innerHTML.match(/(Hide)(.*)/)) {
+      elem.innerHTML = "Show" + m[2];
+    } else if (m = elem.innerHTML.match(/(Show)(.*)/)) {
+      elem.innerHTML = "Hide" + m[2];
+    }
+    return true;
+  }
+
+function span(s, klass) {
+  return '<span class="' + klass + '">' + s + '</span>';
+}
+  
+function highlightSymbols() {
+  pres = document.getElementsByTagName('pre');
+  for(var i = 0; i < pres.length; i++) {
+    pre = pres[i];
+    spans = pre.getElementsByTagName('span');
+    for(var k = 0; k < spans.length; k++) {
+      span = spans[k];
+      if (span.className.match(/ruby-identifier/)) {
+        if (span.innerHTML.match(/^:/)) {
+          span.className += " ruby-symbol";
+        }
+      }
+    }
+  }
+}
+
+ function hasClass(obj) {
+     var result = false;
+     if (obj.getAttributeNode("class") != null) {
+         result = obj.getAttributeNode("class").value;
+     }
+     return result;
+  }   
+
+ function stripe() {
+    var even = true;
+    var color = "#e4ebed";
+    var tables = document.getElementsByTagName('table');
+    if (tables.length == 0) { return; }
+    for (var h = 0; h < tables.length; h++) {
+        var trs = tables[h].getElementsByTagName("tr");
+        for (var i = 0; i < trs.length; i++) {
+          var tds = trs[i].getElementsByTagName("td");
+            for (var j = 0; j < tds.length; j++) {       
+              if (hasClass(tds[j]) != "first") {                
+              var mytd = tds[j];
+              if (even) {
+                mytd.style.backgroundColor = color;
+              }         
+            }
+          }
+          even =  ! even;
+      }
+    }
+  }
+  
+function ajaxGet(url) {
+  url = (href_base + url).replace('/./', '/')
+  var req = false;
+
+  if (window.ActiveXObject) {
+    try {
+      // stupid hack because IE7 disables local Ajax with the native xmlhttprequest object
+      // for security purposes. Yet ActiveX still works. Thanks, Microsoft. I hate you. Die.
+      req = new ActiveXObject("MSXML2.XMLHTTP.3.0");
+    } catch (e) {
+      try {
+        /* IE 6 and maybe 5, don't know, don't care */
+        req = new ActiveXObject("Msxml2.XMLHTTP");
+      } catch (e) {
+        try {
+          req = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch (e) {
+          req = false;
+        }
+      }
+    }
+  }
+    
+  /* real browsers */
+  if (!req && window.XMLHttpRequest) {
+    try {
+      req = new XMLHttpRequest();
+    } catch (e) {
+      req = false;
+    }
+  } 
+  
+  if (req) {
+    req.open('GET', url, false);
+    req.send(null);
+    return req.responseText;
+  } else {
+    return "Ajax error";  
+  }
+}
+
+
+function addEvent(elm, evType, fn, useCapture) {
+	if (elm.addEventListener) {
+	  elm.addEventListener(evType, fn, useCapture);  
+  	return true;
+	} else if (elm.attachEvent) {
+  	var r = elm.attachEvent('on' + evType, fn);  
+	  return r;  
+	} else {
+  	elm['on' + evType] = fn;
+	}
+}
+
+function insertIndices() {
+  pages = ["class", "file", "method"]
+  for (x in pages) { 
+    $(pages[x]).innerHTML += ajaxGet('fr_' + pages[x] + '_index.html').replace(/(href=")/g, '$1' + href_base);
+  }
+  /* mouseoverify method links */
+  links = $('method').getElementsByTagName('a');
+  for (var x = 0; x < links.length; x++) {
+    if (m = links[x].innerHTML.match(/(.*)\s\((.*)\)/)) {
+      links[x].innerHTML = m[1] + '<br>';
+      links[x].title = m[2];
+    }
+  }
+  /* this is stupid */
+  $('class').style.display = "block";
+  $('file').style.display = "block";
+  
+  /* has to be here because IE7 does not guarantee the onLoad callback order */
+  abbreviateIndicesInner(["class", "file"], 25, "a");
+  /* same, linkTitle() depends on the class link list */
+  linkTitle();
+}
+
+function abbreviateIndices() {
+  var ids = ["defined_in", "child_of", "includes", "requires", "method", "methods"];
+  abbreviateIndicesInner(ids, 25, 'a');
+  abbreviateIndicesInner(ids, 25, 'span');
+}
+
+function abbreviateIndicesInner(indices, amount, tag) {
+  for (var x = 0; x < indices.length; x++) { 
+    var the_index = $(indices[x]);
+    if (the_index) {
+      links = the_index.getElementsByTagName(tag);
+      for (var y = 0; y < links.length; y++) {
+        var link = links[y];
+        if (link.getElementsByTagName('span').length == 0 && link.getElementsByTagName('a').length == 0) {
+          // avoid nesting
+          link.innerHTML = link.innerHTML.replace(/<br>|\n/gi, '');
+          link.title = link.innerHTML;
+          link.innerHTML = abbreviate(link.innerHTML, amount) + '<br>';
+        }
+      }
+    }
+  }
+}
+
+function linkTitle() {
+  
+  /* grab the correct title element from the index */
+  var index_page = ajaxGet('index.html');
+  title_text = index_page.match(/<title>(.*)<\/title>/m)[1];
+  document.title = title_text + " - " + document.title;
+  var p = $('header').getElementsByTagName('p')[0]
+  if (p.innerHTML.match(/^\s*$/)) {
+    p.innerHTML = title_text;
+  } else {
+    p.innerHTML = title_text + ": " + p.innerHTML;
+  }
+  
+  /* set the link properly */
+  title_link = index_page.match(/<a\s+href="(.*?)"/)[1];
+  var element = $('title');
+  var item_type = "";
+  var item_name = "";
+  if (m = element.innerHTML.match(/(Class:|Module:|File:)\s*(.*)/)) {
+    item_type = m[1];
+    item_name = m[2];
+  } else {
+    item_name = element.innerHTML;
+  }
+  element.innerHTML = '<a href="' + href_base + title_link + '">' + item_type + " " + abbreviate(item_name, 45) + '</a>';
+  element.getElementsByTagName('a')[0].title = item_name
+  
+  /* breadcrumb navigation */
+  items = item_name.split("::");
+  items_new = item_name.split("::");
+  file_links = $('class').getElementsByTagName('a');
+  for (var x = 0; x < items.length - 1; x++ ){
+    var item = items[x];
+    link = ("/classes/" + items.slice(0,x).join("/") + "/" + item + ".html").replace('//', '/');
+    regex = new RegExp(RegExp.escape(link) + '$');
+    for (var y = 0; y < file_links.length; y++) {
+      if (file_links[y].href.match(regex)) {
+         items_new[x] = '<a href="' + href_base + link + '">' + item + '</a>';
+         break;
+      }
+    }  
+  }
+  $('item_name').innerHTML = item_type + ' ' + items_new.join(" :: ");
+}
+
+function abbreviate(s, size) {
+  // Try to get rid of path and extension in any case. These are not
+  // even interesting if there is enough space.
+  
+  s = s.replace(/\..*$/, '');
+  s = s.replace(/.*\//g, '');
+  
+  // Now this is a blatant hack.
+  
+  if (s == 'gosu')
+    return ''; // Noone will ever see the link, harhar!
+
+  while (s.length > size) {
+    var old_s = s;
+    s = s.replace(/\s|\n/mg, '');
+    s = s.replace(/([A-Z])[a-z]+/m, '$1');
+    if (!s || old_s == s) {
+      return "..." + s.substring(s.length - size, s.length);
+    }
+  }
+  return s;
+}
+
+function disableSubmit(event) {
+  var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+  if (keyCode == 13) {
+    return false;
+  } else {
+    return true;
+  }
+}
+  
+function filterList(id, s, event) {
+  
+  /* some weak escaping */
+  s = s.replace(/[^\w\d\.\_\-\/\:\=\[\]\?\!]/g, '');
+  s = RegExp.escape(s);
+  
+  var show_all = false;
+  if (s.match(/^\s*$/)) {
+    show_all = true;
+  }
+  
+  links = $(id).getElementsByTagName('a')
+  regex = new RegExp(s, 'i');
+  
+  for (var x = 0; x < links.length; x++) {
+    var link = links[x];
+    if (show_all) {
+      link.style.display = 'inline';
+    } else {
+       if (link.innerHTML.match(regex)) {        
+         link.style.display = 'inline';
+       } else {
+         link.style.display = 'none';
+       }
+    }
+  }
+  return true;
+}
+
+RegExp.escape = function(text) {
+  if (!arguments.callee.sRE) {
+    var specials = ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'];
+    arguments.callee.sRE = new RegExp(
+      '(\\' + specials.join('|\\') + ')', 'g'
+    );
+  }
+  return text.replace(arguments.callee.sRE, '\\$1');
+}
+
+function hacks() {
+  // show the spacer if necessary, 
+  divs = document.getElementsByTagName('div');
+  for(var x = 0; x < divs.length; x++) {
+    if (divs[x].className && divs[x].className.match(/top/)) {
+      document.getElementById('spacer').style.display = 'block';
+    }
+  }
+  // remove extra colons from tables
+  tds = document.getElementsByTagName('td');
+  for(var x = 0; x < tds.length; x++) {
+    str = tds[x].innerHTML
+    if (str.charAt(str.length - 1) == ":") {
+      tds[x].innerHTML = str.slice(0, str.length - 1)
+    }
+  }
+}
+
+addEvent(window, 'load', insertIndices, false);
+addEvent(window, 'load', abbreviateIndices, false);
+addEvent(window, 'load', stripe, false);
+addEvent(window, 'load', highlightSymbols, false);
+addEvent(window, 'load', hacks, false);
+</script></head><body><div id="container"><div class="curve" id="preheader_curve_0"></div><div class="curve" id="preheader_curve_1"></div><div class="curve" id="preheader_curve_2"></div><div class="curve" id="preheader_curve_3"></div><div class="curve" id="preheader_curve_4"></div><div class="curve" id="preheader_curve_5"></div><div id="header"><span><h1 id="title">
+Class: Gosu::Window
+</h1></span></div><div class="clear"></div><div id="left">
+<div class="navigation darker top" id="child_of"><h3>Child of</h3><span>
+
+Object
+</span></div>
+
+<div class="navigation darker top" id="defined_in"><h3>Defined in</h3>
+
+<a href="../../files/reference/gosu_rb.html">reference/gosu.rb</a>
+
+</div>
+
+
+
+<div class="navigation top" id="methods"><h3>Methods</h3>
+
+
+<a href='#M000041'>
+button_down<br/>
+</a>
+
+
+
+
+<a href='#M000046'>
+button_down?<br/>
+</a>
+
+
+
+
+<a href='#M000047'>
+button_id_to_char<br/>
+</a>
+
+
+
+
+<a href='#M000042'>
+button_up<br/>
+</a>
+
+
+
+
+<a href='#M000048'>
+char_to_button_id<br/>
+</a>
+
+
+
+
+<a href='#M000050'>
+clip_to<br/>
+</a>
+
+
+
+
+<a href='#M000036'>
+close<br/>
+</a>
+
+
+
+
+<a href='#M000038'>
+draw<br/>
+</a>
+
+
+
+
+<a href='#M000043'>
+draw_line<br/>
+</a>
+
+
+
+
+<a href='#M000045'>
+draw_quad<br/>
+</a>
+
+
+
+
+<a href='#M000044'>
+draw_triangle<br/>
+</a>
+
+
+
+
+<a href='#M000049'>
+gl<br/>
+</a>
+
+
+
+
+<a href='#M000039'>
+needs_redraw?<br/>
+</a>
+
+
+
+
+<a href='#M000034'>
+new<br/>
+</a>
+
+
+
+
+<a href='#M000040'>
+set_mouse_position<br/>
+</a>
+
+
+
+
+<a href='#M000035'>
+show<br/>
+</a>
+
+
+
+
+<a href='#M000037'>
+update<br/>
+</a>
+
+
+</div>
+<div id="spacer"></div><div class="navigation darker index" id="class_wrapper"><div class="list_header"><h3>All classes</h3></div><div class="list_header_link"><a href="#" onclick="toggle('class'); toggleText('class_link'); return false;" id="class_link">Hide...</a></div><div class="clear"></div><div id="class"><form><label for="filter_class">Filter:&nbsp;&nbsp;</label><input type="text" onKeyUp="return filterList('class', this.value, event);" onKeyPress="return disableSubmit(event);" id="filter_class"></input></form></div></div><div class="navigation darker index" id="file_wrapper"><div class="list_header"><h3>All files</h3></div><div class="list_header_link"><a href="#" onclick="toggle('file'); toggleText('file_link'); return false;" id="file_link">Hide...</a></div><div class="clear"></div><div id="file"><form><label for="filter_file">Filter:&nbsp;&nbsp;</label><input type="text" onKeyUp="return filterList('file', this.value, event);" onKeyPress="return disableSubmit(event);" id="filter_file"></input></form></div></div><div class="navigation darker index" id="method_wrapper"><div class="list_header"><h3>All methods</h3></div><div class="list_header_link"><a href="#" onclick="toggle('method'); toggleText('method_link'); return false;" id="method_link">Show...</a></div><div class="clear"></div><div id="method"><form><label for="filter_method">Filter:&nbsp;&nbsp;</label><input type="text" onKeyUp="return filterList('method', this.value, event);" onKeyPress="return disableSubmit(event);" id="filter_method"></input></form></div></div></div><div id="content">
+<div id="description"><p>
+Main class that serves as the foundation of a standard <a
+href="../Gosu.html">Gosu</a> application. Manages initialization of all of
+<a href="../Gosu.html">Gosu</a>&#8216;s core components and provides timing
+functionality.
+</p>
+<p>
+Note that all coordinates, even the mouse position, are in client
+coordinates relative to the window. This means that the mouse position can
+be negative or larger than the window size.
+</p>
+<p>
+Note that you should really only use one instance of this class at the same
+time. This may or may not change later.
+</p>
+<p>
+Right now, having two or more windows and loading samples or songs on both
+of them will result in an exception.
+</p>
+</div>
+
+
+
+
+<p></p>
+
+
+
+
+<h1>Attributes</h1><p><table><tr><th>Name</th><th>Read/write?</th></tr>
+<tr>
+<td class="highlight">caption</td>
+
+
+
+
+<td class="normal">RW</td>
+</tr>
+<tr>
+<td class="highlight">height</td>
+
+
+
+
+<td class="normal">R</td>
+</tr>
+<tr>
+<td class="highlight">mouse_x</td>
+
+
+
+
+<td class="normal">RW</td>
+</tr>
+<tr>
+<td class="highlight">mouse_y</td>
+
+
+
+
+<td class="normal">RW</td>
+</tr>
+<tr>
+<td class="highlight">text_input</td>
+
+
+
+
+<td class="normal">RW</td>
+</tr>
+<tr>
+<td class="highlight">update_interval</td>
+
+
+
+
+<td class="normal">R</td>
+</tr>
+<tr>
+<td class="highlight">width</td>
+
+
+
+
+<td class="normal">R</td>
+</tr>
+</table></p>
+
+
+<h1>Public Class Methods</h1>
+
+
+<a class="small" name="M000047"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000047'>
+
+
+button_id_to_char
+
+(id)
+
+</a>
+</h3>
+<p>
+DEPRECATED: Returns the character a button usually produces, or nil. Please
+use <a href="TextInput.html">TextInput</a> instead.
+</p>
+
+<p class="source_link" id="M000047-show-link"><a href="#" onclick="toggle('M000047-source'); toggleText('M000047-link'); return false;" id="M000047-link">Show source...</a></p><div class="source" id="M000047-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 424</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">button_id_to_char</span>(<span class="ruby-identifier">id</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000048"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000048'>
+
+
+char_to_button_id
+
+(char)
+
+</a>
+</h3>
+<p>
+DEPRECATED: Returns the button that has to be pressed to produce the given
+character, or nil. Please use <a href="TextInput.html">TextInput</a>
+instead.
+</p>
+
+<p class="source_link" id="M000048-show-link"><a href="#" onclick="toggle('M000048-source'); toggleText('M000048-link'); return false;" id="M000048-link">Show source...</a></p><div class="source" id="M000048-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 428</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">char_to_button_id</span>(<span class="ruby-identifier">char</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000034"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000034'>
+
+
+new
+
+(width, height, fullscreen, update_interval = 16.666666)
+
+</a>
+</h3>
+<table>
+<tr><td valign="top">update_interval:</td><td>Interval in milliseconds between two calls
+
+</td></tr>
+</table>
+<p>
+to the <a href="Window.html#M000037">update</a> member function. The
+default means the game will run at 60 FPS, which is ideal on standard 60 Hz
+TFT screens.
+</p>
+
+<p class="source_link" id="M000034-show-link"><a href="#" onclick="toggle('M000034-source'); toggleText('M000034-link'); return false;" id="M000034-link">Show source...</a></p><div class="source" id="M000034-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 377</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">width</span>, <span class="ruby-identifier">height</span>, <span class="ruby-identifier">fullscreen</span>, <span class="ruby-identifier">update_interval</span> = <span class="ruby-value">16.666666</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+
+<h1>Public Instance Methods</h1>
+
+
+<a class="small" name="M000041"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000041'>
+
+
+button_down
+
+(id)
+
+</a>
+</h3>
+<p>
+Called before <a href="Window.html#M000037">update</a> when the user
+pressed a button while the window had the focus.
+</p>
+
+<p class="source_link" id="M000041-show-link"><a href="#" onclick="toggle('M000041-source'); toggleText('M000041-link'); return false;" id="M000041-link">Show source...</a></p><div class="source" id="M000041-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 406</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">button_down</span>(<span class="ruby-identifier">id</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000046"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000046'>
+
+
+button_down?
+
+(id)
+
+</a>
+</h3>
+<p>
+Returns true if a button is currently pressed. Updated every tick.
+</p>
+
+<p class="source_link" id="M000046-show-link"><a href="#" onclick="toggle('M000046-source'); toggleText('M000046-link'); return false;" id="M000046-link">Show source...</a></p><div class="source" id="M000046-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 421</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">button_down?</span>(<span class="ruby-identifier">id</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000042"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000042'>
+
+
+button_up
+
+(id)
+
+</a>
+</h3>
+<p>
+Same as buttonDown. Called then the user released a button.
+</p>
+
+<p class="source_link" id="M000042-show-link"><a href="#" onclick="toggle('M000042-source'); toggleText('M000042-link'); return false;" id="M000042-link">Show source...</a></p><div class="source" id="M000042-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 408</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">button_up</span>(<span class="ruby-identifier">id</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000050"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000050'>
+
+
+clip_to
+
+(x, y, w, h, &amp;drawing_code)
+
+</a>
+</h3>
+<p>
+Limits the drawing area to a given rectangle while evaluating the code
+inside of the block.
+</p>
+
+<p class="source_link" id="M000050-show-link"><a href="#" onclick="toggle('M000050-source'); toggleText('M000050-link'); return false;" id="M000050-link">Show source...</a></p><div class="source" id="M000050-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 434</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clip_to</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span>, <span class="ruby-identifier">w</span>, <span class="ruby-identifier">h</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">drawing_code</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000036"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000036'>
+
+
+close
+
+()
+
+</a>
+</h3>
+<p>
+Tells the window to end the current <a href="Window.html#M000035">show</a>
+loop as soon as possible.
+</p>
+
+<p class="source_link" id="M000036-show-link"><a href="#" onclick="toggle('M000036-source'); toggleText('M000036-link'); return false;" id="M000036-link">Show source...</a></p><div class="source" id="M000036-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 383</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">close</span>; <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000038"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000038'>
+
+
+draw
+
+()
+
+</a>
+</h3>
+<p>
+Called after every <a href="Window.html#M000037">update</a> and when the OS
+wants the window to repaint itself. Your application&#8216;s rendering code
+goes here.
+</p>
+
+<p class="source_link" id="M000038-show-link"><a href="#" onclick="toggle('M000038-source'); toggleText('M000038-link'); return false;" id="M000038-link">Show source...</a></p><div class="source" id="M000038-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 391</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">draw</span>; <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000043"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000043'>
+
+
+draw_line
+
+(x1, y1, c1, x2, y2, c2, z=0, mode=:default)
+
+</a>
+</h3>
+<p>
+Draws a line from one point to another (last pixel exclusive).
+</p>
+
+<p class="source_link" id="M000043-show-link"><a href="#" onclick="toggle('M000043-source'); toggleText('M000043-link'); return false;" id="M000043-link">Show source...</a></p><div class="source" id="M000043-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 411</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">draw_line</span>(<span class="ruby-identifier">x1</span>, <span class="ruby-identifier">y1</span>, <span class="ruby-identifier">c1</span>, <span class="ruby-identifier">x2</span>, <span class="ruby-identifier">y2</span>, <span class="ruby-identifier">c2</span>, <span class="ruby-identifier">z</span>=<span class="ruby-value">0</span>, <span class="ruby-identifier">mode</span>=<span class="ruby-identifier">:default</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000045"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000045'>
+
+
+draw_quad
+
+(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default)
+
+</a>
+</h3>
+<p>
+Draws a rectangle (two triangles) with given corners and corresponding
+colors. The points can be in clockwise order, or in a Z shape.
+</p>
+
+<p class="source_link" id="M000045-show-link"><a href="#" onclick="toggle('M000045-source'); toggleText('M000045-link'); return false;" id="M000045-link">Show source...</a></p><div class="source" id="M000045-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 418</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">draw_quad</span>(<span class="ruby-identifier">x1</span>, <span class="ruby-identifier">y1</span>, <span class="ruby-identifier">c1</span>, <span class="ruby-identifier">x2</span>, <span class="ruby-identifier">y2</span>, <span class="ruby-identifier">c2</span>, <span class="ruby-identifier">x3</span>, <span class="ruby-identifier">y3</span>, <span class="ruby-identifier">c3</span>, <span class="ruby-identifier">x4</span>, <span class="ruby-identifier">y4</span>, <span class="ruby-identifier">c4</span>, <span class="ruby-identifier">z</span>=<span class="ruby-value">0</span>, <span class="ruby-identifier">mode</span>=<span class="ruby-identifier">:default</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000044"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000044'>
+
+
+draw_triangle
+
+(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default)
+
+</a>
+</h3>
+
+<p class="source_link" id="M000044-show-link"><a href="#" onclick="toggle('M000044-source'); toggleText('M000044-link'); return false;" id="M000044-link">Show source...</a></p><div class="source" id="M000044-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 413</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">draw_triangle</span>(<span class="ruby-identifier">x1</span>, <span class="ruby-identifier">y1</span>, <span class="ruby-identifier">c1</span>, <span class="ruby-identifier">x2</span>, <span class="ruby-identifier">y2</span>, <span class="ruby-identifier">c2</span>, <span class="ruby-identifier">x3</span>, <span class="ruby-identifier">y3</span>, <span class="ruby-identifier">c3</span>, <span class="ruby-identifier">z</span>=<span class="ruby-value">0</span>, <span class="ruby-identifier">mode</span>=<span class="ruby-identifier">:default</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000049"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000049'>
+
+
+gl
+
+(&amp;custom_gl_code)
+
+</a>
+</h3>
+<p>
+See examples/OpenGLIntegration.rb.
+</p>
+
+<p class="source_link" id="M000049-show-link"><a href="#" onclick="toggle('M000049-source'); toggleText('M000049-link'); return false;" id="M000049-link">Show source...</a></p><div class="source" id="M000049-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 431</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">gl</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">custom_gl_code</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000039"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000039'>
+
+
+needs_redraw?
+
+()
+
+</a>
+</h3>
+<p>
+Can be overriden to give the game a chance to say no to being redrawn. This
+is not a definitive answer. The operating system can still cause redraws
+for one reason or another.
+</p>
+<p>
+By default, the window is redrawn all the time (i.e. Window#needs_redraw?
+always returns true.)
+</p>
+
+<p class="source_link" id="M000039-show-link"><a href="#" onclick="toggle('M000039-source'); toggleText('M000039-link'); return false;" id="M000039-link">Show source...</a></p><div class="source" id="M000039-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 399</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">needs_redraw?</span>; <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000040"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000040'>
+
+
+set_mouse_position
+
+(x, y)
+
+</a>
+</h3>
+<p>
+DEPRECATED.
+</p>
+
+<p class="source_link" id="M000040-show-link"><a href="#" onclick="toggle('M000040-source'); toggleText('M000040-link'); return false;" id="M000040-link">Show source...</a></p><div class="source" id="M000040-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 402</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_mouse_position</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span>); <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000035"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000035'>
+
+
+show
+
+()
+
+</a>
+</h3>
+<p>
+Enters a modal loop where the <a href="Window.html">Window</a> is visible
+on screen and receives calls to <a href="Window.html#M000038">draw</a>, <a
+href="Window.html#M000037">update</a> etc.
+</p>
+
+<p class="source_link" id="M000035-show-link"><a href="#" onclick="toggle('M000035-source'); toggleText('M000035-link'); return false;" id="M000035-link">Show source...</a></p><div class="source" id="M000035-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 380</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>; <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+<a class="small" name="M000037"><br/></a>
+<div class="method_block"><h3>
+<a href='#M000037'>
+
+
+update
+
+()
+
+</a>
+</h3>
+<p>
+Called every update_interval milliseconds while the window is being shown.
+Your application&#8216;s main game logic goes here.
+</p>
+
+<p class="source_link" id="M000037-show-link"><a href="#" onclick="toggle('M000037-source'); toggleText('M000037-link'); return false;" id="M000037-link">Show source...</a></p><div class="source" id="M000037-source"><pre><span class="ruby-comment cmt"># File reference/gosu.rb, line 387</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>; <span class="ruby-keyword kw">end</span></pre></div>
+</div>
+
+
+
+
+
+</div><div class="clear" id="footer">Allison 2 &copy; 2007 <a href="http://cloudbur.st">Cloudburst, LLC</a><br/>slightly adapted for the Gosu project by Julian Raschke</div></div></body></html>
