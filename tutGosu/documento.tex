@@ -1,12 +1,38 @@
 \documentclass{article}
 
-\usepackage[utf8]{inputenc}
+%\usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{fancyvrb}
+\usepackage{caption}
+
+\usepackage{fontspec}   % provides font selecting commands 
+\usepackage{xunicode}   % provides unicode character macros 
+\usepackage{xltxtra}    % provides some fixes/extras
+\setmonofont{Consolas}
+\setsansfont{Calibri}
+
+\usepackage{setspace}
+\onehalfspacing
+
+%
+
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{0pt}{*0}{*0}
+\titlespacing{\subsection}{0pt}{*0}{*0}
+\titlespacing{\subsubsection}{0pt}{*0}{*0}
+
+\DeclareCaptionStyle{base}[justification=centering,indention=0pt, margin={5mm,10mm,15mm,20mm}]{}
 
 \include{estiloListing}
+
+% Véase http://www.andy-roberts.net/misc/latex/latextutorial6.html , sección custom floats
+\usepackage{float}
+\floatstyle{ruled}
+\newfloat{code}{th}{lop}
+\floatname{code}{Código}
 
 \usepackage[top=1.7cm, bottom=1.7cm, left=1.7cm, right=1.7cm]{geometry}
 
@@ -15,10 +41,10 @@
 
 \renewcommand{\familydefault}{\sfdefault}
 
-\usepackage{setspace}
-\onehalfspacing
+
 
 \setlength{\parskip}{0.4cm}
+%\setlength{\headsep}{0pt}
 
 \title{Mini Guía Emacs para estudiantes de ADA Y POO}
 \author{José Tomás Tocino García}
@@ -80,11 +106,14 @@ alguna. Antes de nada, hay que instalar las dependencias de la
 librería, que son unas cuantas. Suponiendo que estás en un sistema
 basado en Debian:
 
+\begin{code}
+  \begin{Verbatim}
 
-\begin{lstlisting}[style=consola]
-sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost1.40-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
-\end{lstlisting}
-
+sudo apt-get install g++ libgl1-mesa-dev libpango1.0-dev libboost1.40-dev \
+     libsdl-mixer1.2-dev libsdl-ttf2.0-dev
+  \end{Verbatim}
+  \caption{Instalación de dependencias}
+\end{code}
 Una vez hecho, crea una carpeta para tu proyecto, por ejemplo
 \texttt{miJuego}, descarga el código fuente de Gosu desde la página de
 descargas (\url{http://code.google.com/p/gosu/downloads/list}) y
@@ -93,10 +122,14 @@ carpeta de tu proyecto.
 
 Entra en \texttt{gosu} y luego en el subdirectorio \texttt{linux}, y
 teclea:
-\begin{lstlisting}[style=consola]
+\begin{code}
+\begin{verbatim}
+
 ./configure
 make
-\end{lstlisting}
+\end{verbatim}
+\caption{Compilación de Gosu}
+\end{code}
 
 Ya está compilada y lista para usarse. Gosu suele adjuntarse con cada
 proyecto, en lugar de instalarla a nivel de sistema, y se enlaza
@@ -153,46 +186,29 @@ El punto de partida para todas las aplicaciones Gosu es la clase
 debemos heredar para empezar a hacer nuestro juego. Mucha palabrería
 pero en realidad, nada del otro mundo. Abre un nuevo fichero
 \texttt{main.cpp} y guárdalo en la carpeta principal de tu proyecto.
+\input{ejemplo/estiloCodigo.tex}
 
-\begin{lstlisting}[style=C]
-#include <iostream>
-#include "Gosu/Gosu.hpp"
+\begin{singlespace}
+  \begin{code}
+    \input{ejemplo/codigo1.tex}
+    \caption{Estructura inicial}
+  \end{code}
+\end{singlespace}
 
-using namespace std;
+\pagebreak
 
-class Juego : public Gosu::Window{
-
-public:
-
-    Juego() : Gosu::Window(640, 480, false){
-	cout << "Constructor" << endl;
-    }
-
-    void update(){
-	// Aquí va la lógica del juego
-    }
-
-    void draw(){
-	// Dibujado
-    }
-
-    void buttonDown(Gosu::Button boton){
-	if(boton == Gosu::kbEscape){
-	    close();
-	}
-    }
-};
-
-int main(int argc, char *argv[])
-{
-    Juego J;
-    J.show();
-
-    return 0;
-}
-\end{lstlisting}
-
-
+whateverljsahlfkjhsadlfk
+lkjsadhflsakjdhflksadhflksahdf
+whateverljsahlfkjhsadlfk
+lkjsadhflsakjdhflksadhflksahdf
+whateverljsahlfkjhsadlfk
+lkjsadhflsakjdhflksadhflksahdf
+whateverljsahlfkjhsadlfk
+lkjsadhflsakjdhflksadhflksahdf
+whateverljsahlfkjhsadlfk
+lkjsadhflsakjdhflksadhflksahdf
+whateverljsahlfkjhsadlfk
+lkjsadhflsakjdhflksadhflksahdf
 
 \pagebreak
 
