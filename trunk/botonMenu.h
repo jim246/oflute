@@ -82,8 +82,8 @@ class BotonMenu{
     /// Imagen del fondo.
     boost::scoped_ptr<Gosu::Image> imagen;
 
-    /// Coordenadas para controlar la última posición.
-    int lastX, lastY;
+    // Coordenadas para controlar la última posición.
+    int lastX, lastY; ///< WAT
 
     /// Indica si hay sombra o no
     bool sombra;
