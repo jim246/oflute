@@ -49,70 +49,151 @@ using namespace std;
 
 
 class Animacion{
-    int inicialX, inicialY, finalX, finalY;
-    int time, duration, esperaInicial;
-    float currX, currY;
-    int changeX, changeY;
-
+    
 public:
+    /// Diferentes tipos de animaciones
     enum tipoAnim {tEaseInQuad, tEaseOutQuad, tEaseInOutQuad,
 		   tEaseInCubic, tEaseOutCubic, tEaseInOutCubic,
 		   tEaseInQuart, tEaseOutQuart, tEaseInOutQuart,
 		   tEaseOutBack, tLinear};
-
-    Animacion(int iX, int iY, 
-	      int fX, int fY, int d, 
-	      tipoAnim anim = tEaseInQuad, int e=0);
-
-    inline void init() { time = 0; };
-    inline void end() { time = duration + esperaInicial; update(); };
-
-    inline bool finished(){ return time >= duration + esperaInicial;  }
-
-    inline float getX() { return currX; };
-    inline float getY() { return currY; };
-    
-    inline void setInicialX(int x) { inicialX = x; changeX = finalX - inicialX; }
-    inline void setInicialY(int y) { inicialY = y; changeY = finalY - inicialY; }
-
-    inline void setFinalX(int x) { finalX = x; changeX = finalX - inicialX; }
-    inline void setFinalY(int y) { finalY = y; changeY = finalY - inicialY; }
-
-    inline void setTipoAnimacion(tipoAnim a){ anim = a; }
-
-    inline void setDuracion(int d) { duration = d; }
-    inline void setEspera(int e) { esperaInicial = e; }
-
-
-
-// ######################################################
-// Ecuaciones de tweening
-
-    float easeLinear(float t, float b, float c, float d);
-
-    float easeInQuad (float t, float b, float c, float d);
-    float easeOutQuad(float t, float b, float c, float d);
-    float easeInOutQuad(float t, float b, float c, float d);
-    
-    float easeInCubic(float t, float b, float c, float d) ;
-    float easeOutCubic(float t, float b, float c, float d) ;
-    float easeInOutCubic(float t, float b, float c, float d);
-
-
-    float easeInQuart(float t, float b, float c, float d) ;
-    float easeOutQuart(float t, float b, float c, float d) ;
-    float easeInOutQuart(float t, float b, float c, float d);
-
-    float easeOutBack(float t, float b, float c, float d);
-
-    void update();
-    
-
-    ~Animacion();
-
 private:
+
+    /// Número de atributos a animar
+    int numAttr;
+
+    /// Duración de la animación
+    int duracion;
+
+    /// Espera inicial antes de iniciar la animación
+    int esperaInicial;
+
+    /// Contador del tiempo pasado
+    int time;
+
+    /// Vector de posiciones iniciales
+    int * inicial;
+
+    /// Vector de posiciones finales
+    int * final;
+
+    /// Vector de recorridos (diferencia entre final e inicial)
+    int * change;
+
+    /// Vector de posiciones actuales
+    float * actual;
+
+    /// Tipo de animación a realizar
     tipoAnim anim;
 
+    /// Puntero a la función de animación
+    float (*puntFun) (float, float, float, float);
+    
+public:
+    /**
+     * @brief Crea una nueva animación
+     * 
+     * Se inicializan los vectores para cada uno de los atributos a animar.
+     *
+     * @param n Número de atributos en los que se hará la animación.
+     * @param d Duración de la animación.
+     * @param anim Tipo de animación.
+     * @param e Espera inicial antes de empezar la animación.
+     *
+     */
+
+    Animacion(int n, int d, tipoAnim anim = tEaseInQuad, int e = 0);
+
+    /**
+     * @brief Reinicia la animación al estado inicial
+     */
+    inline void init();
+
+    /**
+     * @brief Coloca la animación en su estado final
+     */
+    void end();
+
+    /**
+     * @brief Comprueba si la animación ha terminado.
+     * @return Verdadero si la animación ha terminado.
+     */
+    bool finished();
+
+    /**
+     * @brief Devuelve el valor actual del atributo indicado.
+     *
+     * @param i El índice del atributo cuyo valor hay que consultar.
+     * @return El valor del atributo.
+     *
+     */
+    float get(int i);
+
+
+    void setInicial(int i, int v);
+
+    void setFinal(int i, int v);
+
+    void set(int i, int v1, int v2);
+
+    /**
+     * @brief Selecciona la ecuación de la animación.
+     *
+     * @param a Ecuación a asignar.
+     */
+    void setTipoAnimacion(tipoAnim a);
+
+    /**
+     * @brief Asigna la duración de la animación.
+     * @param d Duración de la animación.
+     */
+    void setDuracion(int d) { duracion = d; }
+
+    /**
+     * @brief Asigna el tiempo de espera de la animación.
+     * @param Tiempo de espera.
+     */
+
+    void setEspera(int e) { esperaInicial = e; }
+
+    /**
+     * @brief Actualiza la animación un paso.
+     */
+
+    void update(bool a = true);
+
+
+    /**
+     * @name Ecuaciones de tweening
+     * Todas las ecuaciones de tweening reciben cuatro argumentos:
+     * - Tiempo pasado.
+     * - Valor inicial.
+     * - Diferencia entre el valor final y el inicial.
+     * - Duración de la animación.
+     */
+
+    //@{
+
+
+    static float easeLinear(float t, float b, float c, float d);
+
+    static float easeInQuad (float t, float b, float c, float d);
+    static float easeOutQuad(float t, float b, float c, float d);
+    static float easeInOutQuad(float t, float b, float c, float d);
+    
+    static float easeInCubic(float t, float b, float c, float d) ;
+    static float easeOutCubic(float t, float b, float c, float d) ;
+    static float easeInOutCubic(float t, float b, float c, float d);
+
+
+    static float easeInQuart(float t, float b, float c, float d) ;
+    static float easeOutQuart(float t, float b, float c, float d) ;
+    static float easeInOutQuart(float t, float b, float c, float d);
+
+    static float easeOutBack(float t, float b, float c, float d);
+    //@}
+
+    /// Libera la memoria de los diferentes vectores.
+    ~Animacion();
 };
 
 #endif /* _ANIMACION_H_ */

@@ -69,7 +69,7 @@ class EstadoMenu : public Estado{
 
     /// Botones del menú
     boost::scoped_ptr<BotonMenu> btn1, btn2, btn3, btn4;
-
+    
     /// Animaciones para los botones del menú
     boost::scoped_ptr<Animacion> animaciones[6];
 
