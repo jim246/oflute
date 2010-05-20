@@ -13,7 +13,7 @@ LDLIBS+=-lSDL_ttf
 
 OBJECTS+=main.o juego.o estado.o estadoImagenFija.o
 OBJECTS+=estadoMenu.o FFT.o analizador.o controlSonido.o 
-OBJECTS+=estadoAnalizador.o animacion.o
+OBJECTS+=estadoAnalizador.o animacion.o ecuaciones.o
 OBJECTS+=estadoLecciones.o log.o
 
 EXE=programa
@@ -34,6 +34,7 @@ estadoAnalizador.o: estado.h estadoAnalizador.h juego.h analizador.h controlSoni
 
 controlSonido.o: controlSonido.h
 animacion.o:animacion.h
+ecuaciones.o:animacion.h
 
 .cpp.o:
 	$(CC) $(CXXFLAGS) -c $< -o $@
