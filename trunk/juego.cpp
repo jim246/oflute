@@ -9,8 +9,10 @@
 
 #include "log.h"
 
+#include <boost/lexical_cast.hpp>
 
-Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
+
+Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS), lastms(Gosu::milliseconds()){
     lDEBUG << Log::CON("Juego");
     setCaption(L"oFlute .:.");
     estadoActual.reset ( 
@@ -25,6 +27,14 @@ Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
 
 void Juego::update(){
     estadoActual -> update();
+
+    /*
+    double fps = 1000./(Gosu::milliseconds() - lastms);
+    lastms = Gosu::milliseconds();
+    setCaption(Gosu::widen("FPS: " + boost::lexical_cast<std::string>(fps))); 
+    //*/
+
+    
 }
 
 void Juego::draw(){
