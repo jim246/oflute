@@ -6,6 +6,10 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 				    L"media/fondoGenerico.png"));
 }
 
+void EstadoMenuLecciones::update(){
+
+}
+
 void EstadoMenuLecciones::draw() {
     imgFondo -> draw(0,0,1);
 }

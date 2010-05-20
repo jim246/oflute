@@ -51,7 +51,7 @@ class EstadoMenuLecciones : public Estado{
 public:
     EstadoMenuLecciones(Juego * p);
 
-    void update(){ };
+    void update();
     
     void draw();
 

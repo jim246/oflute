@@ -54,13 +54,6 @@ void EstadoMenu::update(){
     if(!lanzado) 
 	return;
 
-/*
-  Estados de la animación:
-  0: Haciendo fade in del fondo
-  1: Salen los botones
-*/
-
-
     // 0: Haciendo el fade in
     if(estadoAnim == eFADEIN){
 	animOpacidadFondo -> update();
@@ -118,7 +111,6 @@ void EstadoMenu::update(){
 
     else if(estadoAnim == eANIMOUT){
 	
-	int j = 0;
 	for (int i = 0; i < 6; ++i)
 	{
 	    animaciones[i] -> update();
@@ -179,6 +171,7 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 	    }
 	    animLogoCusl -> end();
 	    animLogotipo -> end();
+	    animOpacidadFondo -> end();
 	    estadoAnim = eESTATICO;
 	}
 
