@@ -35,83 +35,93 @@
 
 using namespace std;
 
-// Añade Función:(Archivo: linea) desde donde fué llamada.
-// Literales de cadena no indexados se concatenan.
-#define LOC()  std::endl <<						\
-			    __FUNCTION__ << " :(" << __FILE__ << ":" <<  __LINE__ << ")  " 
-    
-// Añade variable == valor.
-// (x) debe tener definido el operador << obviamente.
+/// Añade Función:(Archivo: linea) desde donde fué llamada.
+#define LOC()  std::endl << __FUNCTION__ << " :(" << __FILE__ << ":" <<  __LINE__ << ")  " 
+
+/**
+ * Añade variable == valor. (x) debe tener definido el operador << obviamente.
+ */
 #define VARV(x) #x << " = " << (x)
 
-// Log, version 0.1: a simple logging class
+
 enum TLogLevel {logERROR, logWARNING, logINFO, logDEBUG};
+
+/**
+ * @class Log
+ *
+ * @brief Gestiona el log del programa.
+ *
+ * Utiliza sintaxis de flujo para facilitar el uso. Existen cuatro niveles de log, aunque por ahora
+ * no se diferencian en nada más que en el nombre.
+ *
+ * Para usar el log, la sintaxis es la siguiente:
+ * \code
+ * Log().Get(logDEBUG) << "Mensaje";
+ * \endcode
+ * No es necesario añadir un salto de línea al final, el manejador del log lo inserta automáticamente.
+ *
+ * @author José Tomás Tocino García <theom3ga@gmail.com> 
+ *
+ */
+
 
 class Log{
 public:
-    ~Log();
+    /**
+     * @brief Devuelve el flujo para el nivel indicado
+     *
+     * @param level Nivel de log del mensaje
+     * @return Flujo en el que insertar los mensajes.
+     *
+     */
     std::ostringstream& Get(TLogLevel level = logINFO);
 
+    /**
+     * @brief Devuelve una cadena con el texto correspondiente al nivel indicado.
+     *
+     * @param T Nivel de log.
+     * @return Cadena con el nivel escrito.
+     *
+     */
     static string ToString(TLogLevel T);
 
+    /**
+     * @brief Devuelve una cadena con el texto de log estándar para constructores.
+     * Escrito por conveniencia para unificar el logging de constructores y destructores.
+     *
+     * @param s Nombre de la clase cuyo constructor está siendo llamado
+     * @return Cadena con el texto para hacer log de la construcción
+     *
+     */
     static string CON(string s);
 
+    /** 
+     * @brief Devuelve una cadena con el texto de log estándar para destructores.
+     * Escrito por conveniencia para unificar el logging de constructores y destructores.
+     *
+     * @param s Nombre de la clase cuyo destructor está siendo llamado.
+     * @return Cadena con el texto para hacer log de la destrucción.
+     *
+     */
     static string DES(string s);
+
+    /**
+     * @brief Vuelca el flujo con los mensajes de log en el destino indicado, por ahora la salida estándar.
+     */
+    ~Log();
+    //@{
+    ///@name Constantes de colores
+    /// Constantes de cadena con códigos de colores para terminales UNIX. No se ha probado en otros sistemas.
     static string cRojo, cVerde, cAzul, cAmar, cDef;
+    //@}
+
 protected:
+    /// Flujo en el que se vuelcan los mensajes antes de ser enviados al destino final.
     std::ostringstream os;
 
 };
 
 
 #define lDEBUG Log().Get(logDEBUG)
-
-
-/*
-  class Log{
-  public:    
-  stringstream S;
-  int level;
-  Log(int l = LINFO) : level(l){ }
-    
-  ~Log(){
-  switch(level){
-  case LWARN:
-  cout << "[WARN] " << S.str() << flush;
-  break;
-	
-  case LINFO:
-  cout << "[INFO] " << S.str() << flush;
-  break;
-
-  case LDEBUG:
-  cout << "[DEBUG] " << S.str() << flush;
-  break;
-  }
-  }
-    
-  static stringstream& info(){
-  return Log(LINFO);
-  }
-
-  template <typename T>
-  friend Log& operator<<(Log& log, const T& value);
-  friend Log& operator<<(Log& log, ostream& (*pf) (ostream&));
-  };
-
-  template <typename T>
-  Log& operator <<(Log& log, T const & value) {
-  log.S << value;
-  return log;
-  }
-
-
-  Log& operator<< (Log& log, ostream& (*pf) (ostream&))
-  {
-  log.S << pf;
-  return log;
-  }//*/
-
-
 
 #endif /* _LOG_H_ */

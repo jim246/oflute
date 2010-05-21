@@ -21,13 +21,7 @@ string Log::cVerde =  "\033[01;32m";
 string Log::cAzul = "\033[01;34m";
 string Log::cAmar = "\033[01;33m";
 string Log::cDef = "\033[00m";
-/*
-    ROJO='\[\033[01;31m\]'
-    VERDE='\[\033[01;32m\]'
-    AZUL='\[\033[01;34m\]'
-    AMAR='\[\033[01;33m\]'
-    DEF='\[\033[00m\]'
-*/
+
 
 string Log::CON(string s){
     return cVerde + "[++ Constructor] " + s + cDef;

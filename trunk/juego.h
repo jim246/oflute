@@ -50,9 +50,12 @@ class Estado;
  */
 
 class Juego : public Gosu::Window{
+    /// Contenedor del estado actual
     boost::scoped_ptr <Estado> estadoActual;
+
+    /// Imagen para el cursor del ratón
     boost::scoped_ptr <Gosu::Image> cursor;
-    unsigned long lastms;
+
 public:
     /** 
      * @brief Constructor, inicio básico.

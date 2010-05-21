@@ -46,7 +46,7 @@ protected:
     /**
      @brief Puntero al padre creador.
 
-     Nos sirve para poder cambiar de estado (llamando a #Juego::cambiarEstado()), acceder al sistema gráfico (con #Juego::graphics()) y otras acciones.
+     Nos sirve para poder cambiar de estado (llamando a #Juego::cambiarEstado()), acceder al sistema gráfico (con Juego::graphics()) y otras acciones.
     **/
     Juego * padre;
 public:
