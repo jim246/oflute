@@ -150,7 +150,7 @@ public:
 
     /**
      * @brief Asigna el tiempo de espera de la animación.
-     * @param Tiempo de espera.
+     * @param e Tiempo de espera.
      */
 
     void setEspera(int e) { esperaInicial = e; }

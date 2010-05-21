@@ -32,6 +32,7 @@
 #include <Gosu/Gosu.hpp>
 
 #include "estado.h"
+#include "elementosInterfaz.h"
 
 /**
  * @class EstadoMenuLecciones
@@ -48,6 +49,7 @@ class Juego;
 
 class EstadoMenuLecciones : public Estado{
     boost::scoped_ptr<Gosu::Image> imgFondo;
+    boost::scoped_ptr<elementoTexto> txtTitulo;
 public:
     EstadoMenuLecciones(Juego * p);
 

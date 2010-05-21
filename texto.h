@@ -52,6 +52,7 @@ using namespace std;
 
 class Texto{
 
+
     /// Objeto que será el destino gráfico
     Gosu::Graphics& graphics;
 
@@ -79,13 +80,15 @@ class Texto{
     /// Opacidad de la sombra
     unsigned opacidadSombra;
 
+    //@{
     /** Posición del texto.
 	Para el texto justificado a la izquierda, es la esquina sup izq.
 	Para el texto justif. a la derecha, es la esquina sup der.
 	Para el texto centrado, es la posición central superior
     **/
     unsigned x, y;
-
+    //@}
+    
     /// Profundidad
     double z;
 
@@ -93,8 +96,9 @@ class Texto{
     int offsetShadow[2];
 
 
-    // función adaptada de
-    // http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
+    /** @brief Divide el texto según los saltos de línea, metiendo cada línea en el vector lineas.
+     *  función adaptada de http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
+     */
     void dividirTexto(){
 	
 	string::size_type lastPos = texto.find_first_not_of('\n', 0);
@@ -115,6 +119,8 @@ class Texto{
 
     
 public:
+    enum tAlign{ alignIzq = 1, alignCentro, alignDer };
+
     /**
      * @brief Crea un nuevo cuadro de texto
      *
