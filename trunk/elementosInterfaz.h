@@ -34,6 +34,7 @@
 
 #include "animacion.h"
 #include "texto.h"
+#include "log.h"
 
 
 /**
@@ -82,19 +83,19 @@ public:
      */
 
     elementoImagen(Gosu::Graphics& g, string ruta, int x, int y, int z, 
-		   bool animar, int wait, int duracion)
+		   bool animar = true, int wait = 0, int duracion = 30)
 	: 
 	g(g), ruta(ruta), x(x), y(y), z(z), animar(animar){
 	
 	img.reset(new Gosu::Image(g, Gosu::widen(ruta)));	
 
 	if(animar){
-	    cout << "** Se animará. Duración: " << duracion << endl;
+	    lDEBUG << "** Se animará. Duración: " << duracion << endl;
 	    A = new Animacion(1, duracion, Animacion::tEaseOutQuad, wait);
 	    A -> set (0, 0, 255);
 	}
 
-	cout << boost::format("** Imagen - ruta:'%s', x:%i, y:%i, z:%i, wait:%i") % ruta % x % y % z % wait << endl;
+	lDEBUG << boost::format("** Imagen - ruta:'%s', x:%i, y:%i, z:%i, wait:%i") % ruta % x % y % z % wait << endl;
 	
     }
     
@@ -135,7 +136,7 @@ public:
 	    A -> set (0, 0, 255);
 	}
 
-	cout << boost::format("** Texto - fuente:%s, tam:%i, x:%i, y:%i, z:%i, wait:%i, align: %i, sombra: %i\ntexto: %s") % rutaFuente % tam % x % y % z % wait % alineacion % sombra % str << endl;
+	lDEBUG << boost::format("** Texto - fuente:%s, tam:%i, x:%i, y:%i, z:%i, wait:%i, align: %i, sombra: %i\ntexto: %s") % rutaFuente % tam % x % y % z % wait % alineacion % sombra % str << endl;
     }
 
     void draw(){

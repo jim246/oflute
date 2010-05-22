@@ -48,8 +48,17 @@
 class Juego;
 
 class EstadoMenuLecciones : public Estado{
+    /// Imagen para el fondo
     boost::scoped_ptr<Gosu::Image> imgFondo;
+
+    /// Título
     boost::scoped_ptr<elementoTexto> txtTitulo;
+
+    /// Imagen de la pizarra
+    boost::scoped_ptr<elementoImagen> pizarra;
+
+    /// Subtítulo de información
+    boost::scoped_ptr<elementoTexto> txtSubtitulo;
 public:
     EstadoMenuLecciones(Juego * p);
 
