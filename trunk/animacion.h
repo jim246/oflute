@@ -56,6 +56,9 @@ public:
 		   tEaseInCubic, tEaseOutCubic, tEaseInOutCubic,
 		   tEaseInQuart, tEaseOutQuart, tEaseInOutQuart,
 		   tEaseOutBack, tLinear};
+
+    enum atribAnim{ tNada, tAlpha, tPos, tAlphaPos };
+
 private:
 
     /// Número de atributos a animar
@@ -106,7 +109,7 @@ public:
     /**
      * @brief Reinicia la animación al estado inicial
      */
-    inline void init();
+    void init();
 
     /**
      * @brief Coloca la animación en su estado final

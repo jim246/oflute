@@ -51,6 +51,15 @@ class EstadoMenuLecciones : public Estado{
     /// Imagen para el fondo
     boost::scoped_ptr<Gosu::Image> imgFondo;
 
+
+    boost::scoped_ptr<elementoImagen> pizarra;
+
+    boost::scoped_ptr<ElementoCombinado> barraSuperior;
+
+    boost::scoped_ptr<ElementoCombinado> barraInferior;
+
+    boost::scoped_ptr<ElementoCombinado> btn1;
+    /*
     /// Título
     boost::scoped_ptr<elementoTexto> txtTitulo;
 
@@ -59,6 +68,8 @@ class EstadoMenuLecciones : public Estado{
 
     /// Subtítulo de información
     boost::scoped_ptr<elementoTexto> txtSubtitulo;
+    //*/
+
 public:
     EstadoMenuLecciones(Juego * p);
 
