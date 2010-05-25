@@ -73,28 +73,83 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
     // Primer botón
 
-    tConfAnim * confBtn1 = new tConfAnim();
-    confBtn1 -> animar = Animacion::tPos;
-    confBtn1 -> inicialX = 800;
-    confBtn1 -> finalX = 400;
-    confBtn1 -> inicialY = confBtn1 -> finalY = 69;
-    confBtn1 -> wait = 10;
-    confBtn1 -> duracion = 20;
-    confBtn1 -> z = 2;
-    btn1.reset(new ElementoCombinado(padre -> graphics(), *confBtn1));
+    tConfAnim * confBtn = new tConfAnim();
+    confBtn -> animar = Animacion::tPos;
+    confBtn -> inicialX = 800;
+    confBtn -> finalX = 400;
+    confBtn -> inicialY = confBtn -> finalY = 69;
+    confBtn -> wait = 10;
+    confBtn -> duracion = 20;
+    confBtn -> z = 2;
+    btn1.reset(new ElementoCombinado(padre -> graphics(), *confBtn));
 
     btn1 -> setImagen("media/menuLecciones/mBtn1.png");
 
-    tConfTexto * confBtn1Texto = new tConfTexto;
-    confBtn1Texto -> cadena = "Lección #1";
-    confBtn1Texto -> rutaFuente = "media/fNormal.ttf";
-    confBtn1Texto -> tam = 36;
-    confBtn1Texto -> sombra = false;
-    confBtn1Texto -> alineacion = Texto::alignDer;
-    btn1 -> setTexto(*confBtn1Texto, -20, 7);
+    tConfTexto * confBtnTexto = new tConfTexto;
+    confBtnTexto -> cadena = "Lección #1";
+    confBtnTexto -> rutaFuente = "media/fNormal.ttf";
+    confBtnTexto -> tam = 36;
+    confBtnTexto -> sombra = false;
+    confBtnTexto -> alineacion = Texto::alignDer;
+    btn1 -> setTexto(*confBtnTexto, -20, 7);
 
-    delete confBtn1;
-    delete confBtn1Texto;
+
+
+
+    ///////////////////////////////
+    // Descripción
+    confBtn -> inicialY = confBtn -> finalY = 127;
+    confBtn -> wait = 20;
+    btnDescripcion.reset(new ElementoCombinado(padre -> graphics(), *confBtn));
+
+    btnDescripcion -> setImagen("media/menuLecciones/mBtn2.png");
+
+    confBtnTexto -> cadena = "Descripción:";
+    confBtnTexto -> sombra = true;
+    confBtnTexto -> color = Gosu::Color(255, 227, 253, 94);
+    btnDescripcion -> setTexto(*confBtnTexto, -20, 10);
+
+
+
+
+    ///////////////////////////////
+    // Botón comenzar 127
+    confBtn -> inicialY = confBtn -> finalY = 351;
+    confBtn -> wait = 30;
+    btnComenzar.reset(new ElementoCombinado(padre -> graphics(), *confBtn));
+
+    btnComenzar -> setImagen("media/menuLecciones/mBtn3.png");
+    confBtnTexto -> color = Gosu::Color(255,255,255,255);
+    confBtnTexto -> cadena = "Comenzar lección";
+    confBtnTexto -> alineacion = Texto::alignCentro;
+    btnComenzar -> setTexto(*confBtnTexto, 10, 10);
+
+
+    ///////////////////////////////
+    // Botón Siguiente Lección
+    confBtn -> inicialY = confBtn -> finalY = 417;
+    confBtn -> wait = 40;
+    btnSigLec.reset(new ElementoCombinado(padre -> graphics(), *confBtn));
+    btnSigLec -> setImagen("media/menuLecciones/mBtn4.png");
+
+    confBtnTexto -> cadena = "Siguiente lección";
+    btnSigLec -> setTexto(*confBtnTexto, 10, 13);
+
+
+    /////////////////////////////
+    // Botón Anterior Lección
+    confBtn -> inicialY = confBtn -> finalY = 487;
+    confBtn -> wait = 50;
+    btnAntLec.reset(new ElementoCombinado(padre -> graphics(), *confBtn));
+    btnAntLec -> setImagen("media/menuLecciones/mBtn5.png");
+
+    confBtnTexto -> cadena = "Anterior lección";
+    btnAntLec -> setTexto(*confBtnTexto, 10, 10);
+
+
+    delete confBtn;
+    delete confBtnTexto;
+
 			      
 }
 
@@ -110,6 +165,10 @@ void EstadoMenuLecciones::draw() {
     barraSuperior -> draw();
     barraInferior -> draw();
     btn1 -> draw();
+    btnComenzar -> draw();
+    btnAntLec -> draw();
+    btnSigLec -> draw();
+    btnDescripcion -> draw();
     // txtSubtitulo -> draw();
 }
 

@@ -59,6 +59,12 @@ class EstadoMenuLecciones : public Estado{
     boost::scoped_ptr<ElementoCombinado> barraInferior;
 
     boost::scoped_ptr<ElementoCombinado> btn1;
+    boost::scoped_ptr<ElementoCombinado> btnDescripcion;
+    boost::scoped_ptr<ElementoCombinado> btnComenzar;
+    boost::scoped_ptr<ElementoCombinado> btnAntLec;
+    boost::scoped_ptr<ElementoCombinado> btnSigLec;
+
+
     /*
     /// Título
     boost::scoped_ptr<elementoTexto> txtTitulo;
