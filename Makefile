@@ -1,15 +1,14 @@
 CC=g++
-CXXFLAGS+=-I. -Igosu `gosu/bin/gosu-config --cxxflags` -ISDL_ttf
+CXXFLAGS+=-I. -Igosu `gosu/bin/gosu-config --cxxflags`
+CXXFLAGS+=-Itinyxml
 CXXFLAGS+=-g #-Wall -Wextra
 
 LDFLAGS+=`gosu/bin/gosu-config --libs --cxxflags` 
 
 LDLIBS+=gosu/lib/libgosu.a -lportaudiocpp 
 LDLIBS+=-lSDL_ttf
-
-
-
-#tinyxml/tinyxml.a -lboost_regex -g
+LDLIBS+=-lboost_filesystem
+LDLIBS+=tinyxml/tinylib.a
 
 OBJECTS+=main.o juego.o estado.o estadoImagenFija.o
 OBJECTS+=estadoMenu.o FFT.o analizador.o controlSonido.o 
@@ -20,8 +19,8 @@ OBJECTS+=texto.o
 EXE=programa
 
 all: $(OBJECTS)
-	$(CC) $(LDFLAGS) $^ -o $(EXE) $(LDLIBS)
-
+	cd tinyxml; $(MAKE)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $(EXE) $(LDLIBS)
 
 analizador.o: analizador.h
 FFT.o: FFT.h
@@ -43,3 +42,4 @@ estadoLecciones.o: estadoLecciones.h elementosInterfaz.h
 
 clean:
 	rm -rf $(OBJECTS) $(EXE)
+	cd tinyxml; $(MAKE) clean

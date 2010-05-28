@@ -33,10 +33,13 @@
 #include <cstdio>
 #include <string>
 
+#include <boost/lexical_cast.hpp>
+
 using namespace std;
 
 /// Añade Función:(Archivo: linea) desde donde fué llamada.
-#define LOC()  std::endl << __FUNCTION__ << " :(" << __FILE__ << ":" <<  __LINE__ << ")  " 
+#define LOC()  string(__FUNCTION__) + " :(" + __FILE__ + ":" +  boost::lexical_cast<string>(__LINE__) + ")  " 
+//#define LOC()  << __FUNCTION__ << " :(" << __FILE__ << ":" <<  __LINE__ << ")  " 
 
 /**
  * Añade variable == valor. (x) debe tener definido el operador << obviamente.
@@ -123,5 +126,6 @@ protected:
 
 
 #define lDEBUG Log().Get(logDEBUG)
+#define lERROR Log().Get(logERROR)
 
 #endif /* _LOG_H_ */

@@ -28,18 +28,30 @@
 #define _ESTADOLECCIONES_H_
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <Gosu/Gosu.hpp>
 
 #include "estado.h"
 #include "elementosInterfaz.h"
 
+#include <string>
+#include <vector>
+
+#define TIXML_USE_STL
+#include "tinyxml.h"
+#include "tinystr.h"
+
+
+using namespace std;
+
+
 /**
  * @class EstadoMenuLecciones
  *
  * @brief 
  *
- * 
+ * Clase que modela el menú de selección de las lecciones.
  *
  * @author José Tomás Tocino García <theom3ga@gmail.com> 
  *
@@ -64,24 +76,20 @@ class EstadoMenuLecciones : public Estado{
     boost::scoped_ptr<ElementoCombinado> btnAntLec;
     boost::scoped_ptr<ElementoCombinado> btnSigLec;
 
+    struct infoLeccion{ 
+	int indice;
+	string nombre, descrip;
+    };
 
-    /*
-    /// Título
-    boost::scoped_ptr<elementoTexto> txtTitulo;
-
-    /// Imagen de la pizarra
-    boost::scoped_ptr<elementoImagen> pizarra;
-
-    /// Subtítulo de información
-    boost::scoped_ptr<elementoTexto> txtSubtitulo;
-    //*/
-
+    vector<infoLeccion> leccionesCargadas;
 public:
     EstadoMenuLecciones(Juego * p);
 
     void update();
     
     void draw();
+
+    void listarLecciones();
 
     void buttonDown(Gosu::Button boton);
 };
