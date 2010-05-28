@@ -1,6 +1,9 @@
 #include "juego.h"
 #include "estadoLecciones.h"
 
+#include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
+
 EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     imgFondo.reset (new Gosu::Image(padre -> graphics(),
 				    L"media/fondoGenerico.png"));
@@ -8,10 +11,9 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     
     tConfAnim * t = new tConfAnim;
     t -> animar = Animacion::tAlphaPos;
-//    t -> inicialX = 0;
+    t -> inicialX = -450;
     t -> finalX = 35;
-
-//    t -> inicialY = 0;
+    t -> inicialY = 128;
     t -> finalY = 128;
 
     t -> inicialA = 0;
@@ -23,7 +25,7 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
 
     pizarra.reset(new elementoImagen(padre -> graphics(),
-				     "media/pizarra.png",
+				     "media/menuLecciones/pizarra.png",
 				     *t));
     delete t;
     
@@ -113,7 +115,7 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
 
     ///////////////////////////////
-    // Botón comenzar 127
+    // Botón comenzar 
     confBtn -> inicialY = confBtn -> finalY = 351;
     confBtn -> wait = 30;
     btnComenzar.reset(new ElementoCombinado(padre -> graphics(), *confBtn));
@@ -150,7 +152,58 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     delete confBtn;
     delete confBtnTexto;
 
-			      
+    listarLecciones();
+}
+
+void EstadoMenuLecciones::listarLecciones(){
+
+
+    boost::filesystem::path rutaDirectorio("lecciones");
+    boost::filesystem::directory_iterator inicial(rutaDirectorio), final;
+
+    TiXmlDocument documento;
+
+    for(; inicial != final ; ++ inicial){
+	if(boost::to_lower_copy(inicial -> path() . extension()) == ".xml"){
+
+	    EstadoMenuLecciones::infoLeccion lecActual;
+	    string ruta = boost::lexical_cast<string>(inicial -> path());
+
+	    if(!documento.LoadFile(ruta)){
+		lERROR << LOC() << " No se pudo cargar: " << ruta;
+		continue;
+	    }
+
+	    TiXmlHandle manejador(&documento);
+
+	    TiXmlElement * elemento = manejador.FirstChild("Lec").FirstChild("index").ToElement();
+	    if(!elemento){
+		lERROR << "El fichero " << ruta << " no está bien formado. "
+		       << "(Falta índice)";
+		continue;
+	    }
+	    lecActual.indice = boost::lexical_cast<int>(elemento -> GetText());
+	    
+	    elemento = manejador.FirstChild("Lec").FirstChild("nombre").ToElement();
+	    if(!elemento){
+		lERROR << "El fichero " << ruta << " no está bien formado. "
+		       << "(Falta nombre)";
+		continue;
+	    }
+	    lecActual.nombre = elemento -> GetText();
+
+	    elemento = manejador.FirstChild("Lec").FirstChild("descrip").ToElement();
+	    if(!elemento){
+		lERROR << "El fichero " << ruta << " no está bien formado. "
+		       << "(Falta descripción)";
+		continue;
+	    }
+	    lecActual.descrip = elemento -> GetText();
+
+	    leccionesCargadas.push_back(lecActual);
+
+	}
+    }
 }
 
 void EstadoMenuLecciones::update(){
