@@ -28,7 +28,7 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     t -> duracion = 30;
 
 
-    pizarra.reset(new elementoImagen(padre -> graphics(),
+    pizarra.reset(new ElementoImagen(padre -> graphics(),
 				     "media/menuLecciones/pizarra.png",
 				     *t));
     delete t;
@@ -116,7 +116,7 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     btnDescripcion -> setTexto(*confBtnTexto, -20, 10);
 
 
-    textoDesc.reset(new elementoTexto(padre -> graphics(),
+    textoDesc.reset(new ElementoTexto(padre -> graphics(),
 				      " ", "media/fNormal.ttf",
 				      36, Gosu::Color(255,255,255,255),
 				      Texto::alignDer, true, 80,

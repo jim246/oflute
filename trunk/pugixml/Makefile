@@ -17,7 +17,7 @@ ${OUTPUT}: ${OBJS}
 	${RANLIB} $@
 
 clean:
-	rm ${OBJS} ${OUTPUT}
+	rm ${OBJS} ${OUTPUT} -rf
 
 pugixml.o: pugixml.hpp pugiconfig.hpp
 pugixpath.o: pugixml.hpp pugiconfig.hpp

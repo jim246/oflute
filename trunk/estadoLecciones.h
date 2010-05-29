@@ -61,7 +61,7 @@ class EstadoMenuLecciones : public Estado{
     boost::scoped_ptr<Gosu::Image> imgFondo;
 
 
-    boost::scoped_ptr<elementoImagen> pizarra;
+    boost::scoped_ptr<ElementoImagen> pizarra;
 
     boost::scoped_ptr<ElementoCombinado> barraSuperior;
 
@@ -70,7 +70,7 @@ class EstadoMenuLecciones : public Estado{
     boost::scoped_ptr<ElementoCombinado> btn1;
     boost::scoped_ptr<ElementoCombinado> btnDescripcion;
 
-    boost::scoped_ptr<elementoTexto> textoDesc;
+    boost::scoped_ptr<ElementoTexto> textoDesc;
 
     boost::scoped_ptr<ElementoCombinado> btnComenzar;
     boost::scoped_ptr<ElementoCombinado> btnAntLec;
