@@ -4,9 +4,11 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 
+#include "pugixml.hpp"
+
 EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
-    leccionActual = 0;
+    leccionActual = -1;
     imgFondo.reset (new Gosu::Image(padre -> graphics(),
 				    L"media/fondoGenerico.png"));
 
@@ -115,7 +117,7 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
 
     textoDesc.reset(new elementoTexto(padre -> graphics(),
-				      "", "media/fNormal.ttf",
+				      " ", "media/fNormal.ttf",
 				      36, Gosu::Color(255,255,255,255),
 				      Texto::alignDer, true, 80,
 				      780, 175, 255, 4));
@@ -159,7 +161,6 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     delete confBtn;
     delete confBtnTexto;
 
-    listarLecciones();
 }
 
 void EstadoMenuLecciones::listarLecciones(){
@@ -168,49 +169,67 @@ void EstadoMenuLecciones::listarLecciones(){
     boost::filesystem::path rutaDirectorio("./lecciones");
     boost::filesystem::directory_iterator inicial(rutaDirectorio), final;
 
-    TiXmlDocument documento;
+    pugi::xml_document documento;
+    pugi::xml_parse_result resultado;
+    pugi::xml_node nodoActual, nodoVacio;
+    pugi::xml_attribute atributo;
 
     for(; inicial != final ; ++ inicial){
 	if(boost::to_lower_copy(inicial -> path() . extension()) == ".xml"){
 
 	    EstadoMenuLecciones::infoLeccion lecActual;
 	    string ruta = boost::lexical_cast<string>(inicial -> path());
+
 	    lDEBUG << "Intentando cargar archivo " << ruta;
-	    if(!documento.LoadFile(ruta)){
+
+	    resultado = documento . load_file(ruta.c_str());
+
+	    if(!resultado){
 		lERROR << LOC() << " Error al leer el documento: " << ruta;
-		lERROR << documento.ErrorDesc() << "(" << documento.ErrorId() << ")";
+		lERROR << resultado.description(); 
 		continue;
 	    }
 
-	    TiXmlHandle manejador(&documento);
 
-	    TiXmlElement * elemento = manejador.FirstChild("Lec").FirstChild("index").ToElement();
-	    if(!elemento){
+	    /////////////////////
+	    // Leemos el número de lección
+
+	    nodoActual = documento.child("Lec").child("index");
+
+	    if(nodoActual == nodoVacio){
 		lERROR << "El fichero " << ruta << " no está bien formado. "
 		       << "(Falta índice)";
 		continue;
 	    }
-	    lecActual.indice = boost::lexical_cast<int>(elemento -> GetText());
-	    
-	    elemento = manejador.FirstChild("Lec").FirstChild("nombre").ToElement();
-	    if(!elemento){
+
+	    lecActual.indice = boost::lexical_cast<int>(nodoActual.first_child().value());
+
+
+	    /////////////////
+	    // Leemos el nombre de la lección
+
+	    nodoActual = documento.child("Lec").child("nombre");
+
+	    if(nodoActual == nodoVacio){
 		lERROR << "El fichero " << ruta << " no está bien formado. "
 		       << "(Falta nombre)";
 		continue;
 	    }
-	    lecActual.nombre = elemento -> GetText();
 
-	    TiXmlPrinter printer;
-	    printer.SetIndent("");
-	    printer.SetIndent("\n");
-	    elemento = manejador.FirstChild("Lec").FirstChild("descrip").ToElement();
-	    if(!elemento){
+	    lecActual.nombre = nodoActual.first_child().value();
+
+
+	    /////////////////////
+	    // Leemos la descripción
+	    nodoActual = documento.child("Lec").child("descrip");
+
+	    if(nodoActual == nodoVacio){
 		lERROR << "El fichero " << ruta << " no está bien formado. "
 		       << "(Falta descripción)";
 		continue;
 	    }
-	    elemento -> Accept(&printer);
-	    lecActual.descrip = printer.CStr();
+
+	    lecActual.descrip = nodoActual.first_child().value();
 
 	    leccionesCargadas.push_back(lecActual);
 
@@ -218,11 +237,14 @@ void EstadoMenuLecciones::listarLecciones(){
     }
 
     sort(leccionesCargadas.begin(), leccionesCargadas.end(), ordenarLecciones());
+    leccionActual = 0;
     cambiarLeccion(leccionActual);
 }
 
 void EstadoMenuLecciones::update(){
-
+    if((btn1 -> animacion -> finished()) && leccionActual == -1){
+	listarLecciones();
+    }
 }
 
 void EstadoMenuLecciones::cambiarLeccion(unsigned n){
@@ -239,7 +261,6 @@ void EstadoMenuLecciones::cambiarLeccion(unsigned n){
     delete confBtnTexto;
 
     textoDesc -> setText(leccionesCargadas[n] . descrip);
-    lDEBUG << LOC() << VARV(n);
 }
 
 void EstadoMenuLecciones::draw() {
@@ -261,5 +282,15 @@ void EstadoMenuLecciones::draw() {
 void EstadoMenuLecciones::buttonDown(Gosu::Button boton){
     if(boton == Gosu::kbEscape){
 	padre -> cambiarEstado("salir");
+    }
+
+    else if(boton == Gosu::msLeft){
+	int x = padre -> input().mouseX();
+	int y = padre -> input().mouseY();
+	
+	if(barraInferior -> clicked(x, y)){
+	    padre -> cambiarEstado("estadoMenu");
+	}
+
     }
 }

@@ -67,7 +67,7 @@ struct tConfAnim{
 
 
 class Elemento{
-
+protected:
     Animacion::atribAnim animar;
 
     int finalX;
@@ -79,6 +79,10 @@ class Elemento{
     int inicialX;
     int inicialY;
     int inicialAlpha;
+
+    int currentX;
+    int currentY;
+    int currentAlpha;
 
     void setupAnimacion(int wait, int duracion){
 	if(animar != Animacion::tNada){
@@ -103,6 +107,34 @@ class Elemento{
 	    }
 	}else{
 	    animacion = 0;
+	}
+    }
+
+    void actualizarPosicion(){
+
+	if(animar != Animacion::tNada){
+
+	    if(animar == Animacion::tAlpha){
+		currentAlpha = animacion -> get(0);
+		currentX = finalX;
+		currentY = finalX;
+	    }
+
+	    else if(animar == Animacion::tPos){
+		currentAlpha = finalAlpha;
+		currentX = animacion -> get(0);
+		currentY = animacion -> get(1);
+	    }
+
+	    else{
+		currentAlpha = animacion -> get(0);
+		currentX = animacion -> get(1);
+		currentY = animacion -> get(2);
+	    }
+	}else{
+	    currentX = finalX;
+	    currentY = finalY;
+	    currentAlpha = finalAlpha;
 	}
     }
 
@@ -133,37 +165,23 @@ public:
     
 
     virtual void drawEnd(int x, int y, double z, int a) = 0;
+    virtual int getWidth() = 0;
+    virtual int getHeight() = 0;
+
+    int currX(){ return currentX; }
+    int currY(){ return currentY; }
+
+    bool clicked(int x, int y){
+	return (x >= currentX && x <= currentX + getWidth() &&
+		y >= currentY && y <= currentY + getHeight());
+    }
 
     void draw(){
-	int x1, y1, a1;
-
 	if(animar != Animacion::tNada){
 	    animacion -> update();
-
-	    if(animar == Animacion::tAlpha){
-		a1 = animacion -> get(0);
-		x1 = finalX;
-		y1 = finalX;
-	    }
-
-	    else if(animar == Animacion::tPos){
-		a1 = finalAlpha;
-		x1 = animacion -> get(0);
-		y1 = animacion -> get(1);
-	    }
-
-	    else{
-		a1 = animacion -> get(0);
-		x1 = animacion -> get(1);
-		y1 = animacion -> get(2);
-	    }
-	}else{
-	    x1 = finalX;
-	    y1 = finalY;
-	    a1 = finalAlpha;
 	}
-
-	drawEnd(x1, y1, z, a1);
+	actualizarPosicion();
+	drawEnd(currentX, currentY, z, currentAlpha);
     }    
 
     ~Elemento(){
@@ -186,7 +204,7 @@ public:
 
 class elementoImagen : public Elemento{
     /// Contenedor de la imagen.
-    boost::scoped_ptr<Gosu::Image> img;
+    boost::scoped_ptr<Gosu::Image> imagen;
 
     /// Ruta de la imagen.
     string ruta;
@@ -220,7 +238,7 @@ public:
 	ruta(ruta)
 	
 	{
-	    img.reset(new Gosu::Image(g, Gosu::widen(ruta)));	
+	    imagen.reset(new Gosu::Image(g, Gosu::widen(ruta)));	
 	}
     
     elementoImagen(Gosu::Graphics & g, string ruta, tConfAnim t)
@@ -231,16 +249,22 @@ public:
 	ruta(ruta)
 
 	{
-	    img.reset(new Gosu::Image(g, Gosu::widen(ruta)));
+	    imagen.reset(new Gosu::Image(g, Gosu::widen(ruta)));
 	}
 
     /**
      * @brief Dibuja el elemento en pantalla
      */
     void drawEnd(int x, int y, double z, int a){
-	img -> draw(x,y,z,1,1, Gosu::Color(a, 255, 255, 255));
+	imagen -> draw(x,y,z,1,1, Gosu::Color(a, 255, 255, 255));
     }
     
+    int getWidth(){
+	return imagen -> width();
+    }
+    int getHeight(){
+	return imagen -> height();
+    }
 };
 
 class elementoTexto : public Elemento{
@@ -269,10 +293,14 @@ public:
     }
 
     void setText(string s){
-	lDEBUG << LOC() << VARV(s);
 	texto -> setText(s);
     }
-    
+    int getWidth(){
+	return 0;
+    }
+    int getHeight(){
+	return 0;
+    }
 };
 
 
@@ -362,6 +390,13 @@ public:
 	    texto -> draw(x + imagen -> width() + textoX, y + textoY, z + 0.1, a);
 	    break;
 	}
+    }
+
+    int getWidth(){
+	return imagen -> width();
+    }
+    int getHeight(){
+	return imagen -> height();
     }
 
 };

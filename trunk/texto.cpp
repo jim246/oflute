@@ -58,7 +58,6 @@ void Texto::draw(){
 
 void Texto::setText(string s){
     texto = s;
-    lDEBUG << LOC() << VARV(s);
     poblarVectores();
 }
 

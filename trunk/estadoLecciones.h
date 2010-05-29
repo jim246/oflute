@@ -39,11 +39,6 @@
 #include <vector>
 #include <algorithm>
 
-#define TIXML_USE_STL
-#include "tinyxml.h"
-#include "tinystr.h"
-
-
 using namespace std;
 
 
@@ -92,7 +87,7 @@ class EstadoMenuLecciones : public Estado{
 	}
     };
 
-    unsigned leccionActual;
+    int leccionActual;
 
     vector<infoLeccion> leccionesCargadas;
 public:
