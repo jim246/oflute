@@ -36,369 +36,244 @@
 #include "texto.h"
 #include "log.h"
 
-struct tConfTexto{
+/**
+ * @brief Bloque de configuración para un elemento de interfaz de cuadro de texto. 
+ *
+ * @author José Tomás Tocino García <theom3ga@gmail.com> 
+ *
+ */
+
+struct tConfTexto
+{
+    /// Cadena a escribir.
     string cadena;
+
+    /// Ruta de la fuente a usar.
     string rutaFuente;
-    unsigned tam;
+
+    /// Tamaño de la fuente.
+    unsigned int tam;
+
+    /// Color de la fuente.
     Gosu::Color color;
-    unsigned alineacion;
+
+    /// Alineación del texto
+    Texto::tAlign alineacion;
+
+    /// Sombra
     bool sombra;
+
+    /// Opacidad de la sombra
     int opacidadSombra;
-    tConfTexto() : color(Gosu::Color(255,255,255,255)), 
-		   alineacion(Texto::alignIzq),
-		   sombra(true),
-		   opacidadSombra(80) { }
+
+    /// Constructor básico, inicializa algunos valores por defecto.
+    tConfTexto ();
 };
 
-struct tConfAnim{
-    int inicialX, inicialY, inicialA;
-    int finalX, finalY, finalA;
+/**
+ * @brief Bloque de configuración para las animaciones. 
+ *
+ * Se utiliza una estructura para encapsular la configuración
+ * de cada animación, en lugar de pasar los parámetros de inicialización al constructor.
+ *
+ * @author José Tomás Tocino García <theom3ga@gmail.com> 
+ *
+ */
+struct tConfAnim
+{
+    ///@{
+    ///@name Valores iniciales
+
+    /// Posición horizontal inicial
+    int inicialX;
+
+    /// Posición vertical inicial.
+    int inicialY;
+
+    /// Opacidad inicial
+    int inicialA;
+    ///@}
+    
+    ///@{
+    ///@name Valores finales
+
+    /// Posición horizontal final.
+    int finalX;
+
+    /// Posición vertical final.
+    int finalY;
+
+    /// Opacidad final.
+    int finalA;
+
+    /// Profundidad
     int z;
-    Animacion::atribAnim animar;
-    int wait, duracion;
+    ///@}
 
-    tConfAnim() :
-	inicialX(0), inicialY(0), inicialA(0),
-	finalX(0), finalY(0), finalA(255),
-	z(0),
-	animar(Animacion::tNada),
-	wait(0), duracion(30) { }
+
+    /// Tipo de animación
+    Animacion::atribAnim animar;
+
+    /// Espera inicial de la animación
+    int wait;
+
+    /// Duración de la animación.
+
+    int duracion;
+    tConfAnim ();
 };
 
+/**
+ * @class Elemento
+ *
+ * @brief Base para los elementos de la interfaz del menú.
+ *
+ * Ayuda a abstraer la animación de los elementos.
+ *
+ * @author José Tomás Tocino García <theom3ga@gmail.com> 
+ *
+ */
 
-class Elemento{
+
+class Elemento
+{
 protected:
+    /// Tipo de animación a realizar.
     Animacion::atribAnim animar;
 
+    ///@{
+    ///@name Atributos con el valor final
     int finalX;
     int finalY;
     int finalAlpha;
-
     double z;
+    ///@}
 
+    ///@{
+    ///@name Atributos con el valor inicial
     int inicialX;
     int inicialY;
     int inicialAlpha;
-
+    ///@}
+    
+    ///@{
+    ///@name Atributos con el valor actual
     int currentX;
     int currentY;
     int currentAlpha;
+    ///@}
 
-    void setupAnimacion(int wait, int duracion){
-	if(animar != Animacion::tNada){
-	    lDEBUG << "** Se animará. Attrib: " << animar << endl;
-	    
-	    if(animar == Animacion::tAlpha){
-		animacion = new Animacion(1, duracion, Animacion::tEaseOutQuad, wait);
-		animacion -> set (0, inicialAlpha, finalAlpha);
-	    }
-	    
-	    else if(animar == Animacion::tPos){
-		animacion = new Animacion(2, duracion, Animacion::tEaseOutQuad, wait);
-		animacion -> set(0, inicialX, finalX);
-		animacion -> set(1, inicialY, finalY);
-	    }
-	    
-	    else if(animar == Animacion::tAlphaPos){
-		animacion = new Animacion(3, duracion, Animacion::tEaseOutQuad, wait);
-		animacion -> set(0, inicialAlpha, finalAlpha);
-		animacion -> set(1, inicialX, finalX);
-		animacion -> set(2, inicialY, finalY);
-	    }
-	}else{
-	    animacion = 0;
-	}
-    }
+    /// Inicializa el objeto animación. 
+    void setupAnimacion (int wait, int duracion);
 
-    void actualizarPosicion(){
-
-	if(animar != Animacion::tNada){
-
-	    if(animar == Animacion::tAlpha){
-		currentAlpha = animacion -> get(0);
-		currentX = finalX;
-		currentY = finalX;
-	    }
-
-	    else if(animar == Animacion::tPos){
-		currentAlpha = finalAlpha;
-		currentX = animacion -> get(0);
-		currentY = animacion -> get(1);
-	    }
-
-	    else{
-		currentAlpha = animacion -> get(0);
-		currentX = animacion -> get(1);
-		currentY = animacion -> get(2);
-	    }
-	}else{
-	    currentX = finalX;
-	    currentY = finalY;
-	    currentAlpha = finalAlpha;
-	}
-    }
-
+    /// Actualiza la posición actual según la animación definida.
+    void actualizarPosicion ();
 public:
     Animacion * animacion;
 
-    Elemento(Animacion::atribAnim animar,
-	     int fX, int fY, int fA, double z,
-	     int wait, int duracion,
-	     int iX, int iY, int iA
-	)
-
-	: animar(animar), finalX(fX), finalY(fY), finalAlpha(fA), z(z),
-	  inicialX(iX), inicialY(iY), inicialAlpha(iA)
-	{
-	    setupAnimacion(wait, duracion);
-	} // Fin constructor
-
-    Elemento(tConfAnim t) 
-	: animar(t.animar),
-	finalX(t.finalX), finalY(t.finalY), finalAlpha(t.finalA),
-	z(t.z),
-	inicialX(t.inicialX), inicialY(t.inicialY), inicialAlpha(t.inicialA)
-
-	{
-	    setupAnimacion(t.wait, t.duracion);
-	}
+    /**
+     * @brief Constructor por parámetros
+     *
+     * Inicializa el elemento pasando los valores de cada uno de los parámetros. No se recomienda.
+     *
+     */
+    Elemento (Animacion::atribAnim animar, 
+	      int fX, int fY, int fA, double z, 
+	      int wait, int duracion, 
+	      int iX, int iY, int iA);
     
+    /// Constructor por bloque. Recibe un tConfAnim con los parámetros de inicialización.
+    Elemento (tConfAnim t);
 
-    virtual void drawEnd(int x, int y, double z, int a) = 0;
-    virtual int getWidth() = 0;
-    virtual int getHeight() = 0;
+    /// Devuelve el ancho del elemento. Cada subclase devolverá el ancho que corresponda.
+    virtual int getWidth () = 0;
 
-    int currX(){ return currentX; }
-    int currY(){ return currentY; }
+    /// Devuelve la altura del elemento. Cada subclase devolverá la altura que corresponda.
+    virtual int getHeight () = 0;
 
-    bool clicked(int x, int y){
-	return (x >= currentX && x <= currentX + getWidth() &&
-		y >= currentY && y <= currentY + getHeight());
-    }
+    /// Devuelve la posición horizontal actual.
+    int currX ();
 
-    void draw(){
-	if(animar != Animacion::tNada){
-	    animacion -> update();
-	}
-	actualizarPosicion();
-	drawEnd(currentX, currentY, z, currentAlpha);
-    }    
+    /// Devuelve la posición vertical actual.
+    int currY ();
 
-    ~Elemento(){
-	if(animar != Animacion::tNada){
-	    delete animacion;
-	}
-    }
+    /// Comprueba si el elemento ha sido clickeado, basándose en la posición actual y el tamaño.
+    bool clicked (int x, int y);
+
+    /// Método de dibujado, actualiza la posición y llama al método drawEnd.
+    void draw ();
+
+    /// Método final de dibujado. Cada subclase debe implementarlo según sea conveniente.
+    virtual void drawEnd (int x, int y, double z, int a) = 0;
+
+    ~ Elemento ();
 };
 
-/**
- * @class elementoImagen
- *
- * @brief Representa una imagen con una animación asociada.
- *
- * Útil para representar interfaces.
- *
- * @author José Tomás Tocino García <theom3ga@gmail.com> 
- *
- */
 
-class elementoImagen : public Elemento{
-    /// Contenedor de la imagen.
-    boost::scoped_ptr<Gosu::Image> imagen;
-
-    /// Ruta de la imagen.
+class ElementoImagen : public Elemento
+{
+    boost::scoped_ptr <Gosu::Image> imagen;
     string ruta;
-
 public:
-    /**
-     * @brief Crea un nuevo elementoImagen a partir de una ruta, una posición y unos atributos.
-     *
-     * @param g Destino gráfico.
-     * @param ruta Ruta del fichero.
-     * @param x Posición horizontal final.
-     * @param y Posición vertical final.
-     * @param z Profundidad.
-     * @param animar 
-     * @param wait Espera inicial de la animación.
-     * @param duracion Duración de la animación.
-     *
-     */
-
-    elementoImagen(Gosu::Graphics& g, string ruta, 
-		   int fX, int fY, int fA,
-		   double z, 
-		   Animacion::atribAnim animar = Animacion::tNada,
-		   int wait = 0, int duracion = 30,
-		   int iX = 0, int iY = 0, int iA = 0
-	)
-	: 
-	Elemento(animar, fX, fY, fA, 
-		 z, wait, duracion, 
-		 iX, iY, iA),
-	ruta(ruta)
-	
-	{
-	    imagen.reset(new Gosu::Image(g, Gosu::widen(ruta)));	
-	}
-    
-    elementoImagen(Gosu::Graphics & g, string ruta, tConfAnim t)
-	:
-	Elemento(t.animar, t.finalX, t.finalY, t.finalA, t.z,
-		 t.wait, t.duracion,
-		 t.inicialX, t.inicialY, t.inicialA),
-	ruta(ruta)
-
-	{
-	    imagen.reset(new Gosu::Image(g, Gosu::widen(ruta)));
-	}
-
-    /**
-     * @brief Dibuja el elemento en pantalla
-     */
-    void drawEnd(int x, int y, double z, int a){
-	imagen -> draw(x,y,z,1,1, Gosu::Color(a, 255, 255, 255));
-    }
-    
-    int getWidth(){
-	return imagen -> width();
-    }
-    int getHeight(){
-	return imagen -> height();
-    }
+    ElementoImagen (Gosu::Graphics & g, string ruta, 
+		    int fX, int fY, int fA, double z, 
+		    Animacion::atribAnim animar = Animacion::tNada, 
+		    int wait = 0, int duracion = 30, 
+		    int iX = 0, int iY = 0, int iA = 0);
+    ElementoImagen (Gosu::Graphics & g, string ruta, tConfAnim t);
+    void drawEnd (int x, int y, double z, int a);
+    int getWidth ();
+    int getHeight ();
 };
 
-class elementoTexto : public Elemento{
-    boost::scoped_ptr<Texto> texto;
 
+class ElementoTexto : public Elemento
+{
+    boost::scoped_ptr <Texto> texto;
 public:
-    elementoTexto(Gosu::Graphics& g, string str, string rutaFuente, 
-		  unsigned tam, Gosu::Color color, 
-		  unsigned alineacion, bool sombra, int opacidadSombra,
-
-		  int fX, int fY, int fA, 
-		  double z, 
-		  Animacion::atribAnim animar = Animacion::tNada,
-		  int wait = 0, int duracion = 30,
-		  int iX = 0, int iY = 0, int iA = 0
-	
-	) : Elemento(animar, fX, fY, fA, z, wait, duracion, iX, iY, iA)	{
-	
-	texto.reset(new Texto(g, str, rutaFuente, 
-			      tam, color, alineacion, 
-			      sombra, opacidadSombra));
-    }
-    
-    void drawEnd(int x, int y, double z, int a){
-	texto -> draw(x, y, z, a);
-    }
-
-    void setText(string s){
-	texto -> setText(s);
-    }
-    int getWidth(){
-	return 0;
-    }
-    int getHeight(){
-	return 0;
-    }
+    ElementoTexto (Gosu::Graphics & g, string str, 
+		   string rutaFuente, unsigned int tam, 
+		   Gosu::Color color, unsigned int alineacion, 
+		   bool sombra, int opacidadSombra, 
+		   int fX, int fY, int fA, double z, 
+		   Animacion::atribAnim animar = Animacion::tNada, 
+		   int wait = 0, int duracion = 30, 
+		   int iX = 0, int iY = 0, int iA = 0);
+    void drawEnd (int x, int y, double z, int a);
+    void setText (string s);
+    int getWidth ();
+    int getHeight ();
 };
 
 
 
-/**
- * @class elementoCombinado
- *
- * @brief Combina una imagen de fondo con un texto encima
- *
- * 
- *
- * @author José Tomás Tocino García <theom3ga@gmail.com> 
- *
- */
-
-class ElementoCombinado : public Elemento{
-    boost::scoped_ptr<Texto> texto;
-    
-    int textoX, textoY;
-
-    boost::scoped_ptr<Gosu::Image> imagen;
-
+class ElementoCombinado : public Elemento
+{
+    boost::scoped_ptr <Texto> texto;
+    int textoX;
+    int textoY;
+    boost::scoped_ptr <Gosu::Image> imagen;
     Gosu::Graphics & g;
-
 public:
+    ElementoCombinado (Gosu::Graphics & g, 
+		       int fX, int fY, int fA, double z, 
+		       Animacion::atribAnim animar = Animacion::tNada, 
+		       int wait = 0, int duracion = 30, 
+		       int iX = 0, int iY = 0, int iA = 0);
 
-    ElementoCombinado(Gosu::Graphics & g,
-		      int fX, int fY, int fA,
-		      double z,
-		      Animacion::atribAnim animar = Animacion::tNada,
-		      int wait = 0, int duracion = 30,
-		      int iX = 0, int iY = 0, int iA = 0)
-	: 
-	Elemento(animar, fX, fY, fA, z, wait, duracion, iX, iY, iA), g(g) {
+    ElementoCombinado (Gosu::Graphics & g, tConfAnim t);
 
-    }
+    void setTexto (string str, string rutaFuente, 
+		   unsigned int tam, Gosu::Color color, 
+		   unsigned int alineacion, 
+		   bool sombra, int opacidadSombra, 
+		   int tX, int tY);
 
-    ElementoCombinado(Gosu::Graphics & g, tConfAnim t)
-	:
-	Elemento(t.animar, t.finalX, t.finalY, t.finalA, t.z,
-		 t.wait, t.duracion,
-		 t.inicialX, t.inicialY, t.inicialA), g(g){
-
-    }
-
-    void setTexto(string str, string rutaFuente,
-		  unsigned tam, Gosu::Color color,
-		  unsigned alineacion, bool sombra, int opacidadSombra,
-		  int tX, int tY){
-
-	texto.reset(new Texto(g, str, rutaFuente,
-			      tam, color, alineacion,
-			      sombra, opacidadSombra));
-
-	textoX = tX;
-	textoY = tY;
-    }
-
-    void setTexto(tConfTexto t, int x, int y){
-	setTexto(t.cadena, t.rutaFuente,
-		 t.tam, t.color,
-		 t.alineacion, t.sombra, t.opacidadSombra,
-		 x, y);
-
-    }
-    void setTextoXY(int x, int y){
-	textoX = x;
-	textoY = y;
-    }
-
-    void setImagen(string ruta){
-	imagen.reset(new Gosu::Image(g, Gosu::widen(ruta)));
-    }
-
-    void drawEnd(int x, int y, double z, int a){
-	imagen -> draw(x,y,z,1,1,Gosu::Color(a,255,255,255));
-	switch(texto -> getAlineacion()){
-	case Texto::alignIzq:
-	    texto -> draw(x + textoX, y + textoY, z + 0.1, a);
-	    break;
-
-	case Texto::alignCentro:
-	    texto -> draw(x + imagen -> width() / 2 + textoX, y + textoY, z + 0.1, a);
-	    break;
-
-	case Texto::alignDer:
-	    texto -> draw(x + imagen -> width() + textoX, y + textoY, z + 0.1, a);
-	    break;
-	}
-    }
-
-    int getWidth(){
-	return imagen -> width();
-    }
-    int getHeight(){
-	return imagen -> height();
-    }
-
+    void setTexto (tConfTexto t, int x, int y);
+    void setTextoXY (int x, int y);
+    void setImagen (string ruta);
+    void drawEnd (int x, int y, double z, int a);
+    int getWidth ();
+    int getHeight ();
 };
-
 #endif /* _ELEMENTOSINTERFAZ_H_ */

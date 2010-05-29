@@ -14,7 +14,8 @@ OBJECTS += main.o juego.o estado.o estadoImagenFija.o
 OBJECTS += estadoMenu.o FFT.o analizador.o controlSonido.o 
 OBJECTS += estadoAnalizador.o animacion.o ecuaciones.o
 OBJECTS += estadoLecciones.o log.o
-OBJECTS += texto.o
+OBJECTS += texto.o elementosInterfaz.o
+OBJECTS += elementosInterfaz_imagen.o elementosInterfaz_texto.o elementosInterfaz_combinado.o
 
 EXE=programa
 
@@ -36,7 +37,10 @@ controlSonido.o: controlSonido.h
 animacion.o:animacion.h
 ecuaciones.o:animacion.h
 estadoLecciones.o: estadoLecciones.h elementosInterfaz.h
-
+elementosInterfaz.o: elementosInterfaz.h
+elementosInterfaz_imagen.o: elementosInterfaz.h
+elementosInterfaz_texto.o: elementosInterfaz.h
+elementosInterfaz_combinado.o: elementosInterfaz.h
 .cpp.o:
 	$(CC) $(CXXFLAGS) -c $< -o $@
 

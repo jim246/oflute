@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<Lec>
+  <index>1</index>
+  <nombre>Las notas: Do grave</nombre>
+  <descrip>Aprende a tocar la
+
+nota Do grave.</descrip>
+  <elementos>
+    <img src="media/fondoGenerico.png" x="0" y="0" z="1" animar="1" duracion="20" wait="0"/>
+    <img src="media/lecciones/sombraFoto.png" x="21" y="33" z="1" wait="30"/>
+    <img src="media/lecciones/1 dograve.png" x="46" y="57" z="2" wait="15" />
+    
+    <texto str="Lección 1:" tam="45" ca="255" cr="191" cg="219" cb="59" align="1" sombra="1" x="390" y="50" z="2" opacSombra="23" wait="40"/>
+    <texto str="Las notas: Do grave" x="590" y="100" z="2" tam="60" ca="255" cr="34" cg="139" cb="114" align="2" sombra="1" opacSombra="23" fuente="media/fLight.ttf" wait="45"/>
+    <texto x="590" y="181" z="2" tam="33" ca="255" cr="3" cg="69" cb="90" sombra="0" align="2" wait="50"
+	   str="Para tocar un Do Grave, es decir, el
+		do que está más abajo en la
+		partitura, debes cerrar todos
+		los orificios de la flauta." />
+
+
+    <img src="media/lecciones/penta-notaDo.png" x="470" y="350" z="2" wait="55"/>
+    <img src="media/lecciones/btnVolver.png" x="560" y="520" z="2" wait="60" />
+  </elementos>
+</Lec>
