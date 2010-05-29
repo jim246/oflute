@@ -5,6 +5,8 @@
 #include <boost/algorithm/string.hpp>
 
 EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
+
+    leccionActual = 0;
     imgFondo.reset (new Gosu::Image(padre -> graphics(),
 				    L"media/fondoGenerico.png"));
 
@@ -112,6 +114,11 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     btnDescripcion -> setTexto(*confBtnTexto, -20, 10);
 
 
+    textoDesc.reset(new elementoTexto(padre -> graphics(),
+				      "", "media/fNormal.ttf",
+				      36, Gosu::Color(255,255,255,255),
+				      Texto::alignDer, true, 80,
+				      780, 175, 255, 4));
 
 
     ///////////////////////////////
@@ -158,7 +165,7 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 void EstadoMenuLecciones::listarLecciones(){
 
 
-    boost::filesystem::path rutaDirectorio("lecciones");
+    boost::filesystem::path rutaDirectorio("./lecciones");
     boost::filesystem::directory_iterator inicial(rutaDirectorio), final;
 
     TiXmlDocument documento;
@@ -168,9 +175,10 @@ void EstadoMenuLecciones::listarLecciones(){
 
 	    EstadoMenuLecciones::infoLeccion lecActual;
 	    string ruta = boost::lexical_cast<string>(inicial -> path());
-
+	    lDEBUG << "Intentando cargar archivo " << ruta;
 	    if(!documento.LoadFile(ruta)){
-		lERROR << LOC() << " No se pudo cargar: " << ruta;
+		lERROR << LOC() << " Error al leer el documento: " << ruta;
+		lERROR << documento.ErrorDesc() << "(" << documento.ErrorId() << ")";
 		continue;
 	    }
 
@@ -192,22 +200,46 @@ void EstadoMenuLecciones::listarLecciones(){
 	    }
 	    lecActual.nombre = elemento -> GetText();
 
+	    TiXmlPrinter printer;
+	    printer.SetIndent("");
+	    printer.SetIndent("\n");
 	    elemento = manejador.FirstChild("Lec").FirstChild("descrip").ToElement();
 	    if(!elemento){
 		lERROR << "El fichero " << ruta << " no está bien formado. "
 		       << "(Falta descripción)";
 		continue;
 	    }
-	    lecActual.descrip = elemento -> GetText();
+	    elemento -> Accept(&printer);
+	    lecActual.descrip = printer.CStr();
 
 	    leccionesCargadas.push_back(lecActual);
 
 	}
     }
+
+    sort(leccionesCargadas.begin(), leccionesCargadas.end(), ordenarLecciones());
+    cambiarLeccion(leccionActual);
 }
 
 void EstadoMenuLecciones::update(){
 
+}
+
+void EstadoMenuLecciones::cambiarLeccion(unsigned n){
+    leccionActual = n;
+
+    tConfTexto * confBtnTexto = new tConfTexto;
+    confBtnTexto -> cadena = string("Lección nº") + boost::lexical_cast<string>(leccionesCargadas[n].indice);
+    confBtnTexto -> rutaFuente = "media/fNormal.ttf";
+    confBtnTexto -> tam = 36;
+    confBtnTexto -> sombra = false;
+    confBtnTexto -> alineacion = Texto::alignDer;
+    btn1 -> setTexto(*confBtnTexto, -20, 7);
+
+    delete confBtnTexto;
+
+    textoDesc -> setText(leccionesCargadas[n] . descrip);
+    lDEBUG << LOC() << VARV(n);
 }
 
 void EstadoMenuLecciones::draw() {
@@ -218,6 +250,7 @@ void EstadoMenuLecciones::draw() {
     barraSuperior -> draw();
     barraInferior -> draw();
     btn1 -> draw();
+    textoDesc -> draw();
     btnComenzar -> draw();
     btnAntLec -> draw();
     btnSigLec -> draw();

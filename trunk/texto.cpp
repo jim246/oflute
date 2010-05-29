@@ -6,6 +6,7 @@ int Texto::dividirTexto(){
     // Find first "non-delimiter".
     string::size_type pos     = texto.find_first_of('\n', lastPos);
 	
+    lineas.clear();
     while (string::npos != pos || string::npos != lastPos)
     {
 	// Found a token, add it to the vector.
@@ -24,10 +25,17 @@ Texto::Texto(Gosu::Graphics& graphics,
       bool sombra, unsigned opSombra, int x, int y, int z) 
     : 
     graphics(graphics), texto(texto), tam(tam), color(color), 
-    alineacion(alineacion), sombra(sombra), opacidadSombra(opSombra), x(x), y(y), z(z){
+    alineacion(alineacion), sombra(sombra), opacidadSombra(opSombra), 
+    x(x), y(y), z(z), rutaFuente(rutaFuente){
 	
+    poblarVectores();
+}
 
+void Texto::poblarVectores(){
+    fuentes.clear();
+    fuentesSombra.clear();
     int n = dividirTexto();
+
     for (int i = 0; i < n; ++i)
     {
 	boost::shared_ptr<customFont> f (new customFont(graphics, Gosu::widen(rutaFuente), tam));
@@ -46,6 +54,12 @@ void Texto::update(){ }
 
 void Texto::draw(){
     drawAlpha(255);
+}
+
+void Texto::setText(string s){
+    texto = s;
+    lDEBUG << LOC() << VARV(s);
+    poblarVectores();
 }
 
 

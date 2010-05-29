@@ -267,6 +267,11 @@ public:
     void drawEnd(int x, int y, double z, int a){
 	texto -> draw(x, y, z, a);
     }
+
+    void setText(string s){
+	lDEBUG << LOC() << VARV(s);
+	texto -> setText(s);
+    }
     
 };
 

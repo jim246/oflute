@@ -37,6 +37,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #define TIXML_USE_STL
 #include "tinyxml.h"
@@ -46,19 +47,20 @@
 using namespace std;
 
 
+
+
+class Juego;
+
 /**
  * @class EstadoMenuLecciones
  *
- * @brief 
+ * @brief Clase que modela el menú de selección de las lecciones.
  *
- * Clase que modela el menú de selección de las lecciones.
+ * 
  *
  * @author José Tomás Tocino García <theom3ga@gmail.com> 
  *
  */
-
-class Juego;
-
 class EstadoMenuLecciones : public Estado{
     /// Imagen para el fondo
     boost::scoped_ptr<Gosu::Image> imgFondo;
@@ -72,6 +74,9 @@ class EstadoMenuLecciones : public Estado{
 
     boost::scoped_ptr<ElementoCombinado> btn1;
     boost::scoped_ptr<ElementoCombinado> btnDescripcion;
+
+    boost::scoped_ptr<elementoTexto> textoDesc;
+
     boost::scoped_ptr<ElementoCombinado> btnComenzar;
     boost::scoped_ptr<ElementoCombinado> btnAntLec;
     boost::scoped_ptr<ElementoCombinado> btnSigLec;
@@ -80,6 +85,14 @@ class EstadoMenuLecciones : public Estado{
 	int indice;
 	string nombre, descrip;
     };
+
+    struct ordenarLecciones{
+	bool operator()(infoLeccion a, infoLeccion b){
+	    return b.indice < a.indice;
+	}
+    };
+
+    unsigned leccionActual;
 
     vector<infoLeccion> leccionesCargadas;
 public:
@@ -92,6 +105,8 @@ public:
     void listarLecciones();
 
     void buttonDown(Gosu::Button boton);
+
+    void cambiarLeccion(unsigned n);
 };
 
 #endif /* _ESTADOLECCIONES_H_ */

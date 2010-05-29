@@ -100,12 +100,16 @@ class Texto{
     ///Desplazamiento de la sombra respecto al texto
     int offsetShadow[2];
 
-
+    /// Ruta de la fuente
+    string rutaFuente;
+    
     /** @brief Divide el texto según los saltos de línea, metiendo cada línea en el vector lineas.
      *  función adaptada de http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
      */
     int dividirTexto();
     
+    void poblarVectores();
+
 public:
     enum tAlign{ alignIzq = 1, alignCentro, alignDer };
 
@@ -139,6 +143,8 @@ public:
      */
 
     void draw();
+
+    void setText(string s);
 
     /**
      * @brief Pinta el texto con la opacidad indicada.
