@@ -26,6 +26,7 @@ void EstadoMenu::lanzar(){
 
     barraRoja.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/barraInferior.png"));
 
+    int duracionSalidaBotones = 50;
     
     // Inicializamos las animaciones
     int pInit = 290;
@@ -33,18 +34,18 @@ void EstadoMenu::lanzar(){
     {
 	posFinalesY[i] = pInit + i*51;
 	if(i == 5) posFinalesY[i] = 589;
-	animaciones[i].reset(new Animacion(1, 30, Animacion::tEaseOutQuart, i * 10));
+	animaciones[i].reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutQuart, i * 10));
 	animaciones[i] -> set(0, 600, posFinalesY[i]);
 
     }
 
-    animOpacidadFondo.reset(new Animacion(1, 30, Animacion::tEaseOutQuad));
+    animOpacidadFondo.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutQuad));
     animOpacidadFondo -> set(0, 0, 255);
 
-    animLogoCusl.reset(new Animacion(1, 30, Animacion::tEaseOutBack, 40));
+    animLogoCusl.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutBack, 40));
     animLogoCusl -> set(0, 820, 590);
 
-    animLogotipo.reset(new Animacion(1, 30, Animacion::tEaseOutQuart, 10));
+    animLogotipo.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutQuart, 10));
     animLogotipo -> set(0, 0, 255);
 
     // Inicializamos los botones del menú
@@ -95,7 +96,7 @@ void EstadoMenu::update(){
 	for (int i = 5; i > -1; --i)
 	{
 	    ultimaPos = animaciones[i] -> get(0);
-	    animaciones[i] . reset(new Animacion(1, 20, Animacion::tEaseInQuart, (5-i) * 10));
+	    animaciones[i] . reset(new Animacion(1, 30, Animacion::tEaseInQuart, (5-i) * 10));
 	    animaciones[i] -> set(0, ultimaPos, 600);
 
 	}
@@ -103,7 +104,7 @@ void EstadoMenu::update(){
 	animLogoCusl . reset(new Animacion(1, 15, Animacion::tEaseInQuart));
 	animLogoCusl -> set(0, 590, 820);
 
-	animLogotipo . reset(new Animacion(1, 30, Animacion::tLinear, 10) );
+	animLogotipo . reset(new Animacion(1, 40, Animacion::tLinear, 10) );
 	animLogotipo -> set(0, 255, 0);
 
 	estadoAnim = eANIMOUT;

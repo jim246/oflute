@@ -18,8 +18,6 @@ tConfAnim::tConfAnim ()
 void Elemento::setupAnimacion (int wait, int duracion)
 {
     if(animar != Animacion::tNada){
-	lDEBUG << "** Se animará. Attrib: " << animar << endl;
-	    
 	if(animar == Animacion::tAlpha){
 	    animacion = new Animacion(1, duracion, Animacion::tEaseOutQuad, wait);
 	    animacion -> set (0, inicialAlpha, finalAlpha);
