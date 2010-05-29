@@ -1,25 +1,25 @@
 CC=g++
-CXXFLAGS+=-I. -Igosu `gosu/bin/gosu-config --cxxflags`
-CXXFLAGS+=-Itinyxml
-CXXFLAGS+=-g #-Wall -Wextra
+CXXFLAGS += -I. -Igosu `gosu/bin/gosu-config --cxxflags`
+CXXFLAGS += -Ipugixml
+CXXFLAGS += -g #-Wall -Wextra
 
-LDFLAGS+=`gosu/bin/gosu-config --libs --cxxflags` 
+LDFLAGS += `gosu/bin/gosu-config --libs --cxxflags` 
 
-LDLIBS+=gosu/lib/libgosu.a -lportaudiocpp 
-LDLIBS+=-lSDL_ttf
-LDLIBS+=-lboost_filesystem
-LDLIBS+=tinyxml/tinylib.a
+LDLIBS += gosu/lib/libgosu.a -lportaudiocpp 
+LDLIBS += -lSDL_ttf
+LDLIBS += -lboost_filesystem
+LDLIBS += pugixml/pugixml.a
 
-OBJECTS+=main.o juego.o estado.o estadoImagenFija.o
-OBJECTS+=estadoMenu.o FFT.o analizador.o controlSonido.o 
-OBJECTS+=estadoAnalizador.o animacion.o ecuaciones.o
-OBJECTS+=estadoLecciones.o log.o
-OBJECTS+=texto.o
+OBJECTS += main.o juego.o estado.o estadoImagenFija.o
+OBJECTS += estadoMenu.o FFT.o analizador.o controlSonido.o 
+OBJECTS += estadoAnalizador.o animacion.o ecuaciones.o
+OBJECTS += estadoLecciones.o log.o
+OBJECTS += texto.o
 
 EXE=programa
 
 all: $(OBJECTS)
-	cd tinyxml; $(MAKE)
+	cd pugixml; $(MAKE)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(EXE) $(LDLIBS)
 
 analizador.o: analizador.h
@@ -42,4 +42,4 @@ estadoLecciones.o: estadoLecciones.h elementosInterfaz.h
 
 clean:
 	rm -rf $(OBJECTS) $(EXE)
-	cd tinyxml; $(MAKE) clean
+	cd pugixml; $(MAKE) clean
