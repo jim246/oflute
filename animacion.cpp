@@ -137,4 +137,14 @@ void Animacion::set(int i, int v1, int v2){
 
 void Animacion::end() { time = duracion + esperaInicial; update(); };
 void Animacion::init() { time = 0; };
-bool Animacion::finished(){ return time >= duracion + esperaInicial;  }
+bool Animacion::finished(){ 
+/*
+    int j = 0;
+    for (int i = 0; i < numAttr; ++i)
+    {
+	if(final[i] == actual[i]) j++;
+    }
+    return j == numAttr;  //*/
+
+    return time > duracion + esperaInicial;  
+}
