@@ -40,7 +40,10 @@ std::ostringstream& Log::Get(TLogLevel level)
 
 Log::~Log(){
     os << std::endl;
-    fprintf(stderr, "%s", os.str().c_str());
-    fflush(stderr);
+    if(salida){
+	fprintf(stderr, "%s", os.str().c_str());
+	fflush(stderr);
+    }
 }
 
+bool Log::salida = true;
