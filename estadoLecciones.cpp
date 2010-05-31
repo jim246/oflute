@@ -115,12 +115,25 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     confBtnTexto -> color = Gosu::Color(255, 227, 253, 94);
     btnDescripcion -> setTexto(*confBtnTexto, -20, 10);
 
+    tConfTexto tdConf;
+    tdConf.cadena = " ";
+    tdConf.rutaFuente = "media/fNormal.ttf";
+    tdConf.tam = 36;
+    tdConf.alineacion = Texto::alignDer;
 
-    textoDesc.reset(new ElementoTexto(padre -> graphics(),
+    tConfAnim tdConfA;
+    tdConfA.finalX = 780;
+    tdConfA.finalY = 175;
+    tdConfA.finalA = 255;
+    tdConfA.z = 4;
+
+    textoDesc . reset (new ElementoTexto(padre -> graphics(), tdConf, tdConfA));
+
+    /*textoDesc.reset(new ElementoTexto(padre -> graphics(),
 				      " ", "media/fNormal.ttf",
 				      36, Gosu::Color(255,255,255,255),
 				      Texto::alignDer, true, 80,
-				      780, 175, 255, 4));
+				      780, 175, 255, 4)); //*/
 
 
     ///////////////////////////////
@@ -289,7 +302,7 @@ void EstadoMenuLecciones::buttonDown(Gosu::Button boton){
 	int y = padre -> input().mouseY();
 	
 	if(barraInferior -> clicked(x, y)){
-	    padre -> cambiarEstado("estadoMenu");
+	    padre -> cambiarEstado("estadoMenuSinFondo");
 	}
 
     }

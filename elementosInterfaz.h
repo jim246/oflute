@@ -220,7 +220,9 @@ public:
 		    Animacion::atribAnim animar = Animacion::tNada, 
 		    int wait = 0, int duracion = 30, 
 		    int iX = 0, int iY = 0, int iA = 0);
+
     ElementoImagen (Gosu::Graphics & g, string ruta, tConfAnim t);
+
     void drawEnd (int x, int y, double z, int a);
     int getWidth ();
     int getHeight ();
@@ -231,14 +233,21 @@ class ElementoTexto : public Elemento
 {
     boost::scoped_ptr <Texto> texto;
 public:
-    ElementoTexto (Gosu::Graphics & g, string str, 
+    ElementoTexto (Gosu::Graphics & g, 
+		   string str, 
 		   string rutaFuente, unsigned int tam, 
 		   Gosu::Color color, unsigned int alineacion, 
 		   bool sombra, int opacidadSombra, 
+		   
 		   int fX, int fY, int fA, double z, 
 		   Animacion::atribAnim animar = Animacion::tNada, 
 		   int wait = 0, int duracion = 30, 
 		   int iX = 0, int iY = 0, int iA = 0);
+
+    ElementoTexto (Gosu::Graphics & g,
+		   tConfTexto t,
+		   tConfAnim a);
+
     void drawEnd (int x, int y, double z, int a);
     void setText (string s);
     int getWidth ();

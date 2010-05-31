@@ -88,6 +88,8 @@ class EstadoMenu : public Estado{
     std::string estadoDestino;
 
     enum {eFADEIN, eBOTONESIN, eESTATICO, eBOTONESOUT, eANIMOUT, eANIMEND};
+
+    bool animarFondo;
     
     //float posY[5]; //, posFinalesX[5];
 public:
@@ -98,6 +100,8 @@ public:
     void lanzar ();
     void update();
     void draw();
+    void noAnimarFondo(){ animarFondo = false; }
+
     void buttonDown(Gosu::Button boton);
     ~EstadoMenu();
 };
