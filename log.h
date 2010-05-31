@@ -108,6 +108,8 @@ public:
      */
     static string DES(string s);
 
+    static bool salida;
+
     /**
      * @brief Vuelca el flujo con los mensajes de log en el destino indicado, por ahora la salida estándar.
      */
@@ -123,6 +125,7 @@ protected:
     std::ostringstream os;
 
 };
+
 
 
 #define lDEBUG Log().Get(logDEBUG)

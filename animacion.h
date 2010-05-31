@@ -39,9 +39,36 @@ using namespace std;
  *
  * @brief Calcula y devuelve valores para realizar animaciones.
  *
+ * El funcionamiento es sencillo. Creamos un objeto Animación al que le indicamos el
+ número de parámetros que nos interesaría animar. Por ejemplo, para la posición de un objeto,
+ lo usual es animar la posición X y la posición Y. Además, al constructor de la animación
+ le indicamos la duración de la animación, la ecuación a seguir (según queramos imitar
+ un movimiento de aceleración o deceleración) y la espera inicial antes de comenzar la animación.
+ \code
+ Animacion miAnimacion (2, 30, Animacion::tEaseInQuad, 0);
+ \endcode
+
+ Seguidamente, por cada parámetro tendremos que indicar cuál es el valor inicial y final de la
+ animación:
+ \code
+ // Parámetro 0 (la X en el ejemplo), de 10 a 150
+ miAnimacion . set(0, 10, 150);
+
+ // Parámetro 1 (la Y) de 25 a 40
+ miAnimacion . set(1, 25, 40);
+ \endcode
+
+ Ahora, para que la animación vaya avanzando habrá que ir llamando al método #update;
+ el método #get nos servirá para leer el valor de cada parámetro y aplicarlo a nuestro programa.
+ \code
+ miAnimacion . update();
+ cout << "Posición horizontal: " << miAnimacion.get(0) << "\n"
+      << "Posición vertical: " << miAnimacion.get(1) << endl;
+\endcode
+
  * Contiene una serie de ecuaciones con las que lograr efectos de aceleración y deceleración en las animaciones.
  *
- * Por ahora hace una animación en dos variables simultáneamente, pero está pensado generalizarlo.
+ * 
  *
  * @author José Tomás Tocino García <theom3ga@gmail.com> 
  *
@@ -106,6 +133,9 @@ public:
 
     Animacion(int n, int d, tipoAnim anim = tEaseInQuad, int e = 0);
 
+    ///@{
+    ///@name Control del flujo de la animación
+
     /**
      * @brief Reinicia la animación al estado inicial
      */
@@ -122,6 +152,11 @@ public:
      */
     bool finished();
 
+    ///@}
+
+    ///@{
+    ///@name Configuración de los valores de los atributos que serán animados.
+
     /**
      * @brief Devuelve el valor actual del atributo indicado.
      *
@@ -131,12 +166,41 @@ public:
      */
     float get(int i);
 
+    /**
+     * @brief Inicializa los valores inicial y final para el atributo i-ésimo.
+     *
+     * @param i Atributo al que cambiarle los valores.
+     * @param v1 Valor inicial del atributo.
+     * @param v2 Valor final del atributo.
+     *
+     */
+    void set(int i, int v1, int v2);
 
+    /**
+     * @brief Inicializa el valor inicial para el atributo i-ésimo.
+     *
+     * @param i Atributo al que le modificaremos el valor inicial.
+     * @param v Valor inicial del atributo.
+     *
+     */
     void setInicial(int i, int v);
 
+    /**
+     * @brief Inicializa el valor final del atributo i-ésimo.
+     *
+     * @param i Atributo al que le modificaremos el valor final.
+     * @param v Valor final del atributo.
+     * @return 
+     *
+     */
     void setFinal(int i, int v);
 
-    void set(int i, int v1, int v2);
+
+    ///@}
+
+
+    ///@{
+    ///@name Opciones de la animación
 
     /**
      * @brief Selecciona la ecuación de la animación.
@@ -157,11 +221,12 @@ public:
      */
 
     void setEspera(int e) { esperaInicial = e; }
+    ///@}
+
 
     /**
      * @brief Actualiza la animación un paso.
      */
-
     void update(bool a = true);
 
 
