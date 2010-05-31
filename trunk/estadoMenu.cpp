@@ -6,7 +6,7 @@
 
 int posFinalesY[] = {281, 332, 383, 434, 485, 589 };
 
-EstadoMenu::EstadoMenu (Juego * p) : Estado(p){
+EstadoMenu::EstadoMenu (Juego * p) : Estado(p),animarFondo(true){
     lDEBUG << Log::CON("EstadoMenu");
     p -> setCaption(L"oFlute .:. Menú principal");
 
@@ -39,7 +39,7 @@ void EstadoMenu::lanzar(){
 
     }
 
-    animOpacidadFondo.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutQuad));
+    animOpacidadFondo.reset(new Animacion(1, (animarFondo)?duracionSalidaBotones:0, Animacion::tEaseOutQuad));
     animOpacidadFondo -> set(0, 0, 255);
 
     animLogoCusl.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutBack, 40));

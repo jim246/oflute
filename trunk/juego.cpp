@@ -17,11 +17,11 @@ Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
     setCaption(L"oFlute .:.");
     estadoActual.reset ( 
 	new EstadoImagenFija(this,
-			     Gosu::resourcePrefix() + L"media/estadoAutor.png",
+			     L"media/estadoAutor.png",
 			     "estadoIntro")
 	);
 
-    cursor.reset( new Gosu::Image(graphics(), Gosu::resourcePrefix() + L"media/pointerCursor.png"));
+    cursor.reset( new Gosu::Image(graphics(), L"media/pointerCursor.png"));
     estadoActual -> lanzar();
 }
 
@@ -43,15 +43,18 @@ void Juego::cambiarEstado(std::string destino){
 
     if(destino == "estadoIntro"){
 	estadoActual.reset(
-	    new EstadoImagenFija(this,
-				 Gosu::resourcePrefix() + L"media/estadoIntro.png",
-				 "estadoMenu")
-	    );
+	    new EstadoImagenFija(this, L"media/estadoIntro.png", "estadoMenu"));
 	estadoActual -> lanzar();
     }
 	
     else if(destino == "estadoMenu"){
 	estadoActual.reset(new EstadoMenu(this));
+	estadoActual -> lanzar();
+    }
+    
+    else if(destino == "estadoMenuSinFondo"){
+	estadoActual.reset(new EstadoMenu(this));
+	static_cast<EstadoMenu * >(estadoActual . get()) -> noAnimarFondo();
 	estadoActual -> lanzar();
     }
 

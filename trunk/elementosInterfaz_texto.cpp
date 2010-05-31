@@ -13,6 +13,15 @@ ElementoTexto::ElementoTexto (Gosu::Graphics & g, string str,
 			  tam, color, alineacion, 
 			  sombra, opacidadSombra));
 }
+ElementoTexto::ElementoTexto (Gosu::Graphics & g,
+		   tConfTexto t,
+		   tConfAnim a)
+    : Elemento(a)
+{
+    texto.reset(new Texto(g, t.cadena, t.rutaFuente, 
+			  t.tam, t.color, t.alineacion, 
+			  t.sombra, t.opacidadSombra));
+}
 
 void ElementoTexto::drawEnd (int x, int y, double z, int a)
 {

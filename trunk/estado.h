@@ -60,7 +60,9 @@ public:
     Estado(Juego * p);
 
     /// Si es necesario lanzar acciones independientes del constructor, irán aquí.
-    virtual void lanzar(){};
+    virtual void lanzar(){
+	lDEBUG << "lanzar";
+    }
 
     /// Virtual puro. Cada estado implementa la lógica de control aquí.
     virtual void update() = 0;

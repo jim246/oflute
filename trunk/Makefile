@@ -22,6 +22,9 @@ EXE=programa
 all: $(OBJECTS)
 	cd pugixml; $(MAKE)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(EXE) $(LDLIBS)
+libgosu:
+	cd gosu/linux ; make clean ; ./configure && make
+
 
 analizador.o: analizador.h
 FFT.o: FFT.h
