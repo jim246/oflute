@@ -3,7 +3,7 @@ CFLAGS=-Igosu `gosu/bin/gosu-config --cxxflags` -g -Itinyxml
 LDFLAGS=-Igosu `gosu/bin/gosu-config --libs --cxxflags` gosu/lib/libgosu.a -lSDL_ttf
 LDFLAGS+=tinyxml/tinyxml.o tinyxml/tinyxmlparser.o tinyxml/tinyxmlerror.o tinyxml/tinystr.o
 
-OBJECTS=main.o animacion.o
+OBJECTS=main.o animacion.o log.o
 
 EXE=programa
 

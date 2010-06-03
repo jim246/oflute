@@ -15,7 +15,7 @@
 \setsansfont{Calibri}
 
 \usepackage{setspace}
-\onehalfspacing
+%\onehalfspacing
 
 %
 
@@ -196,6 +196,35 @@ pero en realidad, nada del otro mundo. Abre un nuevo fichero
 \end{singlespace}
 
 \pagebreak
+
+Nuestra clase \texttt{Juego} hereda de \texttt{Gosu::Window}, que se
+inicializa con el ancho y alto de la ventana, un booleano que indica
+si queremos pantalla completa, y un cuarto parámetro opcional para
+controlar los fps. Esta es otra \textbf{ventaja} de Gosu sobre la SDL:
+automáticamente controla los fps del juego, así que no tenemos que
+andar creándonos nuestra propia función que cuente los \texttt{ticks}
+ni nada parecido.
+
+Normalmente, tras crear la subclase, se instancia y se llama al método
+\texttt{show}, que hará comenzar el Game Loop. La secuencia de eventos
+viene bien reflejada en el siguiente gráfico:
+
+\begin{center}
+  \includegraphics[width=14cm]{main_loop}
+\end{center}
+
+
+
+Existen dos métodos que hay que implementar:
+\begin{itemize}
+\item En \texttt{update} hemos de escribir la lógica del juego:
+  cálculos, colisiones, etcétera.
+  \item En \texttt{draw} incluiremos el código para mostrar las
+    imágenes en pantalla.
+\end{itemize}
+
+
+
 
 whateverljsahlfkjhsadlfk
 lkjsadhflsakjdhflksadhflksahdf
