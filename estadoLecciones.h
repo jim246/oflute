@@ -43,6 +43,7 @@ using namespace std;
 
 
 
+class Leccion;
 
 class Juego;
 
@@ -78,7 +79,7 @@ class EstadoMenuLecciones : public Estado{
 
     struct infoLeccion{ 
 	int indice;
-	string nombre, descrip;
+	string nombre, descrip, ruta;
     };
 
     struct ordenarLecciones{
@@ -90,6 +91,12 @@ class EstadoMenuLecciones : public Estado{
     int leccionActual;
 
     vector<infoLeccion> leccionesCargadas;
+
+    enum {eSaliendo, eEsperando, eGuardando, eMostrandoLec};
+
+    int estadoActual;
+
+    Leccion * leccionMostrada;
 public:
     EstadoMenuLecciones(Juego * p);
 
@@ -105,6 +112,8 @@ public:
     void siguienteLec();
 
     void cambiarLeccion(unsigned n);
+
+    ~EstadoMenuLecciones();
 };
 
 #endif /* _ESTADOLECCIONES_H_ */

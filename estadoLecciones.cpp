@@ -1,5 +1,6 @@
 #include "juego.h"
 #include "estadoLecciones.h"
+#include "leccion.h"
 
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
@@ -8,6 +9,7 @@
 
 EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
+    leccionMostrada = NULL;
     leccionActual = -1;
     imgFondo.reset (new Gosu::Image(padre -> graphics(),
 				    L"media/fondoGenerico.png"));
@@ -203,6 +205,7 @@ void EstadoMenuLecciones::listarLecciones(){
 		continue;
 	    }
 
+	    lecActual.ruta = ruta;
 
 	    /////////////////////
 	    // Leemos el número de lección
@@ -331,6 +334,17 @@ void EstadoMenuLecciones::buttonDown(Gosu::Button boton){
 	    siguienteLec();
 	}
 
+	else if(btnComenzar -> clicked(x, y)){
+	    leccionMostrada = new Leccion(padre -> graphics(), 
+					  leccionesCargadas[leccionActual].ruta);
+	}
+
     }
 
+}
+
+EstadoMenuLecciones::~EstadoMenuLecciones(){
+    if(leccionMostrada != NULL){
+	delete leccionMostrada;
+    }
 }
