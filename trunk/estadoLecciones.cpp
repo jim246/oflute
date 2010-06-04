@@ -292,9 +292,27 @@ void EstadoMenuLecciones::draw() {
     // txtSubtitulo -> draw();
 }
 
+void EstadoMenuLecciones::anteriorLec(){
+    if(leccionActual <= 0){
+	cambiarLeccion(leccionesCargadas.size() - 1);
+    }else{
+	cambiarLeccion(leccionActual - 1);
+    }
+	
+}
+
+void EstadoMenuLecciones::siguienteLec(){
+    if(leccionActual == (int)(leccionesCargadas.size() - 1)){
+	cambiarLeccion(0);
+    }else{
+	cambiarLeccion(leccionActual + 1);
+    }
+}
+
+
 void EstadoMenuLecciones::buttonDown(Gosu::Button boton){
     if(boton == Gosu::kbEscape){
-	padre -> cambiarEstado("salir");
+	padre -> cambiarEstado("estadoMenuSinFondo");
     }
 
     else if(boton == Gosu::msLeft){
@@ -305,5 +323,14 @@ void EstadoMenuLecciones::buttonDown(Gosu::Button boton){
 	    padre -> cambiarEstado("estadoMenuSinFondo");
 	}
 
+	else if(btnAntLec -> clicked(x, y)){
+	    anteriorLec();
+	}
+
+	else if(btnSigLec -> clicked(x, y)){
+	    siguienteLec();
+	}
+
     }
+
 }
