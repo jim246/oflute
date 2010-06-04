@@ -83,7 +83,7 @@ class EstadoMenuLecciones : public Estado{
 
     struct ordenarLecciones{
 	bool operator()(infoLeccion a, infoLeccion b){
-	    return b.indice < a.indice;
+	    return b.indice > a.indice;
 	}
     };
 
@@ -100,6 +100,9 @@ public:
     void listarLecciones();
 
     void buttonDown(Gosu::Button boton);
+
+    void anteriorLec();
+    void siguienteLec();
 
     void cambiarLeccion(unsigned n);
 };
