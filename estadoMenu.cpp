@@ -189,7 +189,8 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 	}
 
 	else if(btn2 -> clicked(x,y)){
-
+	    estadoDestino = "estadoCancion";
+	    estadoAnim = eBOTONESOUT;
 	}
 
 	else if(btn3 -> clicked(x,y)){
