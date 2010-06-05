@@ -25,31 +25,24 @@ EstadoAnalizador::EstadoAnalizador (Juego * p) :
     Estado(p),  firstFrame(true), running(false){
     cout << "+++ [Constructor] EstadoAnalizador" << endl;
 
-    cartelCargando.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/imgCargando.png"));
-
+    cartelCargando.reset(new Gosu::Image(padre -> graphics(), L"media/imgCargando.png"));
 
     cargarRecursos();
     lanzar();
-
-
 }
 
 void EstadoAnalizador::cargarRecursos(){
+    partitura.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/baseAnalizador.png"));
+    imgDo5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/do5.png"));
+    imgRe5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/re5.png"));
+    imgMi5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/mi5.png"));
+    imgFa5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/fa5.png"));
+    imgSol5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/sol5.png"));
+    imgLa5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/la5.png"));
+    imgSi5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/si5.png"));
+    imgDo6.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/do6.png"));
+    imgRe6.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/re6.png"));
 
-
-    imgFondo.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/baseAnalizador.png"));
-
-    imgDo5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/do5.png"));
-    imgRe5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/re5.png"));
-    imgMi5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/mi5.png"));
-    imgFa5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/fa5.png"));
-    imgSol5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/sol5.png"));
-    imgLa5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/la5.png"));
-    imgSi5.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/si5.png"));
-    imgDo6.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/do6.png"));
-    imgRe6.reset(new Gosu::Image(padre -> graphics(), Gosu::resourcePrefix() + L"media/analizadorAssets/re6.png"));
-
-    //*/
 }
 void EstadoAnalizador::lanzar(){
     cout << "* EstadoAnalizador lanzado" << endl;
@@ -110,13 +103,12 @@ void EstadoAnalizador::draw(){
     case Silencio:
 	break;
     }
-
+    partitura -> draw(0,0,2);
 //    if(!controlSonido . miBuffer.silencio){
-	p -> draw(584,138,2);
+	p -> draw(584,138,3);
 //    } //*/
 
 
-    imgFondo -> draw(0,0,1);
 }
 
 void EstadoAnalizador::buttonDown(Gosu::Button boton){
@@ -124,7 +116,7 @@ void EstadoAnalizador::buttonDown(Gosu::Button boton){
 	return;
     if (boton == Gosu::kbEscape){
 	controlSonido . detenerFlujo();
-	padre -> close();
+	padre -> cambiarEstado("estadoMenuSinFondo");
 
     }
 }

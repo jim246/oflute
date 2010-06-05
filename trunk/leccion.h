@@ -61,18 +61,20 @@ using namespace std;
 
 
 class Leccion{
-    /// Índice de la lección en el listado de lecciones
+    /// Índice de la lección en el listado de lecciones.
     unsigned indice;
 
-    /// Nombre de la lección
+    /// Nombre de la lección.
     string nombre;
 
-    /// Referencia al contenedor gráfico
+    /// Referencia al contenedor gráfico.
     Gosu::Graphics& g;
 
-    /// Contenedor de las imágenes de la interfaz
+    /// Contenedor de los elementos de la interfaz.
     vector<boost::shared_ptr<Elemento> > elementos;
 
+    /// Contenedor de las animaciones de cada elemento de la interfaz.
+    vector<boost::shared_ptr<Animacion> > animaciones;
 
 public:
     /**
@@ -140,13 +142,20 @@ public:
 
 	    lDEBUG << "Imagen (" << ruta << ") @ " << x << "," << y;
 
-	    // Creamos el elemento y lo introducimos en el vector de imágenes.
+	    
+	    // Creamos el elemento y lo introducimos en el vector de elementos
 	    boost::shared_ptr<Elemento> E
-	    	(new ElementoImagen(g, ruta, 
-				    x, y, 255, z, 
-				    ((animar==1)?Animacion::tAlpha:Animacion::tNada), 
-				    wait, duracion) );
+	    	(new ElementoImagen(g, ruta, z, ((animar==1)?Animacion::tAlpha:Animacion::tNada)));
+	    E -> setXY(x, y);
+	    if(animar == 1){
+		E -> animacion = new Animacion(1, duracion, Animacion::tEaseOutQuad, wait);
+		E -> animacion -> set(0, 0, 255);
+	    }
+
+	    
+
 	    elementos.push_back(E);
+	    //*/
 	};
 	    
 
@@ -175,6 +184,7 @@ public:
 	    int tam = elemento.attribute("tam").as_int();
 	    int align = elemento.attribute("align").as_int();
 	    int sombra = elemento.attribute("sombra").as_int();
+	    int opacSombra = elemento.attribute("opacSombra").as_int();
 
 	    int animar, wait, duracion;
 
@@ -206,14 +216,20 @@ public:
 	    
 	    lDEBUG << "Texto (" << ruta << ") @ " << x << "," << y << " :";
 
+	    
 	    boost::shared_ptr<Elemento> T
 		( new ElementoTexto(g, texto, rutaFuente, tam, 
 				    Gosu::Color(ca, cr, cg, cb), align,
-				    sombra, 80,
-				    x, y, 255, z+3,
-				    (animar == 1)? Animacion::tAlpha:Animacion::tNada,
-				    wait, duracion));
-	    elementos.push_back(T);
+				    sombra, opacSombra, z+3, 
+				    (animar == 1)? Animacion::tAlpha:Animacion::tNada) );
+
+	    T -> setXY(x, y);
+	    if(animar == 1){
+		T -> animacion = new Animacion(1, duracion, Animacion::tEaseOutQuad, wait);
+		T -> animacion -> set(0, 0, 255);
+	    }
+
+	    elementos.push_back(T);//*/
 
 	} //*/
 	

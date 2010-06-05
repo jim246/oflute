@@ -43,7 +43,7 @@ class Juego;
 
 class EstadoAnalizador : public Estado{
     bool lanzado;
-    boost::scoped_ptr<Gosu::Image> imgFondo;
+    boost::scoped_ptr<Gosu::Image> partitura;
     boost::shared_ptr<Gosu::Image> imgDo5, imgRe5, imgMi5, imgFa5, imgSol5, imgLa5, imgSi5, imgDo6, imgRe6;
     boost::scoped_ptr<Gosu::Image> cartelCargando;
 
