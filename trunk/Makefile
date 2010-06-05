@@ -39,11 +39,12 @@ texto.o: texto.h
 controlSonido.o: controlSonido.h
 animacion.o:animacion.h
 ecuaciones.o:animacion.h
-estadoLecciones.o: estadoLecciones.h elementosInterfaz.h
+estadoLecciones.o: estadoLecciones.h elementosInterfaz.h leccion.h
 elementosInterfaz.o: elementosInterfaz.h
 elementosInterfaz_imagen.o: elementosInterfaz.h
 elementosInterfaz_texto.o: elementosInterfaz.h
 elementosInterfaz_combinado.o: elementosInterfaz.h
+
 .cpp.o:
 	$(CC) $(CXXFLAGS) -c $< -o $@
 

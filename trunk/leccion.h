@@ -45,6 +45,7 @@ using namespace std;
 #include "animacion.h"
 
 #include "pugixml.hpp"
+#include "log.h"
 
 /**
  * @class Leccion
@@ -70,10 +71,8 @@ class Leccion{
     Gosu::Graphics& g;
 
     /// Contenedor de las imágenes de la interfaz
-    vector<boost::shared_ptr<ElementoImagen> > elementosImg;
+    vector<boost::shared_ptr<Elemento> > elementos;
 
-    /// Contenedor de los cuadros de texto de la interfaz
-    vector<boost::shared_ptr<ElementoTexto> > elementosTxt;
 
 public:
     /**
@@ -103,6 +102,7 @@ public:
 
 	nodoActual = doc.child("Lec").child("elementos");
 
+	///////////////////////////////////////
 	// Iteramos sobre las imágenes definidas en el XML (nodos hijos img)
 	for(pugi::xml_node elemento = nodoActual.child("img");
 	    elemento;
@@ -115,8 +115,6 @@ public:
 	    int x = elemento.attribute("x").as_int();
 	    int y = elemento.attribute("y").as_int();
 
-	    
-	    int p;
 	    int animar, wait, duracion;
 
 	    if((atributo = elemento.attribute("animar")) == atributoVacio){
@@ -140,74 +138,82 @@ public:
 	    // Atributo z, profundidad.
 	    double z = elemento.attribute("z").as_double();
 
+	    lDEBUG << "Imagen (" << ruta << ") @ " << x << "," << y;
+
 	    // Creamos el elemento y lo introducimos en el vector de imágenes.
-	    boost::shared_ptr<ElementoImagen> E
+	    boost::shared_ptr<Elemento> E
 	    	(new ElementoImagen(g, ruta, 
-				    x, y, 0, z, 
+				    x, y, 255, z, 
 				    ((animar==1)?Animacion::tAlpha:Animacion::tNada), 
 				    wait, duracion) );
-	    elementosImg.push_back(E);
-
-//*/
+	    elementos.push_back(E);
 	};
 	    
 
 
-	/*
-	// Leemos los textos
-	elemento = manejador.FirstChild("Lec").FirstChild("elementos")
-	.FirstChild("texto").ToElement();
-
-	for(; elemento; elemento = elemento -> NextSiblingElement("texto") ){
-	string texto, rutaFuente;
-	elemento -> QueryStringAttribute("str", &texto);
 
 
-	cout << texto << endl;
-	if(elemento -> QueryStringAttribute("fuente", &rutaFuente) != TIXML_SUCCESS){
-	rutaFuente = "media/fNormal.ttf";
-	}
+	//////////////////////////////////////
+	// TEXTOS
+	for(pugi::xml_node elemento = nodoActual.child("texto");
+	    elemento;
+	    elemento = elemento.next_sibling("texto")){
 
-	int tam, x, y, align, sombra, opacSombra;
-	elemento -> QueryIntAttribute("x", &x);
-	elemento -> QueryIntAttribute("y", &y);
-	elemento -> QueryIntAttribute("tam", &tam);
-	elemento -> QueryIntAttribute("align", &align);
-	elemento -> QueryIntAttribute("sombra", &sombra);
+	    string texto;
+	    texto = elemento.first_child().value();
 
-	if(elemento -> QueryIntAttribute("opacSombra", &opacSombra) != TIXML_SUCCESS){
-	opacSombra = 80;
-	}
+	    string rutaFuente;
+	    if((atributo = elemento.attribute("fuente")) == atributoVacio){
+		rutaFuente = "media/fNormal.ttf";
+	    }else{
+		rutaFuente = atributo.value();
+	    }
 
+	    // Posición
+	    int x = elemento.attribute("x").as_int();
+	    int y = elemento.attribute("y").as_int();
+	    int tam = elemento.attribute("tam").as_int();
+	    int align = elemento.attribute("align").as_int();
+	    int sombra = elemento.attribute("sombra").as_int();
 
-	int animar, wait, duracion;
-	if(elemento -> QueryIntAttribute("animar", &animar) != TIXML_SUCCESS){
-	animar = 1;
-	}
+	    int animar, wait, duracion;
 
-	if(elemento -> QueryIntAttribute("wait", &wait) != TIXML_SUCCESS){
-	wait = 0;
-	}
+	    if((atributo = elemento.attribute("animar")) == atributoVacio){
+		animar = 1;
+	    }else{
+		animar = atributo.as_int();
+	    }
 
-	if(elemento -> QueryIntAttribute("duracion", &duracion) != TIXML_SUCCESS){
-	duracion = 20;
-	}
+	    if((atributo = elemento.attribute("wait")) == atributoVacio){
+		wait = 0;
+	    }else{
+		wait = atributo.as_int();
+	    }
 
-	double z;
-	elemento -> QueryDoubleAttribute("z", &z);
+	    if((atributo = elemento.attribute("duracion")) == atributoVacio){
+		duracion = 20;
+	    }else{
+		duracion = atributo.as_int();
+	    }	    
+		
+	    // Atributo z, profundidad.
+	    double z = elemento.attribute("z").as_double();
 
-	// Componente alpha, red, green, blue
-	int ca, cr, cb, cg;
-	elemento -> QueryIntAttribute("ca", &ca);
-	elemento -> QueryIntAttribute("cr", &cr);
-	elemento -> QueryIntAttribute("cg", &cg);
-	elemento -> QueryIntAttribute("cb", &cb);
+	    int ca = elemento.attribute("ca").as_int();
+	    int cr = elemento.attribute("cr").as_int();
+	    int cg = elemento.attribute("cg").as_int();
+	    int cb = elemento.attribute("cb").as_int();
+	    
+	    lDEBUG << "Texto (" << ruta << ") @ " << x << "," << y << " :";
 
-	boost::shared_ptr<elementoTexto> T
-	( new elementoTexto(g, texto, rutaFuente, tam, x, y, z,
-	animar, wait, duracion, Gosu::Color(ca, cr, cg, cb), align, 
-	((sombra == 1) ? true : false), opacSombra));
-	elementosTxt.push_back(T);
+	    boost::shared_ptr<Elemento> T
+		( new ElementoTexto(g, texto, rutaFuente, tam, 
+				    Gosu::Color(ca, cr, cg, cb), align,
+				    sombra, 80,
+				    x, y, 255, z+3,
+				    (animar == 1)? Animacion::tAlpha:Animacion::tNada,
+				    wait, duracion));
+	    elementos.push_back(T);
 
 	} //*/
 	
@@ -219,16 +225,11 @@ public:
      */
 
     void draw(){
-/*
-	BOOST_FOREACH(boost::shared_ptr<elementoTexto>& T, elementosTxt)
+
+	BOOST_FOREACH(boost::shared_ptr<Elemento>& T, elementos)
 	{
 	    T -> draw();
 	}
-
-	BOOST_FOREACH(boost::shared_ptr<elementoImagen>& E, elementosImg)
-	{
-	    E -> draw();
-	} //*/
     }
 
 };

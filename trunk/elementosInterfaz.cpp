@@ -41,13 +41,11 @@ void Elemento::setupAnimacion (int wait, int duracion)
 }
 void Elemento::actualizarPosicion ()
 {
-
     if(animar != Animacion::tNada){
-
 	if(animar == Animacion::tAlpha){
 	    currentAlpha = animacion -> get(0);
 	    currentX = finalX;
-	    currentY = finalX;
+	    currentY = finalY;
 	}
 
 	else if(animar == Animacion::tPos){
