@@ -1,20 +1,11 @@
 #include "elementosInterfaz.h"
 
-ElementoCombinado::ElementoCombinado (Gosu::Graphics & g, 
-				      int fX, int fY, int fA, double z, 
-				      Animacion::atribAnim animar, 
-				      int wait, int duracion, 
-				      int iX, int iY, int iA)
-    : Elemento (animar, fX, fY, fA, z, wait, duracion, iX, iY, iA), 
-      g (g)
-{}
+ElementoCombinado::ElementoCombinado (Gosu::Graphics & g, Animacion::atribAnim animar, double z) 
+    : Elemento (animar, z), g(g)
+{
+    lDEBUG << Log::CON("ElementoCombinado");
+}
 
-ElementoCombinado::ElementoCombinado (Gosu::Graphics & g, tConfAnim t)
-    : Elemento (t.animar, t.finalX, t.finalY, t.finalA, t.z, 
-		t.wait, t.duracion, 
-		t.inicialX, t.inicialY, t.inicialA), 
-      g (g)
-{}
 
 void ElementoCombinado::setTexto (string str, string rutaFuente, unsigned int tam, 
 				  Gosu::Color color, unsigned int alineacion, 
@@ -52,6 +43,7 @@ void ElementoCombinado::setImagen (string ruta)
 
 void ElementoCombinado::drawEnd (int x, int y, double z, int a)
 {
+    //lDEBUG << "DrawEnd " << x << "," << y << "," << z << ", alfa: " << a;
     imagen -> draw(x,y,z,1,1,Gosu::Color(a,255,255,255));
     switch(texto -> getAlineacion()){
     case Texto::alignIzq:

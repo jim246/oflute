@@ -87,6 +87,9 @@ void Juego::cambiarEstado(std::string destino){
 }
     
 void Juego::buttonDown(Gosu::Button boton){
+    if(estadoCadena != "estadoAutor" && estadoCadena != "estadoIntro" && boton == Gosu::kbEscape){
+	animacionFondo -> end();
+    }
     estadoActual -> buttonDown(boton);
 }    
 

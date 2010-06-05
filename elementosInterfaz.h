@@ -171,20 +171,6 @@ protected:
 public:
     Animacion * animacion;
 
-    /**
-     * @brief Constructor por parámetros
-     *
-     * Inicializa el elemento pasando los valores de cada uno de los parámetros. No se recomienda.
-     *
-     */
-    Elemento (Animacion::atribAnim animar, 
-	      int fX, int fY, int fA, double z, 
-	      int wait, int duracion, 
-	      int iX, int iY, int iA);
-    
-    /// Constructor por bloque. Recibe un tConfAnim con los parámetros de inicialización.
-    Elemento (tConfAnim t);
-
     Elemento(Animacion::atribAnim animar, double z);
 
     /// Devuelve el ancho del elemento. Cada subclase devolverá el ancho que corresponda.
@@ -199,6 +185,9 @@ public:
     /// Devuelve la posición vertical actual.
     int currY ();
 
+    /// Ajsuta las posiciones finales para elementos no animados
+    void setXY(int x, int y);
+
     /// Comprueba si el elemento ha sido clickeado, basándose en la posición actual y el tamaño.
     bool clicked (int x, int y);
 
@@ -212,19 +201,16 @@ public:
 };
 
 
+
+
+
+
+
 class ElementoImagen : public Elemento
 {
     boost::scoped_ptr <Gosu::Image> imagen;
     string ruta;
 public:
-    ElementoImagen (Gosu::Graphics & g, string ruta, 
-		    int fX, int fY, int fA, double z, 
-		    Animacion::atribAnim animar = Animacion::tNada, 
-		    int wait = 0, int duracion = 30, 
-		    int iX = 0, int iY = 0, int iA = 0);
-
-    ElementoImagen (Gosu::Graphics & g, string ruta, tConfAnim t);
-
     ElementoImagen (Gosu::Graphics & g, string ruta, double z, Animacion::atribAnim animar);
 
     void drawEnd (int x, int y, double z, int a);
@@ -233,24 +219,20 @@ public:
 };
 
 
+
+
+
 class ElementoTexto : public Elemento
 {
     boost::scoped_ptr <Texto> texto;
 public:
-    ElementoTexto (Gosu::Graphics & g, 
-		   string str, 
-		   string rutaFuente, unsigned int tam, 
-		   Gosu::Color color, unsigned int alineacion, 
-		   bool sombra, int opacidadSombra, 
-		   
-		   int fX, int fY, int fA, double z, 
-		   Animacion::atribAnim animar = Animacion::tNada, 
-		   int wait = 0, int duracion = 30, 
-		   int iX = 0, int iY = 0, int iA = 0);
 
     ElementoTexto (Gosu::Graphics & g,
-		   tConfTexto t,
-		   tConfAnim a);
+		   string str, string rutaFuente,
+		   unsigned int tam, Gosu::Color color,
+		   unsigned int alineacion, bool sombra, int opacidadSombra,
+		   double z,
+		   Animacion::atribAnim animar);
 
     void drawEnd (int x, int y, double z, int a);
     void setText (string s);
@@ -260,6 +242,9 @@ public:
 
 
 
+
+//////////////////////////////////////////////
+
 class ElementoCombinado : public Elemento
 {
     boost::scoped_ptr <Texto> texto;
@@ -268,13 +253,7 @@ class ElementoCombinado : public Elemento
     boost::scoped_ptr <Gosu::Image> imagen;
     Gosu::Graphics & g;
 public:
-    ElementoCombinado (Gosu::Graphics & g, 
-		       int fX, int fY, int fA, double z, 
-		       Animacion::atribAnim animar = Animacion::tNada, 
-		       int wait = 0, int duracion = 30, 
-		       int iX = 0, int iY = 0, int iA = 0);
-
-    ElementoCombinado (Gosu::Graphics & g, tConfAnim t);
+    ElementoCombinado (Gosu::Graphics & g, Animacion::atribAnim animar, double z);
 
     void setTexto (string str, string rutaFuente, 
 		   unsigned int tam, Gosu::Color color, 

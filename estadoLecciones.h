@@ -32,6 +32,7 @@
 
 #include <Gosu/Gosu.hpp>
 
+#include "foreach.h"
 #include "estado.h"
 #include "elementosInterfaz.h"
 
@@ -58,21 +59,22 @@ class Juego;
  *
  */
 class EstadoMenuLecciones : public Estado{
-    boost::scoped_ptr<ElementoImagen> pizarra;
+    boost::shared_ptr<ElementoImagen> pizarra;
 
-    boost::scoped_ptr<ElementoCombinado> barraSuperior;
+    boost::shared_ptr<ElementoCombinado> barraSuperior;
 
-    boost::scoped_ptr<ElementoCombinado> barraInferior;
+    boost::shared_ptr<ElementoCombinado> barraInferior;
 
-    boost::scoped_ptr<ElementoCombinado> btnTitular;
-    boost::scoped_ptr<ElementoCombinado> btnDescripcion;
+    boost::shared_ptr<ElementoCombinado> btnTitular;
+    boost::shared_ptr<ElementoCombinado> btnDescripcion;
 
-    boost::scoped_ptr<ElementoTexto> textoDesc;
+    boost::shared_ptr<ElementoTexto> textoDesc;
 
-    boost::scoped_ptr<ElementoCombinado> btnComenzar;
-    boost::scoped_ptr<ElementoCombinado> btnAntLec;
-    boost::scoped_ptr<ElementoCombinado> btnSigLec;
+    boost::shared_ptr<ElementoCombinado> btnComenzar;
+    boost::shared_ptr<ElementoCombinado> btnAntLec;
+    boost::shared_ptr<ElementoCombinado> btnSigLec;
 
+    vector<boost::shared_ptr<Elemento> > conjuntoElementos;
     struct infoLeccion{ 
 	int indice;
 	string nombre, descrip, ruta;
@@ -88,13 +90,14 @@ class EstadoMenuLecciones : public Estado{
 
     vector<infoLeccion> leccionesCargadas;
 
-    enum {eMostrando, eMenu, eOcultando1, eLeccion, eOcultando};
+    enum {eMostrando, eMenu, eOcultarInter, eMostrarInter, eLeccion, eOcultando};
 
     int estadoActual;
 
     Leccion * leccionMostrada;
 
-    void iniciarAnimacionSalida();
+    enum{dirMOSTRAR, dirOCULTAR};
+    void iniciarAnimacionSalida(int dir, bool saltarBarraInferior = true);
 public:
     EstadoMenuLecciones(Juego * p);
 

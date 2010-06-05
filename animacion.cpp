@@ -135,6 +135,18 @@ void Animacion::set(int i, int v1, int v2){
     }
 }
 
+void Animacion::reverse(){
+    int a;
+    for (int i = 0; i < numAttr; ++i)
+    {
+	a = inicial[i];
+	inicial[i] = final[i];
+	final[i] = a;
+	change[i] = final[i] - inicial[i];
+    }
+
+}
+
 void Animacion::end() { time = duracion + esperaInicial; update(false); };
 void Animacion::init() { time = 0; };
 bool Animacion::finished(){ 

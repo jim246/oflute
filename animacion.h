@@ -195,6 +195,7 @@ public:
      */
     void setFinal(int i, int v);
 
+    void reverse();
 
     ///@}
 

@@ -5,19 +5,19 @@
   <descrip>Aprende a tocar la
     nota Do grave.</descrip>
   <elementos>
-    <img src="media/lecciones/sombraFoto.png" x="15" y="13" z="1" wait="30"/>
-    <img src="media/lecciones/1 dograve.png" x="40" y="37" z="2" wait="15" />
+    <img src="media/lecciones/sombraFoto.png" x="15" y="13" z="2" wait="30"/>
+    <img src="media/lecciones/1 dograve.png" x="40" y="37" z="3" wait="15" />
     
     <texto tam="45" ca="255" cr="191" cg="219" cb="59" 
 	   align="1" sombra="1" x="390" y="30" z="2" 
-	   opacSombra="23" wait="40">Lección 1:</texto>
+	   opacSombra="0" wait="40">Lección 1:</texto>
     
     <texto x="580" y="80" z="2" tam="60" 
 	   ca="255" cr="34" cg="139" cb="114" 
 	   align="2" sombra="1" opacSombra="23" 
 	   fuente="media/fLight.ttf" wait="45">Las notas: Do grave</texto>
 
-    <texto x="580" y="151" z="2" tam="33" 
+    <texto x="580" y="161" z="2" tam="33" 
 	   ca="255" cr="3" cg="69" cb="90" 
 	   sombra="0" align="2" wait="50">Para tocar un Do Grave, es decir, el
       do que está más abajo en la
@@ -25,6 +25,6 @@
       los orificios de la flauta." </texto>
 
 
-  <img src="media/lecciones/penta-notaDo.png" x="470" y="350" z="2" wait="55"/>
+  <img src="media/lecciones/penta-notaDo.png" x="465" y="345" z="2" wait="55"/>
 </elementos>
 </Lec>
