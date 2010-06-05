@@ -37,7 +37,7 @@
 #define ANCHO 800
 #define ALTO 600
 #define FULLSCREEN false
-#define FPS 20
+#define REFRESCO 20
 
 class Estado;
 

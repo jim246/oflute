@@ -16,6 +16,7 @@ OBJECTS += estadoAnalizador.o animacion.o ecuaciones.o
 OBJECTS += estadoLecciones.o log.o
 OBJECTS += texto.o elementosInterfaz.o
 OBJECTS += elementosInterfaz_imagen.o elementosInterfaz_texto.o elementosInterfaz_combinado.o
+OBJECTS += estadoCancion.o
 
 EXE=programa
 
@@ -44,6 +45,8 @@ elementosInterfaz.o: elementosInterfaz.h
 elementosInterfaz_imagen.o: elementosInterfaz.h
 elementosInterfaz_texto.o: elementosInterfaz.h
 elementosInterfaz_combinado.o: elementosInterfaz.h
+
+estadoCancion.o: estadoCancion.h estado.h juego.h
 
 .cpp.o:
 	$(CC) $(CXXFLAGS) -c $< -o $@

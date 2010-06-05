@@ -6,13 +6,14 @@
 #include "estadoMenu.h"
 #include "estadoAnalizador.h"
 #include "estadoLecciones.h"
+#include "estadoCancion.h"
 
 #include "log.h"
 
 #include <boost/lexical_cast.hpp>
 
 
-Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
+Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, REFRESCO){
     lDEBUG << Log::CON("Juego");
     setCaption(L"oFlute .:.");
 
@@ -79,6 +80,11 @@ void Juego::cambiarEstado(std::string destino){
 
     else if(destino == "estadoLecciones"){
 	estadoActual.reset(new EstadoMenuLecciones(this));
+    }
+
+    else if(destino == "estadoCancion"){
+	estadoActual.reset(new EstadoCancion(this));
+	estadoActual -> lanzar();
     }
 	
     else if(destino == "salir"){
