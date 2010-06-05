@@ -9,6 +9,8 @@
 
 EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
+    estadoActual = eMostrando;
+
     leccionMostrada = NULL;
     leccionActual = -1;
     imgFondo.reset (new Gosu::Image(padre -> graphics(),
@@ -69,7 +71,7 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     barraInferior -> setImagen("media/menuLecciones/mBottom.png");
 
     tConfTexto * confInferiorTexto = new tConfTexto;
-    confInferiorTexto -> cadena = "Volver al menú principal";
+    confInferiorTexto -> cadena = "Volver al menú";
     confInferiorTexto -> rutaFuente = "media/fNormal.ttf";
     confInferiorTexto -> tam = 28;
     barraInferior -> setTexto(*confInferiorTexto, 52, 7);
@@ -89,17 +91,17 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
     confBtn -> wait = 10;
     confBtn -> duracion = 20;
     confBtn -> z = 2;
-    btn1.reset(new ElementoCombinado(padre -> graphics(), *confBtn));
+    btnTitular.reset(new ElementoCombinado(padre -> graphics(), *confBtn));
 
-    btn1 -> setImagen("media/menuLecciones/mBtn1.png");
+    btnTitular -> setImagen("media/menuLecciones/mBtn1.png");
 
     tConfTexto * confBtnTexto = new tConfTexto;
-    confBtnTexto -> cadena = "Lección #1";
+    confBtnTexto -> cadena = "Lección nº1";
     confBtnTexto -> rutaFuente = "media/fNormal.ttf";
     confBtnTexto -> tam = 36;
     confBtnTexto -> sombra = false;
     confBtnTexto -> alineacion = Texto::alignDer;
-    btn1 -> setTexto(*confBtnTexto, -20, 7);
+    btnTitular -> setTexto(*confBtnTexto, -20, 7);
 
 
 
@@ -257,11 +259,7 @@ void EstadoMenuLecciones::listarLecciones(){
     cambiarLeccion(leccionActual);
 }
 
-void EstadoMenuLecciones::update(){
-    if((btn1 -> animacion -> finished()) && leccionActual == -1){
-	listarLecciones();
-    }
-}
+
 
 void EstadoMenuLecciones::cambiarLeccion(unsigned n){
     leccionActual = n;
@@ -272,7 +270,7 @@ void EstadoMenuLecciones::cambiarLeccion(unsigned n){
     confBtnTexto -> tam = 36;
     confBtnTexto -> sombra = false;
     confBtnTexto -> alineacion = Texto::alignDer;
-    btn1 -> setTexto(*confBtnTexto, -20, 7);
+    btnTitular -> setTexto(*confBtnTexto, -20, 7);
 
     delete confBtnTexto;
 
@@ -281,18 +279,21 @@ void EstadoMenuLecciones::cambiarLeccion(unsigned n){
 
 void EstadoMenuLecciones::draw() {
     imgFondo -> draw(0,0,1);
-  
-    // txtTitulo -> draw();
-    pizarra -> draw();
-    barraSuperior -> draw();
-    barraInferior -> draw();
-    btn1 -> draw();
-    textoDesc -> draw();
-    btnComenzar -> draw();
-    btnAntLec -> draw();
-    btnSigLec -> draw();
-    btnDescripcion -> draw();
-    // txtSubtitulo -> draw();
+    barraInferior -> draw();  
+
+    if(estadoActual == eMenu || estadoActual == eMostrando || estadoActual == eOcultando){
+	pizarra -> draw();
+	barraSuperior -> draw();
+	btnTitular -> draw();
+	textoDesc -> draw();
+	btnComenzar -> draw();
+	btnAntLec -> draw();
+	btnSigLec -> draw();
+	btnDescripcion -> draw();
+    }else if(estadoActual == eLeccion){
+	leccionMostrada -> draw();
+    }
+	
 }
 
 void EstadoMenuLecciones::anteriorLec(){
@@ -322,26 +323,56 @@ void EstadoMenuLecciones::buttonDown(Gosu::Button boton){
 	int x = padre -> input().mouseX();
 	int y = padre -> input().mouseY();
 	
-	if(barraInferior -> clicked(x, y)){
-	    padre -> cambiarEstado("estadoMenuSinFondo");
+	if(estadoActual == eMenu){
+	    if(barraInferior -> clicked(x, y)){
+		padre -> cambiarEstado("estadoMenuSinFondo");
+	    }
+	    
+	    else if(btnAntLec -> clicked(x, y)){
+		anteriorLec();
+	    }
+
+	    else if(btnSigLec -> clicked(x, y)){
+		siguienteLec();
+	    }
+	    
+	    else if(btnComenzar -> clicked(x, y)){
+		lanzarLeccion();
+	    }
 	}
 
-	else if(btnAntLec -> clicked(x, y)){
-	    anteriorLec();
-	}
-
-	else if(btnSigLec -> clicked(x, y)){
-	    siguienteLec();
-	}
-
-	else if(btnComenzar -> clicked(x, y)){
-	    leccionMostrada = new Leccion(padre -> graphics(), 
-					  leccionesCargadas[leccionActual].ruta);
+	else if(estadoActual == eLeccion){	    
+	    if(barraInferior -> clicked(x, y)){
+		estadoActual = eMenu;
+		delete leccionMostrada;
+		leccionMostrada = NULL;
+	    }
 	}
 
     }
 
 }
+
+void EstadoMenuLecciones::lanzarLeccion(){
+    lDEBUG << LOC();
+    estadoActual = eOcultando1;
+    
+/*    leccionMostrada = new Leccion(padre -> graphics(), 
+				  leccionesCargadas[leccionActual].ruta);
+    estadoActual = eLeccion;//*/
+    
+}
+
+void EstadoMenuLecciones::update(){
+    if((btnTitular -> animacion -> finished()) && leccionActual == -1){
+	listarLecciones();
+    }
+
+    if(btnAntLec -> animacion -> finished() && estadoActual < eMenu){
+	estadoActual = eMenu;
+    }
+}
+
 
 EstadoMenuLecciones::~EstadoMenuLecciones(){
     if(leccionMostrada != NULL){

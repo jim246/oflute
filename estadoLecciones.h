@@ -68,7 +68,7 @@ class EstadoMenuLecciones : public Estado{
 
     boost::scoped_ptr<ElementoCombinado> barraInferior;
 
-    boost::scoped_ptr<ElementoCombinado> btn1;
+    boost::scoped_ptr<ElementoCombinado> btnTitular;
     boost::scoped_ptr<ElementoCombinado> btnDescripcion;
 
     boost::scoped_ptr<ElementoTexto> textoDesc;
@@ -92,7 +92,7 @@ class EstadoMenuLecciones : public Estado{
 
     vector<infoLeccion> leccionesCargadas;
 
-    enum {eSaliendo, eEsperando, eGuardando, eMostrandoLec};
+    enum {eMostrando, eMenu, eOcultando1, eLeccion, eOcultando};
 
     int estadoActual;
 
@@ -112,6 +112,7 @@ public:
     void siguienteLec();
 
     void cambiarLeccion(unsigned n);
+    void lanzarLeccion();
 
     ~EstadoMenuLecciones();
 };

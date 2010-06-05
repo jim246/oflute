@@ -39,7 +39,7 @@ void EstadoMenu::lanzar(){
 
     }
 
-    animOpacidadFondo.reset(new Animacion(1, (animarFondo)?duracionSalidaBotones:0, Animacion::tEaseOutQuad));
+    animOpacidadFondo.reset(new Animacion(1, (animarFondo)?duracionSalidaBotones:1, Animacion::tEaseOutQuad));
     animOpacidadFondo -> set(0, 0, 255);
 
     animLogoCusl.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutBack, 40));

@@ -16,12 +16,14 @@ ElementoImagen::ElementoImagen (Gosu::Graphics & g, string ruta, tConfAnim t)
 		t.inicialX, t.inicialY, t.inicialA), 
       ruta (ruta)
 {
+    lDEBUG << "New ElementoImagen" << ruta;
     imagen.reset(new Gosu::Image(g, Gosu::widen(ruta)));
 }
 
 
 void ElementoImagen::drawEnd (int x, int y, double z, int a)
 {
+//    lDEBUG << "img @ " << x << "," << y << "," << z << "(" << a;
     imagen -> draw(x,y,z,1,1, Gosu::Color(a, 255, 255, 255));
 }
 

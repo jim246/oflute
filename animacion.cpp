@@ -135,7 +135,7 @@ void Animacion::set(int i, int v1, int v2){
     }
 }
 
-void Animacion::end() { time = duracion + esperaInicial; update(); };
+void Animacion::end() { time = duracion + esperaInicial; update(false); };
 void Animacion::init() { time = 0; };
 bool Animacion::finished(){ 
 /*
