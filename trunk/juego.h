@@ -30,6 +30,10 @@
 #include "Gosu/Gosu.hpp"
 #include <boost/scoped_ptr.hpp>
 
+#include <string>
+
+#include "animacion.h"
+
 #define ANCHO 800
 #define ALTO 600
 #define FULLSCREEN false
@@ -53,8 +57,17 @@ class Juego : public Gosu::Window{
     /// Contenedor del estado actual
     boost::scoped_ptr <Estado> estadoActual;
 
+    /// Cadena con el estado actual
+    std::string estadoCadena;
+
     /// Imagen para el cursor del ratón
     boost::scoped_ptr <Gosu::Image> cursor;
+
+    /// Fondo común en todas las pantallas del juego excepto los créditos 
+    boost::scoped_ptr <Gosu::Image> fondoComun;
+
+    /// Animación para el fondo
+    boost::scoped_ptr <Animacion> animacionFondo;
 
 public:
     /** 

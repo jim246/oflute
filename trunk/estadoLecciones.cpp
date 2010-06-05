@@ -13,30 +13,15 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
     leccionMostrada = NULL;
     leccionActual = -1;
-    imgFondo.reset (new Gosu::Image(padre -> graphics(),
-				    L"media/fondoGenerico.png"));
+
+    pizarra.reset(new ElementoImagen(padre -> graphics(), "media/menuLecciones/pizarra.png", 2, Animacion::tAlphaPos));
+    pizarra -> animacion = new Animacion(3, 30, Animacion::tEaseOutQuad, 0);
+    pizarra -> animacion -> set(0, 0, 255); // alfa
+    pizarra -> animacion -> set(1, -450, 35); // x
+    pizarra -> animacion -> set(2, 128, 128); // y
 
     
-    tConfAnim * t = new tConfAnim;
-    t -> animar = Animacion::tAlphaPos;
-    t -> inicialX = -450;
-    t -> finalX = 35;
-    t -> inicialY = 128;
-    t -> finalY = 128;
-
-    t -> inicialA = 0;
-    t -> finalA = 255;
-
-    t -> z = 2;
-    t -> wait = 0;
-    t -> duracion = 30;
-
-
-    pizarra.reset(new ElementoImagen(padre -> graphics(),
-				     "media/menuLecciones/pizarra.png",
-				     *t));
-    delete t;
-    
+    /* 
 
     t = new tConfAnim;
     t -> animar = Animacion::tPos;
@@ -133,13 +118,6 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
     textoDesc . reset (new ElementoTexto(padre -> graphics(), tdConf, tdConfA));
 
-    /*textoDesc.reset(new ElementoTexto(padre -> graphics(),
-				      " ", "media/fNormal.ttf",
-				      36, Gosu::Color(255,255,255,255),
-				      Texto::alignDer, true, 80,
-				      780, 175, 255, 4)); //*/
-
-
     ///////////////////////////////
     // Botón comenzar 
     confBtn -> inicialY = confBtn -> finalY = 351;
@@ -177,6 +155,9 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
     delete confBtn;
     delete confBtnTexto;
+
+    //*/
+
 
 }
 
@@ -277,8 +258,22 @@ void EstadoMenuLecciones::cambiarLeccion(unsigned n){
     textoDesc -> setText(leccionesCargadas[n] . descrip);
 }
 
+
+
+void EstadoMenuLecciones::iniciarAnimacionSalida(){
+    pizarra -> animacion -> setTipoAnimacion(Animacion::tEaseInQuad);
+    pizarra -> animacion -> set(0, 255, 0); // alfa
+    pizarra -> animacion -> set(1, 35, -450); // x
+    pizarra -> animacion -> set(2, 128, 128); // y
+    pizarra -> animacion -> init();
+}
+
+
+
 void EstadoMenuLecciones::draw() {
-    imgFondo -> draw(0,0,1);
+    pizarra -> draw();
+
+    /*
     barraInferior -> draw();  
 
     if(estadoActual == eMenu || estadoActual == eMostrando || estadoActual == eOcultando){
@@ -294,6 +289,7 @@ void EstadoMenuLecciones::draw() {
 	leccionMostrada -> draw();
     }
 	
+    //*/
 }
 
 void EstadoMenuLecciones::anteriorLec(){
@@ -316,9 +312,15 @@ void EstadoMenuLecciones::siguienteLec(){
 
 void EstadoMenuLecciones::buttonDown(Gosu::Button boton){
     if(boton == Gosu::kbEscape){
-	padre -> cambiarEstado("estadoMenuSinFondo");
+	if(estadoActual == eMenu){
+	    estadoActual = eOcultando;
+	    iniciarAnimacionSalida();
+	}
+	else{
+	    padre -> cambiarEstado("estadoMenuSinFondo");
+	}
     }
-
+#ifdef ON
     else if(boton == Gosu::msLeft){
 	int x = padre -> input().mouseX();
 	int y = padre -> input().mouseY();
@@ -350,6 +352,7 @@ void EstadoMenuLecciones::buttonDown(Gosu::Button boton){
 	}
 
     }
+#endif
 
 }
 
@@ -364,6 +367,18 @@ void EstadoMenuLecciones::lanzarLeccion(){
 }
 
 void EstadoMenuLecciones::update(){
+    if(pizarra -> animacion -> finished() &&
+       1 ){
+
+	if(estadoActual == eMostrando){
+	    estadoActual = eMenu;
+	}
+	else if(estadoActual == eOcultando){
+	    padre -> cambiarEstado("estadoMenuSinFondo");
+	}
+    }
+
+#ifdef ON
     if((btnTitular -> animacion -> finished()) && leccionActual == -1){
 	listarLecciones();
     }
@@ -371,6 +386,7 @@ void EstadoMenuLecciones::update(){
     if(btnAntLec -> animacion -> finished() && estadoActual < eMenu){
 	estadoActual = eMenu;
     }
+#endif
 }
 
 

@@ -52,9 +52,6 @@ class EstadoMenu : public Estado{
     /// Flag que indica si el estado ha sido lanzado
     bool lanzado;
 
-    /// Imagen de fondo
-    boost::scoped_ptr<Gosu::Image> imgFondo;
-
     /// Adorno rojo inferior
     boost::scoped_ptr<Gosu::Image> barraRoja;
 
@@ -79,9 +76,6 @@ class EstadoMenu : public Estado{
     /// Animación para el logo de oflute
     boost::scoped_ptr<Animacion> animLogotipo;
 
-    /// Animación para la opacidad del fondo
-    boost::scoped_ptr<Animacion> animOpacidadFondo;
-
     /// Contador para controlar el flujo del menú 
     int estadoAnim;
 
@@ -89,9 +83,8 @@ class EstadoMenu : public Estado{
 
     enum {eFADEIN, eBOTONESIN, eESTATICO, eBOTONESOUT, eANIMOUT, eANIMEND};
 
-    bool animarFondo;
-    
     //float posY[5]; //, posFinalesX[5];
+    bool sinDemoraInicial;
 public:
     /// Constructor. Crea un nuevo menú para el juego p.
     EstadoMenu(Juego * p);
@@ -100,8 +93,7 @@ public:
     void lanzar ();
     void update();
     void draw();
-    void noAnimarFondo(){ animarFondo = false; }
-
+    void quitarDemoraInicial(){ sinDemoraInicial = true; }
     void buttonDown(Gosu::Button boton);
     ~EstadoMenu();
 };

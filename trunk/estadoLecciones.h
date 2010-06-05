@@ -58,10 +58,6 @@ class Juego;
  *
  */
 class EstadoMenuLecciones : public Estado{
-    /// Imagen para el fondo
-    boost::scoped_ptr<Gosu::Image> imgFondo;
-
-
     boost::scoped_ptr<ElementoImagen> pizarra;
 
     boost::scoped_ptr<ElementoCombinado> barraSuperior;
@@ -97,6 +93,8 @@ class EstadoMenuLecciones : public Estado{
     int estadoActual;
 
     Leccion * leccionMostrada;
+
+    void iniciarAnimacionSalida();
 public:
     EstadoMenuLecciones(Juego * p);
 

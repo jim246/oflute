@@ -20,6 +20,11 @@ ElementoImagen::ElementoImagen (Gosu::Graphics & g, string ruta, tConfAnim t)
     imagen.reset(new Gosu::Image(g, Gosu::widen(ruta)));
 }
 
+ElementoImagen::ElementoImagen (Gosu::Graphics & g, string ruta, double z, Animacion::atribAnim animar)
+    : Elemento (animar, z)
+{
+    imagen.reset(new Gosu::Image(g, Gosu::widen(ruta)));
+}
 
 void ElementoImagen::drawEnd (int x, int y, double z, int a)
 {

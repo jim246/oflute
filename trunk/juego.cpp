@@ -15,18 +15,23 @@
 Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, FPS){
     lDEBUG << Log::CON("Juego");
     setCaption(L"oFlute .:.");
-    estadoActual.reset ( 
-	new EstadoImagenFija(this,
-			     L"media/estadoAutor.png",
-			     "estadoIntro")
-	);
+
 
     cursor.reset( new Gosu::Image(graphics(), L"media/pointerCursor.png"));
-    estadoActual -> lanzar();
+
+    fondoComun.reset( new Gosu::Image(graphics(), L"media/fondoGenerico.png"));
+    animacionFondo.reset (new Animacion(1, 50, Animacion::tEaseOutQuad));
+    animacionFondo -> set(0, 0, 255);
+
+    cambiarEstado("estadoAutor");
 }
 
 void Juego::update(){
     estadoActual -> update();
+    
+    if(estadoCadena != "estadoAutor" && estadoCadena != "estadoIntro"){
+	animacionFondo -> update();
+    }
 }
 
 void Juego::draw(){
@@ -35,13 +40,23 @@ void Juego::draw(){
 
     cursor -> draw(input().mouseX(), input().mouseY(), 999);
     estadoActual -> draw();
+    if(estadoCadena != "estadoAutor" && estadoCadena != "estadoIntro"){
+	fondoComun -> draw(0,0,1, 1,1, Gosu::Color(animacionFondo -> get(0), 255, 255, 255));
+    }
 }
 
 
 void Juego::cambiarEstado(std::string destino){
     lDEBUG << "\t>>>>>>>>>>>>> Nuevo estado: " << destino;
+    estadoCadena = destino;
+    
+    if (destino == "estadoAutor"){
+	estadoActual.reset( 
+	    new EstadoImagenFija(this, L"media/estadoAutor.png", "estadoIntro"));
+	estadoActual -> lanzar();	
+    }
 
-    if(destino == "estadoIntro"){
+    else if(destino == "estadoIntro"){
 	estadoActual.reset(
 	    new EstadoImagenFija(this, L"media/estadoIntro.png", "estadoMenu"));
 	estadoActual -> lanzar();
@@ -54,7 +69,7 @@ void Juego::cambiarEstado(std::string destino){
     
     else if(destino == "estadoMenuSinFondo"){
 	estadoActual.reset(new EstadoMenu(this));
-	static_cast<EstadoMenu * >(estadoActual . get()) -> noAnimarFondo();
+	static_cast<EstadoMenu * >(estadoActual . get()) -> quitarDemoraInicial();
 	estadoActual -> lanzar();
     }
 

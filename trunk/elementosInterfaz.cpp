@@ -114,3 +114,8 @@ Elemento::~ Elemento ()
 }
 
 
+
+Elemento::Elemento(Animacion::atribAnim animar, double z)
+    : animar(animar), z(z), animacion(0){
+
+}

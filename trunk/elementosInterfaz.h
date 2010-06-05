@@ -185,6 +185,8 @@ public:
     /// Constructor por bloque. Recibe un tConfAnim con los parámetros de inicialización.
     Elemento (tConfAnim t);
 
+    Elemento(Animacion::atribAnim animar, double z);
+
     /// Devuelve el ancho del elemento. Cada subclase devolverá el ancho que corresponda.
     virtual int getWidth () = 0;
 
@@ -222,6 +224,8 @@ public:
 		    int iX = 0, int iY = 0, int iA = 0);
 
     ElementoImagen (Gosu::Graphics & g, string ruta, tConfAnim t);
+
+    ElementoImagen (Gosu::Graphics & g, string ruta, double z, Animacion::atribAnim animar);
 
     void drawEnd (int x, int y, double z, int a);
     int getWidth ();
