@@ -6,27 +6,29 @@
 
 int posFinalesY[] = {281, 332, 383, 434, 485, 589 };
 
-EstadoMenu::EstadoMenu (Juego * p) : Estado(p),animarFondo(true){
+EstadoMenu::EstadoMenu (Juego * p) : Estado(p),sinDemoraInicial(false){
     lDEBUG << Log::CON("EstadoMenu");
     p -> setCaption(L"oFlute .:. Menú principal");
 
 }
 
 void EstadoMenu::lanzar(){
-    lDEBUG << "* EstadoMenu lanzado" ;
     lanzado = true;
-    estadoAnim = eFADEIN;
+    estadoAnim = eBOTONESIN;
  
     // Poblamos el puntero de las imágenes
-    imgFondo.reset(new Gosu::Image(padre -> graphics(), L"media/fondoGenerico.png"));
-
     logoCusl.reset(new Gosu::Image(padre -> graphics(), L"media/logo-cusl4.png"));
-
     logotipo.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/logoMenu.png"));
-
     barraRoja.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/barraInferior.png"));
 
     int duracionSalidaBotones = 50;
+    
+    int demoraInicial;
+    if(sinDemoraInicial){
+	demoraInicial = 0;
+    }else{
+	demoraInicial = 50;
+    }
     
     // Inicializamos las animaciones
     int pInit = 290;
@@ -34,18 +36,15 @@ void EstadoMenu::lanzar(){
     {
 	posFinalesY[i] = pInit + i*51;
 	if(i == 5) posFinalesY[i] = 589;
-	animaciones[i].reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutQuart, i * 10));
+	animaciones[i].reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutQuart, demoraInicial + i * 10));
 	animaciones[i] -> set(0, 600, posFinalesY[i]);
 
     }
 
-    animOpacidadFondo.reset(new Animacion(1, (animarFondo)?duracionSalidaBotones:1, Animacion::tEaseOutQuad));
-    animOpacidadFondo -> set(0, 0, 255);
-
-    animLogoCusl.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutBack, 40));
+    animLogoCusl.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutBack, 40 + demoraInicial));
     animLogoCusl -> set(0, 820, 590);
 
-    animLogotipo.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutQuart, 10));
+    animLogotipo.reset(new Animacion(1, duracionSalidaBotones, Animacion::tEaseOutQuart, 10 + demoraInicial));
     animLogotipo -> set(0, 0, 255);
 
     // Inicializamos los botones del menú
@@ -60,17 +59,8 @@ void EstadoMenu::update(){
     if(!lanzado) 
 	return;
 
-    // 0: Haciendo el fade in
-    if(estadoAnim == eFADEIN){
-	animOpacidadFondo -> update();
-
-	if(animOpacidadFondo -> get(0) == 255){
-	    estadoAnim = eBOTONESIN;
-	}
-    }
-
     // 1: Sacando botones
-    else if(estadoAnim == eBOTONESIN){
+    if(estadoAnim == eBOTONESIN){
 	int j = 0;
 	for (int i = 0; i < 6; ++i)
 	{
@@ -141,8 +131,6 @@ void EstadoMenu::draw(){
     if(!lanzado) 
 	return;
 
-    imgFondo -> draw(0,0,1, 1,1, Gosu::Color(animOpacidadFondo -> get(0), 255, 255, 255));
-
     btn1 -> draw(0, animaciones[0] -> get(0), 2); 
     btn2 -> draw(0, animaciones[1] -> get(0), 3);
     btn3 -> draw(0, animaciones[2] -> get(0), 4);
@@ -172,7 +160,6 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 	    }
 	    animLogoCusl -> end();
 	    animLogotipo -> end();
-	    animOpacidadFondo -> end();
 	    estadoAnim = eESTATICO;
 	}
 
