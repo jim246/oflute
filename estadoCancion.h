@@ -55,6 +55,8 @@ class EstadoCancion : public Estado{
 
     vector<boost::shared_ptr<Nota> > conjNotas;
 
+    boost::scoped_ptr<Gosu::Image> imagenPartitura;
+
 public:
     EstadoCancion(Juego * p);
 

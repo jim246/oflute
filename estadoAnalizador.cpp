@@ -18,9 +18,7 @@ using namespace std;
 typedef int MY_TYPE;
 #define TIPO paInt16;
 
-//tipoBuffer EstadoAnalizador::miBuffer;
 
-//int posFinalesY[] = {281, 333, 386, 441, 494 };
 EstadoAnalizador::EstadoAnalizador (Juego * p) : 
     Estado(p),  firstFrame(true), running(false){
     cout << "+++ [Constructor] EstadoAnalizador" << endl;
@@ -81,6 +79,7 @@ void EstadoAnalizador::draw(){
     }
 
     boost::shared_ptr<Gosu::Image> p;
+    bool sil = false;
     switch(analizador . notaActual()){
     case Do5:
 	p = imgDo5; break;
@@ -101,10 +100,12 @@ void EstadoAnalizador::draw(){
     case Re6:
 	p = imgRe6; break;
     case Silencio:
+	sil = true;
 	break;
     }
     partitura -> draw(0,0,2);
 //    if(!controlSonido . miBuffer.silencio){
+    if(!sil)
 	p -> draw(584,138,3);
 //    } //*/
 
