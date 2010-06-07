@@ -1,40 +1,54 @@
-#ifndef _ESTADOCANCION_H_
-#define _ESTADOCANCION_H_
+/**
+ * @file estadoCancion.h
+ * 
+ * @author José Tomás Tocino García
+ * @date 2010
+ *
+ * 
+ * 
+ * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
-#include "estado.h"
 
-#include <boost/timer.hpp>
+#ifndef _CANCION_H_
+#define _CANCION_H_
+
 #include <boost/shared_ptr.hpp>
-#include "foreach.h"
-
+#include "global.h"
 
 #include <vector>
+#include <string>
 
 using namespace std;
 
 #include "nota.h"
+#include "claseTimer.h"
+#include "elementosInterfaz.h"
+
+#include "controlSonido.h"
+#include "analizador.h"
 
 class Juego;
 
-class myTimer{
-    unsigned long inicial;
-public:
-    myTimer(){
-	restart();
-    }
+class Cancion{
+    ControlSonido controlSonido;
+    Analizador analizador;
 
-    void restart(){
-	inicial = Gosu::milliseconds();
-    }
-
-    unsigned long elapsed(){
-	return Gosu::milliseconds() - inicial;
-    }
-    
-};
-
-
-class EstadoCancion : public Estado{
     int bpm;
 
     float milisegundosPorPulso;
@@ -55,17 +69,33 @@ class EstadoCancion : public Estado{
 
     vector<boost::shared_ptr<Nota> > conjNotas;
 
-    boost::scoped_ptr<Gosu::Image> imagenPartitura;
+//    boost::scoped_ptr<Gosu::Image> imagenPartitura;
+
+    Gosu::Graphics & g;
+    
+    string ruta;
+
+    enum {e1, e2, e3};
+
+    int estadoActual;
+
+    boost::scoped_ptr<ElementoImagen> imagenPartitura;
+    boost::scoped_ptr<ElementoImagen> barraProgresoFondo;
+    boost::scoped_ptr<Gosu::Image> barraProgreso;
+    boost::scoped_ptr<ElementoCombinado> barraSuperior;
+    boost::scoped_ptr<ElementoCombinado> barraInferior;
+
+    void parsear();
 
 public:
-    EstadoCancion(Juego * p);
+    Cancion(Gosu::Graphics & g, string ruta);
 
     void lanzar();
     void update();
     void draw();
     void buttonDown(Gosu::Button boton);
     
-    ~EstadoCancion();
+    ~Cancion();
 };
 
-#endif /* _ESTADOCANCION_H_ */
+#endif /* _CANCION_H_ */

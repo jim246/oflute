@@ -6,7 +6,7 @@
 #include "estadoMenu.h"
 #include "estadoAnalizador.h"
 #include "estadoLecciones.h"
-#include "estadoCancion.h"
+#include "estadoMenuCanciones.h"
 
 #include "log.h"
 
@@ -83,7 +83,7 @@ void Juego::cambiarEstado(std::string destino){
     }
 
     else if(destino == "estadoCancion"){
-	estadoActual.reset(new EstadoCancion(this));
+	estadoActual.reset(new EstadoMenuCanciones(this));
 	estadoActual -> lanzar();
     }
 	
