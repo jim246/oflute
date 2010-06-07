@@ -30,6 +30,9 @@ void ElementoCombinado::setTexto (tConfTexto t, int x, int y)
 
 }
 
+void ElementoCombinado::setText(string s){
+    texto -> setText(s);
+}
 void ElementoCombinado::setTextoXY (int x, int y)
 {
     textoX = x;

@@ -264,6 +264,7 @@ public:
     void setTexto (tConfTexto t, int x, int y);
     void setTextoXY (int x, int y);
     void setImagen (string ruta);
+    void setText(string s);
     void drawEnd (int x, int y, double z, int a);
     int getWidth ();
     int getHeight ();

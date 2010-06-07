@@ -27,17 +27,15 @@
 #ifndef _JUEGO_H_
 #define _JUEGO_H_
 
-#include "Gosu/Gosu.hpp"
+#include <Gosu/Gosu.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <string>
 
 #include "animacion.h"
 
-#define ANCHO 800
-#define ALTO 600
-#define FULLSCREEN false
-#define REFRESCO 20
+#include "global.h"
+
 
 class Estado;
 

@@ -1,5 +1,5 @@
 #include "estadoCancion.h"
-#include "juego.h"
+
 #include "log.h"
 
 #include <pugixml.hpp>
@@ -10,23 +10,65 @@
 
 
 
-EstadoCancion::EstadoCancion(Juego * p)
-    : Estado(p){
+Cancion::Cancion(Gosu::Graphics & g, string ruta) : g(g), ruta(ruta) {
     
     lanzado = false;
-    lDEBUG << Log::CON("EstadoCanción");
+    lDEBUG << Log::CON("EstadoCanción") << " (" << ruta << ")";
+    estadoActual = e1;
 }
 
-void EstadoCancion::lanzar(){
+void Cancion::lanzar(){
     distanciaPulso = 90;
+    margenIzquierdo = 100;
+    esperaInicial = 3; // 3 tiempos
+
+    barraProgresoFondo.reset( new ElementoImagen(g, "media/cancionesBarraProgreso.png",
+						 3, Animacion::tAlpha));
+    barraProgresoFondo -> animacion = new Animacion(1, 20, Animacion::tEaseOutQuad, 30);
+    barraProgresoFondo -> animacion -> set(0,0,255);
+    barraProgresoFondo -> setXY(180, 560);
+
+    barraProgreso.reset(new Gosu::Image(g, L"media/cancionesBarraRelleno.png"));
+
+    imagenPartitura.reset( new ElementoImagen(g, "media/partitura.png", 3, Animacion::tAlpha));
+    imagenPartitura -> animacion = new Animacion(1, 20, Animacion::tEaseOutQuad, 20);
+    imagenPartitura -> animacion -> set (0, 0, 255);
+    imagenPartitura -> setXY(0, 200);
+
+
+    barraSuperior.reset(new ElementoCombinado(g, Animacion::tPos, 3));
+    barraSuperior -> setImagen("media/cancionesTopBar.png");
+    barraSuperior -> setTexto("00000", "media/fNormal.ttf",
+			      49, 0xffffffff,
+			      Texto::alignCentro,
+			      true, 33,
+			      0, 0);
+    
+    barraSuperior -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 0);
+    barraSuperior -> animacion -> set(0,0,0);
+    barraSuperior -> animacion -> set(1, -139, 0);
+
+
+    barraInferior.reset(new ElementoCombinado(g, Animacion::tPos, 3));
+    barraInferior -> setImagen("media/cancionesBottomBar.png");
+    barraInferior -> setTexto("Progreso total:", "media/fNormal.ttf",
+			      32, 0xffffffff,
+			      Texto::alignIzq,
+			      true, 39,
+			      20, 90);
+
+    barraInferior -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 10);
+    barraInferior -> animacion -> set(0,0,0);
+    barraInferior -> animacion -> set(1, 600, 461); //*/
+
+    parsear ();
+}
+void Cancion::parsear(){
     pugi::xml_document documento;
     pugi::xml_parse_result resultado;
     pugi::xml_node nodoActual, nodoVacio;
 
-    imagenPartitura.reset( new Gosu::Image(padre -> graphics(),
-					   L"media/partitura.png"));
-
-    resultado = documento.load_file("song1.xml");
+    resultado = documento.load_file(ruta.c_str());
     if(!resultado){
 	lERROR << "ERROR";
     }
@@ -75,23 +117,47 @@ void EstadoCancion::lanzar(){
 	   << distanciaPulso * bpm << " píxeles por minuto, ó " 
 	   << distanciaPulso * bpm / 60. << " píxeles por segundo.";
 
-    margenIzquierdo = 100;
-
-    esperaInicial = 3; // 3 tiempos
     
-    conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(padre -> graphics(), Do5, Negra, 2)));
-    
-    
+    conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(g, Do5, Negra, 2)));
 }
 
-void EstadoCancion::update(){
+void Cancion::update(){
+    if(estadoActual == e1){
+	if(barraSuperior -> animacion -> finished() &&
+	   barraInferior -> animacion -> finished() &&
+	   imagenPartitura -> animacion -> finished() &&
+	   barraProgresoFondo -> animacion -> finished() )
+	{
+	    lDEBUG << "Animaciones de interfaz terminadas.";
+	    estadoActual = e2;
 
+	    if (!controlSonido . configurarFlujo(analizador)){
+		lERROR << " No se pudo configurar el flujo.";
+	    }
+
+	    if(!controlSonido . iniciarFlujo()){
+		lERROR << " No se pudo iniciar el análisis.";
+	    }
+	}
+    }
 }
+
+
+
 bool entorno(float a, float b, float e){
     return (a >= b - e) && (a <= b + e);
 }
 
-void EstadoCancion::draw(){
+void Cancion::draw(){
+    barraSuperior -> draw();
+    barraInferior -> draw();
+    imagenPartitura -> draw();
+    barraProgresoFondo -> draw();
+
+    if(estadoActual == e2){
+	barraProgreso -> draw(184, 564, 5, 0.5, 1);
+    }
+    /*
     imagenPartitura -> draw(0, 200, 3);
     if(lanzado){
 	double transcurrido = temporizador.elapsed();
@@ -106,17 +172,21 @@ void EstadoCancion::draw(){
 		(estaNota + esperaInicial - pulsosTranscurridos) * distanciaPulso;
 
 	    N -> draw(posHorizontal, 200);
-	}//*/
-    }
+	}
+    }//*/
 }
 
-void EstadoCancion::buttonDown(Gosu::Button boton){
+void Cancion::buttonDown(Gosu::Button boton){
     if(boton == Gosu::kbP){
 	temporizador.restart();
 	lanzado = true;
     }
+
+    else if(boton == Gosu::kbEscape){
+	controlSonido . detenerFlujo();
+    }
 }
 
-EstadoCancion::~EstadoCancion(){
+Cancion::~Cancion(){
     lDEBUG << Log::DES("EstadoCanción");
 }
