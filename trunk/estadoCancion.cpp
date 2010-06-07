@@ -23,12 +23,43 @@ void EstadoCancion::lanzar(){
     pugi::xml_parse_result resultado;
     pugi::xml_node nodoActual, nodoVacio;
 
+    imagenPartitura.reset( new Gosu::Image(padre -> graphics(),
+					   L"media/partitura.png"));
+
     resultado = documento.load_file("song1.xml");
     if(!resultado){
 	lERROR << "ERROR";
     }
 
     bpm = boost::lexical_cast<int>(documento.child("Song").child("BPM").first_child().value());
+
+    string cadenaNotas = documento.child("Song").child("Notes").first_child().value();
+
+    // Expresión regular para cazar las notas
+    boost::regex myRegExp("(do|re|mi|fa|sol|la|si)(5|6)(r|b|n|c)");
+
+    // Iterador de regexp para iterar por las diferentes notas captadas
+    boost::sregex_iterator myIt(cadenaNotas.begin(), cadenaNotas.end(), myRegExp), itEnd;
+
+    for(;myIt != itEnd; myIt++){
+	string figura = (*myIt)[3];
+	string alturaRead = string((*myIt)[1]) + string((*myIt)[2]);
+
+	t_altura alturaLocal = Do5;
+
+	if(alturaRead == "do5") alturaLocal = Do5;
+	else if(alturaRead == "re5") alturaLocal = Re5;
+	else if(alturaRead == "mi5") alturaLocal = Mi5;
+	else if(alturaRead == "fa5") alturaLocal = Fa5;
+	else if(alturaRead == "sol5") alturaLocal = Sol5;
+	else if(alturaRead == "la5") alturaLocal = La5;
+	else if(alturaRead == "si5") alturaLocal = Si5;
+	else if(alturaRead == "do6") alturaLocal = Do6;
+	else if(alturaRead == "re6") alturaLocal = Re6;
+
+    }
+
+
     lDEBUG << "BPM: " << bpm;
     milisegundosPorPulso = 1 / (bpm / 60.) * 1000;
     lDEBUG << "El espacio entre pulsos es " << milisegundosPorPulso << " ms";
@@ -48,7 +79,7 @@ void EstadoCancion::lanzar(){
 
     esperaInicial = 3; // 3 tiempos
     
-    conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(padre -> graphics(), 2)));
+    conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(padre -> graphics(), Do5, Negra, 2)));
     
     
 }
@@ -61,16 +92,13 @@ bool entorno(float a, float b, float e){
 }
 
 void EstadoCancion::draw(){
+    imagenPartitura -> draw(0, 200, 3);
     if(lanzado){
 	double transcurrido = temporizador.elapsed();
 	double pulsosTranscurridos = transcurrido / milisegundosPorPulso;
 
 	//lDEBUG << transcurrido << " ms, " << transcurrido / milisegundosPorPulso << " pulsos";
 	float estaNota, posHorizontal;
-	(conjNotas[0]) ->  draw(margenIzquierdo, 300);
-	(conjNotas[0]) ->  draw(margenIzquierdo + distanciaPulso, 300);
-	(conjNotas[0]) ->  draw(margenIzquierdo + distanciaPulso * 2, 300);
-
 	foreach(boost::shared_ptr<Nota>& N, conjNotas){
 	    estaNota = N -> tiemposDelante;
 	    

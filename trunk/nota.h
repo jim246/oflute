@@ -4,13 +4,20 @@
 #include <Gosu/Gosu.hpp>
 
 #include <boost/shared_ptr.hpp>
+#include "global.h"
 
 class Nota{
 public:
     /// Imagen 
     boost::shared_ptr<Gosu::Image> imagen;
 
-    Nota(Gosu::Graphics & g, float tiempos) : tiemposDelante(tiempos){
+    t_altura altura;
+
+    t_figura figura;
+    
+
+    Nota(Gosu::Graphics & g, t_altura altura, t_figura figura, float tiempos) : 
+	altura(altura), figura(figura), tiemposDelante(tiempos){
 	imagen.reset ( new Gosu::Image (g, L"media/negra.png"));
     }
     

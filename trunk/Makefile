@@ -8,6 +8,7 @@ LDFLAGS += `gosu/bin/gosu-config --libs --cxxflags`
 LDLIBS += gosu/lib/libgosu.a -lportaudiocpp 
 LDLIBS += -lSDL_ttf
 LDLIBS += -lboost_filesystem
+LDLIBS += -lboost_regex
 LDLIBS += pugixml/pugixml.a
 
 OBJECTS += main.o juego.o estado.o estadoImagenFija.o
@@ -46,7 +47,7 @@ elementosInterfaz_imagen.o: elementosInterfaz.h
 elementosInterfaz_texto.o: elementosInterfaz.h
 elementosInterfaz_combinado.o: elementosInterfaz.h
 
-estadoCancion.o: estadoCancion.h estado.h juego.h
+estadoCancion.o: estadoCancion.h estado.h juego.h nota.h
 
 .cpp.o:
 	$(CC) $(CXXFLAGS) -c $< -o $@

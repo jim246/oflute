@@ -148,7 +148,7 @@ int Analizador::funcionCallback(const void * inputBuffer,
 
 	//outputLog << maxPos << std::endl;
 
-	miBuffer -> silencio = ((maxValue[0] < 1e+18)?true:false);
+	miBuffer -> silencio = ((maxValue[0] < 1e+20 )?true:false);
     } //*/
 
     return paContinue;
@@ -173,6 +173,9 @@ t_altura Analizador::asociarNota(double frecuencia){
 
 t_altura Analizador::notaActual(){
 //    cout << "Analizador::notaActual" << endl;
+    if(miBuffer -> silencio)
+	return Silencio;
+
     return asociarNota(miBuffer -> mayores[0]);
 }
 
