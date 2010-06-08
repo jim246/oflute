@@ -104,13 +104,13 @@ public:
 	) : graphics(graphics), color(color), texto(texto), lastX(0), lastY(0), sombra(sombra) {
 
 	// El tamaño máximo de un botón, por ahora, es de 51 píxeles
-	if(altura > 51) altura = 51;
+//	if(altura > 51) altura = 51;
 
 	// El tamaño del texto será dos tercios la altura del botón
-	tamanyo = 2 * altura / 3;
+	tamanyo = 2 * 51 / 3;
 
 	// El 1/3 de espacio que sobra se reparte arriba y abajo, por lo que el margen superior será un sexto (y pico ;) )
-	margenSup = altura / 6 - 2;
+	margenSup = 51 / 6 - 2;
 
 	fuente.reset(new customFont(graphics, L"media/fNormal.ttf", tamanyo));
 	if(sombra) fuenteSombra.reset(new customFont(graphics, L"media/fNormal.ttf", tamanyo));
