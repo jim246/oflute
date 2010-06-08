@@ -53,11 +53,12 @@ class lectorConfiguracion{
 
 public:
     lectorConfiguracion(){
-//	try{
+	try{
 	    read_ini("config.ini", arbol);
-	    limiteSonido = arbol.get<float>("sonido.limite", 1e+17);
+	    limiteSonido = arbol.get<float>("sonido.limite");
 
-/*	}catch(boost::property_tree::ini_parser::ini_parser_error & E){
+	}catch(boost::property_tree::ini_parser::ini_parser_error & E){
+	    lERROR << "Error al intentar abrir o leer 'config.ini'";
 	    limiteSonido = 1e+17;
 	} //*/
 
