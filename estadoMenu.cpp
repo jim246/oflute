@@ -48,11 +48,12 @@ void EstadoMenu::lanzar(){
     animLogotipo -> set(0, 0, 255);
 
     // Inicializamos los botones del menú
-    btnUca.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/btnUca.png"));//*/
+    // btnUca.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/btnUca.png"));//*/
     btn1.reset(new BotonMenu(padre -> graphics(), "Analizador de notas", Gosu::Color(255,3,69,90)));
-    btn2.reset(new BotonMenu(padre -> graphics(), "Canciones(Inactivo)", Gosu::Color(255,34,139,114)));
+    btn2.reset(new BotonMenu(padre -> graphics(), "Canciones", Gosu::Color(255,34,139,114)));
     btn3.reset(new BotonMenu(padre -> graphics(), "Lecciones", Gosu::Color(255,188,216,56)));
-    btn4.reset(new BotonMenu(padre -> graphics(), "Salir", Gosu::Color(255,245,215,19)));
+    btn4.reset(new BotonMenu(padre -> graphics(), "Calibrar micrófono", Gosu::Color(255,245,215,19)));
+    btn5.reset(new BotonMenu(padre -> graphics(), "Salir", Gosu::Color(255,250,115,0), 95));
 }
 
 void EstadoMenu::update(){
@@ -114,7 +115,8 @@ void EstadoMenu::update(){
 	   animaciones[4] -> finished() &&
 	   animaciones[5] -> finished() &&
 	   animLogoCusl -> finished() &&
-	   animLogotipo -> finished() ){
+	   animLogotipo -> finished() )
+	{
 	    estadoAnim = eANIMEND;
 	    lDEBUG << "** Los botones se escondieron." ;
 	}
@@ -135,7 +137,7 @@ void EstadoMenu::draw(){
     btn2 -> draw(0, animaciones[1] -> get(0), 3);
     btn3 -> draw(0, animaciones[2] -> get(0), 4);
     btn4 -> draw(0, animaciones[3] -> get(0), 5);
-    btnUca -> draw(0, animaciones[4] -> get(0), 6);
+    btn5 -> draw(0, animaciones[4] -> get(0), 6);
     barraRoja -> draw(0, animaciones[5] -> get(0), 7);
 
     animLogoCusl -> update();
@@ -198,7 +200,7 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 	    estadoAnim = eBOTONESOUT;
 	}
 
-	else if(btn4 -> clicked(x,y)){
+	else if(btn5 -> clicked(x,y)){
 	    estadoDestino = "salir";
 	    estadoAnim = eBOTONESOUT;
 	}
