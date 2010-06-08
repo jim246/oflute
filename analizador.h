@@ -54,7 +54,7 @@ public:
     int pos;
     float in[4096];
     float out[2048];
-
+    float lastVolume;
     float mayores[5];
     bool silencio;
 };
@@ -79,6 +79,7 @@ class Analizador{
     bool iniciado;
 
     float int_to_hz, hz_to_int;
+    lectorConfiguracion L;
 
 public:
 
@@ -87,6 +88,7 @@ public:
     Analizador();
 
     t_altura notaActual();
+    float volumenActual();
 
     int funcionCallback(const void * inB, 
 			void * outB, 

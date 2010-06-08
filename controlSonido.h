@@ -39,6 +39,8 @@ public:
     bool configurarFlujo(Analizador& analizador);
     bool iniciarFlujo();
     bool detenerFlujo();
+
+    ~ControlSonido();
 };
 
 #endif /* _CONTROLSONIDO_H_ */

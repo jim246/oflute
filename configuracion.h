@@ -31,6 +31,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
+#include "log.h"
 
 #include <iostream>
 using namespace std;
@@ -47,14 +48,30 @@ using namespace std;
 
 
 class lectorConfiguracion{
+    float limiteSonido;
+    boost::property_tree::ptree arbol;
+
 public:
     lectorConfiguracion(){
-	boost::property_tree::ptree arbol;
+//	try{
+	    read_ini("config.ini", arbol);
+	    limiteSonido = arbol.get<float>("sonido.limite", 1e+17);
 
-	read_ini("config.ini", arbol);
-	float lim = arbol.get<float>("sonido.limite");
+/*	}catch(boost::property_tree::ini_parser::ini_parser_error & E){
+	    limiteSonido = 1e+17;
+	} //*/
 
-	cout << "Límite: " << lim << endl;
+	lDEBUG << "Configuración leída. Sonido.límite: " << limiteSonido; 
+    }
+
+    float sonidoLimite(){
+	return limiteSonido;
+    }
+
+    void setSonidoLimite(float s){
+	limiteSonido = s;
+	arbol.put<float>("sonido.limite", s);
+	write_ini("config.ini", arbol);
     }
 
 };
