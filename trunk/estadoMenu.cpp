@@ -200,6 +200,11 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 	    estadoAnim = eBOTONESOUT;
 	}
 
+	else if(btn4 -> clicked(x,y)){
+	    estadoDestino = "estadoCalibrar";
+	    estadoAnim = eBOTONESOUT;
+	}
+
 	else if(btn5 -> clicked(x,y)){
 	    estadoDestino = "salir";
 	    estadoAnim = eBOTONESOUT;

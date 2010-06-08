@@ -7,6 +7,7 @@
 #include "estadoAnalizador.h"
 #include "estadoLecciones.h"
 #include "estadoMenuCanciones.h"
+#include "estadoCalibrarMicro.h"
 
 #include "log.h"
 
@@ -85,6 +86,10 @@ void Juego::cambiarEstado(std::string destino){
     else if(destino == "estadoCancion"){
 	estadoActual.reset(new EstadoMenuCanciones(this));
 	estadoActual -> lanzar();
+    }
+
+    else if(destino == "estadoCalibrar"){
+	estadoActual.reset(new EstadoCalibrarMicro(this));
     }
 	
     else if(destino == "salir"){

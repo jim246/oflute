@@ -19,8 +19,6 @@ Analizador::Analizador() : iniciado(false){
     cout << "+++ [Constructor] Analizador" << endl;
     miBuffer = new tipoBuffer;
 
-    lectorConfiguracion P;
-
     notas[523.25] = Do5;
     notas[592.163] = Re5;
     notas[656.763] = Mi5;
@@ -147,8 +145,8 @@ int Analizador::funcionCallback(const void * inputBuffer,
 
 
 	//outputLog << maxPos << std::endl;
-
-	miBuffer -> silencio = ((maxValue[0] < 1e+20 )?true:false);
+	miBuffer -> lastVolume = maxValue[0];
+	miBuffer -> silencio = ((maxValue[0] < L.sonidoLimite() )?true:false);
     } //*/
 
     return paContinue;
@@ -179,6 +177,9 @@ t_altura Analizador::notaActual(){
     return asociarNota(miBuffer -> mayores[0]);
 }
 
+float Analizador::volumenActual(){
+    return miBuffer -> lastVolume;
+}
 
 Analizador::~Analizador(){
     delete miBuffer;
