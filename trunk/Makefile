@@ -26,8 +26,15 @@ EXE=programa
 all: $(OBJECTS)
 	cd pugixml; $(MAKE)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(EXE) $(LDLIBS)
+
 libgosu:
 	cd gosu/linux ; make clean ; ./configure && make
+
+regosu:
+	cd gosu/linux ; make
+
+prueba: pruebaFuentes.cpp
+	g++ -o programa pruebaFuentes.cpp `gosu/bin/gosu-config --libs --cxxflags` -Igosu gosu/lib/libgosu.a
 
 
 analizador.o: analizador.h configuracion.h

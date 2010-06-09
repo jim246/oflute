@@ -36,6 +36,9 @@ void Texto::poblarVectores(){
     fuentesSombra.clear();
     int n = dividirTexto();
 
+    fuente.reset(new Gosu::Font(graphics, Gosu::widen(rutaFuente), tam));
+
+    /*
     for (int i = 0; i < n; ++i)
     {
 	boost::shared_ptr<customFont> f (new customFont(graphics, Gosu::widen(rutaFuente), tam));
@@ -44,7 +47,7 @@ void Texto::poblarVectores(){
 	    f.reset(new customFont(graphics, Gosu::widen(rutaFuente), tam));
 	    fuentesSombra.push_back(f);
 	}
-    }
+    }//*/
 
     offsetShadow[0] = 1;
     offsetShadow[1] = 2;
@@ -64,7 +67,7 @@ void Texto::setText(string s){
 
 void Texto::drawAlpha(int a){
 	
-    int salto = fuentes[0] -> saltoLinea();
+    int salto = tam + 5;
     short i = 0;
 
 
@@ -78,20 +81,20 @@ void Texto::drawAlpha(int a){
 	}
 	// Alineación a la derecha
 	else if(alineacion == 3){
-	    destX = x - fuentes[i] -> textWidth(s);
+	    destX = x - fuente -> textWidth(Gosu::widen(s));
 	}
 
 	// Centrado
 	else{
-	    destX = x - fuentes[i] -> textWidth(s) / 2;
+	    destX = x - fuente -> textWidth(Gosu::widen(s)) / 2;
 	}
 
 	color.setAlpha(a);
-	fuentes[i] -> draw(s, destX, y + salto * i, z + 0.1, color);
+	fuente -> draw(Gosu::widen(s), destX, y + salto * i, z + 0.1, 1, 1, color);
 	    
 	if(sombra){
-	    fuentesSombra[i] -> draw(s, destX + offsetShadow[0], y + salto * i + offsetShadow[1],
-				     z, Gosu::Color(opacidadSombra * a / 255, 0, 0, 0));
+	    fuente -> draw(Gosu::widen(s), destX + offsetShadow[0], y + salto * i + offsetShadow[1],
+			   z, 1, 1, Gosu::Color(opacidadSombra * a / 255, 0, 0, 0));
 	}
 
 	i++;

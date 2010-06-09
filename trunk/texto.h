@@ -58,6 +58,8 @@ class Texto{
     /// Objeto que será el destino gráfico.
     Gosu::Graphics& graphics;
 
+    boost::scoped_ptr<Gosu::Font> fuente;
+
     /// Conjunto de objetos customFont para cada línea del texto.
     vector<boost::shared_ptr<customFont> > fuentes;
 

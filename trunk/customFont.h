@@ -214,7 +214,7 @@ public:
 
 	// Resize the bitmap to the surface's size
 	mapaBMP . resize(w, h);
-	
+
 	// Casting the input and output sources
 	unsigned * source = (unsigned *) textSurface -> pixels;
 	unsigned * dest = mapaBMP . data();

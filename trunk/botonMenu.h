@@ -30,6 +30,7 @@
 #include <iostream>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <Gosu/Gosu.hpp>
 
@@ -62,7 +63,7 @@ class BotonMenu{
     Gosu::Color color;
 
     /// Texto del botón.
-    std::string texto;
+    std::wstring texto;
 
     /// Tamaño del texto, por defecto 34.
     int tamanyo;
@@ -74,10 +75,11 @@ class BotonMenu{
     int margenSup;
 
     /// Fuentes del texto.
-    boost::scoped_ptr<customFont> fuente;
+    //boost::scoped_ptr<customFont> fuente;
+    boost::scoped_ptr<Gosu::Font> fuente;
     
     /// Fuente de la sombra.
-    boost::scoped_ptr<customFont>fuenteSombra;
+    //boost::scoped_ptr<customFont>fuenteSombra;
 
     /// Imagen del fondo.
     boost::scoped_ptr<Gosu::Image> imagen;
@@ -101,7 +103,7 @@ public:
 	       Gosu::Color color,
 	       int altura = 51,
 	       bool sombra = true
-	) : graphics(graphics), color(color), texto(texto), lastX(0), lastY(0), sombra(sombra) {
+	) : graphics(graphics), color(color), texto(Gosu::widen(texto)), lastX(0), lastY(0), sombra(sombra) {
 
 	// El tamaño máximo de un botón, por ahora, es de 51 píxeles
 //	if(altura > 51) altura = 51;
@@ -112,8 +114,8 @@ public:
 	// El 1/3 de espacio que sobra se reparte arriba y abajo, por lo que el margen superior será un sexto (y pico ;) )
 	margenSup = 51 / 6 - 2;
 
-	fuente.reset(new customFont(graphics, L"media/fNormal.ttf", tamanyo));
-	if(sombra) fuenteSombra.reset(new customFont(graphics, L"media/fNormal.ttf", tamanyo));
+	fuente.reset(new Gosu::Font(graphics, L"media/fNormal.ttf", tamanyo));
+	//if(sombra) fuenteSombra.reset(new customFont(graphics, L"media/fNormal.ttf", tamanyo));
 	imagen.reset(new Gosu::Image(graphics, L"media/btnTemplate.png", 0, 0, 800, altura));
 
 	lDEBUG << Log::CON("BotonMenu");	    
@@ -129,12 +131,16 @@ public:
 	imagen -> draw(x, y, z, 1, 1, color);
 
 	int ancho = fuente -> textWidth(texto);
+	int posHorizontal = 800/2 - ancho/2;
+	int posVertical = y + margenSup;
 
-	fuente -> draw(texto, 800/2 - ancho/2, y+margenSup, z + 0.1, Gosu::Color(255,255,255,255));
+	fuente -> draw(texto, 800/2 - ancho/2, y + margenSup, 
+		       z + 0.1, 1, 1, Gosu::Color(255,255,255,255));
+
 
 	if(sombra){
 	    int offsetShadow[] = {1,2};
-	    fuenteSombra -> draw(texto, 800/2 - ancho/2 + offsetShadow[0], y+margenSup + offsetShadow[1], z, Gosu::Color(80,0,0,0));
+	    fuente -> draw(texto, posHorizontal + offsetShadow[0], posVertical + offsetShadow[1], z, 1, 1, Gosu::Color(80,0,0,0));
 	}
     }
     
