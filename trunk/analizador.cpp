@@ -11,7 +11,7 @@
 #include <algorithm>
  
 #include "configuracion.h"
-
+#include "log.h"
 
 using namespace std;
 
@@ -140,6 +140,7 @@ int Analizador::funcionCallback(const void * inputBuffer,
 		  << std::setw(12) << miBuffer -> mayores[1]  
 		  << std::setw(12) << miBuffer -> mayores[2]  
 		  << std::setw(12) << maxValue[0]
+		  << std::setw(12) << L.sonidoLimite()
 		  << std::flush;	//
 
 
