@@ -69,15 +69,21 @@ class Cancion{
 
     vector<boost::shared_ptr<Nota> > conjNotas;
 
+    t_altura notaLeida;
+
 //    boost::scoped_ptr<Gosu::Image> imagenPartitura;
 
     Gosu::Graphics & g;
     
     string ruta;
 
+    int px;
+
     enum {e1, e2, e3};
 
     int estadoActual;
+
+    boost::scoped_ptr<Gosu::Image> resalteNotaActual;
 
     boost::scoped_ptr<ElementoImagen> imagenPartitura;
     boost::scoped_ptr<ElementoImagen> barraProgresoFondo;

@@ -22,7 +22,7 @@
 #ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
-enum t_altura { Do5, Re5, Mi5, Fa5, Sol5, La5, Si5, Do6, Re6, Silencio };
+enum t_altura { Silencio, Do5, Re5, Mi5, Fa5, Sol5, La5, Si5, Do6, Re6 };
 enum t_figura { Redonda, Blanca, Negra, Corchea };
 
 float durfig(t_figura t);
