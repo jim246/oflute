@@ -151,7 +151,7 @@ void EstadoMenu::draw(){
 void EstadoMenu::buttonDown(Gosu::Button boton){
     if(!lanzado) 
 	return;
-
+    
 
     if(boton == Gosu::kbEscape){
 	lDEBUG << "Escape pulsado " << VARV(estadoAnim);
@@ -181,38 +181,34 @@ void EstadoMenu::buttonDown(Gosu::Button boton){
 	}
     }
 
-    if(boton == Gosu::msLeft){
-	int x = padre -> input().mouseX();
-	int y = padre -> input().mouseY();
+    int x = padre -> input().mouseX();
+    int y = padre -> input().mouseY();
 	
-	if(btn1 -> clicked(x,y)){
-	    estadoDestino = "estadoAnalizador";
-	    estadoAnim = eBOTONESOUT;
-	}
-
-	else if(btn2 -> clicked(x,y)){
-	    estadoDestino = "estadoCancion";
-	    estadoAnim = eBOTONESOUT;
-	}
-
-	else if(btn3 -> clicked(x,y)){
-	    estadoDestino = "estadoLecciones";
-	    estadoAnim = eBOTONESOUT;
-	}
-
-	else if(btn4 -> clicked(x,y)){
-	    estadoDestino = "estadoCalibrar";
-	    estadoAnim = eBOTONESOUT;
-	}
-
-	else if(btn5 -> clicked(x,y)){
-	    estadoDestino = "salir";
-	    estadoAnim = eBOTONESOUT;
-	}
-
-	
-	lDEBUG << "*** LMB @ (" << x << "," << y << ")" ;
+    if((btn1 -> clicked(x,y) && (boton == Gosu::msLeft)) || ((boton == Gosu::kb1) || (boton == Gosu::kbNumpad1))){
+	estadoDestino = "estadoAnalizador";
+	estadoAnim = eBOTONESOUT;
     }
+    
+    else if((btn2 -> clicked(x,y) && (boton == Gosu::msLeft)) || ((boton == Gosu::kb2) || (boton == Gosu::kbNumpad2))){
+	estadoDestino = "estadoCancion";
+	estadoAnim = eBOTONESOUT;
+    }
+    
+    else if((btn3 -> clicked(x,y) && (boton == Gosu::msLeft)) || ((boton == Gosu::kb3) || (boton == Gosu::kbNumpad3))){
+	estadoDestino = "estadoLecciones";
+	estadoAnim = eBOTONESOUT;
+    }
+    
+    else if((btn4 -> clicked(x,y) && (boton == Gosu::msLeft)) || ((boton == Gosu::kb4) || (boton == Gosu::kbNumpad4))){
+	estadoDestino = "estadoCalibrar";
+	estadoAnim = eBOTONESOUT;
+    }
+    
+    else if((btn5 -> clicked(x,y) && (boton == Gosu::msLeft)) || ((boton == Gosu::kb5) || (boton == Gosu::kbNumpad5))){
+	estadoDestino = "salir";
+	estadoAnim = eBOTONESOUT;
+    }
+
 }
 
 EstadoMenu::~EstadoMenu(){
