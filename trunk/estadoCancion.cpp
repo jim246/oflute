@@ -165,7 +165,7 @@ void Cancion::draw(){
 	barraProgreso -> draw(184, 564, 5, 0.5, 1);
 	
 	if(notaLeida != Silencio){
-	    resalteNotaActual -> draw(0, 260+(9-notaLeida)*20, 5);
+	    resalteNotaActual -> draw(0, 259+(9-notaLeida)*18.5, 5);
 	}
     }
     /*
