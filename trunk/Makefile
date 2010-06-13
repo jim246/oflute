@@ -58,7 +58,7 @@ elementosInterfaz_combinado.o: elementosInterfaz.h
 estadoMenuCanciones.o: estadoMenuCanciones.h estado.h juego.h estadoCancion.h
 estadoCancion.o: estadoCancion.h estado.h juego.h nota.h claseTimer.h
 global.o: global.h
-estadoCalibrarMicro.o: estadoCalibrarMicro.h estado.h elementosInterfaz.h log.h juego.h
+estadoCalibrarMicro.o: estadoCalibrarMicro.h estado.h elementosInterfaz.h log.h juego.h configuracion.h
 
 .cpp.o:
 	$(CC) $(CXXFLAGS) -c $< -o $@

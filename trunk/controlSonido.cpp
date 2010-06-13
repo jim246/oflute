@@ -50,7 +50,7 @@ bool ControlSonido::configurarFlujo(Analizador& analizador){
 	256,
 	paClipOff);
 
-    //cout << "*** [Analizador] isSupported(): " << (int)parametros.isSupported() << endl;
+    lDEBUG << "*** [Analizador] isSupported(): " << (int)parametros.isSupported();
 
     flujo.open(parametros, analizador, &Analizador::funcionCallback);
 

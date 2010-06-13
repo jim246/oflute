@@ -22,6 +22,8 @@ void Cancion::lanzar(){
     margenIzquierdo = 100;
     esperaInicial = 3; // 3 tiempos
 
+    resalteNotaActual.reset( new Gosu::Image(g, L"media/cancionesIndicadorNota.png"));
+
     barraProgresoFondo.reset( new ElementoImagen(g, "media/cancionesBarraProgreso.png",
 						 3, Animacion::tAlpha));
     barraProgresoFondo -> animacion = new Animacion(1, 20, Animacion::tEaseOutQuad, 30);
@@ -119,6 +121,7 @@ void Cancion::parsear(){
 
     
     conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(g, Do5, Negra, 2)));
+    px=0;
 }
 
 void Cancion::update(){
@@ -139,7 +142,11 @@ void Cancion::update(){
 		lERROR << " No se pudo iniciar el análisis.";
 	    }
 	}
+    }else if (estadoActual == e2){
+	notaLeida = analizador . notaActual();
     }
+
+    
 }
 
 
@@ -156,6 +163,10 @@ void Cancion::draw(){
 
     if(estadoActual == e2){
 	barraProgreso -> draw(184, 564, 5, 0.5, 1);
+	
+	if(notaLeida != Silencio){
+	    resalteNotaActual -> draw(0, 260+(9-notaLeida)*20, 5);
+	}
     }
     /*
     imagenPartitura -> draw(0, 200, 3);
@@ -184,6 +195,11 @@ void Cancion::buttonDown(Gosu::Button boton){
 
     else if(boton == Gosu::kbEscape){
 	controlSonido . detenerFlujo();
+    }
+
+    else if(boton == Gosu::kbDown){
+	px ++;
+	lDEBUG << VARV(px);
     }
 }
 

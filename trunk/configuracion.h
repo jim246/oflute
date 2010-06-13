@@ -59,7 +59,7 @@ public:
 
 	}catch(boost::property_tree::ini_parser::ini_parser_error & E){
 	    lERROR << "Error al intentar abrir o leer 'config.ini'";
-	    limiteSonido = 1e+17;
+	    limiteSonido = 1e+18;
 	} //*/
 
 	lDEBUG << "Configuración leída. Sonido.límite: " << limiteSonido; 
@@ -70,6 +70,7 @@ public:
     }
 
     void setSonidoLimite(float s){
+	s *= 100;
 	limiteSonido = s;
 	arbol.put<float>("sonido.limite", s);
 	write_ini("config.ini", arbol);
