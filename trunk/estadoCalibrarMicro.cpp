@@ -70,16 +70,6 @@ void EstadoCalibrarMicro::buttonDown(Gosu::Button boton){
 
 	    analizador.iniciar();
 
-	    /*
-	    if (!controlSonido . configurarFlujo(analizador)){
-		lERROR << " No se pudo configurar el flujo.";
-	    }
-
-	    if(!controlSonido . iniciarFlujo()){
-		lERROR << " No se pudo iniciar el análisis.";
-	    }
-	    //*/
-
 	    crono.restart();
 	    estadoCaptura = 1;
 	}

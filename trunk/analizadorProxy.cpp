@@ -1,8 +1,10 @@
 #include "analizadorProxy.h"
-#include "FFT.h"
+
+#include "kissfft/tools/kiss_fftr.h"
 
 #include <iomanip>
 #include <fstream>
+#include <cmath>
 
 #define BUFSIZE 4096
 
@@ -126,16 +128,28 @@ void AnalizadorProxy::operator()(){
 	 << "Sample size: " << pa_sample_size(&ss) << endl
 	 << "Formato intermedio: " << sizeof(int16_t) << endl
 	 << "Convers: " << sizeof(int) << endl;
-
+    
+    /*
     fstream F;
     F.open("test", fstream::in | fstream::out);
     cout << "Failed? " << F.fail() << endl;
+    //*/
+
+    float magnitude;
+
+    int limInf = 450 * hz_to_int;
+    int limSup = 1500 * hz_to_int;
+    
+    cout << "limInf: " << limInf << endl
+	 << "limSup: " << limSup << endl;
+
+    kiss_fftr_cfg configFFT = kiss_fftr_alloc(BUFSIZE, 0, NULL, NULL);
 
     for(;;){
 	if(iniciado){
 	    int16_t buf[BUFSIZE];
 	    float in[BUFSIZE];
-	    float out[BUFSIZE / 2];
+	    kiss_fft_cpx out[BUFSIZE / 2 + 1];
 
 	    float maxValue[] = {0,0,0};
 	    float maxPos[] = {0,0,0};
@@ -147,32 +161,25 @@ void AnalizadorProxy::operator()(){
 	    // Dump al fichero y al vector de flotantes
 	    for (int i = 0; i < BUFSIZE; ++i)
 	    {
-		in[i] = (int)buf[i];
+		in[i] = (float)buf[i];
 		//F << (int)buf[i] << endl;
 		//F << in[i] << endl;
 	    }
 
 #if 1
-	    WindowFunc(3, BUFSIZE,  in);
-	    PowerSpectrum(BUFSIZE,  in,  out);
+	    kiss_fftr(configFFT, in, out);
 	    
-	    for(int i = 450 * hz_to_int; i < BUFSIZE / 2; ++i){
+	    for(int i = limInf; i <= limSup; ++i){
 		for (int j = 0; j < 3; j++)
 		{
-		    if( out[i] > maxValue[j]){
-			maxValue[j] =  out[i];
+		    magnitude = std::sqrt(std::pow(out[i].r,2) + std::pow(out[i].i, 2));
+		    if( magnitude > maxValue[j]){
+			maxValue[j] =  magnitude;
 			maxPos[j] = i;
 			break;
 		    }
 		}                   
-		
-		// Hemos seleccionado como límite superior 1500Hz
-		// 22050 => 2048
-		// x     => i
-		// x = i * 22050 / 2048 = i * 10.766
-
-		if(i * int_to_hz > 1500) break;
-	    } //*/
+	    } 
 	    
 
 	    miBuffer -> lastVolume = maxValue[0];
@@ -183,7 +190,7 @@ void AnalizadorProxy::operator()(){
 
 	    int ancho = 18;
 	    std::cout << '\xd' << "Datos:" 
-		      << std::setw(ancho) << miBuffer -> mayores[0] << " (" << maxPos[0] << ") "
+		      << std::setw(ancho) << miBuffer -> mayores[0] 
 		      << std::setw(ancho) << miBuffer -> mayores[1]  
 		      << std::setw(ancho) << miBuffer -> mayores[2]  
 		      << std::setw(ancho) << maxValue[0]
@@ -206,8 +213,9 @@ void AnalizadorProxy::operator()(){
 
 	if(!iniciado && salir){
 	    return;
-	    cout << "Cerrando archivo..." << endl;
-	    F.close();
+	    
+	    // cout << "Cerrando archivo..." << endl;
+	    // F.close();
 	}
     }
 
