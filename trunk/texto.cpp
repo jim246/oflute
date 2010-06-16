@@ -32,21 +32,9 @@ Texto::Texto(Gosu::Graphics& graphics,
 }
 
 void Texto::poblarVectores(){
-    fuentes.clear();
-    fuentesSombra.clear();
+    dividirTexto();
 
     fuente.reset(new Gosu::Font(graphics, Gosu::widen(rutaFuente), tam));
-
-    /*
-    for (int i = 0; i < n; ++i)
-    {
-	boost::shared_ptr<customFont> f (new customFont(graphics, Gosu::widen(rutaFuente), tam));
-	fuentes.push_back(f);
-	if(sombra){
-	    f.reset(new customFont(graphics, Gosu::widen(rutaFuente), tam));
-	    fuentesSombra.push_back(f);
-	}
-    }//*/
 
     offsetShadow[0] = 1;
     offsetShadow[1] = 2;

@@ -1,0 +1,526 @@
+%
+% Generado automáticamente por las hojas de estilo XSLT
+% Retocado manualmente después
+%
+% Antonio García Domínguez, (C) 2008
+% nyoescape@gmail.com
+% $Id$
+%
+
+\section{Cómo abrir nuevos formatos con XMLEye}
+
+\subsection{Introducción}
+
+ XMLEye, como el nombre indica, se trata de un visor genérico de documentos XML. Pero ello no lo limita a únicamente ficheros XML: si se le proporciona la información necesaria acerca de cómo distinguir un cierto formato, y cómo convertirlo a XML, podrá abrirlo de forma transparente tal y como abre un fichero XML. 
+
+ La información referente a cómo identificar y, opcionalmente, qué hacer para convertir un formato determinado se halla en un \emph{descriptor de formato}. Este descriptor puede incluir una referencia a cualquier ejecutable que haga las veces de convertidor a un documento XML. 
+
+ En este capítulo veremos qué condiciones debe cumplir un convertidor, y cómo habría que escribir posteriormente el descriptor para integrarlo con XMLEye. En cuanto a su instalación, véase el Manual de Usuario: realmente es tan sencillo como asegurar que el convertidor esté bajo la ruta correcta y copiar el descriptor de formatos a su sitio. 
+
+\subsection{Creación de un convertidor}
+
+ Un convertidor puede ser cualquier cosa que podamos ejecutar: desde un programa en código máquina hasta guiones Perl o Python. Yo en particular prefiero usar Perl, ya que se halla mejor ajustado a la tarea de procesar texto, pero cualquier cosa sirve. 
+
+ Salvado el tema del lenguaje, las restricciones que ha de cumplir nuestro convertidor son: 
+
+\begin{enumerate}
+\item  Debe de poder aceptar a través de la línea de órdenes la ruta absoluta del fichero a convertir. 
+
+\item  Debe de ofrecer el resultado a través de la salida estándar, e imprimir errores por la salida estándar de errores. 
+
+\item  Ha de comportarse como cualquier ejecutable tipo UNIX, devolviendo el código de estado 0 en caso de éxito y distinto de cero en caso de error. 
+
+\item  Ha de poder ejecutarse desde el directorio de instalación de XMLEye. Es decir, o bien pertenece a un directorio en nuestro PATH, o se halla instalado bajo el directorio de XMLEye, o se lanza a través de otro programa, que sí cumple la condición anterior (por ejemplo, un intérprete de Python o Perl). 
+
+\end{enumerate}
+
+ Sería recomendable que además contara con su propia ayuda, en caso de aceptar más opciones, y su página \application{man}, pero no es imprescindible. 
+
+ Un ejemplo muy simple de qué podría hacerse puede extraerse del guión \command{yaml2xml} del módulo YAXML::Reverse: 
+
+\lstset{language=perl,frame=tb}
+
+\begin{lstlisting}[caption=Guión principal de \nombreyaxml{}]
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use YAXML::Reverse qw(ConvertFile);
+
+# Argument processing
+if (scalar @ARGV != 1) {
+    print "Usage: $0 [path to .yaml]\n";
+    exit 1;
+}
+my ($path) = @ARGV;
+
+# Convert the YAML file
+print ConvertFile($path);
+exit 0;
+
+\end{lstlisting}%$
+
+Como puede verse, no es más que un guión Perl normal y corriente: la
+primera línea indica con qué intérprete debería ejecutarse al intentar
+ejecutarse. Es decir, si intentamos hacer esto:
+
+\begin{alltt}
+./yaml2xml
+\end{alltt}
+
+, realmente haremos esto:
+
+\begin{alltt}
+/usr/bin/perl ./yaml2xml
+\end{alltt}
+
+ A continuación activamos las opciones habituales de comprobación de errores de Perl \emph{strict} y \emph{warnings}, e importamos la función ConvertFile del módulo YAXML::Reverse, que implementa realmente toda la funcionalidad. 
+
+ Ofreciendo esta funcionalidad separada en un módulo aparte nos aseguramos de que pueda ser reutilizada en un futuro a través de otros medios. 
+
+ A continuación procesamos los argumentos, recibiendo la ruta absoluta al fichero \filename{.yaml} que antes mencionamos, y mostrando un mensaje de uso (junto con el código de estado correspondiente) si no se ha proporcionado. 
+
+ Por último imprimimos el resultado de la conversión por la salida estándar e indicamos mediante el código de estado 0 que todo ha ido bien. 
+
+\subsection{Creación de un descriptor de formato}
+
+ Para decirle a XMLEye que acepte un nuevo formato, y que se integre con un determinado editor y convertidor, todo lo que hemos de hacer es escribir un corto fichero XML como el siguiente: 
+
+\lstset{language=xml}
+
+\begin{lstlisting}[caption=Descriptor de formato para \nombreyaxml{}]
+<?xml version="1.0" encoding="UTF-8"?>
+<format xmlns="http://xmleye.uca.es/xmleye/accepted-doc">
+  <name>Fichero YAML/JSON</name>
+  <name language="en">YAML/JSON file</name>
+  <edit_cmd>emacs  %s</edit_cmd>
+  <import_cmd>yaml2xml  %s</import_cmd>
+  <extensions>
+    <extension>yaml</extension>
+    <extension>yml</extension>
+    <extension>json</extension>
+  </extensions>
+</format>
+\end{lstlisting}
+
+Yendo línea a línea por el fichero anterior, nos vamos encontrando con
+lo siguiente:
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+\end{lstlisting}
+
+ Se trata de la declaración que todo fichero XML debiera (aunque no tiene por qué) incluir. Indica que estamos empleando la versión 1.0 del estándar: aunque también existe la versión 1.1, las diferencias no nos importan en este caso. 
+
+\begin{lstlisting}
+<format xmlns="http://xmleye.uca.es/xmleye/accepted-doc">
+...
+</format>
+\end{lstlisting}
+
+ El descriptor de documento viene representado globalmente por un elemento de nombre \varname{format} y del espacio de nombres de descriptores de formatos de XMLEye. Es importante usar el espacio de nombres correcto, ya que XMLEye validará cada descriptor durante su carga mediante un XML Schema, que tiene en cuenta dicho detalle. 
+
+\begin{lstlisting}
+<name>Fichero YAML/JSON</name>
+<name language="en">YAML/JSON file</name>
+\end{lstlisting}
+
+ Estas dos líneas indican el nombre del formato de documento que se le mostrará al usuario. Un detalle importante es el atributo \emph{language}: esto nos permite localizar la misma descripción a distintos idiomas e incluso dialectos, si así lo deseamos. El algoritmo de búsqueda es bastante sencillo: 
+
+\begin{enumerate}
+\item  Sea \varname{P} el código del país (según el estándar ISO-3166) de la localización del usuario, detectada a partir de los ajustes de su sistema operativo, y \varname{L} el código de idioma, según el estándar ISO 639. 
+
+\item  Se busca una entrada cuyo atributo \varname{language} tenga la forma 'L\_P', coincidiendo tanto el país como el lenguaje. Esto nos permite, por ejemplo, usar distintas entradas para inglés americano e inglés británico. 
+
+\item  A continuación se busca solamente por el idioma ('L'). 
+
+\item  Si aun así no hemos conseguido nada, tomaremos el nombre por defecto (aquel sin atributo \varname{language}). 
+
+\end{enumerate}
+
+\begin{lstlisting}
+<edit_cmd>emacs  %s</edit_cmd>
+<import_cmd>yaml2xml  %s</import_cmd>
+\end{lstlisting}
+
+ Éstas son las órdenes que XMLEye debe de usar para editar el fichero original (y \emph{no} el resultado de la conversión, si la hubo), y para convertir el fichero a XML. De hecho, XMLEye invocará al convertidor cada vez que considere que ha habido cambios en el fichero original, si se ha activado la opción \guimenuitem[moreinfo = none]{Actualización automática}. 
+
+\begin{lstlisting}
+<extensions>
+  <extension>yaml</extension>
+  <extension>yml</extension>
+  <extension>json</extension>
+</extensions>
+\end{lstlisting}
+
+ Por último, el elemento \varname{extensions} incluye una serie de subelementos \varname{extension} que relacionan ciertas extensiones de fichero con el formato de documento en cuestión. En otros estándares parecidos como la especificación de \varname{shared-mime-info} de Freedesktop.org (~\cite{sharedmime}) implementan también un sistema basado en el contenido del fichero, pero por simplicidad no lo he considerado. 
+
+\section{Cómo añadir nuevas visualizaciones de documentos y elementos}
+
+\subsection{Introducción}
+
+ A través de los descriptores de formatos de documentos, XMLEye puede efectivamente abrir cualquier formato para el que podamos imaginarnos una conversión a XML. Con ello ya disponemos no de un visor genérico de XML, sino de un visor genérico \emph{en} XML. 
+
+ Sin embargo, no sería tan interesante si sólo pudiéramos ver el resultado de la conversión (o el documento XML original) tal y como queda. Utilizaremos las tecnologías XPath~\cite{Clark:99:XPL} y XSLT~\cite{Clark:99:XTV} para definir nuestras \emph{hojas de usuario}: conjuntos cohesivos de hojas de estilos XSLT dedicadas a realizar una determinada transformación. XMLEye implementa algunas extensiones sobre dichas tecnologías para permitir su localización y especialización. 
+
+Por ejemplo, es posible que queramos poner icono o una etiqueta amigable a algunos nodos, ocultar otros, añadir nuevos nodos, o simplemente reorganizarlos. Éstas son las tareas de cualquier \emph{hoja de usuario de preprocesado}. 
+
+ Incluso así, seguimos teniendo un árbol XML normal y corriente. ¿Y si quisiéramos ver en detalle toda la información concerniente a un nodo determinado, con hipervínculos a todo aquello que nos pueda ser de interés? Ahí es donde entran en juego las \emph{hojas de usuario de visualización}, que crean esos resúmenes en formato XHTML para cada nodo del árbol seleccionado por el usuario, una vez preprocesado. 
+
+ En cuanto a posibles problemas de rendimiento: las hojas son compiladas a bytecode Java en su primera ejecución, siendo mucho más rápidas en las posteriores transformaciones. Dicha representación se conoce en Xalan con el nombre de \emph{translets}. De hecho, si quisiéramos, podríamos generar versiones empaquetadas de esas hojas y usarlas dentro de la línea de órdenes. Además, si algún paso de la transformación de visualización es particularmente costoso, podemos usar la hoja de preprocesado para añadir nodos ocultos y almacenar los resultados temporales que necesitemos. 
+
+ En el resto de esta sección veremos la estructura general de los repositorios que agrupan a las hojas de usuario, mencionaremos cómo localizar las hojas de usuario y heredar de una hoja de usuario base, y los aspectos particulares de las hojas de preprocesado y de visualización. Terminaremos ilustrando estos conceptos mediante un paseo por las partes más importantes del código de una hoja de preprocesado y de una hoja de visualización. 
+
+\subsection{Estructura de los repositorios de hojas de usuario}
+
+ Todas las hojas de usuario empleables por XMLEye se hallan instaladas en lo que llamaremos un repositorio de hojas de usuario. Normalmente este repositorio se halla bajo el subdirectorio \filename{xslt} de donde esté \filename{xmleye.jar}, o en su defecto en el directorio desde el cual se lance XMLEye: en el paquete Debian se trata de \filename{/usr/share/xmleye}, por ejemplo. 
+
+ Mirando en su interior, veremos tres ficheros XSLT: 
+
+\begin{description}
+\item[\filename{preproc.xsl}] \mbox{}
+ Éste es el punto de entrada a partir del cual siempre se comienza toda transformación de preprocesado. Además de importar la hoja \filename{util.xsl} y definir variables con rutas a iconos predefinidos, se importa una hoja con la URI \filename{current\_preproc}. 
+
+ Tal hoja no existe en ninguna parte: de hecho, se trata de una de las extensiones propias de XMLEye. Es una URI especial que se resuelve, a grandes rasgos, a la ruta de la hoja de preprocesado seleccionada automáticamente por el usuario. Veremos los detalles después. 
+
+\item[\filename{view.xsl}] \mbox{}
+ De forma análoga al caso anterior, éste es el punto de entrada para toda visualización en formato XHTML. Además de importar la hoja de utilidades y la hoja de visualización elegida por el usuario, activa el modo de salida en XHTML y, lo que es más importante, inicia la transformación por el nodo que haya seleccionado el usuario (proporcionado mediante el parámetro \varname{selectedUID} de esta hoja XSLT) importando a la URI especial \filename{current\_view}. 
+
+ ¿Y de dónde viene este UID? Pues del preprocesado, precisamente. Es una de las pocas cosas que absolutamente \emph{toda} hoja de preprocesado debe hacer. De todas formas, si hacemos que nuestra hoja de preprocesado herede de la hoja base \filename{xml}, como veremos posteriormente, no tendremos que preocuparnos por esto. 
+
+\note{ Si lo tenemos que implementar de todas formas, recomiendo utilizar la función XPath \command{generate-id} definida en el estándar XSLT. }
+
+ Es obvio que buscar por todo el documento el nodo que tenga un determinado identificador tiene que ser bastante costoso, y de hecho, lo es. Por ello, \filename{view.xsl} crea un índice a nivel del documento completo de todos los identificadores y sus nodos correspondientes, con lo que la búsqueda posterior a la primera será mucho más rápida. 
+
+\item[\filename{util.xsl}] \mbox{}
+ Esta hoja ya no cumple un papel tan importante: simplemente define algunas funciones de utilidad para la manipulación de cadenas, como \varname{util\colonhyp{}to\hyp{}lower} (cambio a minúsculas), \varname{util\colonhyp{}to\hyp{}upper} (cambio a mayúsculas) o \varname{util\colonhyp{}substring\hyp{}after\hyp{}last} (que toma la subcadena posterior a la última aparición de la clave, y de lo contrario la cadena completa). 
+
+ En un futuro puede que estas funciones se hagan redundantes en el cambio a XSLT 2.0, pero las dejaré ahí de todas formas, ya que tampoco tienen ningún impacto negativo. 
+
+\end{description}
+
+ Las hojas de usuario son subdirectorios de \filename{view} (para las hojas de visualización) y \filename{preproc} (para las de preprocesado), y aparecerán bajo XMLEye con el mismo nombre que tenga el subdirectorio. 
+
+ Toda hoja de usuario tendrá como mínimo un fichero XSLT, pero puede tener varios. De hecho, en el siguiente apartado veremos por qué nos interesaría hacerlo así. 
+
+\subsection{Localización de una hoja de usuario}
+
+ Una requisito fundamental del diseño de XMLEye ha sido siempre su internacionalización, es decir, la implantación de la infraestructura necesaria para poder localizar todo el contenido de la interfaz a distintos lenguajes, atendiendo incluso a la presencia de dialectos distintos entre países. 
+
+ Las hojas de usuario generan contenidos que el usuario podrá ver, así que no son ninguna excepción. El proceso de localización es realmente muy simple, y se basa en una selección inteligente del punto de entrada a través del cual se carga el resto de los contenidos de una hoja de usuario. Sea \varname{L} el código de idioma de la localización actual según ISO 639 y \varname{P} el código de país según ISO 3166. Si el usuario ha seleccionado actualmente la hoja \filename{H} de usuario de preprocesado, se intentará resolver la URI de su punto de entrada, \filename{current\_preproc}, a uno de estos ficheros XSLT en el mismo orden: 
+
+\begin{enumerate}
+\item \filename{xslt/preproc/H/H\_L\_P.xsl}
+
+\item \filename{xslt/preproc/H/H\_L.xsl}
+
+\item \filename{xslt/preproc/H/H.xsl}
+
+\end{enumerate}
+
+ El proceso para las hojas de visualización es análogo a éste, sustituyendo \filename{preproc} por \filename{view} en las rutas. Una consecuencia de este esquema es que si vamos a presentar varias traducciones del texto generado, no deberíamos repetir la funcionalidad de la hoja varias veces, sino dividirla en dos partes: 
+
+\begin{enumerate}
+\item Cada punto de entrada concretará la misma serie de variables y/o plantillas con nombre con contenidos específicos de la combinación idioma-dialecto escogida, e incluirá con \varname{xsl:include} a las hojas que proporcionen la lógica requerida. Al usar una inclusión y no una importación (con \varname{xsl:import}, que después usaremos en otro contexto), nos aseguraremos de que se produzcan errores en caso de colisión de identificadores, y evitaremos sorpresas.
+
+\item La hoja principal con toda la funcionalidad no contendrá cadenas de texto, sino que quedará completamente dependiente de las variables y plantillas con nombre de la hoja que actúe de punto de entrada.
+
+\end{enumerate}
+
+ Esto le resultará muy familiar a cualquiera que haya trabajado con \application{gettext}, por ejemplo: por un lado tenemos el diccionario de cadenas, y por otra el código propiamente dicho. 
+
+ Este es el enfoque que se ha seguido en la hoja de visualización por defecto, \filename{xml}, por ejemplo: se tiene el fichero \filename{xml.xsl}, que actúa como punto de entrada por defecto e incluye a \filename{principal.xsl}, que realmente implementa la funcionalidad necesaria. 
+
+\note{ A la hora de importar ficheros XSLT concretos, hay que emplear la ruta relativa completa a partir del directorio \filename{xslt}: así, cuando \filename{xml.xsl} incluye a \filename{principal.xsl}, ha de emplear la ruta relativa completa, aunque se halle en el mismo directorio: \filename{view/xml/principal.xsl}, por ejemplo.}
+
+\subsection{Herencia a partir de una hoja base}
+
+ El propio estándar XSLT ya define mecanismos para la herencia: a través del elemento \varname{xsl:import} podemos importar todas las reglas de otro fichero XSLT, con menos precedencia que las actuales, de tal forma que podamos efectivamente especializar dicha hoja, redefiniendo y ampliando ciertos aspectos de forma parecida a la herencia del mundo orientado a objetos. 
+
+ Sin embargo, no se debe usar directamente de esa forma: el estándar sólo hace referencia a URL estáticas, con lo que perderíamos la capacidad de emplear la infraestructura de internacionalización que antes mencionamos. 
+
+ Para poder seguir usando el esquema de resolución dinámica de puntos de entrada para la hoja que vayamos a especializar, tendremos que seguir usando URI especiales. En particular, URI de la forma \varname{view\_X} se resuelven al punto de entrada correcto de la hoja X de usuario de visualización. Las URI de la forma \varname{preproc\_X} son sus análogas para las hojas de preprocesado. 
+
+ La hoja de preprocesado para ACL2, \filename{ppACL2}, especializa la hoja de preprocesado \filename{xml} así: 
+
+\begin{lstlisting}
+<xsl:import href="preproc_xml"/>
+\end{lstlisting}
+
+ Como de costumbre, podemos especializar a varios niveles. Así, \filename{summaries} y \filename{reverse} son a su vez especializaciones de \filename{ppACL2}. 
+
+\subsection{Ejemplo de hoja de preprocesado: \filename{xml}}
+
+ Para tener una mejor idea de cómo elaborar una nueva hoja de preprocesado, daremos un paseo por el código de la hoja más sencilla de preprocesado, \filename{xml}, que normalmente especializaremos para cubrir nuestras necesidades concretas. Iremos mencionando al mismo tiempo algunos conceptos clave de XSLT, pero se recomienda de todas formas completar la información aquí presente mediante la especificación oficial~\cite{Clark:99:XTV}. En la próxima sección examinaremos una hoja de visualización. 
+
+ Iremos alternando código y explicaciones. Comencemos: 
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xmleye="http://www.uca.es/xmleye">
+
+<!-- ... a continuación ... -->
+
+</xsl:stylesheet>
+
+\end{lstlisting}
+
+ Aquí tenemos primero a la declaración XML, indicando que se trata de un documento XML 1.0 codificado en UTF-8. Después tenemos al elemento raíz de toda hoja de estilos XSLT, \varname{stylesheet}, bajo el espacio de nombres de XSLT. Estamos usando XSLT 1.0: existe XSLT 2.0 actualmente, pero aún no está disponible en XMLEye. Vayamos avanzando por el interior del interior del elemento \varname{stylesheet}: 
+
+\begin{lstlisting}
+<xsl:template match="/">
+  <xsl:apply-templates select="." mode="process-node"/>
+</xsl:template>
+\end{lstlisting}
+
+ Este es el primer patrón de nuestra hoja de usuario. En XSLT, vamos básicamente recorriendo el árbol XML original a partir de la raíz, \varname{/}, un nodo que representa al documento completo, y no a un elemento en particular. A cada paso aplicamos la plantilla (\varname{xsl:template}) más específica cuya condición (véase el atributo \varname{match}) se cumpla. 
+
+ Utilizando el elemento \varname{xsl:apply-templates}, pedimos que se siga recursivamente procesando el nodo actual, pero cambiando del modo por defecto por el que empezamos la transformación a \varname{process-node}. Cambiando entre modos podemos cambiar entre distintos conjuntos de plantillas fácilmente, y procesar varias veces el mismo nodo. Es interesante ver que si en una especialización de esta hoja redefinimos esta regla y cambiamos la ruta del \varname{xsl:apply-templates}, podemos podar todo excepto una determinada parte del documento. La siguiente plantilla no produce ninguna salida: 
+
+\begin{lstlisting}
+<xsl:template match="*" />
+\end{lstlisting}
+
+ Esta plantilla vacía coincide con cualquier elemento (que no nodo: excluye a los atributos y nodos de texto, por ejemplo) en el modo por defecto. Al ser tan general, cualquier otra plantilla que definamos tendrá prioridad sobre ella. La utilidad de esta regla es desactivar las reglas por defecto de XSLT, a saber: 
+
+\begin{itemize}
+\item Los atributos no son recorridos.
+
+\item Se desciende recursivamente por los elementos.
+
+\item Se imprimen los nodos de texto como están.
+
+\end{itemize}
+
+ Mejor dicho: si transformáramos un documento XML con una hoja XSLT vacía sin opciones ni plantillas, lo que haríamos sería quitarle todo el marcado XML y dejarlo en texto puro. Pasamos a la siguiente plantilla: 
+
+\begin{lstlisting}
+<xsl:template match="*" mode="process-node">
+  <xsl:copy>
+    <xsl:copy-of select="@*"/>
+    <xsl:attribute name="UID">
+      <xsl:value-of select="generate-id()"/>
+    </xsl:attribute>
+    <xsl:apply-templates select="."/>
+    <xsl:copy-of select="text()"/>
+    <xsl:apply-templates select="." mode="process-children"/>
+  </xsl:copy>
+</xsl:template>
+\end{lstlisting}
+
+ Otra plantilla para cualquier elemento, pero para el modo \varname{process-node} que vimos antes. Esta plantilla es el corazón de la hoja de preprocesado \varname{xml}, y hace un par de cosas por nosotros: 
+
+\begin{enumerate}
+\item Crea una copia del elemento actual.
+
+\item Copia los atributos del elemento actual.
+
+\item Añade el atributo \varname{UID} con el identificador único que necesitamos para ser capaces de seleccionar un nodo.
+
+\item Procesa recursivamente el nodo actual en el modo por defecto. En esta hoja no hace nada de por sí, pero al especializarla podremos añadir plantillas en el modo por defecto que sean aplicadas para añadir los atributos o elementos que consideremos necesario. Podríamos por ejemplo usar algunos de estos atributos especiales:
+
+\begin{description}
+\item[hidden] \mbox{}
+ Si este atributo se pone a "1", el elemento no será visible por el usuario. 
+
+\item[leaf] \mbox{}
+ Si este atributo se pone a "1", el elemento será considerado como hoja, y sus \emph{hijos} no serán visibles al usuario. 
+
+ He aquí un ejemplo, extraído de la hoja de visualización \filename{yaxml}, que oculta todos los nodos con nombre \varname{\_key}: 
+
+\begin{lstlisting}
+<!-- Hide all yaml:_key elements -->
+<xsl:template match="*[local-name(.)='_key']">
+  <xsl:attribute name="hidden">1</xsl:attribute>
+</xsl:template>
+\end{lstlisting}
+
+\item[nodeicon] \mbox{}
+ Contiene la ruta relativa a partir del mismo directorio donde se halla el repositorio de hojas de usuario (es decir, el directorio \filename{xslt}) al icono de 16x16 píxeles que se desee mostrar para dicho nodo. 
+
+ La hoja de visualización de demostraciones de ACL2 usa esto para mostrar de forma sencilla qué elementos han tenido éxito en su demostración y en cuáles no. 
+
+\item[nodelabel] \mbox{}
+ Contiene la etiqueta a usar para el nodo en cuestión. Esto permite levantar así algunas restricciones típicas sobre los árboles XML normales, en los cuales los nombres de elementos no pueden tener espacios o ciertos caracteres. 
+
+ La hoja de visualización de ficheros YAML/JSON usa este atributo para poner etiquetas en los pares clave/valor de los mapas: YAML es más permisivo en las claves de los mapas que XML, permitiendo espacios, por ejemplo. 
+
+\begin{lstlisting}
+<!-- Label map values using their keys -->
+<xsl:template match="*[local-name(.)='_value']">
+ <xsl:attribute name="nodelabel">
+  <xsl:value-of 
+   select="preceding-sibling::*[local-name(.)='_key'][1]"/>
+ </xsl:attribute>
+</xsl:template>
+\end{lstlisting}
+
+\end{description}
+
+\item Copia los nodos de texto.
+
+\item Procesa recursivamente el nodo actual en el modo \varname{process-children}. Así podemos determinar qué hijos del nodo actual serán procesados, y podremos retirar los que no nos interesen.
+
+\end{enumerate}
+
+ Como vemos, esta última plantilla sigue el patrón de diseño Método Plantilla (valga la redundancia), en una versión del principio de Hollywood: "No nos llames; nosotros te llamaremos". En las especializaciones de esta hoja, añadiríamos plantillas que redefinirían partes de su comportamiento y esta plantilla sería la que las aplicaría. Hecha esta puntualización, seguimos: 
+
+\begin{lstlisting}
+<xsl:template match="*" mode="process-children">
+  <xsl:apply-templates select="*" mode="process-node"/>
+</xsl:template>
+\end{lstlisting}
+
+ Esta plantilla se aplica a todos los nodos en el modo \varname{process-children}: por defecto se procesan todos los hijos del nodo actual. Toda especialización de \filename{xml} puede añadir plantillas más específicas que sólo procesen algunos de los hijos de ciertos elementos, retirando los demás. 
+
+ En resumen, si queremos crear nuestra hoja de preprocesado a partir de la hoja \filename{xml}, haremos lo siguiente: 
+
+\begin{itemize}
+\item Añadiremos este elemento como primer hijo de \varname{xsl:stylesheet}:
+
+\begin{lstlisting}
+<xsl:import href="preproc_xml"/>
+\end{lstlisting}
+
+ Al importar y no incluir la hoja, nos aseguramos que todas las reglas y variables de la hoja base tengan menos prioridad, y así podremos redefinirlas como queramos sin que se produzcan colisiones. 
+
+\item Para añadir nueva información a un elemento, definiremos una plantilla en el modo por defecto que cree los atributos y elementos deseados con \varname{xsl:attribute} o \varname{xsl:element}, por ejemplo.
+
+\item Para podar elementos del árbol, definiremos plantillas bajo el modo \varname{process\hyp{}children} que procesarán sólo algunos de los hijos, efectivamente retirando al resto.
+
+\item Para podar todo excepto una parte del árbol, redefiniremos la plantilla del nodo raíz en el modo por defecto para que la ruta del \varname{xsl:apply-templates} señale a esa parte.
+
+\item Para cambiar la forma de procesamiento de algunos nodos por completo, podemos definir nuevas plantillas en el modo \varname{process-node} para ellos. Tendremos que tener cuidado de no olvidar añadir el atributo \varname{UID} con el identificador único.
+
+\end{itemize}
+
+\subsection{Ejemplo de hoja de visualización: \filename{xml}}
+
+ En este caso no llegaremos a mostrar otra vez todo el código, ya que muchas partes se repiten. En su lugar, nos limitaremos a las partes más interesantes. Primero nos centraremos en su punto de entrada por defecto, \filename{xml.xsl}, que proporciona cadenas en inglés, y luego pasaremos a describir una plantilla interesante en \filename{main.xsl}. 
+
+\subsubsection{Punto de acceso por defecto: \filename{ppACL2.xsl}}
+
+\begin{lstlisting}
+<xsl:stylesheet version="1.0"
+  xmlns:xmls="http://www.uca.es/xmleye/xml-stylesheet"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <!-- ... omitido ... -->
+
+</xsl:stylesheet>
+\end{lstlisting}
+
+ Hemos definido un nombre de espacios para esta hoja de usuario. Lo necesitaremos para nuestras variables con las cadenas de texto localizadas: así evitaremos que otras hojas que especialicen a la nuestra tengan problemas de colisiones de identificadores. Pero primero tenemos que hacer algo más: 
+
+\begin{lstlisting}
+<xsl:include href="view/xml/main.xsl"/>
+\end{lstlisting}
+
+ Este \varname{xsl:include} incluye a la hoja XSLT principal que implementa toda la funcionalidad, y que emplea las cadenas de texto que define este punto de acceso. Como ya se dijo antes, aquí sí conviene usar inclusiones y no importaciones para que, si existen colisiones de identificadores, se produzca un mensaje de error y se eviten sorpresas. En el caso de la herencia, el razonamiento es el contrario: si estuviéramos definiendo una especialización de \filename{xml}, utilizaríamos un \varname{xsl:import} a la URI \filename{view\_xml}, para que nuestras definiciones tomaran prioridad sobre las de la hoja base. Ahora ya podemos listar las variables e ir dándoles las cadenas localizadas de texto: 
+
+\begin{lstlisting}
+<xsl:variable name="xmls:name">Name</xsl:variable>
+<xsl:variable name="xmls:value">Value</xsl:variable>
+<xsl:variable name="xmls:attributes">Attributes</xsl:variable>
+\end{lstlisting}
+
+ En casos más complejos necesitaremos plantillas con nombre en vez de variables, pero aquí no son necesarias. 
+
+ Resumiendo: 
+
+\begin{itemize}
+\item Utilizaremos variables y plantillas con nombre en los puntos de acceso para almacenar las cadenas o rutinas de generación de salida localizadas al idioma y dialecto en cuestión. Sus identificadores se hallarán en un espacio de nombres propio de la hoja de usuario, para evitar colisiones.
+
+\item Incluiremos con \varname{xsl:include}, en vez de importar, las hojas XSLT con la funcionalidad de la hoja de usuario desde el punto de acceso. Ello nos asegurará de que si existe alguna colisión de identificadores, se produzca un error, y no nos llevemos después sorpresas.
+
+\end{itemize}
+
+\subsubsection{Hoja XSLT principal: \filename{main.xsl}}
+
+ Esta es la hoja que se ocupa de generar el código XHTML a mostrar al usuario. Se compone de dos plantillas: 
+
+\begin{lstlisting}
+<xsl:template match="*">
+  <xsl:call-template name="skeleton">
+    <xsl:with-param name="rtf">
+      <xsl:if test="@*">
+          <h2><xsl:copy-of select="$xmls:attributes"/></h2>
+          <table border="1" padding="1" 
+                 width="60%" align="center">
+
+          <!-- ... omitido ... -->
+
+          </table>
+      </xsl:if>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+\end{lstlisting}%$
+
+ Esta es la plantilla a través de la cual se genera la visualización de cualquier nodo seleccionado. Resulta interesante ver cómo llama (usando \varname{xsl:call-template}) a una plantilla con nombre, pasándole mediante \varname{xsl:with-param} el fragmento de XHTML generado internamente como el argumento \varname{rtf}. Usar esta plantilla con nombre nos permite asegurar que tendremos un esqueleto básico para todo nodo, en el que podremos rellenar los distintos espacios con el código que necesitemos. Además, las hojas derivadas podrán aprovechar esta plantilla con nombre sin problemas, o incluso la redefinirán. 
+
+ Esta plantilla sólo se ejecuta una vez por selección: el punto de entrada global a toda transformación de visualización, \filename{view.xsl}, dirige directamente la transformación al nodo seleccionado. Es lo contrario a lo que se hacía en el preprocesado, en el que se iba recorriendo recursivamente el árbol. La ventaja de cambiar el nodo actual al elemento seleccionado en vez de usar sólo el subárbol con él como raíz como entrada a la transformación es que, si lo necesitamos, podemos usar toda la información del árbol para generar la visualización. Ahora veremos la plantilla \varname{skeleton} a la que se le proporciona el fragmento de XHTML: 
+
+\begin{lstlisting}
+<xsl:template name="skeleton">
+  <xsl:param name="rtf"/>
+   <html>
+     <body>
+
+        <!-- Lista de ancestros -->
+        <xsl:if test="ancestor::*">
+        <h2><xsl:copy-of select="$xmls:ancestors"/></h2>
+        <ol>
+          <xsl:for-each select="ancestor::*">
+          <li>
+            <a href="#xpointer({ext:getPath(.,/)})">
+              <xsl:choose>
+                <xsl:when test="@nodelabel">
+                  <xsl:value-of select="@nodelabel"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="name(.)"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </a>
+          </li> 
+          </xsl:for-each>
+        </ol>
+        <hr/>
+        </xsl:if>
+
+        <xsl:copy-of select="$rtf"/>
+
+        <!-- ... lista de hijos ... -->
+     </body>
+   </html>
+</xsl:template>
+\end{lstlisting}
+
+ Esta plantilla nunca será utilizada automáticamente, pues carece de un atributo \varname{match}, sino que la invocaremos por su nombre, definido en el atributo \varname{name}. Se declara el argumento antes utilizado mediante \varname{param}, y el resto consiste en crear el esqueleto de la visualización XHTML con la lista de los ancestros y los hijos, dentro del cual insertaremos el fragmento XHTML proporcionado. 
+
+ Antes de insertar ese fragmento XHTML, se añade una lista de enlaces a los nodos ancestros del actual, si los hay (\varname{xsl:if} implementa dicho comportamiento condicional). Podemos ver cómo se utiliza la variable \varname{xmls:ancestors} con una de las cadenas localizadas, y cómo podemos implementar estructuras iterativas y selectivas múltiples utilizando los elementos \varname{xsl:for-each} y \varname{xsl:choose}, respectivamente. 
+
+ En este fragmento podemos ver además cómo crear enlaces entre los nodos del documento. Empleamos un enlace normal y corriente de XHTML, pero con un ligero matiz: la sintaxis de los enlaces utiliza una variante del esquema \emph{xpointer()} de XPointer~\cite{xpointer} sin sus extensiones XPath. A nivel general, se permiten URL del formato \constant{(ruta al fichero)\#xpointer(patrón XPath)}, donde debe de estar al menos el patrón. Si no está la parte del fichero, se asume que la ruta enlaza a un nodo del mismo documento, y si está, entonces enlaza a un nodo determinado de otro documento. 
+
+ Como crear rutas tiene cierta complejidad, se ha definido en el espacio de nombres \constant{xalan://es.uca.xmleye.xpath.XPathPathManager} la función de extensión XPath \varname{getPath}, que calcula la ruta entre un nodo y un ancestro suyo (el nodo actual y la raíz del documento en este caso). Evidentemente, no podemos usar esta función cuando enlazamos a nodos de otros ficheros. En ese caso, deberemos de buscar nuestra propia forma de identificar de forma unívoca al nodo destino con una ruta XPath. 
+
+\note{ También podemos usar enlaces a direcciones Web (del estilo de \constant{http://...}, o anclas HTML (\constant{\#ancla}). }
+
+ En resumen: 
+
+\begin{itemize}
+\item  La transformación de visualización no recorre recursivamente el árbol, sino que pasa directamente al nodo actualmente seleccionado. 
+
+\item  Resulta útil utilizar plantillas con nombre para refactorizar nuestro código XSLT y evitar repetirnos. Un uso concreto en la generación de XHTML es el de implementar un esqueleto mínimo de la visualización. 
+
+\item  Podemos crear enlaces entre nodos del mismo documento y de documentos distintos. En caso de que se traten de nodos del mismo documento, se dispone de la función de extensión \varname{getPath} para ayudar a generar la ruta XPath a incluir en el enlace. 
+
+\end{itemize}
+  
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 

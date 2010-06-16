@@ -1,0 +1,709 @@
+%
+% Generado automáticamente por las hojas de estilo XSLT
+% Modificado posteriormente a mano
+%
+% Antonio García Domínguez, (C) 2008
+% nyoescape@gmail.com
+% $Id$
+%
+
+\section{Instalación de XMLEye}
+\label{instPrograma}
+
+ En este apartado cubriré la instalación de XMLEye en sus diferentes formas, tanto a nivel de usuario local como a nivel de sistema. Para instalar los conversores asociados y sus hojas de usuario y descriptores de formato, referirse al apartado~\ref{instHojas} (página~\pageref{instHojas}). 
+
+\subsection{Requisitos previos}
+
+ Se necesita tener instalado un entorno Java compatible con J2SE 5.0 o superior. Su instalación se realiza automáticamente si utilizamos los paquetes Debian. 
+
+\subsubsection{Windows}
+
+ Tendremos que ir a \url{http://java.sun.com/javase/downloads/index.jsp} y descargar una edición reciente del JRE de acuerdo a nuestro sistema operativo. Tanto si hemos obtenido la versión que no requiere conexión como la que descarga sólo lo necesario a través de Internet, todo lo que tendremos que hacer es ejecutar el instalador y seguir las instrucciones. 
+
+\subsubsection{GNU/Linux}
+
+ Si utilizamos una distribución basada en Debian, podemos probar a instalar los paquetes \filename{icedtea\hyp{}7\hyp{}jre} o \filename{openjdk\hyp{}6\hyp{}jre}. OpenJDK es la iniciativa de Sun, que a fecha de hoy (03/07/2008) es prácticamente 100 \% libre salvo por algunas pequeñas partes que el proyecto IcedTea ha reemplazado utilizando código del proyecto GNU Classpath. Podemos instalar una versión de OpenJDK 6.0 con los reemplazos de IcedTea en Ubuntu 8.04 "Hardy Heron" y usarla como entorno Java por defecto con estas órdenes: 
+
+\begin{alltt}
+	\command{sudo aptitude install openjdk-6-jre}
+	\command{sudo update-alternatives --config java}
+\end{alltt}
+
+ Escogeremos la entrada de \filename{openjdk\hyp{}6\hyp{}jre} y pulsaremos Intro, terminando con este paso. Si estamos utilizando openSUSE 10.3, podemos usar sin problemas el entorno J2SE 5.0 de Sun que incluye de fábrica. En caso de que no estuviera instalado por alguna razón, tendríamos que instalar los paquetes \filename{java\hyp{}1\_5\_0\hyp{}sun*} a través del gestor de paquetes de YaST. 
+
+\note{ Actualmente, OpenJDK sigue teniendo pequeños defectos en la forma en que sitúa los componentes Swing. Es posible que algunos diálogos tengan un aspecto distinto al normal, con botones demasiado grandes, por ejemplo. El JRE original de Sun no tiene estos problemas, pero no es 100 \% libre. De todas formas, los efectos de este problema son puramente estéticos. }
+
+\subsection{Instalación desde distribuciones precompiladas}
+
+\note{ Si se usa una distribución basada en Debian, se debería considerar el uso de los paquetes Debian, que son mucho más cómodos de usar. }
+
+\subsubsection{Un único usuario, GNU/Linux}
+
+ El proceso es muy sencillo: sólo hay que descargar el \filename{\hyp{}dist\hyp{}tar.gz} más reciente de XMLEye de \url{https://forja.rediris.es/frs/?group_id=233} y descomprimirlo bajo nuestro directorio personal. Para ejecutar XMLEye, basta con ejecutar el guión \filename{/home/\-\emph{usuario}/\-xmleye/\-xmleye} tras pulsar la combinación \keycombo{ALT + F2}. Una opción más cómoda para los habituales de la línea de órdenes es añadir la siguiente línea a \filename{\~\{\}/\-.bashrc}: 
+
+\begin{alltt}
+export PATH=\$PATH:\~{}/xmleye
+\end{alltt}
+
+ Haciendo esto, se puede abrir cualquier documento compatible desde la línea de órdenes mediante: 
+
+\begin{alltt}
+xmleye \emph{(ruta absoluta o relativa)}
+\end{alltt}
+
+ Según este procedimiento, las hojas de usuario se instalarán en \filename{/home/\-\emph{usuario}/\-xmleye/\-xslt}, y los descriptores de formatos en \filename{/home/\-\emph{usuario}/\-xmleye/\-formats}. Las opciones se guardarán en \filename{/home/\-\emph{usuario}/\-xmleye}. 
+
+\subsubsection{Múltiples usuarios, GNU/Linux}
+
+ Un caso más complejo es cuando queremos instalarlo para varios usuarios, pero queremos tener ajustes distintos para cada usuario (las hojas son comunes a todos). Al igual que en el caso anterior, deberemos tener instalado un JRE compatible con J2SE 5.0 o superior antes que nada, pero después usaremos una distribución diferente de los ficheros. 
+
+ La distribución "ideal" sería la del paquete Debian, pero como es un poco más compleja de lo que necesitamos, nos limitaremos a un término medio. Primero descomprimiremos la última distribución de XMLEye (el enlace de descarga está en la sección anterior) a \filename{/opt}, que crearemos si no existe ya: 
+
+\begin{alltt}
+sudo mkdir /opt
+cd /opt
+sudo tar xjf \emph{(ruta a distribución)}
+
+\end{alltt}
+
+ Tendremos que retocar el guión de lanzamiento un poco. XMLEye cuenta con dos variables de entorno, \envar{XMLEYE\_PREF\_DIR} y \envar{XMLEYE\_FORMATS\_DIR}, que indican la ruta en la que se guardarán las preferencias y los formatos personalizados por el usuario. Además, XMLEye supone que las hojas de usuario se hallan bajo el subdirectorio \filename{xslt} de la ruta sobre la cual es lanzado. 
+
+ Teniendo todo esto en cuenta, habrá que sustituir las líneas que afectan a \envar{PROGRAM\_DIR} y \envar{PROGRAM\_JAR} por: 
+
+\begin{alltt}
+PROGRAM\_DIR=/opt/xmleye
+PROGRAM\_JAR=xmleye.jar
+export XMLEYE\_PREF\_DIR=\${HOME}/.xmleye
+export XMLEYE\_FORMATS\_DIR=\${HOME}/.xmleye
+mkdir -p \${XMLEYE\_PREF\_DIR}
+\end{alltt}
+
+ De forma similar a la sección anterior, los usuarios podrían directamente ejecutar XMLEye a través de la ruta completa. Para que todos los usuarios puedan ejecutar XMLEye por nombre, se puede añadir esta línea a \filename{/etc/\-environment}: 
+
+\begin{alltt}
+export PATH=\$PATH:/opt/xmleye
+\end{alltt}
+
+ Si queremos que aparezca una entrada de menú y que se asocien los ficheros XML con XMLEye, entonces tendremos que, además de seguir el paso anterior, crear el fichero \filename{/usr/\-share/\-applications/\-xmleye.desktop} con este contenido: 
+
+\begin{alltt}
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Exec=xmleye  \%U
+Comment[es]=Visor genérico de XML dirigido por datos
+Name=XMLEye
+Comment=Generic data-driven XML Viewer
+GenericName=Generic XML viewer
+GenericName[es]=Visor genérico de XML
+Icon=accessories-text-editor
+Categories=Utility;TextEditor;
+MimeType=application/xml;
+\end{alltt}
+
+ Actualizaremos las bases de datos y reiniciaremos los menús de GNOME con: 
+
+\begin{alltt}
+sudo update-desktop-database
+sudo update-menus
+sudo killall gnome-panel nautilus
+\end{alltt}
+
+ Ya debería de aparecer la entrada de XMLEye en el menú principal de GNOME. 
+
+ Las hojas de usuario estarán bajo \filename{/opt/\-xmleye/\-xslt}, y los descriptores de formato en \filename{/opt/\-xmleye/\-formats}. 
+
+\subsubsection{Windows}
+
+ Descargamos y descomprimimos en alguna carpeta el \filename{\hyp{}dist\hyp{}tar.gz} más reciente de XMLEye de \url{https://forja.rediris.es/frs/?group_id=233}. 
+
+ Para ejecutar XMLEye, haremos doble clic en el fichero \filename{xmleye.jar} de la carpeta en que hemos descomprimido la distribución. 
+
+\subsection{Instalación desde paquetes Debian}
+
+ Esta es la opción a seguir siempre que sea posible, ya que además de ser más sencilla, permitirá recibir actualizaciones de forma automática. 
+
+ Los paquetes han sido desarrollados para Ubuntu Gutsy, pero deberían funcionar en cualquier distribución basada en Debian reciente. 
+
+ Los pasos a seguir son: 
+
+\begin{enumerate}
+\item Descargaremos la firma digital de los paquetes disponible bajo \url{http://www.shoyusauce.org/packages/claveDebian.asc}.
+
+\item  Añadiremos la firma al anillo de confianza de Apt. En primer lugar lanzaremos la opción \emph{Sistema $\rightarrow$ Administración $\rightarrow$ Orígenes
+	  de software} bajo el menú principal de GNOME. 
+
+ Hecho esto, seleccionaremos la pestaña \guilabel[moreinfo = none]{Autentificación} y pulsaremos en el botón \guibutton[moreinfo = none]{Importar clave...}, tras lo cual seleccionaremos la firma que antes descargamos. 
+
+ Aún no cerraremos la ventana: nos queda una cosa por hacer. 
+
+\item  Ahora añadiremos los repositorios de paquetes binarios y paquetes de fuentes de \application{XMLEye} y sus hojas de estilos. Esta vez iremos a la pestaña \guilabel[moreinfo = none]{Software de terceros}. 
+
+ Pulsaremos en \guibutton[moreinfo = none]{Añadir} e introduciremos esta línea tal y como está: 
+
+\begin{alltt}
+deb http://www.shoyusauce.org/packages/ubuntu/ gutsy main
+\end{alltt}
+
+ Volvemos a pulsar en \guibutton[moreinfo = none]{Añadir}, pero esta vez introducimos esta línea: 
+
+\begin{alltt}
+deb-src http://www.shoyusauce.org/packages/ubuntu/ gutsy main
+\end{alltt}
+
+ Ya podemos pulsar en \guibutton[moreinfo = none]{Cerrar} para cerrar este diálogo, y solicitar la actualización de nuestras listas de paquetes en el diálogo subsecuente pulsando en \guibutton[moreinfo = none]{Recargar}. Una vez haya terminado, estaremos listos para instalar \application{XMLEye} y otros paquetes de apoyo, como \application{pprocACL2}. 
+
+\item  Lanzaremos \emph{Sistema $\rightarrow$ Administración $\rightarrow$ Gestor
+	  de paquetes Synaptic} y pulsaremos en el botón \guibutton[moreinfo = none]{Buscar} de la barra de herramientas. 
+
+ Introduciendo "xmleye" en el campo de búsqueda obtendremos un único resultado en el que podremos hacer doble clic para marcar para su instalación. También podríamos seleccionar otros paquetes con los conversores, descriptores y hojas de estilos específicas de otros formatos, como "libacl2-procesador-perl" o "libyaxml-reverse-perl", de la misma forma. 
+
+ Una vez todos los paquetes que deseamos instalar se hallen marcados, pulsaremos en \guibutton[moreinfo = none]{Aplicar} de la barra de herramientas para confirmar los cambios. 
+
+\item  ¡Listo! Ya podemos lanzar XMLEye a través de \emph{Aplicaciones $\rightarrow$ Accesorios $\rightarrow$ XMLEye} del menú principal de GNOME. 
+
+\note{ Sólo un detalle: todas las opciones que establezcamos irán a parar al subdirectorio \filename{.xmleye} bajo nuestro directorio personal, es decir, \filename{/home/\-\emph{nombredeusuario}}. }
+
+\end{enumerate}
+
+ La ruta bajo la cual tendremos que instalar las hojas de usuario será \filename{/usr/\-share/\-xmleye/\-xslt}, y en \filename{/usr/\-share/\-xmleye/\-formats} se hallarán los descriptores de formato. 
+
+\subsection{Compilación del código fuente}
+
+\note{ Aunque hay instantáneas disponibles del código fuente, éstas son más para los usuarios que los desarrolladores. En caso de querer participar como desarrollador, recomiendo encarecidamente usar una copia de trabajo del repositorio Subversion. Bastará con instalar el paquete \filename{subversion} y seguir algunas instrucciones sencillas. Para más información, véase el excelente libro~\cite{svnhandbook}. }
+
+ Tras obtener un JDK compatible con J2SE 5.0 o superior, como el de OpenJDK 6.0 o 7.0, IcedTea 6.0 o 7.0, o los originales de Sun, tendremos que instalar además la herramienta Apache Ant y el entorno de pruebas de unidad JUnit, en una de sus versiones 3.X. En Ubuntu 8.04 "Hardy Heron", esto se puede hacer mediante: 
+
+\begin{alltt}
+sudo aptitude install openjdk-6-jdk ant junit
+\end{alltt}
+
+ Ahora tendremos que crear una copia de trabajo local de la última revisión de la rama principal de desarrollo del repositorio de RedIris: 
+
+\begin{verbatim}
+svn checkout \
+  https://forja.rediris.es/svn/csl2-xmleye/XMLEye/trunk \
+  xmleye
+\end{verbatim}
+
+ Ya podemos introducirnos en \filename{xmleye} y aprovechar los objetivos ya definidos en el fichero \filename{build.xml} de Ant. Si se desea instalar \filename{xmleye} a partir de fuentes, se recomienda usar el objetivo \varname{dist} e instalar la distribución según alguno de los métodos antes expuestos. 
+
+\begin{description}
+\item[clean] \mbox{}
+Limpia el árbol de directorios existente.
+
+\item[compile] \mbox{}
+Compila todo el código fuente.
+
+\item[dist] \mbox{}
+Compila las fuentes ,ejecuta las pruebas de unidad y genera una distribución autocontenida en el subdirectorio \filename{dist}.
+
+\item[dist-jar] \mbox{}
+Tras compilar y ejecutar las pruebas de unidad, genera un fichero \filename{.jar} bajo \filename{dist}, pero no llega a empaquetarlo con todo lo demás.
+
+\item[docs] \mbox{}
+Genera la documentación del API en formato HTML en el subdirectorio \filename{docs} a través de Javadoc.
+
+\item[run] \mbox{}
+Se trata del objetivo por defecto (ejecutado a través de \command{ant}). Compila el código y ejecuta la versión así compilada de XMLEye.
+
+\item[run-about] \mbox{}
+Compila el código y ejecuta únicamente la ventana de "Acerca de". Útil a la hora de diseñar la interfaz.
+
+\item[run-find] \mbox{}
+Como la anterior, pero para el diálogo de búsqueda.
+
+\item[run-types] \mbox{}
+Más de lo mismo, pero para el diálogo de edición de tipos.
+
+\item[test] \mbox{}
+Ejecuta las pruebas de unidad. La salida de cada conjunto de pruebas se halla bajo el fichero \filename{TEST\hyp{}*} correspondiente.
+
+\end{description}
+
+ Más cosas a tener en cuenta: esta aplicación depende de InfoNode Tabbed Panel 1.5.0 (licenciado bajo la GPL para uso no comercial) y del look and feel JGoodies Looks 2.1.4 (licenciado bajo BSD), disponibles en \url{http://www.infonode.net/index.html?itp} y \url{https://looks.dev.java.net/} respectivamente. De todas formas, los ficheros \filename{.jar} necesarios se hallan en el propio repositorio, por lo que no hay que hacer nada al respecto. 
+
+ Además, el desarrollo puede hacerse mucho más cómodamente si se emplea el plugin Subclipse para Eclipse, disponible en \url{http://subclipse.tigris.org/}, y se importa a través de él el proyecto Eclipse desde el repositorio. Así podemos contar con sus funcionalidades de refactorización y notificación de errores y avisos de compilación en directo. 
+
+\section{Instalación de conversores asociados}
+
+\label{instHojas}
+
+\subsection{\nombrepostprocesador{}: convertidor de demostraciones de ACL2}
+
+ Como muestra de las capacidades de XMLEye, desarrollé en paralelo un conjunto de hojas de usuario de preprocesado y visualización, junto con un tipo de documento para ACL2. Esto nos permite demostraciones para dicho sistema en formato \filename{.lisp} siguiendo una estructura arbórea donde cada nodo se muestra como un hipertexto con enlaces a otras partes de la demostración. 
+
+ La subcarpeta \filename{t/\-testInputs} del fichero de fuentes con nombre de la forma \filename{ACL2\hyp{}Procesador\hyp{}*.tar.gz} más reciente contiene algunos ejemplos de interés, extraídos de tutoriales reales de aprendizaje del uso de ACL2. 
+
+ Primero nos ocuparemos de las dependencias, y luego veremos tres formas de instalar el convertidor, el descriptor de formato y las hojas de usuario. 
+
+\subsubsection{Dependencias}
+
+Las dependencias a instalar variarán según el método de instalación.
+
+\paragraph{ACL2 2.9 o superior}
+
+ Se ha depurado \postprocesador{} también con ACL2 3.1 y 3.3. 
+
+\subparagraph{GNU/Linux}
+
+En una distribución basada en Debian, instalar ACL2 es tan sencillo como ejecutar la siguiente orden (necesitamos \application{gcc} para poder certificar libros):
+
+\begin{alltt}
+\command{sudo aptitude install acl2 gcc}
+\end{alltt}
+
+Otras distribuciones requerirán del proceso manual de instalación, documentado bajo \url{http://www.cs.utexas.edu/users/moore/acl2/v3-3/installation/installation.html}. Es sencillo, pero la compilación de los libros puede llevar mucho tiempo (alrededor de 8-10 horas).
+
+\subparagraph{Windows}
+
+Descargaremos e instalaremos la distribución completa de ACL2 preparada por Jared Davis, disponible en \url{http://www.cs.utexas.edu/users/moore/acl2/v3-3/distrib/windows/}. Incluye todo lo que podríamos necesitar para trabajar con ACL2:
+
+\begin{itemize}
+\item ACL2 3.3
+
+\item GCL 2.6.7, el entorno Lisp que necesitamos, junto con el compilador GCC necesario para certificar libros.
+
+\item El editor GNU Emacs en su versión 21.3.
+
+\item Documentación de ACL2.
+
+\item Una colección de libros previamente certificados.
+
+\end{itemize}
+
+\paragraph{Perl 5.8.6 o superior}
+\label{inst_perl}
+\subparagraph{GNU/Linux}
+
+ La gran mayoría de las distribuciones lo incluyen de fábrica, pero en el caso en que no lo tuviéramos, podríamos instalarlo en una distribución basada en Debian con: 
+
+\begin{alltt}
+\command{sudo aptitude install perl}
+\end{alltt}
+
+Otra opción sería descargar el código fuente de \url{http://www.perl.com/download.csp} y compilarlo, pero no se cubrirá dicha alternativa aquí.
+
+\subparagraph{Windows}
+
+ Utilizaremos la edición 5.10 más reciente de Strawberry Perl, disponible bajo \url{http://strawberryperl.com/}. Sólo hemos de seguir los pasos del instalador. 
+
+\paragraph{Módulos Perl: \application{PAR}}
+\label{inst_par}
+ Una vez hayamos instalado Perl (véase la sección ), sólo necesitamos ejecutar una orden más. No es necesario seguir la configuración manual del acceso a CPAN en ninguno de los dos casos. 
+
+\subparagraph{GNU/Linux}
+
+\begin{alltt}
+\command{sudo cpan PAR}
+\end{alltt}
+
+\subparagraph{Windows}
+
+\begin{alltt}
+\command{cpan PAR}
+\end{alltt}
+
+\paragraph{Módulos Perl: \application{PAR::Packer}}
+\label{inst_parpacker}
+\subparagraph{GNU/Linux}
+
+ Si estamos usando una distribución basada en Debian reciente, podemos ejecutar: 
+
+\begin{alltt}
+\command{sudo aptitude install libpar-packer-perl}
+\end{alltt}
+
+ De lo contrario, ejecutaremos: 
+
+\begin{alltt}
+\command{sudo cpan PAR::Packer}
+\end{alltt}
+
+\subparagraph{Windows}
+
+ Tendremos que obtener la última copia del código fuente de \application{PAR::Packer} del repositorio SVN, ya que la versión más reciente en el CPAN a día de hoy (03/07/2008), la 0.980, no incluye el arreglo de un defecto que imposibilitaba su instalación en Strawberry Perl. Para ello, instalaremos el cliente Subversion TortoiseSVN, disponible bajo \url{http://tortoisesvn.tigris.org/}, y haremos un \emph{checkout} de la dirección \url{http://svn.openfoundry.org/par/PAR-Packer/trunk/}. 
+
+ Una vez hayamos descargado el código, abriremos una ventana del intérprete de órdenes, y dentro del directorio con el código fuente, ejecutaremos: 
+
+\begin{alltt}
+\computeroutput{perl Makefile.PL
+dmake
+dmake test
+dmake install
+}
+\end{alltt}
+
+ Si se nos pide instalar alguna dependencia en alguno de los pasos, aceptaremos. 
+
+\paragraph{Biblioteca \application{libxml2}}
+\label{inst_xml}
+\subparagraph{GNU/Linux}
+
+ Si estamos usando una distribución basada en Debian, ejecutaremos esta orden: 
+
+\begin{alltt}
+\command{sudo aptitude install libxml2-dev}
+\end{alltt}
+
+\subparagraph{Windows}
+
+ No hay que hacer nada: viene ya incluida con Strawberry Perl. 
+
+\subsubsection{Instalación mediante paquetes Debian}
+
+ Si instalamos XMLEye mediante el paquete Debian, sólo tendremos que instalar el paquete \filename{libacl2\hyp{}procesador\hyp{}perl}. La próxima vez que iniciemos XMLEye tendremos todo lo necesario a nuestra disposición, incluido ACL2. 
+
+\subsubsection{Instalación desde distribución monolítica}
+\label{inst_distrib_monolit}
+ Necesitaremos previamente haber instalado ACL2, y haber instalado XMLEye descomprimiendo la distribución de la forja. Descargaremos del área de ficheros (\url{http://forja.rediris.es/frs/?group_id=233}) de la forja de XMLEye el fichero \filename{ACL2\hyp{}Procesador\hyp{}*\hyp{}standalone\hyp{}*.tar.gz} más reciente que se corresponda con la microarquitectura de nuestra CPU y nuestro sistema operativo, y lo descomprimiremos sobre el directorio en el que instalamos XMLEye. 
+
+\subsubsection{Instalación desde distribución basada en PAR}
+\label{inst_distrib_par}
+ Necesitaremos ACL2, Perl y el módulo PAR. El proceso es idéntico al de~\ref{inst_distrib_monolit} (página~\pageref{inst_distrib_monolit}), pero en este caso el fichero a descargar y descomprimir es \filename{ACL2\hyp{}Procesador\hyp{}*\hyp{}par\hyp{}noarch.tar.gz}, que es independiente de la CPU y el sistema operativo escogido. 
+
+\subsubsection{Instalación manual a partir de fuentes}
+\label{inst_fuentes}
+ Los pasos, tras instalar todas las dependencias, son los siguientes: 
+
+\begin{enumerate}
+\item Descomprimimos el fichero de fuentes bajo \filename{/tmp}, y nos introducimos en sus contenidos:
+
+\begin{alltt}
+cd /tmp
+tar xzf \emph{(ruta a las fuentes)}
+cd ACL2-Procesador-*
+\end{alltt}
+
+\item Instalamos el preprocesador tal y como instalaríamos cualquier paquete Perl. Este proceso resultará muy familiar a cualquier usuario de las \application{autotools}:
+
+\begin{alltt}
+perl Makefile.PL
+sudo make
+make test
+sudo make install
+\end{alltt}
+
+ Es muy probable que Perl nos solicite en la primera orden instalar algunas dependencias. Siempre le diremos que sí. La última orden se podría sustituir por \command{sudo checkinstall} si deseamos poder desinstalarlo fácilmente, instalando \postprocesador{} como un paquete Debian. 
+
+\item  Lo siguiente es instalar las hojas de usuario, que es tan fácil (suponiendo que la ruta de hojas de usuario es \filename{/home/\-\emph{tunombredeuaurio}/\-xmleye/\-xslt} como: 
+
+\begin{alltt}
+cp -r xslt/* \$HOME/xmleye/xslt
+\end{alltt}
+
+\item  Terminaremos instalando el descriptor de tipo a su sitio: 
+
+\begin{alltt}
+cp types/* \$HOME/xmleye/types
+\end{alltt}
+
+\end{enumerate}
+
+\subsubsection{Ejecución independiente de XMLEye}
+\label{ejecucion}
+ Podemos comproabr que todo va bien ejecutando el guión principal. La forma de hacerlo variará según el método de instalación usado: 
+
+\begin{itemize}
+\item Desde el paquete Debian, o desde fuentes: \command{pprocACL2} desde cualquier ruta.
+
+\item Desde la distribución monolítica: \command{\emph{(ruta)}/\-pprocACL2}, utilizando la ruta bajo la cual se halla instalado XMLEye. Podríamos añadir esta ruta al PATH si quisiéramos.
+
+\item Desde la distribución basada en PAR: \command{perl -MPAR (ruta)/\-pprocACL2.par}, utilizando la ruta bajo la cual se halla instalado XMLEye.
+
+\end{itemize}
+
+ Deberíamos obtener una salida como la que viene a continuación. Por razones técnicas, es posible que en ciertos entornos la distribución basada en PAR no produzca ninguna salida, pero esto no es un problema: seguirá funcionando de forma normal una vez le pasemos un fichero de entrada, imprimiéndose el XML resultante por salida estándar, y los mensajes de estado por la salida de errores. 
+
+\begin{alltt}
+\computeroutput{Usage:
+  pprocACL2 [opciones] [entrada Lisp ACL2]
+
+Options:
+  --help, -h, -?
+          Se limita a mostrar un mensaje corto de ayuda.
+
+  --man, -m
+          Muestra un mensaje detallado de ayuda en formato man.}
+\end{alltt}
+
+\subsection{\nombreyaxml{}: conversor de documentos YAML a XML}
+
+ Este otro conversor se desarrolló para abrir con XMLEye la familia completa de documentos con lenguajes basados en YAML 1.1 o JSON. Al igual que \postprocesador{}, incorpora las hojas de usuario y descriptores de formatos necesarios para su funcionamiento. Incluye soporte para anclias y alias de YAML. 
+
+ También en este caso se pueden ver algunos ejemplos de entradas aceptadas en \filename{t/\-testInputs} de las fuentes, disponibles como ficheros con nombres del estilo de \filename{YAXML\hyp{}Reverse\hyp{}*.tar.gz} en el área de ficheros de la forja (\url{http://forja.rediris.es/frs/?group_id=233}). 
+
+ Para evitar repeticiones innecesarias, aprovecharemos las instrucciones de instalación de algunas de las dependencias y algunos de los pasos de los métodos de instalación de \postprocesador{}. Comentaremos únicamente los aspectos que cambian. 
+
+\subsubsection{Dependencias}
+
+Hay algunas dependencias de \application{YAXML::Reverse} cuyos métodos
+de instalación ya se han mencionado en la sección \S\ref{inst_perl}
+análoga de \postprocesador{}:
+
+\begin{description}
+\item[Perl] \mbox{}
+Véase la página~\pageref{inst_perl}.
+
+\item[PAR] \mbox{}
+Véase la página~\pageref{inst_par}.
+
+\item[PAR::Packer] \mbox{}
+Véase la página~\pageref{inst_parpacker}.
+
+\item[Bibliotecas XML] \mbox{}
+Véase la página~\pageref{inst_xml}.
+
+\end{description}
+
+\paragraph{Bibliotecas XSLT}
+
+ También puede que nos hagan falta las bibliotecas para XSLT. Dependiendo del sistema operativo sobre el que trabajemos, los métodos de instalación cambiarán. 
+
+\subparagraph{GNU/Linux}
+
+ Necesitaremos instalar los paquetes de desarrollo para las bibliotecas \application{exslt}, \application{gdbm} y \application{gcrypt}. En una distribución basada en Debian, usaremos: 
+
+\begin{alltt}
+\computeroutput{sudo aptitude install libexslt-dev \textbackslash{}
+                      libgdbm-dev  \textbackslash{}
+                      libgcrypt-dev}
+\end{alltt}
+
+\subparagraph{Windows}
+
+ Como instalar manualmente las bibliotecas es demasiado complejo, usaremos una distribución precompilada del módulo \application{XML::LibXSLT}. Para ello, ejecutaremos esta orden bajo la interfaz de línea de órdenes: 
+
+\begin{alltt}
+\computeroutput{ppm install XML::LibXSLT}
+\end{alltt}
+
+\subsubsection{Instalación mediante paquetes Debian}
+
+Una vez instalemos XMLEye mediante el paquete Debian, sólo habrá que instalar el paquete \filename{libyaxml\hyp{}reverse\hyp{}perl}, cerrar y volver a abrir XMLEye y todo quedará listo.
+
+\subsubsection{Instalación desde distribución monolítica}
+
+ En este caso utilizaremos el fichero más reciente que concuerde con nuestro entorno que siga el patrón \filename{YAXML\hyp{}Reverse\hyp{}*\hyp{}standalone\hyp{}*.tar.gz}. 
+
+\subsubsection{Instalación desde distribución basada en PAR}
+
+ Esta vez las distribuciones (que siguen el patrón \filename{YAXML\hyp{}Reverse\hyp{}*\hyp{}par\hyp{}*.tar.gz}) serán específicas del entorno, pero por lo demás es todo igual. 
+
+\subsubsection{Instalación manual a partir de fuentes}
+
+ El patrón del nombre de fichero cambia a \filename{YAXML\hyp{}Reverse\hyp{}*.tar.gz} más reciente, y no se necesita ACL2, sino las bibliotecas de XSLT. El resto de las dependencias siguen siendo necesarias.
+
+\subsubsection{Ejecución independiente de XMLEye}
+
+ El proceso es análogo al de la sección~\ref{ejecucion} (página~\pageref{ejecucion}), pero esta vez el guión principal es \filename{yaml2xml} (y el PAR es \filename{yaml2xml.par}), y la salida que deberíamos obtener tendría que ser similar a ésta: 
+
+\begin{alltt}
+\prompt{\$ yaml2xml}
+
+\computeroutput{yaml2xml, using YAXML::Reverse 0.3.4
+Usage: yaml2xml [path to .yaml]}
+\end{alltt}
+
+\subsection{Instrucciones genéricas}
+
+ Estas instrucciones son las más detalladas, y sirven para cualquier hoja de usuario disponible actualmente y en el futuro, siempre que no varíe el diseño de XMLEye. 
+
+\subsubsection{Instalación de hojas de usuario}
+
+ Una hoja de usuario nos permite mejorar XMLEye en una de las siguientes formas: 
+
+\begin{itemize}
+\item Ver la estructura de un documento XML de otra forma. Un ejemplo sería ver sólo un resumen del documento, cambiar el orden para su preprocesamiento, o decorar los nodos del árbol con nuevas etiquetas e iconos.
+
+\item Ver el contenido de un nodo del documento de otra forma. Podemos hacer cualquier cosa que se nos ocurra con XHTML 1.1 y CSS (no hay soporte para Javascript), y establecer vínculos entre nodos del árbol y nodos de otros documentos.
+
+\end{itemize}
+
+ Realmente, no son más que conjuntos de hojas XSLT que siguen una determinada estructura para permitir su localización y su integración con otras hojas, ya que una hoja de usuario puede ser una especialización de otra hoja. 
+
+ La ruta donde se guardan las hojas de usuario variará dependiendo del método de instalación que hayamos seguido. Para más detalles, referirse al apartado~\ref{instPrograma} (página~\pageref{instPrograma}). Nos encontraremos bajo dicha ruta una serie de ficheros (sólo de interés para desarrolladores) y dos subdirectorios, \filename{preproc} y \filename{view}, en cuyo interior habrá un subdirectorio por hoja de usuario de preprocesado o visualización, respectivamente. 
+
+ Instalar una hoja de usuario no es más entonces que asegurarnos que su subdirectorio se halle en el lugar correcto, y reiniciar XMLEye. Encontraremos entradas con los mismo nombres que los subdirectorio correspondientes en las entradas \emph{Preferencias $\rightarrow$ Preprocesamiento} y \emph{Preferencias $\rightarrow$ Visualización} de XMLEye. Por defecto tendremos instalado como mínimo las hojas de usuario de preprocesado y visualización \filename{xml}, y la hoja de visualización \filename{xmlSource} a partir de la versión 1.22. 
+
+\subsubsection{Instalación de nuevos formatos de documentos}
+
+ A pesar de su nombre, XMLEye puede visualizar documentos de cualquier formato, usando un conversor si no se trata de un documento XML originalmente, e integrarse con su editor (monitorizando el fichero en busca de cambios) siempre que se le dé la información correspondiente. Esa información viene integrada en un \emph{descriptor de formato de documento}. 
+
+ Dichos descriptores se nombran usando la extensión \filename{.format} y siguen un formato XML sencillo, en cuyos detalles no entraremos aquí (véase el Manual del Desarrollador). Lo único que nos importa es su instalación, que es tan sencilla como copiar el fichero \filename{.format} correspondiente a la ruta de tipos que le corresponde según el tipo de instalación que hayamos realizado. 
+
+ Una vez instalado y reiniciado XMLEye, podremos abrir cualquier documento que tenga las extensiones especificadas en el tipo de documento instalado sin más problemas, siempre que su editor y preprocesador (si tiene alguno) se hallen debidamente instalados y tengan órdenes que puedan ejecutarse desde el directorio principal de XMLEye (posiblemente usando ejecutables bajo los directorios dentro de la variable de entorno \envar{PATH}). 
+
+\section{Uso y configuración}
+\label{uso}
+Este apartado de la guía trata acerca del empleo de XMLEye y de su configuración. Para cuestiones relacionadas con la instalación o con detalles de implementación, referirse a los apartados anteriores o al Manual del Desarrollador, respectivamente.
+
+A lo largo de esta guía nos referiremos exclusivamente a las opciones de los menús, pero prácticamente toda acción tiene una combinación equivalente en el teclado,indicada en la parte derecha del elemento del menú correspondiente (y si no, es un fallo del que se agradecería una notificación ;-): informe de él en \url{https://forja.rediris.es/tracker/?group_id=233} ). Además, las opciones más comunes poseen un botón en la barra de herramientas, cuyo icono es una versión ampliada del icono de la entrada de menú correspondiente.
+
+Podemos cambiar entre los botones de la barra de herramientas, el árbol y el navegador mediante \keycombo{Ctrl + Tab} en de izquierda a derecha y de arriba abajo, o mediante \keycombo{Shift + Ctrl + Tab} en dirección inversa.\keycombo{Tab} y \keycombo{Shift + Tab} siguen funcionando también de la forma usual, pero se hallan redefinidos en el navegador para navegar por los hipervínculos.
+
+La forma de lanzar el programa se detalla en la guía de instalación, y variará según el método seguido.
+
+\subsection{Apertura y edición de documentos}
+
+ Bajo el menú \guimenu[moreinfo = none]{Fichero}, disponemos de \guimenuitem[moreinfo = none]{Abrir...}, en donde podremos seleccionar un fichero de cualquier tipo, o uno de los formatos que tengamos instalados. 
+
+ Una vez hayamos seleccionado el fichero, XMLEye detectará a partir de la extensión de qué formato se trata y aplicará el convertidor indicado, si lo hay. Una vez el fichero se halle disponible en formato XML, pasará por la hoja de preprocesado y se mostrará su árbol en pantalla junto con la visualización de su nodo raíz. 
+
+ Para editar el fichero fuente con el editor definido en el descriptor de formato, usaremos \guimenuitem[moreinfo = none]{Editar fuente}. Si \emph{Preferencias $\rightarrow$ Actualización
+      automática} se halla activo, XMLEye monitorizará el fichero en segundo plano y actualizará el árbol XML cada vez que se produzcan cambios en él, indpendientemente de si estuviera o no el editor abierto. 
+
+ Por último, podemos acceder a los 5 últimos documentos abiertos con éxito, o \guimenuitem[moreinfo = none]{Salir} del programa. 
+
+ Para cerrar un documento, actualmente no hay ninguna entrada en el menú \guimenu[moreinfo = none]{Fichero}, pero puede hacerse pulsando la cruz de su pestaña correspondiente. Para cerrar todos los documentos, podemos pulsar en el botón de cierre general en el extremo derecho del componente de pestañas. 
+
+\subsection{Navegación por los documentos}
+
+ El documento XML tras ser preprocesado sigue una estructura arbórea normal y corriente, por lo que podemos realizar las acciones usuales mediante las entradas del menú \guimenu[moreinfo = none]{Navegar}. En particular: 
+
+\begin{description}
+\item[Buscar...] \mbox{}
+ Abre un diálogo de búsqueda en el que podemos buscar siguiendo diversos parámetros. Además de las opciones usuales de búsqueda por palabras completas o por concordancia de mayúsculas, se puede marcar el ámbito de la búsqueda. 
+
+\item[Buscar siguiente] \mbox{}
+ Repite la última búsqueda realizada, mostrando un error en caso de que no se halla realizado una anteriormente. Si hemos llegado al último resultado de la última búsqueda, volveremos al primero después. 
+
+ La repetición de una búsqueda es muy rápida, ya que XMLEye se ocupa de almacenar los resultados tras la primera petición y va dando directamente los resultados que le siguen dispués. 
+
+\item[Padre] \mbox{}
+ Sube un nivel en la jerarquía del árbol, o no hace nada si estamos en la raíz. 
+
+\item[Hijo] \mbox{}
+ Baja un nivel en la jerarquía del árbol, o no hace nada si estamos en un nodo hoja. 
+
+\item[Hermano anterior] \mbox{}
+ Se desplaza al anterior nodo hijo del padre del nodo actual, o no hace nada si estamos en su primer hijo. 
+
+\item[Hermano siguiente] \mbox{}
+ Se desplaza al siguiente nodo hijo del padre del nodo actual, o no hace nada si estamos en su último hijo. 
+
+\item[Expandir todo] \mbox{}
+ Expande el contenido de todos los nodos del árbol, de tal forma que todo nodo quede directamente visible, a menos que haya sido ocultado explícitamente por la hoja de visualización. 
+
+\item[Contraer todo] \mbox{}
+ Contrae el contenido de todos los nodos del árbol, de tal forma que únicamente el nodo raíz quede visible. 
+
+\end{description}
+
+Aunque casi toda acción es accesible mediante ratón, se recomienda
+aprender los accesos directos mediante teclado, ya que agilizan
+enormemente los desplazamientos. En la tabla \ref{teclado_arbol}
+(página~\pageref{teclado_arbol}) se listan todos los accesos directos
+mediante teclado para navegar por el árbol del documento, tras hacer
+clic en él.
+
+\begin{table}
+\centering
+\begin{tabularx}{\textwidth}{| c | X |} 
+\hline
+Combinación de teclas & \multicolumn{1}{c|}{Efecto} \\ \hline
+\hline
+\keycombo{Arriba} & Selecciona el nodo anterior en la vista actual del árbol. \\ \hline
+\keycombo{Abajo} & Selecciona el nodo siguiente en la vista actual del árbol. \\ \hline
+\keycombo{Izquierda} & Sube al nodo padre si el nodo está cerrado, y cierra el nodo actual de lo contrario. \\ \hline
+\keycombo{Derecha} & Abre el nodo actual si está cerrado, y baja al primer hijo de lo contrario. \\ \hline
+\keycombo{Inicio} & Selecciona el primer nodo en la vista actual del árbol. \\ \hline
+\keycombo{Fin} & Selecciona el último nodo en la vista actual del árbol. \\ \hline
+\keycombo{Alt + Arriba} & Selecciona al nodo padre del actual. \\ \hline
+\keycombo{Alt + Abajo} & Selecciona al primer hijo del nodo actual. \\ \hline
+\keycombo{Alt + Izquierda} & Selecciona al hermano anterior del nodo actual. \\ \hline
+\keycombo{Alt + Derecha} & Selecciona al hermano siguiente del nodo actual. \\ \hline
+
+\end{tabularx}
+\caption{Accesos de teclado para navegación por el árbol}
+\label{teclado_arbol}
+\end{table}
+ Podemos cambiar entre los documentos haciendo clic en sus pestañas correspondientes, o pulsando en la flecha hacia abajo justo a la izquierda de la cruz en el extremo derecho de la barra de pestañas: se desplegará una lista con los nombres de los documentos abiertos, pudiendo saltar directamente al documento que deseemos. 
+
+\subsection{Navegación por la vista del nodo actual}
+
+Este área muestra la información generada por la hoja de usuario de visualización a partir del nodo actual en formato XHTML, pudiendo activar los enlaces a través del ratón o pulsando \keysym{Intro} tras seleccionarlo a través de un recorrido con \keysym{Tab} y \keycombo{Shift + Tab}.
+
+Para viajar a los componentes Swing anterior o siguiente, se usarán las combinaciones \keycombo{Ctrl + Tab} o \keycombo{Ctrl + Shift + Tab} respectivamente, siguiendo las recomendaciones de Sun.
+
+Estas combinaciones y otras se recogen en la tabla~\ref{teclado_nodo}
+(página~\pageref{teclado_nodo}).
+
+\begin{table}
+\centering
+\begin{tabularx}{\textwidth}{| c | X |} 
+\hline
+Combinación de teclas & \multicolumn{1}{c|}{Efecto} \\ \hline
+\hline
+
+\begin{keysym}
+Flechas
+\end{keysym}
+
+ & Desplazamiento unitario en la dirección indicada. \\ \hline
+\begin{keysym}
+Inicio
+\end{keysym}
+
+ & Desplazamiento al inicio de la vista. \\ \hline
+\begin{keysym}
+Fin
+\end{keysym}
+
+ & Desplazamiento al final de la vista. \\ \hline
+\begin{keysym}
+AvPág
+\end{keysym}
+
+ & Desplazamiento de un bloque hacia delante. \\ \hline
+\begin{keysym}
+RePág
+\end{keysym}
+
+ & Desplazamiento de un bloque hacia atrás. \\ \hline
+\begin{keysym}
+Tab
+\end{keysym}
+
+ & Selección cíclica del siguiente enlace. \\ \hline
+\keycombo{Shift + Tab} & Selección cíclica del anterior enlace. \\ \hline
+\begin{keysym}
+RePág
+\end{keysym}
+
+ & Activación del enlace seleccionado. \\ \hline
+\keycombo{Ctrl + Tab} & Cambio al siguiente componente. \\ \hline
+\keycombo{Ctrl + Shift + Tab} & Cambio al anterior componente. \\ \hline
+
+\end{tabularx}
+\caption{Accesos de teclado para navegación por la vista del nodo actual}
+\label{teclado_nodo}
+\end{table}
+
+\subsection{Personalización de la presentación}
+
+ Podemos cambiar en cualquier momento la hoja de usuario empleada para el preprocesado del documento ocupada de generar la estructura arbórea que vemos en el panel izquierdo. Lo haremos seleccionando una opción distinta del submenú \emph{Preferencias $\rightarrow$ Preprocesado}. Se regenerará el árbol XML del documento y se nos mostrará el nodo raíz. 
+
+ Podemos hacer lo mismo con la visualización de cada nodo bajo el submenú \emph{Preferencias $\rightarrow$ Preprocesado}. Se actualizará el nodo actual de forma automática. 
+
+\note{ Los dos tipos de hojas de usuario son independientes, pero a veces conseguirá muchos mejores resultados si usa una hoja de visualización que esté diseñada de forma acorde a la hoja de preprocesado utilizada. Tal es el caso de la hoja de visualización \filename{ppACL2}, por ejemplo. }
+
+\subsection{Personalización de los formatos aceptados}
+
+Cualquier usuario puede personalizar los ajustes de los descriptores
+de formatos instalados, cambiando su nombre mostrado en el diálogo de
+selección, la orden de conversión, la orden de edición y las
+extensiones correspondientes a su libre albedrío. Esto se hace en el
+diálogo disponible bajo \emph{Preferencias $\rightarrow$ Formatos
+  admitidos...}.
+
+ La clave \verb#%s# será sustituida por la ruta al documento en las órdenes de conversión y edición. La orden de conversión puede dejarse vacía para formatos que ya se hallen en XML. Ninguna extensión puede contener espacios. 
+
+ La copia global de todo descriptor siempre se mantiene intacta, por lo que podemos volver a ella cuando queramos pulsando el botón \guibutton[moreinfo = none]{Restaurar}. Podemos confirmar los cambios realizados con el botón \guibutton[moreinfo = none]{Aceptar}, o cancelarlos mediante \guibutton[moreinfo = none]{Cancelar}. 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 

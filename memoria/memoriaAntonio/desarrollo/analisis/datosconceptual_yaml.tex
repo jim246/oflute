@@ -1,0 +1,177 @@
+%
+% Modelo conceptual de datos de YAML
+% Copyright (C) 2008 Antonio García Domínguez
+% $Id$
+%
+
+\subsubsection{Notación}
+
+Se seguirá la misma notación que en~\S\ref{sec:conceptual_notacion}
+(página~\pageref{sec:conceptual_notacion}).
+
+\subsubsection{Secuencia de procesado}
+\label{sec:conceptual_yaml_general}
+
+\index{YAML!flujo}
+\index{YAML!operaciones}
+\index{volcado|see{YAML!operaciones}}
+\index{carga|see{YAML!operaciones}}
+
+Toda implementación de \ac{YAML} establece una correspondencia entre
+las estructuras de datos nativas y los flujos de caracteres Unicode a
+través de una transformación compuesta por tres pasos en cada
+dirección, tal y como puede verse en la
+figura~\ref{fig:secuenciaproc_yaml} de la
+página~\pageref{fig:secuenciaproc_yaml}. Los detalles de cada paso son
+invisibles a los demás. Según en qué dirección nos desplacemos,
+hablaremos de:
+
+\begin{description}
+\item[Volcado]
+
+  Tomaremos una estructura de datos nativa del lenguaje de
+  programación y la presentaremos en forma de una sucesión de bytes
+  dentro de un flujo. En la mayoría de las implementaciones, esta
+  operación recibe el nombre de \verb#Dump#. Seguiremos estos pasos:
+
+  \begin{enumerate}
+  \item \emph{Representación} de la estructura de datos nativa en
+    forma de un grafo dirigido con raíz, siguiendo el modelo de
+    información de representación de \ac{YAML} que describiremos
+    posteriormente.
+
+  \item \emph{Serialización} del grafo a un árbol de
+    serialización. Habrá que imponer un orden sobre los nodos del
+    grafo, y evitar los problemas asociados con representar nodos con
+    múltiples arcos entrantes y caminos con ciclos en un árbol. Parte
+    de estos detalles también aparecen en nuestro modelo conceptual de
+    datos.
+
+  \item \emph{Presentación} en forma de una sucesión de bytes de la
+    información del árbol, recorriéndolo para lanzar y después
+    capturar una serie de eventos de serialización. Se emplearán
+    diversos estilos y notaciones para generar resultados fácilmente
+    legibles por humanos.
+  \end{enumerate}
+
+\item[Carga] 
+
+  Este es el proceso inverso al volcado, y se suele encontrar bajo el
+  nombre de \verb#Load#. Cada paso va descartando los detalles
+  específicos al paso correspondiente del volcado. Los pasos a seguir
+  son:
+
+  \begin{enumerate}
+  \item \emph{Análisis} de los bytes del flujo, lanzando y capturando
+    los eventos de deserialización correspondientes para producir el
+    árbol de serialización que refleje la información original.
+
+  \item \emph{Composición} del grafo de nodos a partir del árbol,
+    restableciendo los enlaces originales entre los nodos.
+
+  \item \emph{Construcción} de las estructuras de datos nativas del
+    lenguaje a partir del grafo de nodos.
+  \end{enumerate}
+
+\end{description}
+
+\subsubsection{Modelos de información}
+\label{sec:modinf_yaml}
+
+\index{YAML!modelos de información}
+
+Normalmente, las aplicaciones sólo necesitan las estructuras de datos
+finales, que se corresponden en muchos lenguajes (Perl, por ejemplo, o
+Java, en menor grado) de manera bastante fiel a los grafos del modelo
+de información de representación. \yaxml{}, sin embargo, tiene unos
+requisitos algo especiales: ha de asegurar una correspondencia entre
+los grafos de \ac{YAML} y los árboles de \ac{XML}, por lo que ha de
+operar a un nivel menor de abstracción, utilizando el modelo de
+información de serialización descrito en~\cite{YAML}. Una adaptación a
+\ac{UML} de dicho modelo se halla en la
+figura~\ref{fig:diaganalisis_yaml} de la
+página~\pageref{fig:diaganalisis_yaml}.
+
+Explicaremos primero los elementos del modelo de información de
+representación de \ac{YAML}, y luego describiremos las modificaciones
+que introduce el modelo de información de serialización.
+
+\paragraph{Modelo de información de representación}
+
+\index{YAML!documento}
+\index{YAML!escalar}
+\index{YAML!vector asociativo}
+\index{YAML!secuencia}
+
+Un documento \ac{YAML} se halla representado por el \clase{Nodo} raíz
+del grafo. Existen varias categorías (\emph{kind} en el original) de
+\clase{Nodo}s: \clase{Escalar}es que contienen una cadena opaca de
+caracteres Unicode, \clase{Secuencia}s ordenadas de nodos, y vectores
+asociativos (objetos de la clase \clase{VectorAsociativo}) que
+contienen un conjunto no ordenado de pares clave-valor
+(\clase{ParClaveValor}). Es interesante ver que tanto la clave como el
+valor pueden ser nodos arbitrariamente complejos, pudiendo referirse
+a cualquier otro nodo del grafo.
+
+\index{forma canónica|see{YAML!forma canónica}}
+\index{YAML!forma canónica}
+
+Todo nodo dispone de una etiqueta (\emph{tag} en el original) que
+identifica el tipo abstracto de su contenido. Las etiquetas sirven
+también en el caso de los escalares para unificar cadenas con el mismo
+significado a una serie de formas canónicas. Por ejemplo, las reglas
+de la etiqueta \etiqueta{tag:yaml.org,2002:int} utilizan base 10 y un único
+signo negativo opcional en sus formas canónicas: un valor hexadecimal
+como \verb#0xA# sería convertido por cualquier analizador al valor
+decimal 10.
+
+\index{YAML!ancla}
+\index{YAML!alias}
+
+\paragraph{Modelo de información de serialización}
+
+Modifica el modelo de representación en dos aspectos:
+
+\begin{enumerate}
+\item Añade un orden a los pares clave-valor de los vectores
+  asociativos. Este orden es un detalle de serialización, y no tiene
+  impacto alguno en los grafos y estructuras de datos nativas
+  generados.
+
+\item Permite asociar a cualquier nodo un identificador o
+  \emph{ancla}, y usar nodos \emph{alias} señalando a esa ancla en
+  posteriores referencias a ese nodo. Esto permite crear
+  presentaciones compactas de grafos complejos, que podrían incluso
+  contener ciclos en su interior.
+
+  Un ancla no tiene por qué ser única: el nodo al que hace referencia
+  un \emph{alias} no es más que el último que definió esa ancla en el
+  orden establecido.
+\end{enumerate}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{desarrollo/analisis/procesado_yaml}
+  \caption{Secuencia de procesado de \acs{YAML}}
+  \label{fig:secuenciaproc_yaml}
+\end{figure}
+
+\begin{sidewaysfigure}
+  \centering
+  \includegraphics[height=.7\textwidth]{desarrollo/analisis/modyaml}
+  \caption{Diagrama de clases conceptuales para \acs{YAML}}
+  \label{fig:diaganalisis_yaml}
+\end{sidewaysfigure}
+
+\subsubsection{Restricciones textuales}
+\label{sec:conceptual_yaml_restricciones}
+
+\begin{itemize}
+\item \emph{Clave externa}: ``nombre'' de Etiqueta.
+\end{itemize}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../memoria"
+%%% End: 

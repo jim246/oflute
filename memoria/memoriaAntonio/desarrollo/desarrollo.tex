@@ -1,0 +1,77 @@
+%
+% Desarrollo del proyecto
+% $Id: desarrollo.tex 623 2008-07-02 14:50:26Z antonio $
+%
+
+Procederemos a describir el análisis, diseño, implementación y
+realización de pruebas del proyecto como un todo, considerando la
+separación de \yaxml{} y \postprocesador{} respecto de \visor{} como
+un detalle de diseño, motivado por el deseo de aprovechar los puntos
+fuertes de cada lenguaje y hacer tanto al visor como a los conversores
+reutilizables.
+
+En particular, las secciones de diseño y análisis describirán la
+última iteración de cada producto, al contener éstas la arquitectura y
+diseño definitivos, que también han ido cambiando y han ido siendo
+refinados a lo largo de las iteraciones.
+
+\section{Proceso}
+\label{sec:proceso}
+\input{desarrollo/proceso/proceso.tex}
+
+\section{Herramientas de modelado usadas}
+
+\subsection{BOUML}
+\label{sec:herr_bouml}
+
+Genera código Java/\CPP/Python/Perl a partir de diagramas \ac{UML},
+realiza ingeniería inversa de Java/\CPP, y permite dibujar diversos
+diagramas \ac{UML} 2.0, como los diagramas de clases, despliegue,
+componentes o casos de uso, entre otros.
+
+Está disponible para Windows, \ac{GNU}/Linux y Mac OS X en la web
+\url{http://bouml.free.fr}. Se trata de un programa escrito en \CPP
+usando la versión 3.3.8 de la biblioteca Qt de la compañía Trolltech,
+conocida por ser la biblioteca sobre la cual se halla implementado el
+gestor de escritorio KDE.
+
+\subsection{UMLet}
+\label{sec:herr_umlet}
+
+Esta otra herramienta, a diferencia de BOUML, no trata de ser un
+\acs{CASE}, sino una simple herramienta para dibujar diagramas.
+
+Está diseñada para ser flexible y muy fácil de aprender y usar.
+Dibujar un diagrama consiste en utilizar componentes de una serie de
+paletas personalizables, pudiendo modificar propiedades editando un
+pequeño bloque de texto asociado a cada elemento.
+
+Se ha usado para cubrir algunas carencias de BOUML, como por ejemplo
+en el diagrama de arquitectura del sistema.
+
+El programa se halla disponible como una aplicación Java independiente
+o como un plug-in para Eclipse en \url{http://www.umlet.com}.
+
+\section{Requisitos}
+\label{sec:requisitos}
+\input{desarrollo/requisitos.tex}
+
+\section{Análisis del sistema}
+\label{sec:analisis}
+\input{desarrollo/analisis/analisis.tex}
+
+\section{Diseño del sistema}
+\label{sec:diseno}
+\input{desarrollo/diseno/diseno.tex}
+
+\section{Implementación}
+\label{sec:implementacion}
+\input{desarrollo/implementacion/implementacion.tex}
+
+\section{Pruebas y validación}
+\input{desarrollo/pruebas/pruebas.tex}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 

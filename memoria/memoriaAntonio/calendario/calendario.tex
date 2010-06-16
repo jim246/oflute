@@ -1,0 +1,367 @@
+No se ha seguido una estricta planificación durante la realización de
+este proyecto, dado que se ha desarrollado la mayor parte de él de
+forma simultánea a los estudios del último curso del Segundo Ciclo en
+Ingeniería Informática, durante mi participación en el II Concurso
+Universitario de Software Libre~\cite{CUSL2}.
+
+Los contenidos de la forja~\cite{ForjaXMLEye} han sido revisados en
+paralelo con el proyecto desde la elaboración de los paquetes Debian
+de cada producto.
+
+\section{XMLEye}
+\label{sec:cal-xmleye}
+
+\index{iteraciones!XMLEye}
+
+\subsection{Primera iteración: rediseño}
+
+El diseño del visor original se hallaba fundamentado en la premisa de
+que sólo era necesario visualizar un único documento a la vez. Al
+cambiar esta premisa, se necesitó revisar el diseño completo de la
+aplicación. Se cambió de un diseño basado en fachadas a un diseño
+basado en el patrón arquitectónico Presentación-Abstracción-Control.
+
+Las pruebas de unidad existentes fueron una gran ayuda a la hora de
+mantener la funcionalidad durante el cambio.
+
+\subsection{Segunda iteración: interfaz \acs{TDI}}
+
+Con el nuevo diseño, se pudo integrar una interfaz multidocumento
+\ac{TDI} o basada en pestañas, con controles para cerrar pestañas
+individuales y cerrar todas las pestañas. Se implementó la capacidad
+de mantener el estado y opciones de visualización de cada documento de
+forma independiente.
+
+\subsection{Tercera iteración: hipervínculos entre documentos}
+
+Se extendió la sintaxis existente para enlaces entre nodos de un
+documento para poder enlazar con nodos de otros documentos,
+aprovechando el soporte de demostraciones que usen libros por el lado
+de \postprocesador. Al pulsar en uno de esos enlaces, se abriría o
+seleccionaría la pestaña del documento en cuestión y se pasaría al
+nodo especificado.
+
+\subsection{Cuarta iteración: descriptores de formatos de documentos}
+
+Se retiró la lógica restante específica a \ac{ACL2} de \visor: en
+particular, se retiraron los diálogos explícitos de importación. Se
+reemplazó por un sistema de descriptores de formatos de documentos que
+generalizaban el enfoque anterior a cualquier formato para el que
+hiciera falta un conversor y/o un editor, y que se pudiera identificar
+por su extensión. Las órdenes especificadas son personalizables por
+cada usuario del sistema a partir de unos valores globales por
+defecto.
+
+\subsection{Quinta iteración: estabilización}
+
+Debido al importante número de cambios realizados en el diseño de la
+capa de aplicación, se consideró oportuno dedicar un tiempo prudencial
+a la depuración en detalle y simplificación del diseño en ciertos
+puntos. Un punto en el que se hizo mucho hincapié fue en el manejo de
+la concurrencia en \visor, que producía ocasionalmente problemas
+difíciles de reproducir.
+
+\subsection{Sexta iteración: paquete Debian}
+
+En esta iteración se creó un paquete Debian para \visor. Se hicieron
+diversos ajustes en \visor debidos a la necesidad de acomodarlo a las
+prácticas recomendadas por la política de Debian, y se aprovechó para
+verificar el correcto funcionamiento de \visor con OpenJDK, la versión
+de código abierto del \ac{JDK}. Ahora \visor puede funcionar al 100\% sólo
+con software libre. También se añadió la posibilidad de abrir
+documentos con XMLEye desde la línea de órdenes.
+
+\subsection{Séptima iteración: manuales y traducción al inglés}
+
+Se escribieron sendos manuales de usuario y desarrollador en DocBook,
+convirtiéndose a los formatos \ac{HTML} de una o varias páginas y
+\ac{PDF}. La versión \ac{PDF} fue producida a través de unas hojas
+\ac{XSLT} especializadas que producen código \LaTeX{}, puesto que
+todas las hojas equivalentes existentes daban resultados
+insatisfactorios.
+
+Además, se tradujeron al inglés todas las cadenas de la interfaz de
+\visor{} y los nombres de las clases de su código. La arquitectura ya
+se hallaba internacionalizada, por lo que no hubo que hacer más
+cambios aparte de indicar el idioma inglés como lenguaje por defecto.
+
+\subsection{Octava iteración: creación de un wiki}
+
+Se instaló, configuró y elaboró una primera versión de los contenidos
+de un wiki~\cite{WikiXMLEye}. Detalla tanto las motivaciones detrás de
+\visor{}, como su arquitectura general, los métodos de instalación y
+qué tener en cuenta al añadir nuevos formatos de entrada y hojas de
+estilo a \visor{}.
+
+% TODO: integrar los contenidos de los manuales del anterior PFC en el
+% wiki, y descartar los manuales de usuario y desarrollador originales.
+
+\section{\nombrepostprocesador{}}
+\label{sec:cal-acl2-procesador}
+
+\index{iteraciones!ACL2::Procesador}
+
+\subsection{Primera iteración: rediseño}
+
+Se revisó la organización del post-procesador para que siguiera las
+mejores prácticas reconocidas del \ac{CPAN}. Entre otras cosas, se
+añadió documentación al propio código en formato \ac{POD}, se
+convirtieron las pruebas de regresión existentes a guiones Perl, y se
+añadieron más pruebas para asegurar la cobertura de la documentación.
+
+Una importante ventaja de reescribir las pruebas de regresión usando
+mejores herramientas es la capacidad de calcular las diferencias entre
+la salida esperada y la obtenida de forma más inteligente, pudiendo
+ignorar de forma selectiva diferencias que no se consideren
+importantes a nivel semántico.
+
+\subsection{Segunda iteración: eventos para libros}
+
+Se añadió soporte para algunos eventos relacionados con el manejo de
+libros: IN-PACKAGE, DEFPKG, INCLUDE-BOOK y CERTIFY-BOOK.
+
+\subsection{Tercera iteración: grafos de dependencias}
+
+Se separaron de forma explícita los pasos de análisis del código
+fuente de las demostraciones, análisis de la salida resultante y
+producción de la salida. Esto posibilitó la generación previa al
+análisis de la salida de una demostración de su grafo de
+dependencias. Este grafo acíclico dirigido lista todos los eventos
+obtenidos de cada libro en uso, y detalla la ruta relativa a la
+definición del libro.
+
+Empleando estos grafos, se pudieron refinar las hojas de estilos para
+que crearan los enlaces a las definiciones de aquellos elementos que
+se originaran en otros libros.
+
+\subsection{Cuarta iteración: integración con ACL2}
+
+Aprovechando la información de los grafos de dependencias, se añadió
+la lógica necesaria a \postprocesador para invocar él mismo a
+\ac{ACL2} sobre los ficheros implicados en una demostración, haciendo
+un recorrido en post-orden del grafo. Los resultados del análisis son
+almacenados en ficheros, y sólo son recalculados cuando es necesario.
+
+\subsection{Quinta iteración: ejecutable monolítico y paquete Debian}
+
+Se integró la posibilidad de crear ejecutables monolíticos con todas
+las bibliotecas y módulos necesarios y el propio intérprete de Perl
+mediante el módulo PAR, y se elaboró un paquete Debian, empaquetando
+además todas sus dependencias, y revisando el código de
+\postprocesador{} para que cumpliera la política de Debian.
+
+\subsection{Sexta iteración: traducción al inglés}
+
+Se tradujeron todos los mensajes de error y los \ac{POD} más
+importantes a inglés. La traducción del código se deja para
+posteriores versiones.
+
+\subsection{Séptima iteración: actualización para ACL2 v3.3}
+
+Se revisó \postprocesador{} para tener en cuenta los ligeros cambios
+producidos en la salida de \ac{ACL2} en su versión 3.3.
+
+\section{\nombreyaxml{}}
+\label{sec:cal-yaxml-reverse}
+
+\index{iteraciones!YAXML::Reverse}
+
+\subsection{Primera iteración: Procesamiento de YAML 1.0}
+
+Se realizó una primera versión consistente en un solo guión Perl que
+cargaba el fichero \ac{YAML} 1.0 fuente y hacía la correspondencia
+inversa a \ac{YAXML}. Se implementó la conversión del ejemplo de la
+factura de~\cite{YAXML}, y de los 5 ejemplos
+de~\cite{YamlInFiveMinutes}.
+
+\subsection{Segunda iteración: reorganización y traducción}
+
+Pronto se vio que el problema era más complejo de lo esperado, y se
+reestructuró el guión en forma de un módulo Perl, igual que se había
+hecho con \postprocesador{}. El código y toda la documentación se
+tradujo directamente a inglés.
+
+\subsection{Tercera iteración: ejecutable monolítico y paquete Debian}
+
+De forma similar a \postprocesador{}, se creó un paquete Debian
+siguiendo las directrices de la política de Debian, y se posibilitó la
+generación de ejecutables monolíticos que incluyeran todos los
+módulos, bibliotecas y el intérprete Perl necesario.
+
+\subsection{Cuarta iteración: YAML 1.1/JSON y otras mejoras}
+
+La versión hasta el momento utilizaba \verb#YAML::Syck#, que
+funcionaba correctamente para ficheros \ac{YAML} 1.0. Sin embargo,
+cuando hubo que utilizar ficheros \ac{JSON}, no funcionaba
+debidamente: aparentemente, \ac{JSON} es subconjunto de \ac{YAML} 1.1,
+no de la versión 1.0.
+
+Se cambió a \verb#YAML::XS#, y se corrigieron otras cuestiones
+relativas al procesamiento de ficheros de entrada codificados en
+UTF-8.
+
+\section{Diagrama Gantt}
+
+\index{Gantt!diagrama}
+
+Se ha elaborado un diagrama Gantt (figura~\ref{fig:gantt} en la
+página~\pageref{fig:gantt}) para poder visualizar con mayor facilidad
+la distribución de las iteraciones.
+
+Se pueden ver las fechas exactas de inicio y fin de cada producto y
+cada iteración de cada producto y sus duraciones $D_R$ y $D_I$ en días
+reales y días ideales, respectivamente, en el
+cuadro~\ref{tab:resumenIteraciones} de la
+página~\pageref{tab:resumenIteraciones}. Tomado de~\cite{planxp}, un
+día ideal equivale a la cantidad de trabajo que puede realizarse en un
+día por una persona, sin distracción alguna y a máximo rendimiento.
+
+Se ha empleado la herramienta \emph{Gantt Project} para dibujar el
+diagrama y GNOME Planner para calcular las fechas con mejor
+precisión. Ambos son código abierto: la primera está hecha en Java y
+disponible en \url{http://ganttproject.sourceforge.net}, y la segunda
+se halla escrita en \CPP{} con la biblioteca \ac{GTK+} y se puede
+encontrar bajo la dirección \url{http://live.gnome.org/Planner}.
+
+\begin{sidewaysfigure}
+  \centering
+  \includegraphics[width=\textwidth]{calendario/calendario.png}
+  \caption{Diagrama Gantt de iteraciones}
+  \label{fig:gantt}
+\end{sidewaysfigure}
+
+\begin{table}
+  \centering
+  \begin{tabular}{| l | r@{/}r@{/}r | r@{/}r@{/}r | , | , |}
+    \hline
+    \multicolumn{1}{|c}{Producto} & \multicolumn{3}{|c}{Inicio} & \multicolumn{3}{|c|}{Fin} & D_I & D_R \\
+    \hline
+    \hline
+    \emph{XMLEye}                          & 15&11&2007 & 02&06&2008 & 34 & 53 \\
+    \hline
+    \hspace{1em} Rediseño                           & 15&11&2007 & 24&11&2007 & 6 & 8 \\
+    \hspace{1em} Interfaz TDI                       & 25&11&2007 & 06&12&2007 & 4 & 8 \\
+    \hspace{1em} Hipervínculos entre documentos     & 27&12&2007 & 31&12&2007 & 2 & 5 \\
+    \hspace{1em} Descriptores de formatos de documentos & 07&02&2008 & 18&02&2008 & 6 & 10\\
+    \hspace{1em} Paquete Debian                     & 21&02&2008 & 03&03&2008 & 5 & 10\\
+    \hspace{1em} Estabilización y manuales          & 09&03&2008 & 20&03&2008 & 8 & 8 \\
+    \hspace{1em} Manuales y traducción al inglés    & 21&03&2008 & 22&03&2008 & 1 & 2 \\
+    \hspace{1em} Wiki                               & 01&06&2008 & 02&06&2008 & 2 & 2 \\
+    \hline
+    \hline
+    \emph{\postprocesador{}}                      & 08&12&2007 & 19&06&2008 & 16 & 27.5 \\
+    \hline
+    \hspace{1em} Rediseño                           & 08&12&2007 & 13&12&2007 & 2 & 4 \\
+    \hspace{1em} Eventos para libros                & 14&12&2007 & 17&12&2007 & 2 & 3.25 \\
+    \hspace{1em} Grafos de dependencias             & 17&12&2007 & 23&12&2007 & 3 & 4.25 \\
+    \hspace{1em} Integración con ACL2               & 04&01&2008 & 06&01&2008 & 1 & 2 \\
+    \hspace{1em} Ejecutable monolítico y paquete Debian & 21&02&2008 & 01&03&2008 & 4 & 8 \\
+    \hspace{1em} Traducción al inglés               & 21&03&2008 & 22&03&2008 & 1 & 2 \\
+    \hspace{1em} Actualización a \ac{ACL2} v3.3     & 14&06&2008 & 19&06&2008 & 3 & 4 \\
+    \hline
+    \hline
+    \emph{\yaxml{}}                                & 06&03&2008 & 02&06&2008 & 5 & 6 \\
+    \hline
+    \hspace{1em} Procesamiento de YAML 1.0          & 06&03&2008 & 06&03&2008 & 1 & 1 \\
+    \hspace{1em} Reorganización y traducción        & 07&03&2008 & 07&03&2008 & 1 & 1 \\
+    \hspace{1em} Ejecutable monolítico y paquete Debian & 08&03&2008 & 08&03&2008 & 1 & 1 \\
+    \hspace{1em} YAML 1.1/JSON y otras mejoras      & 30&03&2008 & 04&04&2008 & 2 & 3\\
+    \hline
+  \end{tabular}
+  \caption{Cuadro de fechas y duraciones de las iteraciones}
+  \label{tab:resumenIteraciones}
+\end{table}
+
+\section{Porcentajes de esfuerzo}
+\label{sec:porcentajes}
+
+\index{porcentajes de esfuerzo}
+
+Los porcentajes aproximados de esfuerzo se detallan en los
+cuadros~\ref{tab:porcentajes-visor} al~\ref{tab:porcentajes-yaxml}
+(páginas~\pageref{tab:porcentajes-visor}
+a~\pageref{tab:porcentajes-yaxml}).
+
+La mayoría de los requisitos eran conocidos de antemano desde el final
+del Proyecto Fin de Carrera sobre el que se basa éste, por lo que hay
+muy poco énfasis en la fase de análisis. El importante rediseño de
+\visor{} ha motivado que los porcentajes de esfuerzo dedicados a la
+prueba de \visor{} y a su propia construcción sean prácticamente
+equivalentes.
+
+\begin{table}
+  \centering
+  \begin{tabular}[htb]{c || , | ,}
+    Fase del proceso & \multicolumn{1}{c|}{Días ideales} & \multicolumn{1}{c}{Porcentaje} \\
+
+    \hline
+    \hline
+
+    Análisis     & 1.5   &  4.44\% \\
+    \hline
+    Diseño       & 6.25  &  18.38\% \\
+    \hline
+    Construcción & 13.25 &  38.97\% \\
+    \hline
+    Pruebas      & 13    &  38.24\% \\
+    \hline
+    \hline
+    \emph{Total} & 34 & 100\% \\ 
+
+  \end{tabular}
+  \caption{Porcentajes de esfuerzo: \nombrevisor{}}
+  \label{tab:porcentajes-visor}
+\end{table}
+
+\begin{table}
+  \centering
+  \begin{tabular}[htb]{c || , | ,}
+    Fase del proceso & \multicolumn{1}{c|}{Días ideales} & \multicolumn{1}{c}{Porcentaje} \\
+
+    \hline
+    \hline
+
+    Análisis     & 0.5 & 3.125\% \\
+    \hline
+    Diseño       &   3 & 18.75\% \\
+    \hline
+    Construcción &   7 & 43.75\% \\
+    \hline
+    Pruebas      & 5.5 & 34.375\% \\
+    \hline
+    \hline
+    \emph{Total} & 16 & 100\% \\ 
+
+  \end{tabular}
+  \caption{Porcentajes de esfuerzo: \nombrepostprocesador{}}
+  \label{tab:porcentajes-acl2proc}
+\end{table}
+
+\begin{table}
+  \centering
+  \begin{tabular}[htb]{c || , | ,}
+    Fase del proceso & \multicolumn{1}{c|}{Días ideales} & \multicolumn{1}{c}{Porcentaje} \\
+
+    \hline
+    \hline
+
+    Análisis     & 0.25 &  5\% \\
+    \hline
+    Diseño       & 0.5  & 10\% \\
+    \hline
+    Construcción & 2.75 & 55\% \\
+    \hline
+    Pruebas      & 1.5  & 30\% \\
+    \hline
+    \hline
+    \emph{Total} & 5 & 100\% \\ 
+
+  \end{tabular}
+  \caption{Porcentajes de esfuerzo: \nombreyaxml{}}
+  \label{tab:porcentajes-yaxml}
+\end{table}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 

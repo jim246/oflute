@@ -1,0 +1,1065 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="770.5"
+   height="638.17297"
+   version="1.0"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="componentes.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <metadata
+     id="metadata323">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs321">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 331 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="795 : 331 : 1"
+       inkscape:persp3d-origin="397.5 : 220.66667 : 1"
+       id="perspective325" />
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-height="750"
+     inkscape:window-width="1279"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     guidetolerance="10.0"
+     gridtolerance="10.0"
+     objecttolerance="10.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     showgrid="false"
+     inkscape:zoom="1.6359201"
+     inkscape:cx="289.99069"
+     inkscape:cy="279.88352"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:current-layer="svg2" />
+  <g
+     id="g4"
+     transform="translate(-11.5,-10.827)">
+    <rect
+       x="297"
+       y="70"
+       width="73"
+       height="19"
+       id="rect6"
+       style="fill:#ffffe0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="370"
+       y="74"
+       width="3"
+       height="14"
+       id="rect8"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="334"
+       y="82"
+       id="text10"
+       style="font-size:11px;text-anchor:middle;fill:#000000;font-family:Helvetica">Filtrado</text>
+    <rect
+       x="297"
+       y="89"
+       width="184"
+       height="101"
+       id="rect12"
+       style="fill:#ffffe0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="481"
+       y="93"
+       width="3"
+       height="100"
+       id="rect14"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="301"
+       y="190"
+       width="183"
+       height="3"
+       id="rect16"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+  </g>
+  <g
+     id="g18"
+     transform="translate(-11.5,-10.827)">
+    <rect
+       x="12"
+       y="252"
+       width="306"
+       height="19"
+       id="rect20"
+       style="fill:#ffffe0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="318"
+       y="256"
+       width="3"
+       height="14"
+       id="rect22"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="165"
+       y="264"
+       id="text24"
+       style="font-size:11px;text-anchor:middle;fill:#000000;font-family:Helvetica">Presentacion</text>
+    <rect
+       x="12"
+       y="271"
+       width="767"
+       height="375"
+       id="rect26"
+       style="fill:#ffffe0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="779"
+       y="275"
+       width="3"
+       height="374"
+       id="rect28"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="16"
+       y="646"
+       width="766"
+       height="3"
+       id="rect30"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+  </g>
+  <g
+     id="g32"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="393"
+       y1="567"
+       x2="393"
+       y2="544"
+       id="line34"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g36"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="589"
+       y1="593"
+       x2="575"
+       y2="592"
+       id="line38"
+       style="stroke:#000000;stroke-dasharray:4, 4;stroke-opacity:1" />
+  </g>
+  <g
+     id="g40"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="575"
+       y1="592"
+       x2="575"
+       y2="476"
+       id="line42"
+       style="stroke:#000000;stroke-dasharray:4, 4;stroke-opacity:1" />
+  </g>
+  <g
+     id="g44"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="589"
+       y1="593"
+       x2="575"
+       y2="592"
+       id="line46"
+       style="stroke:#000000;stroke-dasharray:4, 4;stroke-opacity:1" />
+  </g>
+  <g
+     id="g48"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="575"
+       y1="592"
+       x2="575"
+       y2="357"
+       id="line50"
+       style="stroke:#000000;stroke-dasharray:4, 4;stroke-opacity:1" />
+  </g>
+  <g
+     id="g52"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="534"
+       y1="196"
+       x2="392"
+       y2="196"
+       id="line54"
+       style="stroke:#000000;stroke-dasharray:4, 4;stroke-opacity:1" />
+  </g>
+  <g
+     id="g56"
+     transform="translate(-11.5,-10.827)">
+    <rect
+       x="466"
+       y="572"
+       width="3"
+       height="51"
+       id="rect58"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="320"
+       y="620"
+       width="149"
+       height="3"
+       id="rect60"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="316"
+       y="568"
+       width="150"
+       height="52"
+       id="rect62"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="391"
+       y="588"
+       id="text64"
+       style="font-size:11px;text-anchor:middle;fill:#000000;font-family:Helvetica">&lt;&lt;component&gt;&gt;</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       font-weight="bold"
+       x="391"
+       y="614"
+       id="text66"
+       style="font-size:11px;font-weight:bold;text-anchor:middle;fill:#000000;font-family:Helvetica">Vista de nodo</text>
+    <rect
+       x="448"
+       y="572"
+       width="14"
+       height="23"
+       id="rect68"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="443"
+       y="577"
+       width="9"
+       height="4"
+       id="rect70"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="443"
+       y="587"
+       width="9"
+       height="4"
+       id="rect72"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  </g>
+  <g
+     id="g74"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="391"
+       y1="113"
+       x2="391"
+       y2="37"
+       id="line76"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g78"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="392"
+       y1="170"
+       x2="392"
+       y2="217"
+       id="line80"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g82"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="392"
+       y1="329"
+       x2="392"
+       y2="232"
+       id="line84"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g86"
+     transform="translate(-13.5,-10.827)">
+    <line
+       x1="470"
+       y1="357"
+       x2="531"
+       y2="357"
+       id="line88"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g90"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="393"
+       y1="386"
+       x2="393"
+       y2="405"
+       id="line92"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g94"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="470.00388"
+       y1="476"
+       x2="528.45459"
+       y2="476"
+       id="line96"
+       style="stroke:#000000;stroke-width:1.00387776;stroke-opacity:1" />
+  </g>
+  <g
+     id="g98"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="393"
+       y1="504"
+       x2="393"
+       y2="529"
+       id="line100"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g102"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="315"
+       y1="357"
+       x2="248"
+       y2="357"
+       id="line104"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g106"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="171"
+       y1="357"
+       x2="233"
+       y2="357"
+       id="line108"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g110"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="393"
+       y1="447"
+       x2="393"
+       y2="420"
+       id="line112"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g114"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="615"
+       y1="357"
+       x2="546"
+       y2="357"
+       id="line116"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g118"
+     transform="translate(-11.5,-10.827)">
+    <line
+       x1="618"
+       y1="476"
+       x2="543"
+       y2="476"
+       id="line120"
+       style="stroke:#000000;stroke-opacity:1" />
+  </g>
+  <g
+     id="g122"
+     transform="translate(-11.5,-10.827)">
+    <rect
+       x="465"
+       y="118"
+       width="3"
+       height="51"
+       id="rect124"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="319"
+       y="166"
+       width="149"
+       height="3"
+       id="rect126"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="315"
+       y="114"
+       width="150"
+       height="52"
+       id="rect128"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="390"
+       y="134"
+       id="text130"
+       style="font-size:11px;text-anchor:middle;fill:#000000;font-family:Helvetica">&lt;&lt;component&gt;&gt;</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       font-weight="bold"
+       x="390"
+       y="160"
+       id="text132"
+       style="font-size:11px;font-weight:bold;text-anchor:middle;fill:#000000;font-family:Helvetica">Conversor</text>
+    <rect
+       x="447"
+       y="118"
+       width="14"
+       height="23"
+       id="rect134"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="442"
+       y="123"
+       width="9"
+       height="4"
+       id="rect136"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="442"
+       y="133"
+       width="9"
+       height="4"
+       id="rect138"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  </g>
+  <g
+     id="g140"
+     transform="translate(-11.5,-10.827)">
+    <rect
+       x="466"
+       y="334"
+       width="3"
+       height="51"
+       id="rect142"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="320"
+       y="382"
+       width="149"
+       height="3"
+       id="rect144"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="316"
+       y="330"
+       width="150"
+       height="52"
+       id="rect146"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="391"
+       y="350"
+       id="text148"
+       style="font-size:11px;text-anchor:middle;fill:#000000;font-family:Helvetica">&lt;&lt;component&gt;&gt;</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       font-weight="bold"
+       x="391"
+       y="376"
+       id="text150"
+       style="font-size:11px;font-weight:bold;text-anchor:middle;fill:#000000;font-family:Helvetica">Preprocesado</text>
+    <rect
+       x="448"
+       y="334"
+       width="14"
+       height="23"
+       id="rect152"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="443"
+       y="339"
+       width="9"
+       height="4"
+       id="rect154"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="443"
+       y="349"
+       width="9"
+       height="4"
+       id="rect156"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  </g>
+  <g
+     id="g158"
+     transform="translate(-11.5,-10.827)">
+    <rect
+       x="466"
+       y="452"
+       width="3"
+       height="51"
+       id="rect160"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="320"
+       y="500"
+       width="149"
+       height="3"
+       id="rect162"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="316"
+       y="448"
+       width="150"
+       height="52"
+       id="rect164"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="391"
+       y="468"
+       id="text166"
+       style="font-size:11px;text-anchor:middle;fill:#000000;font-family:Helvetica">&lt;&lt;component&gt;&gt;</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       font-weight="bold"
+       x="391"
+       y="494"
+       id="text168"
+       style="font-size:11px;font-weight:bold;text-anchor:middle;fill:#000000;font-family:Helvetica">Vista</text>
+    <rect
+       x="448"
+       y="452"
+       width="14"
+       height="23"
+       id="rect170"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="443"
+       y="457"
+       width="9"
+       height="4"
+       id="rect172"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="443"
+       y="467"
+       width="9"
+       height="4"
+       id="rect174"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  </g>
+  <g
+     id="g176"
+     transform="translate(-11.5,-10.827)">
+    <rect
+       x="766"
+       y="334"
+       width="3"
+       height="51"
+       id="rect178"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="620"
+       y="382"
+       width="149"
+       height="3"
+       id="rect180"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="616"
+       y="330"
+       width="150"
+       height="52"
+       id="rect182"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="691"
+       y="350"
+       id="text184"
+       style="font-size:11px;text-anchor:middle;fill:#000000;font-family:Helvetica">&lt;&lt;component&gt;&gt;</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       font-weight="bold"
+       x="691"
+       y="376"
+       id="text186"
+       style="font-size:11px;font-weight:bold;text-anchor:middle;fill:#000000;font-family:Helvetica">PreprocesadoUsuario</text>
+    <rect
+       x="748"
+       y="334"
+       width="14"
+       height="23"
+       id="rect188"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="743"
+       y="339"
+       width="9"
+       height="4"
+       id="rect190"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="743"
+       y="349"
+       width="9"
+       height="4"
+       id="rect192"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  </g>
+  <g
+     id="g194"
+     transform="translate(-11.5,-10.827)">
+    <rect
+       x="769"
+       y="452"
+       width="3"
+       height="51"
+       id="rect196"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="623"
+       y="500"
+       width="149"
+       height="3"
+       id="rect198"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="619"
+       y="448"
+       width="150"
+       height="52"
+       id="rect200"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="694"
+       y="468"
+       id="text202"
+       style="font-size:11px;text-anchor:middle;fill:#000000;font-family:Helvetica">&lt;&lt;component&gt;&gt;</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       font-weight="bold"
+       x="694"
+       y="494"
+       id="text204"
+       style="font-size:11px;font-weight:bold;text-anchor:middle;fill:#000000;font-family:Helvetica">VistaUsuario</text>
+    <rect
+       x="751"
+       y="452"
+       width="14"
+       height="23"
+       id="rect206"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="746"
+       y="457"
+       width="9"
+       height="4"
+       id="rect208"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="746"
+       y="467"
+       width="9"
+       height="4"
+       id="rect210"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  </g>
+  <g
+     id="g212"
+     transform="translate(-11.5,-10.827)">
+    <rect
+       x="167"
+       y="334"
+       width="3"
+       height="51"
+       id="rect214"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="21"
+       y="382"
+       width="149"
+       height="3"
+       id="rect216"
+       style="fill:#808080;stroke:none;stroke-opacity:1" />
+    <rect
+       x="17"
+       y="330"
+       width="150"
+       height="52"
+       id="rect218"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="92"
+       y="350"
+       id="text220"
+       style="font-size:11px;text-anchor:middle;fill:#000000;font-family:Helvetica">&lt;&lt;component&gt;&gt;</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       font-weight="bold"
+       x="92"
+       y="376"
+       id="text222"
+       style="font-size:11px;font-weight:bold;text-anchor:middle;fill:#000000;font-family:Helvetica">Vista documento</text>
+    <rect
+       x="149"
+       y="334"
+       width="14"
+       height="23"
+       id="rect224"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="144"
+       y="339"
+       width="9"
+       height="4"
+       id="rect226"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+    <rect
+       x="144"
+       y="349"
+       width="9"
+       height="4"
+       id="rect228"
+       style="fill:#c0ffc0;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  </g>
+  <g
+     id="g230"
+     transform="translate(-11.5,-10.827)">
+    <polygon
+       points="590,568 759,568 759,578 769,578 769,636 590,636 590,568 "
+       id="polygon232"
+       style="fill:#c0ffff;stroke:#000000;stroke-opacity:1" />
+    <line
+       x1="759"
+       y1="568"
+       x2="769"
+       y2="578"
+       id="line234"
+       style="stroke:#000000;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="600"
+       y="589"
+       id="text236"
+       style="font-size:12px;fill:#000000;font-family:Helvetica">Conexiones intercambiables</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="600"
+       y="606"
+       id="text238"
+       style="font-size:12px;fill:#000000;font-family:Helvetica">por el usuario, y establecidas</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="600"
+       y="623"
+       id="text240"
+       style="font-size:12px;fill:#000000;font-family:Helvetica">por la capa de Aplicacion.</text>
+  </g>
+  <g
+     id="g242"
+     transform="translate(-11.5,-10.827)">
+    <polygon
+       points="535,162 698,162 698,172 708,172 708,231 535,231 535,162 "
+       id="polygon244"
+       style="fill:#c0ffff;stroke:#000000;stroke-opacity:1" />
+    <line
+       x1="698"
+       y1="162"
+       x2="708"
+       y2="172"
+       id="line246"
+       style="stroke:#000000;stroke-opacity:1" />
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="545"
+       y="183"
+       id="text248"
+       style="font-size:12px;fill:#000000;font-family:Helvetica">Separacion conseguible</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="545"
+       y="200"
+       id="text250"
+       style="font-size:12px;fill:#000000;font-family:Helvetica">mediante validacion por</text>
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="545"
+       y="217"
+       id="text252"
+       style="font-size:12px;fill:#000000;font-family:Helvetica">DTD, XML Schema, etc.</text>
+  </g>
+  <g
+     id="g254"
+     transform="translate(-3.3101797,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="353"
+       y="18"
+       id="text256"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">FicheroFuente</text>
+  </g>
+  <g
+     id="g258"
+     transform="translate(-11.5,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="406"
+       y="226"
+       id="text260"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">Source</text>
+  </g>
+  <g
+     id="g262"
+     transform="translate(-2.2720078,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="502"
+       y="376"
+       id="text264"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">URIResolver</text>
+  </g>
+  <g
+     id="g266"
+     transform="translate(-11.5,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="398"
+       y="397"
+       id="text268"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">Result</text>
+  </g>
+  <g
+     id="g270"
+     transform="translate(0.7279922,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="499"
+       y="495"
+       id="text272"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">URIResolver</text>
+  </g>
+  <g
+     id="g274"
+     transform="translate(-11.5,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="400"
+       y="514"
+       id="text276"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">Result</text>
+  </g>
+  <g
+     id="g278"
+     transform="translate(-11.5,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="277"
+       y="370"
+       id="text280"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">Result</text>
+  </g>
+  <g
+     id="g282"
+     transform="translate(-11.5,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="173"
+       y="349"
+       id="text284"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">Document</text>
+  </g>
+  <g
+     id="g286"
+     transform="translate(-11.5,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="398"
+       y="441"
+       id="text288"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">Source</text>
+  </g>
+  <g
+     id="g290"
+     transform="translate(-11.5,-10.827)">
+    <text
+       font-size="9"
+       xml:space="preserve"
+       x="399"
+       y="560"
+       id="text292"
+       style="font-size:11px;fill:#000000;font-family:Helvetica">HTMLDocument</text>
+  </g>
+  <path
+     d="M 388.5,17.173 C 388.5,22.143563 384.47056,26.173 379.5,26.173 C 374.52944,26.173001 370.5,22.143564 370.5,17.173001"
+     id="path294"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  <ellipse
+     cx="392"
+     cy="223"
+     rx="5"
+     ry="5"
+     id="ellipse296"
+     sodipodi:cx="392"
+     sodipodi:cy="223"
+     sodipodi:rx="5"
+     sodipodi:ry="5"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     transform="translate(-11.5,-10.827)" />
+  <path
+     d="M 389.5,212.173 C 389.5,217.14356 385.47056,221.173 380.5,221.173 C 375.52944,221.173 371.5,217.14356 371.5,212.173"
+     id="path298"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  <g
+     id="g2698"
+     transform="translate(-3,0)">
+    <ellipse
+       transform="translate(-11.5,-10.827)"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+       sodipodi:ry="5"
+       sodipodi:rx="5"
+       sodipodi:cy="357"
+       sodipodi:cx="537"
+       id="ellipse300"
+       ry="5"
+       rx="5"
+       cy="357"
+       cx="537" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+       id="path302"
+       d="M 525.5,337.173 C 530.47056,337.173 534.5,341.20244 534.5,346.173 C 534.5,351.14356 530.47056,355.173 525.5,355.173" />
+  </g>
+  <ellipse
+     cx="394"
+     cy="411"
+     rx="5"
+     ry="5"
+     id="ellipse304"
+     sodipodi:cx="394"
+     sodipodi:cy="411"
+     sodipodi:rx="5"
+     sodipodi:ry="5"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     transform="translate(-11.5,-10.827)" />
+  <g
+     id="g2702">
+    <ellipse
+       transform="translate(-11.5,-10.827)"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+       sodipodi:ry="5"
+       sodipodi:rx="5"
+       sodipodi:cy="476"
+       sodipodi:cx="534"
+       id="ellipse306"
+       ry="5"
+       rx="5"
+       cy="476"
+       cx="534" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+       id="path308"
+       d="M 522.5,456.173 C 527.47056,456.173 531.5,460.20244 531.5,465.173 C 531.5,470.14356 527.47056,474.173 522.5,474.173" />
+  </g>
+  <ellipse
+     cx="394"
+     cy="535"
+     rx="5"
+     ry="5"
+     id="ellipse310"
+     sodipodi:cx="394"
+     sodipodi:cy="535"
+     sodipodi:rx="5"
+     sodipodi:ry="5"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     transform="translate(-11.5,-10.827)" />
+  <ellipse
+     cx="243"
+     cy="357"
+     rx="5"
+     ry="5"
+     id="ellipse312"
+     sodipodi:cx="243"
+     sodipodi:cy="357"
+     sodipodi:rx="5"
+     sodipodi:ry="5"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1"
+     transform="translate(-11.5,-10.827)" />
+  <path
+     d="M 391.495,524.458 C 391.33779,529.42608 387.18292,533.32605 382.21484,533.16884 C 377.24676,533.01163 373.34679,528.85676 373.504,523.88868"
+     id="path314"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  <path
+     d="M 231.5,355.173 C 226.52944,355.173 222.5,351.14356 222.5,346.173 C 222.5,341.20244 226.52944,337.173 231.5,337.173"
+     id="path316"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+  <path
+     d="M 391.496,400.428 C 391.35505,405.39657 387.21295,409.31013 382.24438,409.16918 C 377.27581,409.02823 373.36225,404.88613 373.5032,399.91756"
+     id="path318"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+</svg>

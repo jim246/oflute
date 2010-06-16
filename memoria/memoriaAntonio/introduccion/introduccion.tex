@@ -1,0 +1,824 @@
+\section{Metalenguajes en el intercambio de información}
+\label{sec:metalenguajes}
+
+\index{analizador!sintáctico}
+\index{analizador!léxico}
+\index{analizador!semántico}
+\index{lenguaje}
+
+Comunicar dos o más aplicaciones entre sí (en máquinas o espacios de
+memoria distintos, o incluso la misma aplicación en ejecuciones
+separadas en el tiempo) significa, a grandes rasgos, intercambiar
+secuencias de bits que siguen una serie de reglas que les dan
+estructura y significado, es decir, que pertenecen a un
+\emph{lenguaje}.
+
+Evidentemente, en ambos extremos de la comunicación debe de existir la
+lógica necesaria para recuperar esa estructura y significado a partir
+de los bits: los analizadores \emph{léxicos} reconocen los lexemas
+que constituyen los elementos básicos y los analizadores
+\emph{sintácticos} y \emph{semánticos} se ocupan de crear estructuras
+de datos más elaboradas a partir de ellos.
+
+Originalmente, tanto la gramática con las reglas que describían la
+sintaxis de la mayoría de los documentos, como el contenido que debían
+tener, eran propios de cada lenguaje. Esto originaba muchas
+complicaciones imprevistas al tener que integrar varias aplicaciones,
+posiblemente desarrolladas por diferentes organizaciones, y para
+entornos hardware y software distintos.
+
+Las razones de este enfoque \emph{ad hoc} eran las limitaciones en
+memoria y capacidad de proceso del hardware de la época: primaba la
+eficiencia en recursos computacionales sobre los costes de desarrollo,
+así que los lenguajes usados eran un fiel reflejo (a veces demasiado)
+de las representaciones internas de los datos. Con el tiempo,
+el avance en la tecnología alteró este equilibrio para la gran mayoría de
+aplicaciones que con el auge de Internet necesitaban más que nunca
+garantizar el intercambio fiable y perdurable de la información con
+una mejor gestión de errores y comprobaciones más estrictas.
+
+\index{metalenguaje}
+
+Esto impulsó la popularidad de los \emph{metalenguajes}, que definían
+las reglas no ya de uno, sino de familias completas de lenguajes. Los
+desarrolladores podían partir de una base de reglas y herramientas ya
+existentes para definir y explotar sus lenguajes de intercambio de
+información.
+
+\index{lenguaje!de marcado}
+\index{lenguaje!de serialización}
+
+Las familias de lenguajes definidas por los metalenguajes pueden tener
+diversos usos, no excluyentes entre sí:
+
+\begin{itemize}
+\item Lenguajes de \emph{marcado}, que emplean etiquetas para anotar
+  el contenido de los documentos con información acerca del
+  significado de sus elementos. Son lenguajes descriptivos, más que
+  procedimentales. Por ejemplo, en lugar de indicar que se imprima una
+  serie de cadenas separadas por saltos de línea de 16 puntos, al
+  estilo de PostScript, indicaríamos que dicho grupo de cadenas forman
+  un párrafo.
+
+  \index{GML}
+  \index{SGML}
+  \index{HTML}
+
+  Algunos de los primeros metalenguajes de marcado fueron
+  \ac{GML}~\cite{SGMLRoots} (1973) y su sucesor, \ac{SGML},
+  estandarizado como ISO 8879:1986. \ac{HTML}, sobre el que se apoya
+  hoy en día toda la World Wide Web, es una derivación de \ac{SGML}.
+
+  Posteriormente, se empleó \ac{SGML} para definir
+  \ac{XML}~\cite{XMLSpec}, el metalenguaje por excelencia hoy en
+  día. Sacrifica gran parte de la flexibilidad de \ac{SGML} para
+  simplificar su manipulación automática. Además de las ventajas de
+  los metalenguajes y de los lenguajes de marcado, \ac{XML} permite
+  definir vocabularios fácilmente extensibles por terceras partes que
+  acomoden nueva información antes no prevista.
+
+  Uno de los ejemplos más notables del uso de \ac{XML} es el formato
+  para documentos ofimáticos \ac{ODF}, publicado como el estándar ISO
+  26300:2006, e implementado en diversos paquetes ofimáticos, como
+  OpenOffice, KOffice o Google Docs.
+
+\item Lenguajes de \emph{serialización} y \emph{deserialización} de
+  estructuras de datos de memoria a un flujo de bytes y viceversa,
+  respectivamente. Esto permite enviar dichas estructuras a través de
+  una conexión de red o guardarlas en ficheros, por ejemplo.
+
+  Aunque \ac{XML} se usa ampliamente para este fin, hoy en día
+  \ac{YAML} está reuniendo cada vez más adeptos, por su sintaxis más
+  concisa y fácil de leer y su facilidad de uso. \ac{JSON}, un
+  subconjunto de \ac{YAML} 1.1 más fácil de analizar pero menos
+  legible, está cobrando fuerza en la comunidad de desarrolladores
+  Web.
+
+  Algunos ejemplos del uso de \ac{YAML} y \ac{JSON} incluyen los
+  volcados de bases de datos del entorno de desarrollo web Django, los
+  descriptores de módulos Perl y los marcadores del navegador web
+  Mozilla Firefox en sus versiones 3.0 y posteriores.
+
+\end{itemize}
+
+Sin embargo, muchos de estos metalenguajes no fueron diseñados para
+ser legibles por personas. Este es el caso de aquellos
+basados en \ac{XML} o \ac{JSON}, por ejemplo. Otras veces, incluso
+para metalenguajes más legibles como \ac{YAML}, los documentos son
+simplemente demasiado complejos o grandes.
+
+El único tipo de herramienta que puede resolver estos problemas es un
+visor, que reúna información agregada en un formato fácil de
+comprender. Por otro lado, la creación de un visor específico para un
+lenguaje determinado implica un esfuerzo considerable, que sólo se
+halla justificado si dispone de la <<masa crítica>>
+necesaria. Especializar un visor genérico ya existente supone el mejor
+enfoque para los formatos con comunidades de usuarios más pequeñas.
+
+\section{Formatos de intercambio de información que no se basan en
+  metalenguajes}
+\label{sec:estructurados}
+
+Los problemas de legibilidad antes mencionados no son específicos de
+los formatos basados en metalenguajes. Las grandes capacidades de
+procesamiento automatizado que nos otorgan las computadoras nos
+permiten tratar problemas mucho más grandes, pero con cada vez mayor
+frecuencia nos vemos impedidos a la hora de analizar los propios
+resultados.
+
+También aquí, la solución usual para formatos lo bastante populares es
+crear visores específicos para ellos. En muchos casos, el documento
+original se convierte primero a un formato basado en un metalenguaje,
+para reutilizar la amplia gama de documentación, herramientas y
+bibliotecas existentes. Esto no debería suponer una pérdida de
+información: \ac{XML}, por ejemplo, permite construir lenguajes
+arbitrariamente complejos. Otras veces, es la propia aplicación la que
+pasa a basar el formato de su salida en un metalenguaje, como en el
+caso del sistema de demostraciones automatizadas
+Mizar~\cite{CairnsG07, Urban05}, que pasó a utilizar \ac{XML}.
+
+Con la infraestructura básica establecida, se puede pasar directamente
+a crear el visor. Si ya existiera un visor genérico basado en el
+metalenguaje usado, podríamos evitar también este paso: sólo habría
+que especializarlo para nuestro formato.
+
+La reducción de las barreras necesarias para crear un visor nos
+permitiría concentrarnos más en el análisis del formato origen y en la
+definición del formato final de presentación, sin tener que
+molestarnos en los detalles de implementación necesarios para mantener
+un historial de documentos, habilitar la navegación por hipervínculos
+y otros aspectos de bajo nivel.
+
+Así, podríamos manejar formatos considerados más difíciles de
+procesar, como aquellos que carecen de gramáticas explícitamente
+definidas. Tal es el caso de muchos resultados generados de manera
+automática y dirigidos al usuario final: en este caso, la gramática
+está definida por el propio código que la produce. Convertir la salida
+producida a un metalenguaje puede resultar más eficiente que
+reescribir el programa original si no se ha hecho una separación entre
+el procesamiento y la presentación del resultado desde un primer
+momento.
+
+\index{lenguaje!aplicativo}
+\index{lenguaje!funcional}
+
+Uno de estos formatos con gramáticas implícitas es el de las
+demostraciones producidas por el sistema \ac{ACL2}. \ac{ACL2} es un
+sistema de razonamiento automatizado desarrollado en la Universidad de
+Texas en Austin y publicado bajo la licencia \acs{GNU}
+\acs{GPL}. Utiliza un subconjunto funcional (\emph{aplicativo} o sin
+efectos colaterales, es decir, sin bucles, ni asignaciones, ni
+variables globales, etc.) de Lisp para realizar demostraciones
+formales de propiedades de sistemas software y hardware complejos.
+
+En~\cite{indacl2} se muestran algunos ejemplos de demostraciones sobre
+sistemas complejos realizadas mediante \ac{ACL2}. Entre ellos, se
+menciona la verificación de que cierto microcódigo de un chip \ac{DSP}
+de Motorola realmente implementaba ciertos algoritmos conocidos, y que
+llegó a los 84 megabytes de texto puro. No es sólo eso: la salida de
+\ac{ACL2} se realiza en una mezcla de lenguaje natural y expresiones
+Lisp que puede hacerse muy difícil y tediosa de manejar en
+demostraciones de interés práctico.
+
+Puede darse también el caso de que la demostración se halle dividida a
+lo largo de varios ficheros, y la traza de una demostración fallida
+requiera así la inspección de varios ficheros enlazados entre sí.
+
+Definiendo un visor para \ac{ACL2}, se podría navegar de forma mucho
+más sencilla y cómoda, y partiendo de un marco genérico, podemos
+ahorrarnos la mayor parte del trabajo implicado en ello. Además,
+seguir los sutiles cambios producidos en el formato de la salida de
+\ac{ACL2} entre versiones se haría mucho más sencillo, al no estar
+atado el visor a esos detalles.
+
+\section{Objetivos}
+
+Este proyecto toma como punto de partida el Proyecto Fin de Carrera
+``Post-procesador y Visor de Demostraciones del Sistema ACL2'', en el
+cual se definió una conversión preliminar de un subconjunto de las
+demostraciones sin uso de libros de \ac{ACL2} a un lenguaje basado en
+\ac{XML}, y un visor específico para este formato.
+
+Los objetivos a cumplir son los siguientes:
+
+\begin{itemize}
+\item Generalizar el diseño del visor a un visor genérico de
+  documentos basado en \ac{XML} para su uso en un amplio rango de
+  formatos, tanto basados como no basados en metalenguajes. Se
+  necesitará:
+
+  \begin{itemize}
+  \item Integración personalizable con los editores y los
+    convertidores a \ac{XML} de los múltiples formatos utilizados.
+
+  \item Apertura de múltiples documentos en una interfaz en pestañas o
+    \ac{TDI}, con la posibilidad de mantener distintas configuraciones
+    de visualización en cada documento abierto.
+
+  \item Recorrido de enlaces entre múltiples documentos, pudiendo
+    seleccionar el nodo exacto a visualizar en el documento enlazado.
+
+  \item Retirada de toda lógica específica a \ac{ACL2} del visor,
+    moviéndola al antiguo post-procesador.
+  \end{itemize}
+
+\item Mejorar la calidad global del producto a través de:
+
+  \begin{itemize}
+  \item Mejorar la cantidad y calidad de la documentación, situándola
+    en una plataforma colaborativa.
+
+  \item Facilitar la instalación del visor y sus extensiones.
+
+  \item Traducir la interfaz del visor al inglés.
+
+  \item Publicar el código fuente y otros ficheros asociados a través
+    de una forja.
+
+  \item Ampliar el conjunto de casos de prueba de todos los productos.
+  \end{itemize}
+
+\item Refinar el antiguo post-procesador de \ac{ACL2} y sus hojas de
+  estilo, ejecutando las siguientes acciones:
+
+  \begin{itemize}
+  \item Integración de la lógica específica a \ac{ACL2} antes
+    contenida en el visor.
+
+  \item Manejo de demostraciones que certifiquen libros y reutilicen
+    sus definiciones a múltiples niveles, teniendo en cuenta el grafo
+    completo de dependencias y evitando enviar a \ac{ACL2} el mismo
+    fichero varias veces.
+  \end{itemize}
+
+\item Crear una nueva extensión para procesar documentos basados en
+  \ac{YAML} y \ac{JSON}, con sus hojas de estilo:
+
+  \begin{itemize}
+  \item Conversión de documentos \ac{YAML} 1.1 y \ac{JSON} a XML,
+    garantizando que no se producen pérdidas ni cambios de la
+    información original.
+
+  \item Manejo de anclas y alias de \ac{YAML}, con la debida creación
+    de vínculos en el \ac{XML} resultante.
+  \end{itemize}
+
+\end{itemize}
+
+\section{Alcance}
+
+El proyecto se compone de tres productos:
+
+\begin{itemize}
+\item El producto principal es \visor, un visor genérico de documentos
+  basados en \ac{XML}, integrable con extensiones externas que
+  convierten formatos no basados en \ac{XML} y con hojas de estilo
+  \ac{XSLT} que definen visualizaciones especializadas para ciertos
+  formatos.
+
+\item \postprocesador{}, un conversor integrable en \visor que toma la
+  salida de \ac{ACL2} en lenguaje humano y su fuente Lisp y procesa
+  ambos para obtener un fichero \ac{XML} sin pérdida de información
+  que otros programas puedan manejar fácilmente. Incluye sus propias
+  hojas de estilo especializadas, también integrables en \visor.
+
+\item \yaxml, un conversor a \ac{XML} de documentos \ac{YAML}
+  1.1 y \ac{JSON}. También incluye sus propias hojas de estilo.
+\end{itemize}
+
+Estos productos dispondrán de su propia documentación para usuarios y
+desarrolladores. Se habilitará un \emph{wiki} y un espacio en una
+forja para permitir la futura colaboración de nuevos participantes.
+
+\subsection{Limitaciones del proyecto}
+
+Únicamente se utilizarán visualizaciones en \ac{HTML} mediante una
+interfaz Swing. Generar árboles estáticos de ficheros \ac{XHTML} o
+utilizar interfaces Swing dinámicas mediante JavaFX se dejan como
+trabajo futuro.
+
+Por limitaciones de tiempo, \postprocesador{} se restringe a un
+subconjunto de todos los eventos de \ac{ACL2}, tratando demostraciones
+que, aunque complejas, no hacen uso de todo el potencial de \ac{ACL2}.
+Su uso sería, pues, eminentemente didáctico.
+
+Se ignoran en la actualidad los mensajes de la implementación de Lisp
+sobre la que se ejecuta \ac{ACL2}, como los mensajes del recolector de
+basura, ya que existe actualmente una gran variedad de ellas y no
+sería factible ni útil añadir lógica para cada una. Por supuesto, sí
+se han considerado los mensajes de error durante la demostración
+propios de \ac{ACL2}.
+
+No se crearán hojas de estilo para lenguajes derivados de \ac{YAML} o
+\ac{JSON} para este proyecto. En futuras versiones se crearán hojas de
+estilo para ficheros de marcadores de Firefox y volcados de bases de
+datos de pruebas de Django.
+
+\subsection{Licencia}
+
+Se decidió publicar \postprocesador{}, \yaxml{} y \visor{} como
+software libre bajo la licencia \ac{GPL} en sus versiones 2 o
+posteriores. Las licencias de las principales bibliotecas, módulos
+Perl y demás herramientas utilizadas en este Proyecto son:
+
+\begin{itemize}
+\item Perl: la versión original dirigida a sistemas UNIX puede usarse
+  bajo o bien la licencia denominada ``Artística'' (disponible bajo
+  \url{http://www.perl.com/language/misc/Artistic.html}), o bajo la
+  \ac{GNU} \ac{GPL} en sus versiones 1 o posteriores.
+
+\item La distribución de Perl para Windows usada, Strawberry Perl, y
+  la mayoría de los módulos Perl usados comparten el esquema de
+  licenciado de Perl. Algunos módulos varían ligeramente, como en el
+  caso de \modulo{XML::Writer}, que no impone restricción alguna en su
+  uso comercial o no comercial, o \modulo{XML::Validate}, que
+  únicamente admite la licencia \ac{GPL}.
+
+\item A través de algunos de los módulos Perl, se emplean de forma
+  indirecta las bibliotecas \biblioteca{libxml2}, \biblioteca{libxslt}
+  y \biblioteca{libyaml}. Todas se hallan bajo la licencia \ac{MIT},
+  prácticamente equivalente a la licencia \ac{BSD} revisada, en la que
+  se retira la necesidad de incluir el aviso del uso de dicho
+  componente en todo el material publicitario del producto final. Al
+  no ser una licencia \emph{copyleft}, los usuarios no se hallan
+  obligados a devolver a la comunidad los cambios que hagan sobre las
+  bibliotecas.
+
+\item OpenJDK 6.0: \ac{GPL}, con la excepción Classpath (véase
+  \url{http://www.gnu.org/software/classpath/license.html}), que
+  permite enlazar módulos independientes bajo cualquier licencia con
+  módulos escritos bajo la \ac{GPL} versión 2, sin que la \ac{GPL} se
+  extienda a dichos módulos. De esta forma, puede usarse para
+  desarrollar aplicaciones comerciales, por ejemplo, y no supone un
+  impedimento para su adopción. En última instancia, es muy similar a
+  la licencia \ac{LGPL}.
+
+  Un pequeño porcentaje (menor al 5\%) de OpenJDK sigue estando bajo
+  licencias propietarias: Sun está ahora trabajando en sustituirlas
+  por componentes equivalentes.
+
+\item IcedTea 6.0: \ac{GPL} con la excepción Classpath. Reemplaza ese
+  pequeño porcentaje propietario de OpenJDK y añade un proceso de
+  compilación completamente basado en herramientas libres.
+
+\item Apache Ant: \ac{APL} 2.0. Esta licencia tampoco es
+  \emph{copyleft}, y es compatible con la \ac{GPL} en sus versiones 3
+  o superiores.
+
+\item \ac{ACL2}: \ac{GNU} \ac{GPL}, combinando a su vez componentes
+  bajo la \ac{GNU} \ac{GPL} (por ejemplo, la biblioteca
+  \biblioteca{readline}) y bajo la \ac{GNU} \ac{LGPL} (como el entorno
+  Lisp \ac{GCL}).
+
+\end{itemize}
+
+% lista de componentes
+
+\section{Visión general}
+
+Tras una revisión del calendario seguido, detallaremos a lo largo del
+resto de la memoria el proceso de análisis, diseño, codificación y
+pruebas que se siguió al realizar el proyecto.
+
+En particular, se describirá el estado del proyecto en su última
+iteración, que tiene la arquitectura y el diseño definitivos.
+
+Los manuales de usuario y de instalación se incluyen tras un resumen
+de los aspectos más destacables de proyecto y las conclusiones. En
+dicho manual, se halla un apartado dirigido a usuarios avanzados que
+deseen definir sus propias hojas \ac{XSLT}.
+
+\section{Glosario}
+
+\subsection{Acrónimos}
+\input{introduccion/acronimos.tex}
+
+\subsection{Definiciones}
+\label{sec:definiciones}
+
+\subsubsection{Definiciones generales}
+\label{sec:def-generales}
+
+\begin{description}
+\item[Analizador léxico] 
+  \index{analizador!léxico}
+
+  Programa o módulo que se ocupa de reconocer los símbolos terminales
+  de un lenguaje dentro de las cadenas de texto recibidas por el
+  analizador sintáctico.
+
+\item[Analizador sintáctico] 
+  \index{analizador!sintáctico}
+
+  Programa o módulo que se encarga de agrupar las cadenas de símbolos
+  terminales proporcionados por el analizador léxico en símbolos no
+  terminales. Pueden reflejar así restricciones de mayor nivel de
+  abstracción sobre las cadenas válidas del lenguaje. Normalmente le
+  sigue un analizador semántico.
+
+\item[Analizador semántico] 
+  \index{analizador!semántico}
+
+  Programa o módulo cuyo cometido es realizar cualquier procesamiento
+  adicional específico para el lenguaje del texto procesado, y que el
+  analizador sintáctico no sea capaz de implementar a través de su
+  gramática. Excepto por los lenguajes más simples, una gramática
+  estándar no puede representar todas sus restricciones.
+
+\item[Deserialización] 
+  \index{deserialización}
+
+  Proceso inverso a la serialización. En él se recupera una copia con
+  el mismo contenido semántico que la estructura de datos original, a
+  partir de la secuencia de bytes resultante de la serialización.
+
+\item[Forja] 
+  \index{forja}
+
+  Sitio web dedicado a hospedar proyectos de desarrollo de
+  software. Normalmente, las forjas son gratuitas para proyectos de
+  software libre y/o código abierto, pero también existen
+  forjas~\cite{Assembla} para entornos comerciales. Los servicios
+  proporcionados varían mucho entre forja y forja, pero como mínimo
+  suelen tener espacio en algún sistema de control de versiones, un
+  sistema de control de incidencias y un área en la que alojar
+  ficheros para su descarga por los usuarios.
+
+\item[Lenguaje] 
+  \index{lenguaje!definición}
+
+  Subconjunto del conjunto potencia de los caracteres de un
+  alfabeto. Un lenguaje puede definirse a partir de una gramática que
+  especifique restricciones en la sintaxis de las cadenas consideradas
+  válidas. En el caso de los lenguajes artificiales, esta gramática
+  viene definida explícitamente a través de algún mecanismo formal.
+
+\item[Lenguaje de marcado]
+  \index{lenguaje!de marcado}
+
+  Lenguaje artificial que decora un texto sencillo con anotaciones
+  acerca de la estructura, el significado y/o el formato de sus
+  partes. Estas anotaciones son de tipo declarativo, describiendo qué
+  características tiene cada región del texto, y no cómo se consiguen.
+
+  Algunos ejemplos muy conocidos incluyen \ac{SGML}, \ac{HTML},
+  \ac{XML}, \TeX{} o \LaTeX{}.
+
+\item[Lenguaje de serialización] 
+  \index{lenguaje!de serialización}
+
+  Lenguaje artificial que representa estructuras de datos a partir de
+  una serie de símbolos terminales organizados según una serie de
+  reglas. Idealmente, un lenguaje de serialización debería ser
+  conciso, fácilmente legible y eficiente tanto al serializar como
+  deserializar.
+
+\item[Metalenguaje]
+  \index{metalenguaje}
+  \index{lenguaje!meta-}
+
+  En el ámbito en que nos ocupa, un metalenguaje consiste en una serie
+  de reglas que proporcionan la sintaxis y semántica, dentro de un
+  modelo de datos, como un árbol o un grafo, por ejemplo, de una
+  familia completa de lenguajes. No llega a detallar el contenido
+  exacto de los documentos, quedando por concretar en cada una de sus
+  instancias. Estas que se hallan en un nivel más bajo de abstracción,
+  y ya son lenguajes completamente definidos.
+
+\item[Serialización] 
+  \index{serialización}
+
+  Proceso en el que se traduce una estructura de datos en memoria a
+  una secuencia de bytes que representan su contenido. Esta puede
+  posteriormente enviarse a través de una conexión de red, guardarse
+  en un fichero, etc.
+
+\item[Símbolo no terminal] 
+  \index{símbolo!no terminal}
+
+  Símbolo de una gramática que puede ser expandido a una sucesión de
+  símbolos terminales y/o no terminales.
+
+  Para ilustrar mejor el concepto, supongamos que tenemos la gramática
+  $G = (N,\Sigma,P,S)$ con los símbolos terminales $\Sigma = \left\{a,b\right\}$, 
+  los símbolos no terminales $N = \left\{E\right\}$,
+  el símbolo inicial $S = E$, y el conjunto de reglas $P$ de
+  producción en \ac{BNF} siguiente:
+
+  \begin{eqnarray*}
+    E & \rightarrow & E b \label{eq:regla1} \\
+    E & \rightarrow & a   \label{eq:regla2} 
+  \end{eqnarray*}
+
+  Podríamos hacer la siguiente expansión para obtener la secuencia de
+  símbolos terminales $abb$:
+
+  \begin{eqnarray*}
+    E & \Rightarrow & E b \\
+      & \Rightarrow & E b b \\
+      & \Rightarrow & a b b \\
+  \end{eqnarray*}
+
+\item[Símbolo terminal] 
+  \index{símbolo!terminal}
+
+  Símbolo de una gramática que representa una secuencia de caracteres
+  de un alfabeto con un significado coherente. Algunos ejemplos
+  incluyen ``división'' (con la cadena ``/'', por ejemplo) o
+  ``entero'' (``200''). El significado de un símbolo terminal puede
+  ser el mismo para todas sus ocurrencias (como en ``división''), o
+  puede variar en cada instancia (como en el caso de ``entero'').
+
+\item[Wiki] 
+  \index{wiki}
+
+  Sitio web cuyas páginas pueden ser editadas a través del propio
+  navegador web, distribuyendo su mantenimiento a una comunidad
+  completa de usuarios. Existe una gran variedad: desde \emph{wikis} de
+  empresa sólo accesibles por una parte de los empleados, hasta \emph{wikis}
+  de acceso y modificación públicos, como la conocida Wikipedia. El
+  primer wiki fue WikiWikiWeb~\cite{WikiWikiWeb}.
+
+\end{description}
+
+\subsubsection{Definiciones en el dominio de YAML, JSON y YAXML}
+\label{sec:def-yaml}
+
+\begin{description}
+\item[Alias]
+  \index{alias|see{YAML!alias}}
+  \index{YAML!alias}
+
+  Identificador único establecido sobre un nodo del documento, para
+  posterior referencia mediante anclas.
+
+\item[Ancla]
+  \index{ancla|see{YAML!ancla}}
+  \index{YAML!ancla}
+
+  Referencia a un alias definido en otra parte del documento. Evita
+  tener que repetir contenido idéntico en varias partes del documento
+  en la salida serializada.
+
+\item[Documento] 
+  \index{documento|see{YAML!documento}}
+  \index{YAML!documento}
+
+  Estructura de datos nativa al lenguaje de programación utilizado,
+  consistente en un único \emph{nodo} raíz.
+
+  Se obtiene a partir del flujo tras los eventos de \emph{análisis},
+  la \emph{composición} del grafo a partir de estos, y la
+  \emph{construcción} de la estructura nativa de datos a partir del
+  grafo.
+
+  En dirección inversa, una estructura de datos nativa se
+  \emph{representa} por un grafo dirigido y con raíz de nodos, se
+  convierte a un árbol ordenado, que se recorre para generar eventos
+  de \emph{serialización} y finalmente \emph{presentar} la estructura
+  original en forma de una sucesión de bytes.
+
+\item[Flujo] 
+  \index{flujo|see{YAML!flujo}}
+  \index{YAML!flujo}
+
+  Sucesión de bytes que cumple las reglas correspondientes de
+  producción de la gramática de \ac{YAML}, y en la cual se pueden
+  hallar presentados cero, uno o más \emph{documentos} \ac{YAML}, separados por
+  delimitadores. El primer delimitador es opcional.
+
+  Opcionalmente, puede comenzar por un \ac{BOM} de \ac{UTF} indicando
+  si la entrada se halla codificada en \ac{UTF}-8, \ac{UTF}-16 Little
+  Endian, o \ac{UTF}-16 Big Endian. Por defecto, se asume que la
+  entrada se halla codificada en \ac{UTF}-8.
+
+\item[Nodo]
+  \index{nodo|see{YAML!nodo}}
+  \index{YAML!nodo}
+
+  Cualquier elemento con entidad propia del árbol del documento. Puede
+  tener otros nodos anidados en su interior.
+
+\item[Escalar] 
+  \index{escalar|see{YAML!escalar}}
+  \index{YAML!escalar}
+
+  Categoría de todo nodo con contenido atómico opaco consistente en
+  una serie de cero o más caracteres Unicode. El significado de dichos
+  caracteres se concreta a partir de su etiqueta.
+
+\item[Esquema] 
+  \index{esquema|see{YAML!esquema}}
+  \index{YAML!esquema}
+
+  Combinación de un conjunto de etiquetas y un mecanismo para
+  etiquetar nodos por defecto. A través de estos esquemas, como el
+  JSON Schema o el Core Schema, podemos darles interpretaciones
+  estándar a los nodos secuencia, nodos vector asociativo o nodos
+  escalar.
+
+  Por ejemplo, conseguimos que los escalares con el contenido ``true''
+  se les dé la etiqueta ``tag:yaml.org,2002:bool'', indicando que se
+  trata de un valor de verdad booleano.
+
+\item[Etiqueta] 
+  \index{etiqueta|see{YAML!etiqueta}}
+  \index{YAML!etiqueta}
+
+  Todo nodo tiene una etiqueta, que indica el tipo de información que
+  representan. Por ejemplo, los enteros tienen la etiqueta ``int'', y
+  los números de coma flotante ``float''.
+
+\item[Secuencia]
+  \index{secuencia|see{YAML!secuencia}}
+  \index{YAML!secuencia}
+
+  Categoría de los nodos que contienen cero o más nodos, numerables
+  según su posición relativa entre los demás.
+
+\item[Vector asociativo]
+  \index{vector asociativo|see{YAML!vector asociativo}}
+  \index{YAML!vector asociativo}
+
+  Categoría de todo nodo que contiene un conjunto de cero o más pares
+  clave-valor, en donde las claves han de ser únicas. Tanto las claves
+  como los valores pueden ser nodos arbitrariamente complejos y de
+  cualquier tipo.
+
+\end{description}
+
+\subsubsection{Definiciones en el dominio de ACL2}
+\label{sec:def-acl2}
+
+\begin{description}
+
+\item[Átomo Lisp] 
+  \index{átomo Lisp}
+
+  Mínima unidad sintáctica de toda expresión Lisp. Puede ser un
+  símbolo, un número, un carácter o una cadena.
+
+\item[Clausura lambda] 
+  \index{clausura lambda}
+
+  Par formado por un bloque de código a ejecutar y las ligaduras a
+  variables usadas en dicho código locales al bloque en que fue
+  definida la clausura, que persisten tras la ejecución de dicho
+  bloque.
+
+  El concepto, creado por Alonzo Church en su $\lambda$-cálculo, ha
+  sido llevado a diversos lenguajes de programación con mayor o menor
+  exactitud: Scheme (el primer lenguaje en implementarlo
+  completamente~\cite{Gafter:ClosuresJava,LispWorks:CLHS,Seibel:Lexical,Steele:Scheme}), Perl y sus
+  subrutinas anónimas, Java y sus clases anónimas, etc.
+
+\item[Dependencia inversa] 
+  \index{dependencia inversa|see{ACL2!dependencia inversa}}
+  \index{ACL2!dependencia inversa}
+
+  Se dice de la relación entre un evento y aquellos eventos que lo
+  mencionan en su demostración.
+
+\item[Evento] 
+  \index{evento|see{ACL2!evento}}
+  \index{ACL2!evento}
+
+  Orden de \ac{ACL2} que modifica su mundo lógico en alguna medida.
+
+\item[Libro] 
+  \index{libro|see{ACL2!libro}}
+  \index{ACL2!libro}
+
+  Conjunto de funciones y teoremas que expresan propiedades sobre
+  ellas y que forman una teoría computacional en \ac{ACL2}.
+
+\item[Meta] 
+  \index{meta|see{ACL2!meta}}
+  \index{ACL2!meta}
+
+  Unidad mínima de toda demostración de \ac{ACL2}, a la que le
+  corresponde una etiqueta única dentro de la demostración, una
+  conjetura y una serie de acciones que conducen a su demostración,
+  refutación, simplificación o división en otras metas.
+
+  Una meta puede contener submetas, generando un árbol de demostración
+  de manera recursiva. Por supuesto, existe una meta raíz en toda
+  demostración de \ac{ACL2}, que recibe la etiqueta ``Goal''.
+
+\item[Mundo lógico] 
+  \index{mundo lógico|see{ACL2!mundo lógico}}
+  \index{ACL2!mundo lógico}
+
+  A nivel abstracto, el \emph{mundo lógico} o simplemente \emph{mundo}
+  de \ac{ACL2} es la base de datos en la que basa sus demostraciones,
+  y que podemos extender con nuevas reglas, funciones y otros
+  elementos.
+
+  A nivel de implementación, un \emph{mundo} no es más que una lista
+  propia de Lisp de tripletas propiedad-símbolo-valor. Podemos crear
+  nuestros propios mundos si así lo deseamos y utilizarlos con las
+  funciones \orden{getprop} y \orden{setprop}. El mundo de \ac{ACL2}
+  se halla bajo el nombre \lisp{'current-acl2-world}, pero no puede
+  ser modificado excepto por un evento.
+
+\item[Paquete Lisp] 
+  \index{paquete Lisp}
+
+  Nombre de espacios que califica a un identificador, reduciendo el
+  riesgo de una colisión. Por defecto, en \ac{ACL2} se usa el paquete
+  \ac{ACL2}, pero podemos definir nuestros propios paquetes y cambiar
+  entre ellos libremente.
+
+\item[Par Lisp] 
+  \index{par Lisp}
+
+  Estructura de datos ordenada que engloba a dos elementos. 
+
+  El formato básico es \lisp{(a . b)}, donde \lisp{a} o \lisp{b}
+  pueden ser átomos o pares Lisp. Así, para crear una lista con los
+  elementos 1, 2 y 3, escribiríamos \lisp{(1 . (2 . (3 . nil)))}, o en
+  una notación simplificada, \lisp{(1 2 3)}. Listas como ésta donde el
+  último elemento es \lisp{nil} se conocen como \emph{listas propias}.
+
+\item[Proyecto] 
+  \index{proyecto|see{ACL2!proyecto}}
+  \index{ACL2!proyecto}
+
+  Grafo acíclico dirigido con raíz en un fichero Lisp que describe una
+  demostración a realizar mediante \ac{ACL2}, utilizando una serie de
+  eventos definidos en varios libros, ya se hallen integrados en la
+  distribución de \ac{ACL2} o hayan sido creados por el usuario.
+
+  Un proyecto depende de una serie de \emph{subproyectos}, cuyas
+  raíces son los nodos directamente adyacentes al nodo raíz del
+  proyecto principal.
+
+\item[S-expresión] 
+  \index{S-expresión}
+
+  Su nombre es una abreviatura de ``expresión simbólica'', y consiste
+  en un átomo Lisp o en un par Lisp. Los eventos de \ac{ACL2}, por
+  ejemplo, están formados por S-expresiones, utilizando notación
+  prefija para la aplicación de funciones y operadores.
+\end{description}
+
+\subsection{Otras tecnologías}
+
+\subsubsection{XSLT}
+\index{XSLT}
+
+\ac{XSLT} (véase~\cite{Clark:99:XTV}) se trata de un lenguaje \ac{XML}
+estandarizado por el \ac{W3C} que define hojas de estilo capaces de
+transformar una entrada \ac{XML} a otros formatos.
+
+El formato de salida no ha de ser necesariamente \ac{XML} también: se
+podría generar texto arbitrario, o un documento \ac{HTML}.
+
+El uso de hojas \ac{XSLT} permite definir las transformaciones de forma
+declarativa, simplificando mucho la tarea de transformación frente a
+otros métodos, como el uso del \acs{API} \ac{DOM}, o el procesado
+mediante \ac{SAX}.
+
+Permite que la visualización del documento \ac{XML} en \visor{} se
+halle dirigida por datos y no por código, y así sea extensible y
+personalizable por el usuario sin necesidad de recompilación.
+
+\subsubsection{XPath}
+\index{XPath}
+
+XPath (véase~\cite{Clark:99:XPL}) es un estándar relacionado con
+\ac{XML} del \ac{W3C} que además de poderse usar independientemente,
+es parte fundamental de otras tecnologías \ac{XML}, como \ac{XSLT}, o
+XQuery, un lenguaje especializado para consultas sobre datos \ac{XML}
+de cualquier fuente (incluso una base de datos).
+
+Su propósito es permitir identificar fácilmente conjuntos de nodos de
+un documento \ac{XML}, siguiendo un modelo de datos similar al del
+estándar \ac{DOM}, con ligeras diferencias.
+
+La sintaxis de una expresión XPath es declarativa, usando condiciones
+que deben cumplir los nodos resultado de dicha expresión. Se pueden
+filtrar nodos en función de su tipo, nombre (en caso de ser elemento),
+atributos, descendientes, etc.
+
+En \visor{} se usa como parte de \ac{XSLT} en las transformaciones y,
+por separado, en las búsquedas.
+
+\subsubsection{\acs{YAXML}}
+\label{sec:yaxml}
+\index{YAXML}
+
+\ac{YAXML}~\cite{YAXML} es una correspondencia \ac{XML} $\rightarrow$
+\ac{YAML} en borrador desde 2006. Se halla descrita a nivel informal
+de manera textual, y con mayor rigor a través de una transformación
+automática implementada mediante una hoja de estilos \ac{XSLT} 1.0.
+
+\yaxml es un módulo Perl que implementa la correspondencia inversa y
+al mismo tiempo sirve para depurar y mejorar \ac{YAXML}, aprovechando
+el ciclo \ac{YAML} $\rightarrow$ \ac{XML} $\rightarrow$ \ac{YAML}
+resultante.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 

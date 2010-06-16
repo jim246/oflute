@@ -1,0 +1,507 @@
+%%
+%% Casos de uso de XMLEye
+%% Copyright (C) 2008 Antonio García Domínguez
+%% $Id: casosuso.tex 629 2008-07-06 13:47:58Z antonio $
+%%
+\index{meta de usuario|see{casos de uso!meta de usuario}}
+\index{subfunción|see{casos de uso!subfunción}}
+\index{casos de uso!meta de usuario}
+\index{casos de uso!subfunción}
+
+Estos casos de uso nos permiten analizar de manera general y abstracta
+qué es lo que se requiere en conjunto de las historias de usuario de
+\visor{} de este Proyecto y la versión del Proyecto Fin de Carrera
+sobre el que se basa. El diagrama que ilustra las relaciones entre los
+distintos casos de uso que cumplen las metas del usuario se puede
+hallar en la figura~\ref{fig:diag_casosdeuso}.
+
+El límite del sistema establecido engloba únicamente a \visor{}. Los
+conversores externos, entre los cuales se hallan \postprocesador{} y
+\visor{}, participan únicamente como un agente externo. El método de
+comunicación con \visor{} se aclarará más tarde, en la fase de
+diseño. A menos que se indique lo contrario, los casos de uso aquí
+mostrados son en general de nivel de meta de usuario.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{desarrollo/analisis/casosuso}
+  \caption{Diagrama de casos de uso}
+  \label{fig:diag_casosdeuso}
+\end{figure}
+
+\subsubsection{Seleccionar documento actual}
+\label{sec:seleccionar_doc_actual}
+
+\begin{description}
+\item[Actor principal] Usuario: desea seleccionar el documento sobre
+  el que actuar en el resto de casos de prueba de entre los documentos
+  abiertos.
+\item[Precondiciones] Existe al menos un documento abierto.
+\item[Postcondiciones] Se muestra el documento seleccionado.
+
+\item[Escenario principal] \mbox{}
+  \begin{enumerate}
+  \item El usuario indica su intención de cambiar de documento.
+  \item El sistema proporciona una lista de los documentos disponibles.
+  \item El usuario selecciona el documento de la lista. \label{item:select_doc}
+  \item El sistema registra la selección, guarda el estado actual de
+    la visualización actual y restaura el estado de la visualización
+    del documento seleccionado, mostrándolo tal y como estaba antes de
+    haber seleccionado otro documento.
+  \end{enumerate}
+
+\item[Variaciones] \mbox{}
+
+  \begin{enumerate}[{\ref{item:select_doc}}a.]
+  \item El documento es el mismo que el actual:
+    \begin{enumerate}[1.]
+    \item El sistema cancela el cambio de uso.      
+    \end{enumerate}
+  \end{enumerate}
+
+\end{description}
+
+\subsubsection{Editar documento}
+\label{sec:casouso_editar}
+
+\begin{description}
+\item[Actor principal] Usuario: desea editar en paralelo a la
+  visualización el enunciado fuente del documento actual de forma rápida
+  y sencilla usando su editor preferido.
+\item[Actores secundarios] \mbox{}
+  \begin{description}
+  \item[Editor] Editor preferido del usuario para el formato del
+    documento actual.
+  \item[Conversor] Sistema externo ocupado de convertir el documento a
+    \ac{XML}, si es necesario.
+  \end{description}
+\item[Precondiciones] Existe un documento abierto.
+\item[Postcondiciones] Se ha abierto el documento con el editor
+  especificado en el descriptor de formato correspondiente.
+\item[Escenario principal] \mbox{}
+  \begin{enumerate}
+  \item El usuario indica su intención de editar el enunciado del
+    documento abierto.
+  \item El sistema lanza el editor, y continúa con su funcionamiento
+    normal, esperando en segundo plano a que se realicen cambios.
+    \label{item:edit_espera}
+  \item El usuario guarda algunos cambios en el documento.
+  \item El sistema detecta los cambios: se regenera la visualización
+    completa del documento.
+  \item El sistema pasa de nuevo a la espera de más cambios en segundo
+    plano.
+  \end{enumerate}
+
+\item[Variaciones] \mbox{}
+
+  \begin{enumerate}[{\ref{item:edit_espera}}a.]
+  \item La invocación del editor ha fallado:
+    \begin{enumerate}[1.]
+    \item El sistema indica el error y cancela el caso de uso.
+    \end{enumerate}
+
+  \item Se ha cerrado el documento:
+    \begin{enumerate}[1.]
+    \item El sistema deja de monitorizar el documento.
+    \end{enumerate}
+  \end{enumerate}
+
+\end{description}
+
+\subsubsection{Abrir documento}
+\label{sec:casouso_abrir}
+
+\begin{description}
+\item[Actor principal] Usuario: desea examinar la versión más reciente
+  del documento en general, para después centrarse en los nodos de su
+  interés.
+\item[Actores secundarios] Conversor: sistema externo que se ocupa de
+  convertir el documento proporcionado a \ac{XML}.
+\item[Precondiciones] Ninguna.
+\item[Postcondiciones] Se carga la versión más reciente del documento
+  elegido por el usuario.
+\item[Escenario principal]\mbox{}
+  \begin{enumerate}
+  \item El usuario indica su intención de abrir un documento ya
+    existente.
+  \item El sistema muestra los documentos disponibles.
+  \item El usuario selecciona un
+    documento. \label{item:abrir_cancelar}
+  \item El sistema comprueba que el documento
+    existe. \label{item:abrir_docexiste}
+  \item El sistema le asocia el primer formato con una extensión
+    coincidente, y aplica su conversor, si tiene uno asociado, al
+    documento. \label{item:abrir_asociar_formato}.
+  \item El sistema muestra el documento elegido, tras añadirlo a la
+    lista de documentos abiertos.
+  \end{enumerate}
+\item[Variaciones]\mbox{}
+
+  \begin{enumerate}[{\ref{item:abrir_cancelar}}a.]
+  \item El usuario cancela la selección de documento:
+    \begin{enumerate}[1.]
+    \item El sistema cancela el caso de uso.
+    \end{enumerate}
+  \end{enumerate}
+
+  \begin{enumerate}[{\ref{item:abrir_docexiste}}a.]
+  \item El documento no existe:
+    \begin{enumerate}[1.]
+    \item El sistema muestra el error y cancela el caso de uso.
+    \end{enumerate}
+  \end{enumerate}
+
+  \begin{enumerate}[{\ref{item:abrir_asociar_formato}}a.]
+  \item No existe un formato con una extensión coincidente:
+    \begin{enumerate}[1.]
+    \item El sistema utiliza el formato por defecto, \ac{XML}, que no
+      tiene un conversor asociado.
+    \end{enumerate}
+  \end{enumerate}
+\end{description}
+
+\subsubsection{Personalizar formato}
+\label{sec:personalizar_formato}
+
+\begin{description}
+\item[Actor principal] Usuario: desea cambiar las opciones de alguno
+  de los formatos instalados.
+
+\item[Precondiciones] Existe al menos un formato instalado en el
+  sistema.
+
+\item[Postcondiciones] Se cambian los ajustes locales del usuario para
+  el formato indicado, sin cambiar los ajustes globales.
+
+\item[Escenario principal] \mbox{}
+  \begin{enumerate}
+  \item El usuario indica su intención de cambiar las opciones de alguno de
+    los formatos.
+
+  \item El sistema muestra la lista de los formatos disponibles. \label{item:pers_primero}
+
+  \item El usuario selecciona un formato de la lista.
+
+  \item El sistema muestra los campos modificables del formato:
+
+    \begin{itemize}
+    \item La traducción del nombre del formato que se ajuste mejor a
+      la localización activa por defecto en el entorno del usuario.
+    \item La orden usada para invocar al editor preferido del usuario
+      para dicho formato.
+    \item La orden usada para invocar al conversor a \ac{XML}
+      preferido del usuario para dicho formato.
+    \item La lista de extensiones, separadas por comas, con las que se
+      asociará a este formato.
+    \end{itemize}
+    
+  \item El usuario modifica el valor de los campos. 
+
+  \item El sistema solicita confirmación al usuario.
+
+  \item El usuario proporciona la confirmación. \label{item:pers_conf}
+
+  \item El sistema registra los cambios a nivel del usuario actual,
+    sin modificar los ajustes globales, y los hace efectivos a partir
+    del mismo momento.
+  \end{enumerate}
+
+\item[Variaciones] \mbox{}
+
+  \begin{enumerate}[{\ref{item:pers_primero}-\ref{item:pers_conf}}a.]
+  \item El usuario cancela la personalización:
+    \begin{enumerate}[1.]
+    \item El sistema cancela el caso de uso, sin que se hagan
+      efectivos los campos.
+    \end{enumerate}
+  \end{enumerate}
+
+  \begin{enumerate}[{\ref{item:pers_conf}}a.]
+  \item Los campos de nombre del formato, orden de edición o
+    extensiones se hallan vacíos o sólo contienen espacios en blanco,
+    alguna de las extensiones pasadas contiene espacios o está vacía,
+    o la orden de importación contiene solamente uno o más espacios en
+    blanco:
+    \begin{enumerate}[1.]
+    \item El sistema informa de la situación y solicita corregir dicha
+      situación.
+    \end{enumerate}
+  \end{enumerate}
+
+\end{description}
+
+\subsubsection{Buscar nodo}
+\label{sec:casouso_buscarnodo}
+
+\begin{description}
+\item[Actor principal] Usuario: desea localizar rápidamente los nodos
+  que cumplan una serie de condiciones.
+\item[Precondiciones] Hay un documento abierto.
+\item[Postcondiciones] Se muestra el resultado de la búsqueda.
+\item[Escenario principal] \mbox{}
+  \begin{enumerate}
+  \item El usuario indica su intención de iniciar una nueva búsqueda.
+    \label{item:buscar_inicio}
+  \item El sistema solicita la clave de búsqueda.
+  \item El usuario introduce la clave de búsqueda.
+  \item El sistema comprueba que la clave de búsqueda es válida.
+    \label{item:buscar_chkclave}
+  \item El sistema presenta al usuario las opciones de filtrado.
+  \item El usuario elige las opciones de filtrado.
+    \label{item:buscar_filtro}
+  \item El sistema realiza la búsqueda a partir del nodo actual y
+    muestra el primer resultado. \label{item:buscar_res}
+  \end{enumerate}
+\item[Variaciones] \mbox{}
+  
+  \begin{enumerate}[{\ref{item:buscar_inicio}-\ref{item:buscar_filtro}}a.]
+  \item El usuario cancela la búsqueda:
+    \begin{enumerate}[1.]
+    \item El sistema cancela el caso de uso.
+    \end{enumerate}
+  \end{enumerate}
+  
+  \begin{enumerate}[{\ref{item:buscar_chkclave}}a.]
+  \item La clave no es válida:
+    \begin{enumerate}[1.]
+    \item El sistema indica el error y pide una nueva clave.
+    \end{enumerate}
+  \end{enumerate}
+  
+  \begin{enumerate}[{\ref{item:buscar_res}}a.]
+  \item No hay resultados:
+    \begin{enumerate}[1.]
+    \item \emph{include(Reintentar búsqueda)}
+    \end{enumerate}
+  \end{enumerate}
+\end{description}
+
+\subsubsection{Repetir búsqueda}
+\label{sec:casouso_repbusqueda}
+
+\begin{description}
+\item[Actor principal] Usuario: desea encontrar otro nodo que cumpla
+  las mismas condiciones que el anterior, sin tener que volver a
+  especificar las opciones de filtrado.
+\item[Precondiciones] Hay un documento abierto.
+\item[Postcondiciones] Se muestra el siguiente nodo que cumple las
+  condiciones de la última búsqueda.
+\item[Escenario principal] \mbox{}
+
+  \begin{enumerate}
+  \item El usuario desea repetir la búsqueda anterior:
+  \item El sistema comprueba que existe una búsqueda anterior.
+    \label{item:chk_busqanterior}
+  \item El sistema realiza de nuevo la búsqueda a partir del nodo
+    actual y muestra el primer resultado.
+    \label{item:repetirbusq_buscar_res}
+  \end{enumerate}
+
+\item[Variaciones] \mbox{}
+
+  \begin{enumerate}[{\ref{item:chk_busqanterior}}a.]
+  \item No existen búsquedas anteriores:
+    \begin{enumerate}[1.]
+    \item El sistema indica el error y cancela el caso de uso.
+    \end{enumerate}
+  \end{enumerate}
+  
+  \begin{enumerate}[{\ref{item:repetirbusq_buscar_res}}a.]
+  \item No hay resultados:
+    \begin{enumerate}[1.]
+    \item \emph{include(Reintentar búsqueda)}
+    \end{enumerate}
+  \end{enumerate}
+\end{description}
+
+\subsubsection{Reintentar búsqueda}
+\label{sec:casouso_reintentar_busq}
+
+\begin{description}
+\item[Actor principal] Usuario: desea visualizar un nodo que cumpla
+  las condiciones, aunque tenga que relajar el alcance de la búsqueda.
+\item[Nivel de caso de uso] Subfunción.
+\item[Precondiciones] Hay un documento abierto.
+\item[Postcondiciones] Se muestra el primer nodo que cumple las nuevas
+  condiciones relajadas.
+\item[Escenario principal] \mbox{}
+  \begin{enumerate}
+  \item El sistema indica la situación y ofrece repetir la búsqueda
+    con parámetros más generales.
+  \item El usuario acepta. \label{item:buscar_res_aceptar}
+  \item El sistema relanza la búsqueda y muestra el primer
+    resultado. \label{item:buscar_res_repetir}
+  \end{enumerate}
+
+\item[Variaciones] \mbox{}
+  \begin{enumerate}[{\ref{item:buscar_res_aceptar}}a.]
+  \item El usuario rechaza la oferta: 
+    \begin{enumerate}[1.]
+    \item El sistema cancela el caso de uso.
+    \end{enumerate}
+  \end{enumerate}
+
+  \begin{enumerate}[{\ref{item:buscar_res_repetir}}a.]
+  \item No hay resultados:
+    \begin{enumerate}[1.]
+    \item El sistema indica la situación y cancela el caso de uso.
+    \end{enumerate}
+  \end{enumerate}
+\end{description}
+
+\subsubsection{Ver nodo}
+\label{sec:casouso_selnodo}
+
+\begin{description}
+\item[Actor principal] Usuario: desea visualizar la información acerca
+  de un nodo del documento.
+\item[Precondiciones] Hay un documento abierto.
+\item[Postcondiciones] Se muestra la información del nodo seleccionado.
+\item[Escenario principal] \mbox{}
+  \begin{enumerate}
+  \item El usuario indica el nodo del documento que desea ver.
+  \item El sistema comprueba que existe. \label{item:selnode_chknode}
+  \item El sistema muestra la información del nodo al usuario, dejando
+    que interactúe con él. \label{item:selnode_interact}
+  \end{enumerate}
+\item[Variaciones] \mbox{}
+
+  \begin{enumerate}[{\ref{item:selnode_chknode}}a.]
+  \item El nodo no existe:
+    \begin{enumerate}[1.]
+    \item El sistema muestra una visualización vacía.
+    \end{enumerate}
+  \end{enumerate}
+
+  \begin{enumerate}[{\ref{item:selnode_interact}}a.]
+  \item El usuario activa uno de los hipervínculos disponibles:
+    \begin{enumerate}[1.]
+    \item \emph{include(Activar enlace)}
+    \end{enumerate}
+  \end{enumerate}
+
+\end{description}
+
+\subsubsection{Activar enlace}
+\label{sec:casouso_activar_enlace}
+
+\begin{description}
+\item[Actor principal] Usuario: desea visualizar el recurso al que
+  señala el enlace activado.
+\item[Nivel de caso de uso] Subfunción.
+\item[Precondiciones] Hay un documento abierto, y se está visualizando
+  un nodo.
+\item[Postcondiciones] Se muestra el destino del enlace pulsado, si
+  tiene uno definido.
+\item[Escenario principal] \mbox{}
+  \begin{enumerate}
+  \item El usuario activa el enlace en cuestión de la visualización
+    del nodo actual.
+
+  \item Si el enlace señala a otro nodo, se ejecuta el caso de uso
+    ``Ver nodo'' sobre él, y se termina el caso de uso.
+
+  \item Si el enlace señala a una \ac{URL}, se muestra el documento en
+    uno de los navegadores Web disponibles, y se termina el caso de uso.
+
+  \item Si el enlace señala a un ancla de la visualización \ac{HTML}
+    del nodo actual, se desplaza la posición actual a la del ancla, y
+    se termina el caso de uso.
+
+  \item Si el enlace señala a un nodo de otro documento, se visualiza
+    dicho documento mediante ``Visualizar documento'', posteriormente
+    se ejecuta ``Ver nodo'' sobre el nodo especificado, y se termina
+    el caso de uso.
+
+  \item El sistema cancela el caso de uso.
+  \end{enumerate}
+
+\end{description}
+
+\subsubsection{Cambiar hoja de preprocesado}
+\label{sec:casouso_hoja_preproc}
+
+\begin{description}
+\item[Actor principal] Usuario: desea cambiar la forma en
+  que se muestra la estructura del documento.
+
+\item[Precondiciones] Existe al menos un documento abierto y
+  seleccionado.
+
+\item[Postcondiciones] Se le muestra al usuario la nueva estructura
+  del documento, procesada desde el texto \ac{XML} original a través
+  de la hoja seleccionada. Se usará esta hoja para todos los ficheros
+  que se abran a continuación.
+
+\item[Escenario principal] \mbox{}
+  \begin{enumerate}
+  \item El usuario indica su intención de cambiar la hoja
+    de preprocesado en uso. \label{item:cambio_hoja_inicio}
+  \item El sistema muestra una lista de las hojas de preprocesado
+    disponibles.
+  \item El usuario selecciona una hoja de la
+    lista. \label{item:cambio_hoja_selecc}
+  \item El sistema recupera el texto \ac{XML} original del documento y
+    lo procesa mediante la nueva hoja seleccionada.
+  \item El sistema muestra la nueva estructura del documento, y vacía
+    la visualización del nodo actual, al no haber ninguno
+    seleccionado.
+  \item El sistema registra la hoja seleccionada como hoja de
+    preprocesado por defecto para todos los documentos abiertos en
+    adelante.
+  \end{enumerate}
+
+\item[Variaciones] \mbox{}
+
+  \begin{enumerate}[{\ref{item:cambio_hoja_inicio}-\ref{item:cambio_hoja_selecc}}a.]
+  \item El usuario cancela la selección:
+    \begin{enumerate}[1.]
+    \item El sistema cancela la ejecución del caso de uso.
+    \end{enumerate}
+  \end{enumerate}
+
+\end{description}
+
+\subsubsection{Cambiar hoja de visualización}
+\label{sec:casouso_hoja_visualizacion}
+
+\begin{description}
+\item[Actor principal] Usuario: desea cambiar la forma en que se
+  muestra la información de los nodos de un documento.
+
+\item[Precondiciones] Existe al menos un documento abierto y
+  seleccionado.
+
+\item[Postcondiciones] Se visualiza el nodo actual y todos los
+  posteriormente seleccionados en el documento actual y en todos los
+  documentos abiertos posteriormente bajo la nueva hoja.
+
+\item[Escenario principal] \mbox{}
+  \begin{enumerate}
+  \item El usuario indica su intención de cambiar la hoja de
+    visualización para el documento actual. \label{item:cambio_hoja_v_inicio}
+  \item El sistema muestra la lista de las hojas de visualización
+    disponibles.
+  \item El usuario selecciona una de las hojas de la
+    lista. \label{item:cambio_hoja_v_selecc}
+  \item El sistema actualiza la visualización del nodo actualmente
+    seleccionado, si lo hay.
+  \item El sistema registra la hoja seleccionada como hoja de
+    visualización por defecto para los documentos abiertos de ahora en
+    adelante.
+  \end{enumerate}
+\item[Variaciones] \mbox{}
+
+  \begin{enumerate}[{\ref{item:cambio_hoja_v_inicio}-\ref{item:cambio_hoja_v_selecc}}a.]
+  \item El usuario cancela la selección:
+    \begin{enumerate}[1.]
+    \item El sistema cancela la ejecución del caso de uso.
+    \end{enumerate}
+  \end{enumerate}
+
+\end{description}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../memoria"
+%%% End: 

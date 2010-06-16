@@ -1,0 +1,305 @@
+%%
+%% Diseño de la capa de presentación
+%% Copyright (C) 2009 Antonio García Domínguez
+%% $Id: capa_presentacion.tex 621 2008-07-02 09:04:44Z antonio $
+%%
+
+%% Organización general de la interfaz
+%
+% - cada documento tiene su modelo de presentación, conectado al de la
+% ventana principal.
+%
+% - ventana principal tiene su modelo de presentación.
+%
+% - ventana de formatos tiene su modelo, usado por la ventana
+% principal, pero sin conocimiento del modelo de presentación de
+% formatos
+%
+% - ventanas "acerca de" y "buscar" _no_ tienen modelos de
+% presentación, al ser muy simples. Ventana de Buscar se comunica con
+% la principal a través de un patrón Observador, evitando que esté
+% acoplada al modelo de presentación completo. Ventana "Acerca de" es
+% prácticamente un diálogo estático, por lo que no hay nada de
+% interesante en su diseño.
+% 
+% - vistas (DocumentView, DocumentList, WndMain, etc.) sincronizan por
+% su cuenta con los modelos de presentación, evitando complicar estos
+% con los detalles de los controles GUI usados, y mejorando la
+% capacidad para hacer pruebas respecto a la versión anterior.
+%%
+
+La capa de presentación se encarga de la comunicación persona-máquina,
+realizando peticiones sobre la capa de aplicación y mostrando los
+resultados.
+
+Durante el diseño de la interfaz, se usaron las
+obras~\cite{jlfguid,jlfguidadv} como guía, como en el caso del diseño
+del diálogo ``Buscar'', donde el reparto de los componentes sigue sus
+recomendaciones. Otras recomendaciones seguidas son la ejecución de
+las tareas largas en segundo plano, los elementos de los que deben
+constar los menús, o las combinaciones de teclas recomendadas para
+cada opción.
+
+\subsubsection{Estructura general}
+\label{sec:capa_presentacion_general}
+
+\index{patrón arquitectónico!MVP}
+\index{patrón arquitectónico!Modelo de Presentación}
+
+Como ya se comentó en \S~\ref{sec:arquitectura_mvp}
+(página~\pageref{sec:arquitectura_mvp}), la capa de presentación se
+ocuparía de los elementos Vista y Presentación del trío
+Modelo-Vista-Presentación. En particular, se utilizaría la variante
+\patron{Modelo de Presentación}, que nos permite definir la lógica de
+una forma completamente separada de la interfaz, y así poder crear
+nuevas interfaces de manera mucho más libre.
+
+\visor{} dispone básicamente de 4 formularios, tal y como se
+estableció durante el análisis (apartado~\ref{sec:req_externas} en la
+página~\pageref{sec:req_externas}): el formulario principal, el
+formulario de gestión de descriptores de formatos, el formulario de
+realización de búsquedas, y por último el formulario con información
+acerca de \visor{}.
+
+Descartando el último de este apartado por su sencillez, podemos ver
+que el formulario principal y el de gestión de formatos son los más
+complejos. Por ello, modelaremos su estado con \patron{Modelos de
+  Presentación}, permitiendo una mejor comprensión y depuración de su
+código. El formulario de búsqueda es más sencillo, y por lo tanto no
+requiere dicho enfoque, como veremos posteriormente.
+
+Además de los modelos de presentación, hablaremos en el resto de esta
+sección de otros aspectos interesantes del diseño de la capa de
+presentación.
+
+\subsubsection{Modelos de presentación y su ensamblaje}
+\label{sec:capa_presentacion_docs}
+
+\index{patrón de diseño!Observador}
+\index{patrón de diseño!MVP}
+\index{patrón de diseño!Inyección de Dependencias}
+
+En los formularios más complejos, se pudo ver rápidamente que el uso
+del patrón \patron{Observador} para aspectos como el control de hojas
+usadas y demás hacía el código cada vez más difícil de estructurar y
+depurar. Además, este código impedía poder aislar de manera efectiva
+el estado de múltiples documentos.
+
+Por ello, se cambió a un enfoque donde unas clases encapsulan el
+estado de la interfaz, de forma independiente a los controles
+Swing. Estas clases ofrecen una serie de métodos \metodo{get} públicos
+para acceder al estado de la interfaz, y disponen también de un método
+por cada gesto de interés que pueda provenir del usuario.
+
+Las vistas se reducen, por lo tanto, a informar de los gestos del
+usuario al modelo de presentación y posteriormente sincronizarse con
+los modelos. Al quedarse sin la mayor parte de su lógica, el hecho de
+no poder realizar pruebas sobre los propios controles Swing no es tan
+importante: podemos hacer pruebas sobre el modelo de presentación,
+enviando los gestos y estudiando su estado posterior.
+
+Los modelos de presentación pueden anidarse: así, el modelo de
+presentación del formulario principal contiene a los modelos de
+presentación de cada documento, que contienen a su vez a los modelos
+(ya no de presentación) de los documentos correspondiente, junto con
+otros elementos como una referencia al repositorio de hojas o al
+repositorio de descriptores de formato. Entre los campos de todo
+modelo de presentación se encuentra el nodo seleccionado actualmente,
+la hoja de visualización que está siendo usada o la última búsqueda
+realizada, por ejemplo.
+
+Los modelos de presentación dependen de otros objetos, como ya hemos
+visto, pero no deberían quedarse acoplados a una implementación o
+instancia particular de ellos. En su lugar, estas dependencias se
+proporcionan a través del constructor, constituyendo una
+\patron{Inyección de Dependencias}. Los modelos de presentación y sus
+dependencias y la vista del formulario principal son creados y
+configurados por un ensamblador central: la clase principal de la
+aplicación. Esto asegura que toda la lógica relevante se halle en un
+único sitio, y el resto de las clases se mantengan lo más flexibles
+posible.
+
+El diagrama de clases que describe las relaciones entre las distintas
+vistas principales (formularios, listas de pestañas y pestañas) y los
+modelos de presentación se halla en el
+cuadro~\ref{fig:presentacion_modpre} de la
+página~\pageref{fig:presentacion_modpre}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.9\textwidth]{desarrollo/diseno/clases_xmleye_pre_modelos}
+  \caption{Diagrama de clases de diseño de los modelos de presentación}
+  \label{fig:presentacion_modpre}
+\end{figure}
+
+\subsubsection{Diseño e integración del formulario de búsqueda}
+
+% Patrón Observador
+
+\index{patrón arquitectónico!Observador}
+
+El formulario de búsqueda es una excepción al uso del patrón
+\ac{MVP}. Este diálogo carece prácticamente de lógica propia, siendo
+únicamente una interfaz a partir de la cual el usuario puede construir
+la petición de búsqueda y enviarla a sus suscriptores, entre los
+cuales se halla el modelo de presentación del formulario principal.
+
+Aplicando de esta forma el patrón \patron{Observador}, se evita el
+acoplamiento del formulario de búsqueda al formulario principal, y se
+puede guardar el evento para posteriormente repetir la búsqueda sin
+necesidad de volver a mostrarlo, por ejemplo.
+
+El formulario principal, como es común, se limita a notificar del
+gesto al modelo de presentación, que utiliza la funcionalidad del
+modelo del documento para implementar la búsqueda, añadiendo algo más
+de inteligencia en lo que respecta a búsquedas repetidas.
+
+Puede verse el diagrama de clases de diseño correspondiente en el
+cuadro~\ref{fig:presentacion_busq} de la página~\pageref{fig:presentacion_busq}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.9\textwidth]{desarrollo/diseno/clases_xmleye_pre_busqueda}
+  \caption{Diagrama de clases de diseño de búsquedas}
+  \label{fig:presentacion_busq}
+\end{figure}
+
+\subsubsection{Gestión de diálogos de mensajes}
+\label{sec:presentacion_mensajes}
+
+\index{patrón arquitectónico!Singleton}
+
+%% SI: pero la necesidad viene de refactorizar en una clase común
+%% informes de errores que vengan de otros hilos que no sean el de la
+%% interfaz Swing, y de usar el patrón Singleton para evitar tener que
+%% usar métodos estáticos, que restarían flexibilidad para el futuro.
+
+A diferencia del caso de~\S\ref{sec:aplic_singleton}, se ha mantenido
+el uso del patrón \patron{Singleton} para la gestión de diálogos de
+mensaje: el punto de acceso global en este caso es realmente
+necesario, y la lógica que provee es muy concreta.
+
+En particular, la clase a la que da acceso el \patron{Singleton}
+permite mostrar esos diálogos de forma independiente al hilo en que
+nos hallemos: normalmente, para poder lanzar un diálogo debemos
+hacerlo en el hilo de Swing, o se crearán condiciones de carrera
+indeseadas. Esta clase hace uso de las \clase{SwingUtilities} para
+enviar las tareas apropiadas al hilo de Swing desde cualquier otro de
+los hilos, como cuando estamos convirtiendo un documento de entrada,
+por ejemplo.
+
+Sin embargo, en este caso, no se ha dividido en una interfaz y una
+implementación, ya que a diferencia de la gestión de preferencias, no
+se están considerando implementaciones alternativas.
+
+\subsubsection{Presentación de árboles XML dirigidos por datos}
+\label{sec:presentacion_mvc}
+
+\index{patrón arquitectónico!MVC}
+\index{patrón arquitectónico!Documento-Vista}
+
+Los componentes usados para visualizar árboles \ac{DOM} \ac{XML}
+emplean, como todo componente Swing, una modificación~\cite{swingarch}
+del patrón \patron{Modelo-Vista-Controlador} original de~\cite{gof}.
+
+En esta versión modificada, llamada ``arquitectura de modelo
+separable'' por Sun y similar al patrón \patron{Documento-Vista} mencionado
+en~\cite{archpatterns}, se dividen los componentes en tres partes:
+\begin{itemize}
+\item El componente Swing que implementa los aspectos de vista y
+  controlador.
+\item El objeto del Look \& Feel instalado en el componente Swing que
+  define el aspecto exacto del componente.
+\item El modelo del componente, es decir, la información que contiene,
+  y que modifica su visualización o comportamiento. En Swing, el
+  modelo puede contener también detalles de la interfaz gráfica: botón
+  activado o desactivado, por ejemplo.
+\end{itemize}
+
+Así, se han definido dos \clase{TreeModel}:
+\begin{description}
+\item[\clase{DOMTreeModel}] 
+
+  Modelo sobre un árbol \ac{DOM} \ac{XML} estándar, que hace
+  accesibles los nodos de tipo elemento.
+
+\item[\clase{DataDrivenTreeModel}] 
+
+  Especialización del anterior, este modelo incorpora la capacidad de
+  realizar falsas podas, ocultando nodos de la visualización sin
+  eliminarlos del árbol \ac{DOM}.
+
+  La decisión de ocultar un nodo o sus hijos se halla en el propio
+  documento \ac{XML}. De esta forma, el usuario puede controlar este
+  aspecto a través de las hojas \ac{XSLT}, dirigiéndolo todo por
+  datos.
+
+  En los campos \metodo{ATTRIBUTE\_LEAF} y \metodo{ATTRIBUTE\_HIDDEN} de
+  \clase{DataDrivenTreeModel} se hallan los atributos que deben
+  tomar el valor del campo \metodo{ENABLED\_VALUE} para activar la
+  ocultación de los hijos o del propio nodo, respectivamente.
+\end{description}
+
+Por las mismas razones que \clase{DataDrivenTreeModel}, se implementó
+lógica de dibujado dirigida por datos de los nodos del \clase{JTree}
+mediante la clase \clase{DataDrivenTreeCellRenderer}. Este dibujador
+puede modificar el icono y la etiqueta de un nodo a través de sus
+propios atributos \metodo{NODELABEL\_ATTRIBUTE} y
+\metodo{NODEICON\_ATTRIBUTE}.
+
+Se extendieron las capacidades de \clase{JTree} en \clase{DOMTree},
+implementando operaciones para encapsular la navegación por el árbol y
+abstraer al resto de la interfaz de los detalles, como
+\metodo{selectParent}.
+
+En la figura~\ref{fig:dc_presentacion_arboles}
+(página~\pageref{fig:dc_presentacion_arboles}) se ilustran en un
+diagrama \ac{UML} las relaciones entre las clases relacionadas con la
+visualización de árboles \ac{XML}, incluyendo sus casos de prueba.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{desarrollo/diseno/clases_xmleye_pre_arboles}
+  \caption{Diagrama de clases de manejo de árboles}
+  \label{fig:dc_presentacion_arboles}
+\end{figure}
+
+\subsubsection{Múltiples métodos de acceso a una acción por el usuario}
+\label{sec:presentacion_orden}
+
+\index{patrón arquitectónico!Orden}
+
+Otro patrón de diseño empleado comúnmente en las interfaces gráficas
+es el patrón Orden, y esta interfaz no es una excepción. 
+
+En este patrón, se define una interfaz para una acción genérica. El
+lanzador de las acciones recibe objetos que cumplen tal interfaz. Al
+generarse el evento de interés, reacciona ejecutando cada una de las
+acciones a través de dicha interfaz.
+
+Este patrón permite aislar al elemento que lanza la acción del que
+realiza la acción. Así, podemos asociar cualquier acción a un control
+Swing, sin que deba saber exactamente qué hace esa acción. Sólo conoce
+la interfaz que debe cumplir la acción, limitándose a invocar al
+método correspondiente.
+
+Además de reducir el acoplamiento, también mejora la estructura del
+programa evitando la duplicación de código al codificar la misma
+lógica en varios componentes.
+
+Es el caso usual de las acciones disponibles mediante la barra de
+herramientas, un acceso de teclado y un elemento del menú, por
+ejemplo: no importa exactamente quién lanza el evento, sólo qué acción
+se lanza.
+
+En Swing, la interfaz a cumplir es \clase{Action}, que permite no sólo
+unificar la orden a ejecutar, sino también parte de su visualización.
+Podemos asignar un acelerador de teclado, una descripción corta y un
+mnemónico a una acción, y al crear un botón o elemento de menú a
+partir de ella, éstos se inicializarán con los valores correctos.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../memoria"
+%%% End: 

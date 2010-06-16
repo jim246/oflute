@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="" company="" webLink="http://" view-date="2007-11-12" view-index="0"
+         gantt-divider-location="423"
+         resource-divider-location="300"
+         version="2.0">
+   <description/>
+   <view zooming-state="default:6" id="gantt-chart"/>
+   <view id="resource-table">
+      <field id="0" name="Nombre" width="55" order="0"/>
+      <field id="1" name="Función" width="44" order="1"/>
+   </view>
+   <!-- --><calendars>
+      <day-types>
+         <day-type id="0"/>
+         <day-type id="1"/>
+         <calendar id="1" name="default">
+            <default-week sun="0" mon="0" tue="0" wed="0" thu="0" fri="0" sat="0"/>
+            <overriden-day-types/>
+            <days/>
+         </calendar>
+      </day-types>
+   </calendars>
+   <tasks color="#8cb6ce">
+      <taskproperties>
+         <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+         <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+         <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+         <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+         <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+         <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+         <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+         <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+         <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+         <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+      </taskproperties>
+      <task id="53" name="XMLEye" color="#8cb6ce" meeting="false" start="2007-11-15"
+            duration="200"
+            complete="0"
+            priority="1"
+            expand="true">
+         <task id="54" name="Rediseño" color="#8cb6ce" meeting="false" start="2007-11-15"
+               duration="9"
+               complete="0"
+               priority="1"
+               expand="true">
+            <depend id="55" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="55" name="Interfaz TDI" color="#8cb6ce" meeting="false" start="2007-11-25"
+               duration="11"
+               complete="0"
+               thirdDate="2007-11-25"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="56" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="56" name="Hipervinculos entre documentos" color="#8cb6ce" meeting="false"
+               start="2007-12-23"
+               duration="4"
+               complete="0"
+               thirdDate="2007-12-27"
+               thirdDate-constraint="0"
+               priority="1"
+               expand="true">
+            <depend id="58" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="58" name="Descriptores de formatos de documentos" color="#8cb6ce"
+               meeting="false"
+               start="2008-02-07"
+               duration="11"
+               complete="0"
+               thirdDate="2008-02-07"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="59" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="59" name="Paquete Debian" color="#8cb6ce" meeting="false"
+               start="2008-02-18"
+               duration="11"
+               complete="0"
+               thirdDate="2008-02-21"
+               thirdDate-constraint="0"
+               priority="1"
+               expand="true">
+            <depend id="60" type="2" difference="0" hardness="Strong"/>
+            <depend id="71" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="60" name="Estabilizacion y manuales" color="#8cb6ce" meeting="false"
+               start="2008-03-09"
+               duration="11"
+               complete="0"
+               thirdDate="2008-03-09"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="61" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="61" name="Manuales y traduccion al ingles" color="#8cb6ce" meeting="false"
+               start="2008-03-21"
+               duration="1"
+               complete="0"
+               thirdDate="2008-03-21"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="62" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="62" name="Wiki" color="#8cb6ce" meeting="false" start="2008-06-01"
+               duration="1"
+               complete="0"
+               thirdDate="2008-06-01"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true"/>
+      </task>
+      <task id="63" name="ACL2::Procesador" color="#8cb6ce" meeting="false"
+            start="2007-12-08"
+            duration="194"
+            complete="0"
+            priority="1"
+            expand="true">
+         <task id="64" name="Rediseño" color="#8cb6ce" meeting="false" start="2007-12-08"
+               duration="5"
+               complete="0"
+               thirdDate="2007-12-08"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="65" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="65" name="Eventos para libros" color="#8cb6ce" meeting="false"
+               start="2007-12-14"
+               duration="3"
+               complete="0"
+               thirdDate="2007-12-14"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="66" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="66" name="Grafos de dependencias" color="#8cb6ce" meeting="false"
+               start="2007-12-17"
+               duration="6"
+               complete="0"
+               thirdDate="2007-12-17"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="56" type="2" difference="0" hardness="Strong"/>
+            <depend id="67" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="67" name="Integracion con ACL2" color="#8cb6ce" meeting="false"
+               start="2008-01-04"
+               duration="2"
+               complete="0"
+               thirdDate="2008-01-04"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="58" type="2" difference="0" hardness="Strong"/>
+            <depend id="68" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="68" name="Ejecutable monolitico y paquete Debian" color="#8cb6ce"
+               meeting="false"
+               start="2008-02-21"
+               duration="9"
+               complete="0"
+               thirdDate="2008-02-21"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="69" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="69" name="Traduccion al ingles" color="#8cb6ce" meeting="false"
+               start="2008-03-21"
+               duration="1"
+               complete="0"
+               thirdDate="2008-03-21"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="70" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="70" name="Actualizacion a ACL2 v3.3" color="#8cb6ce" meeting="false"
+               start="2008-06-14"
+               duration="5"
+               complete="0"
+               thirdDate="2008-06-14"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true"/>
+      </task>
+      <task id="71" name="YAXML::Reverse" color="#8cb6ce" meeting="false"
+            start="2008-03-04"
+            duration="27"
+            complete="0"
+            priority="1"
+            expand="true">
+         <task id="72" name="Procesamiento de YAML 1.0" color="#8cb6ce" meeting="false"
+               start="2008-03-04"
+               duration="1"
+               complete="0"
+               thirdDate="2008-03-06"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true">
+            <depend id="73" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="73" name="Reorganizacion y traduccion" color="#8cb6ce" meeting="false"
+               start="2008-03-05"
+               duration="1"
+               complete="0"
+               priority="1"
+               expand="true">
+            <depend id="74" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="74" name="Ejecutable monolitico y paquete Debian" color="#8cb6ce"
+               meeting="false"
+               start="2008-03-06"
+               duration="1"
+               complete="0"
+               priority="1"
+               expand="true">
+            <depend id="75" type="2" difference="0" hardness="Strong"/>
+         </task>
+         <task id="75" name="YAML 1.1/JSON y otras mejoras" color="#8cb6ce" meeting="false"
+               start="2008-03-26"
+               duration="5"
+               complete="0"
+               thirdDate="2008-03-30"
+               thirdDate-constraint="1"
+               priority="1"
+               expand="true"/>
+      </task>
+   </tasks>
+   <resources>
+      <resource id="0" name="Antonio Garcia Dominguez" function="Default:1" contacts=""
+                phone=""/>
+   </resources>
+   <allocations/>
+   <vacations/>
+   <taskdisplaycolumns>
+      <displaycolumn property-id="tpd3" order="0" width="67"/>
+      <displaycolumn property-id="tpd4" order="1" width="80"/>
+      <displaycolumn property-id="tpd5" order="2" width="78"/>
+   </taskdisplaycolumns>
+   <previous/>
+   <roles roleset-name="Default"/>
+</project>

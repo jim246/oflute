@@ -1,0 +1,168 @@
+%%
+%% requisitos.tex
+%% 
+%% Made by Antonio García
+%% $Id: requisitos.tex 607 2008-06-21 22:51:12Z antonio $
+%%
+
+\subsection{Interfaces externas}
+\label{sec:req_externas}
+
+\index{requisitos!interfaces}
+
+En este apartado se describen los requisitos que deben cumplir las
+interfaces con el hardware, el software y el usuario.
+
+\begin{itemize}
+\item La visualización permitirá a un usuario acceder directamente a
+  nodos relacionados del árbol del documento.
+
+\item La visualización debe de usar texto con formato, para
+  proporcionar mayor información visual que el texto puro.
+
+\item Las operaciones de larga duración no deben de afectar al tiempo
+  de respuesta de la interfaz gráfica.
+
+\item El estado de la interfaz mostrado al usuario debe de ser siempre
+  coherente con el estado interno de la aplicación.
+
+\item El sistema operativo ha de posibilitar el lanzamiento y
+  monitorización de otros procesos en segundo plano.
+
+\item \visor{} ha de ser capaz de adaptarse a los distintos esquemas
+  de nombrado de ficheros disponibles en cada sistema operativo.
+
+\item El formato de salida de \postprocesador{} debe estar bien
+  definido.
+\end{itemize}
+
+\index{prototipos!interfaz}
+
+Se adjunta un prototipo de la ventana principal en la
+figura~\ref{fig:proto_vntprincipal} de la
+página~\pageref{fig:proto_vntprincipal}. Puede verse cómo, en esta
+nueva versión de \visor{}, se integrará el soporte para visualización
+simultánea de varios documentos en pestañas.
+
+También hay prototipos para los diálogos:
+\begin{itemize}
+\item Búsqueda: figura~\ref{fig:proto_dlgbusqueda},
+  página~\pageref{fig:proto_dlgbusqueda}.
+\item Gestión de descriptores de formatos de documentos:
+  figura~\ref{fig:proto_dlgdfd}, página~\pageref{fig:proto_dlgdfd}.
+\item Información del producto: figura~\ref{fig:proto_dlgacercade},
+  página~\pageref{fig:proto_dlgacercade}.
+\end{itemize}
+
+\begin{figure}
+  \centering
+  \includegraphics[height=.5\textheight]{desarrollo/prototiposInterfaz/ventanaprincipal}
+  \caption{Prototipo de la ventana principal}
+  \label{fig:proto_vntprincipal}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[height=.35\textheight]{desarrollo/prototiposInterfaz/dialogobusqueda}
+  \caption{Prototipo del diálogo de búsqueda}
+  \label{fig:proto_dlgbusqueda}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.8\textwidth]{desarrollo/prototiposInterfaz/dialogotipos}
+  \caption{Prototipo del diálogo de gestión de descriptores de formatos de documentos}
+  \label{fig:proto_dlgdfd}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[height=.4\textheight]{desarrollo/prototiposInterfaz/dialogoacercade}
+  \caption{Prototipo del diálogo de información del programa}
+  \label{fig:proto_dlgacercade}
+\end{figure}
+
+\subsection{Funcionales}
+\label{sec:req_func}
+
+\index{requisitos!funcionales}
+
+\begin{itemize}
+\item Generar ficheros \ac{XML} que engloben la información de una
+  fuente Lisp, su demostración por \ac{ACL2} asociada y referencias a
+  todas las otras fuentes Lisp (libros de \ac{ACL2}) de que dependa.
+
+\item Permitir la visualización de documentos pertenecientes a
+  lenguajes basados en \ac{YAML} 1.1, y la posterior creación de hojas
+  específicas a éstos.
+
+\item Navegar por múltiples documentos a la vez, abstrayendo al
+  usuario si éste lo desea de los detalles de la estructura de sus
+  versiones \ac{XML}.
+
+\item Mantener un historial de documentos recientes, fácilmente
+  accesible por el usuario.
+
+\item Permitir editar los documentos visualizados con el editor
+  favorito del usuario para el formato correspondiente, si están
+  presentes en el sistema. Puede que en ciertos casos sólo dispongamos
+  del \ac{XML} final.
+
+\item Regenerar cualquier documento abierto si se producen cambios en
+  él en algún momento, pudiendo mantener el editor y el visor abiertos
+  a la vez.
+
+\item Relacionar los elementos del documento entre sí, y con elementos
+  específicos de otros documentos.
+
+\item Generar automáticamente información adicional que pueda ser de
+  interés para el usuario.
+
+\item Realizar búsquedas por el documento, sin pérdidas de información
+  respecto del texto original, usando diversos filtros y pudiendo
+  limitar su alcance.
+
+\item Repetir la última búsqueda realizada.
+
+\item Personalizar las órdenes usadas para lanzar el editor o el
+  conversor de cualquiera de los formatos aceptados, y volver a los
+  ajustes por defecto en cualquier momento.
+
+\item Cambiar el tipo y/o formato de la información mostrada durante
+  la ejecución del programa.
+\end{itemize}
+
+\subsection{Atributos del sistema software}
+\label{sec:req_attr}
+
+\index{requisitos!atributos}
+
+En este proyecto, la mantenibilidad es fundamental para que
+posteriores ampliaciones y correcciones se hagan de forma rápida y
+sencilla, dada la complejidad de la herramienta cuyo uso se pretende
+facilitar.
+
+También sería deseable la separación entre la lógica de visualización
+y el resto del sistema por la posibilidad de que los usuarios (véase
+\S\ref{sec:desc_usuarios}) extiendan sus capacidades de visualización
+sin tener que modificar el código fuente del proyecto, sólo
+modificando o añadiendo ficheros de datos. Separar la lógica de
+conversión de \visor{} de cuestiones específicas a \postprocesador{}
+posibilitará su uso para formatos distintos a demostraciones de
+\ac{ACL2}, y que tampoco tengan por qué ser basados en \ac{XML}.
+
+La transportabilidad, aunque no imprescindible, se corresponde con el
+deseo de permitir un libre uso de este proyecto como una herramienta
+más para los usuarios de \ac{ACL2} que limite en lo mínimo posible su
+elección de sistema operativo.
+
+Con vistas a ampliar la base de usuarios potencial de \visor{} y sus
+extensiones, cobrará importancia no solo la facilidad de uso, sino
+también la facilidad de instalación, controlando el número de
+dependencias externas y, cuando esto no sea posible, reduciendo su
+impacto en la complejidad de la instalación.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 

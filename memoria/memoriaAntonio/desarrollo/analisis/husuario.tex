@@ -1,0 +1,389 @@
+%%
+%% husuario.tex
+%% Copyright (C) 2008 Antonio García Domínguez
+%% $Id: husuario.tex 624 2008-07-02 21:40:46Z antonio $
+%%
+
+\index{historia de usuario|see{práctica XP!historia de usuario}}
+
+Como ya se comentó en \S\ref{sec:xp_practicas}
+(página~\pageref{sec:xp_practicas}), los proyectos basados en \ac{XP}
+se estructuran en torno a las historias de los usuarios, que describen
+un comportamiento o propiedad deseada del sistema en sus propias
+palabras.
+
+Mientras se redactan, el equipo de desarrolladores, tras realizar un
+análisis superficial del trabajo implicado con ayuda del cliente,
+asigna a cada historia un tiempo estimado de finalización en días
+ideales y un riesgo. El cliente puede, en función de esos factores y
+de sus intereses, marcar la prioridad de una historia.
+
+Una historia de usuario puede ser de muy alto nivel o de muy bajo
+nivel, pudiendo unirse varias historias de bajo nivel en una sola, o
+dividirse una de alto nivel en varias más sencillas.
+
+Pasaremos a listar las historias de usuario que se han ido acumulando
+a lo largo de la comunicación con los clientes durante el desarrollo
+del PFC, es decir, mis directores de proyecto, usuarios de \ac{ACL2} y
+por lo tanto partes interesadas.
+
+En los casos de \postprocesador{} y \yaxml{}, hay varias historias
+pospuestas para futuras iteraciones, sin que ello impida entregar una
+versión funcional (recordemos el principio ``Margen'' de \ac{XP}).
+
+Dividiremos la mayoría de las historias en tareas, dando estimaciones
+iniciales del tiempo necesario para cada una. Otras serán lo bastante
+concretas como para no necesitar ninguna subdivisión.
+
+En esta lista de historias de usuario no se incluyen aquellas que se
+completaron durante el Proyecto Fin de Carrera ``Post-procesador y
+Visor de Demostraciones del Sistema ACL2''.
+
+\subsubsection{\nombrevisor{}}
+\label{sec:husuario_visor}
+
+\begin{enumerate}
+\item \label{item:multidoc}
+  \begin{quote}
+    ``Añadir soporte para visualizar varios ficheros a la vez y
+    enlazarlos entre sí.''
+  \end{quote}
+
+  Esta historia de usuario es muy corta para todo el trabajo que
+  implica:
+
+  \begin{enumerate}
+  \item Concentrar el estado de visualización del documento actual en
+    un modelo de presentación, para así poder cambiar entre los
+    estados de cada documento: 3 días ideales. Completada.
+
+  \item Integrar de nuevo y depurar toda la funcionalidad de la
+    aplicación con este nuevo diseño: 3 días ideales. Completada.
+
+  \item Añadir una interfaz \ac{TDI} a XMLEye, y asegurar su
+    integración con el \emph{Look and Feel} instalado: 4 días
+    ideales. Completada.
+
+  \item Añadir la posibilidad de establecer hipervínculos entre varios
+    documentos: 2 días ideales. Completada.
+  \end{enumerate}
+
+\item 
+  \begin{quote}
+    ``El visor no debería saber absolutamente nada de \ac{ACL2}. Nada
+    en su interfaz gráfica ni en su implementación nos debe recordar
+    que podemos trabajar con \ac{ACL2}. Pero sí podría saber algo de
+    un procesador externo que tradujera ficheros de un formato, del
+    que el visor tampoco sabe nada, a \ac{XML}. También podría conocer
+    la existencia de hojas de estilo \ac{XSLT} y de herramientas
+    externas, como un editor, como de hecho ocurre ahora.''
+  \end{quote}
+
+  \begin{enumerate}
+  \item Mover toda la lógica propia de \ac{ACL2} a \postprocesador{},
+    y retirarla de \visor{}: 0,5 día ideal para retirarla. Véase la
+    historia~\ref{item:integrar-pproc-acl2} de \postprocesador{} para
+    la estimación de su recreación. Completada.
+
+  \item Definir la estructura y contenidos de un descriptor de formato
+    de documento: 0,5 día ideal. Completada.
+
+  \item Implementar y depurar la estructura en 2 niveles del
+    repositorio de descriptores, empleando ciertas variables del
+    entorno si se hallan definidas: 2 días ideales. Completada.
+
+  \item Internacionalizar las cadenas contenidas en los descriptores:
+    0,5 día ideal. Completada.
+
+  \item Integrar la información de los descriptores con los controles
+    de apertura y edición de documentos: 2 días ideales. Completada.
+
+  \item Crear un diálogo de gestión de los descriptores instalados: 1
+    día ideal. Completada.
+  \end{enumerate}
+
+\item 
+  \begin{quote}
+    ``Vigilar directamente el fichero fuente en caso de cambios, en vez de
+    solamente cuando se cierra el editor. Así, si uno abre el editor, hace
+    un par de cambios y guarda (sin cerrar el editor), también se
+    actualizará. En caso de que se desactive temporalmente la
+    reimportación automática, también debería funcionar correctamente si
+    en ese intervalo se hicieron cambios.''
+  \end{quote}
+
+  Esta historia implica:
+
+  \begin{itemize}
+  \item Resolver unas condiciones de carrera conocidas que producían
+    fallos intermitentes en la reimportación automática. Tiempo
+    estimado: 1 día ideal. Completada.
+
+  \item Refinar el diseño del momento para evitar que al reabrir el
+    documento, apareciera como una nueva pestaña. Tiempo estimado: 1
+    día ideal. Completada.
+
+  \item Implementar la detección y notificación con un hilo pausable
+    de baja prioridad en segundo plano, activado de forma
+    intermitente. Tiempo estimado: 1 día ideal. Completada.
+  \end{itemize}
+
+\end{enumerate}
+
+\subsubsection{\nombrepostprocesador{}}
+\label{sec:husuario_pproc}
+
+\begin{enumerate}
+\item 
+  \begin{quote}
+    ``Normalizar la estructura de \postprocesador{} para que siga la de
+    un módulo del CPAN y se porte mejor a la hora de en el futuro
+    hacer un paquete Debian.''
+  \end{quote}
+
+  Tiempo estimado: 2 días ideales. Completada.
+
+\item 
+  \begin{quote}
+    ``Llevar la cuenta de en qué paquete (espacio de nombres) estamos
+    trabajando. Puede saberse por el indicador (prompt).''
+  \end{quote}
+
+  Se requeriría añadir el filtrado de la orden \orden{in-package} y
+  del indicador de \ac{ACL2}, modificando en consecuencia la salida
+  \ac{XML}.
+
+  Tiempo estimado: 1 día ideal. Completada.
+
+\item \label{item:hanoi}
+
+  \begin{quote}
+    ``Tratar el ejemplo de las Torres de Hanoi de~\cite{Hanoi},
+    dividiéndolo en tres partes: \fichero{books/hanoi.lisp}, libro que
+    define el algoritmo para resolver el problema y todo lo necesario
+    excepto el propio teorema del número de intercambios;
+    \fichero{books/hanoi.acl2}, que se encarga de definir el paquete y
+    certificar el libro; y \fichero{hanoi-use.lisp}, que incluye el
+    libro y contiene el teorema con el número de intercambios.''
+  \end{quote}
+
+  Una vez la capacidad de visualizar y enlazar entre sí varios
+  documentos esté añadida en \visor{} (véase su
+  historia~\ref{item:multidoc}), habría que:
+
+  \begin{itemize}
+  \item Crear un módulo de detección de dependencias que utilice un
+    simple análisis superficial de sus órdenes, de forma recursiva, y
+    genere un índice de cada libro con los identificadores de los
+    eventos que define y los libros de que depende a su vez. Tiempo
+    estimado: 3 días ideales. Completada.
+
+  \item Implementar el procesamiento de la salida de los eventos
+    \orden{include-book}, \orden{certify-book}, \orden{defpkg} e
+    \orden{in-package}. Tiempo estimado: 2 días ideales. Completada.
+  \end{itemize}
+
+\item 
+
+  \begin{quote}
+    ``Mejorar los informes de errores de las pruebas de regresión,
+    evitando que fallen con diferencias insignificantes.''
+  \end{quote}
+
+  Requiere:
+
+  \begin{itemize}
+  \item Volver a implementar las pruebas de regresión, esta vez
+    calculando la diferencia entre los documentos no a partir de las
+    líneas de texto que lo componen, sino usando el árbol DOM
+    resultado de analizar los dos documentos \ac{XML}. Tiempo
+    estimado: 2 días ideales. Completado.
+
+  \item Implementar el código necesario para ignorar aquellas
+    diferencias que no sean de interés. Tiempo estimado: 1 día
+    ideal. Completado.
+  \end{itemize}
+
+\item \label{item:integrar-pproc-acl2}
+
+  \begin{quote}
+    ``Integrar \postprocesador{} con ACL2, haciendo que
+    automáticamente genere las salidas y las sitúe en ficheros
+    \fichero{.out} y \fichero{.xml} en el mismo directorio, realizando
+    una gestión de dependencias al estilo GNU Make entre ellos y la
+    fuente Lisp. Así evitaríamos importar varias veces el mismo
+    fichero, y se podría simplificar el visor.''
+  \end{quote}
+
+  Una vez esté terminada la tarea~\ref{item:hanoi}, habría que
+  modificar el código que recibe el texto de la demostración de
+  \ac{ACL2} y lanza el proceso de análisis para que invoque él mismo a
+  \ac{ACL2} en caso de que el fichero \fichero{.xml} no exista o se
+  halle desactualizado respecto a la fuente Lisp.
+
+  Tiempo estimado: 1 día ideal. Completada.
+
+\item 
+
+  \begin{quote}
+    ``Manejar los eventos definidos por el usuario con
+    \orden{make-event} y las expansiones de macros creadas con
+    \orden{defmacro}.''
+  \end{quote}
+
+  No está del todo clara la forma de resolver esta historia de
+  usuario. Un análisis superficial sugiere esta división en tareas:
+
+  \begin{itemize}
+  \item Instrumentar el código Lisp con llamadas previas a
+    \verb#:trans1# sobre la orden desconocida, sin que se produzcan
+    modificaciones en el espaciado de cualquiera del resto de las
+    líneas del documento. Tiempo estimado: 2 días ideales. Pospuesta.
+
+  \item Usar la orden resultante de \verb#:trans1# como el enunciado
+    de la orden para la siguiente salida. Tiempo estimado: 2 días
+    ideales, por posibles cambios importantes a realizar en el
+    diseño. Pospuesta.
+
+  \item Registrar de alguna forma la expansión producida por
+    \orden{make-event}, tomando como base el fichero fuente
+    \fichero{basic.lisp} del libro \fichero{make-event} incluido en la
+    distribución de \ac{ACL2}. Tiempo estimado: 3 días
+    ideales. Pospuesta.
+  \end{itemize}
+
+\item 
+
+  \begin{quote}
+    ``Tratar el caso en que un \orden{include-book} aparezca dentro de un
+    \orden{local} (y entonces lo que se incluye es local al libro, no se ve
+    fuera). Y esto puede aparecer dentro de un \orden{encapsulate}''.
+  \end{quote}
+
+  Hay que refinar la sintaxis de los grafos de dependencias para
+  incluir menciones al ámbito de validez de cada entrada: puede que
+  dentro de un \orden{encapsulate} se haga referencia a un evento
+  \evento{P::F}, y en el nivel global u otro \orden{local} o
+  \orden{encapsulate}, se dependa de otro evento distinto con el mismo
+  nombre. Limitando el alcance de las definiciones se podría tratar
+  este problema.
+
+  Tiempo estimado: 3 días ideales. Pospuesta.
+
+\item 
+
+  \begin{quote}
+    ``Tratar las \emph{forcing rounds}, demostraciones realizadas tras
+    la demostración principal sobre cualquier hipótesis cuya
+    aplicación se hubiera forzado durante la demostración anterior (la
+    demostración inicial, u otra \emph{forcing round}).''
+  \end{quote}
+  
+  Hay que refinar la división jerárquica de las metas y procesar la
+  salida específica a las \emph{forcing rounds} estableciendo los
+  enlaces correspondientes.
+
+  Tiempo estimado: 3 días ideales. Pospuesta.
+
+\item
+  \begin{quote}
+    ``Tratar todas las opciones que pueden acompañar a un \orden{defthm} y a
+    un \orden{defun}.''
+  \end{quote}
+
+  En el caso de \orden{defthm}, se han de tratar \orden{:rule-classes},
+  \orden{:instructions}, \orden{:hints}, \orden{:otf-flg} y
+  \orden{:doc}.
+
+  Para \orden{defun}, se han de tratar las declaraciones y la cadena
+  de documentación (del estilo del argumento de \orden{:doc}).
+
+  Esta historia se habría de dividir entonces en varias tareas
+  independientes:
+  \begin{enumerate}
+  \item Soporte para cadenas de documentación, \orden{:rule-classes} y
+    \orden{:otf-flg}: 2 días ideales. Completada parcialmente.
+  \item Soporte de \orden{:instructions}: 2 días ideales. Pospuesta.
+  \item Soporte de \orden{:hints}: 2 días ideales. Pospuesta.
+  \item Soporte de declaraciones (incluye \orden{:hints} e
+    \orden{:instructions}): 2 días ideales. Pospuesta.
+  \end{enumerate}
+
+\item
+  \begin{quote}
+    ``Marcar las salidas de los nuevos apuntes de
+    Moore~\cite{recindacl2}, \emph{Recursion and Induction}.''
+  \end{quote}
+
+  El trabajo necesario para implementar esta historia de usuario es
+  extensivo, requiriendo implementar todas las historias anteriormente
+  propuestas, y añadir la capacidad a \postprocesador{} de tratar
+  macros Lisp.  
+
+  Tiempo estimado: 6 días ideales. Pospuesta.
+
+\end{enumerate}
+
+\subsubsection{\nombreyaxml{}}
+\label{sec:husuario_yaxml}
+
+\begin{enumerate}
+\item 
+  \begin{quote}
+    ``Abrir documentos \ac{YAML} en \nombrevisor{} sin que suponga una
+    pérdida o alteración de la información disponible.''
+  \end{quote}
+
+  \begin{itemize}
+  \item Seleccionar un módulo Perl que permita cargar documentos
+    \ac{YAML}. Idealmente, debería ser Perl puro, pero la velocidad de
+    carga y la fiabilidad son más importantes. Tiempo estimado: 0,5 día
+    ideal. Completada.
+
+  \item Definir un primer prototipo del módulo que verifique la
+    viabilidad del enfoque usado con algunos ejemplos sencillos: 0,5
+    día ideal. Completada.
+
+  \item Convertir el prototipo en un módulo completo al estilo del
+    \ac{CPAN}, con pruebas de unidad basadas en Perl que verifiquen la
+    conservación de la información: 1 día ideal. Completada.
+  \end{itemize}
+
+\item 
+  \begin{quote}
+    ``Procesar el ejemplo de la factura de la web~\cite{YAXML} de \ac{YAXML}.''
+  \end{quote}
+
+  Hay que establecer un mecanismo para detectar la existencia de
+  anclas y alias en la estructura de datos generada en memoria,
+  evitando tener que volver a analizar el código fuente
+  \ac{YAML}. Podrían buscarse referencias duplicadas, por
+  ejemplo. Tiempo estimado: 1 día ideal. Completada.
+
+\item 
+  \begin{quote}
+    ``Preparar hojas de estilos para los marcadores de Firefox y
+    volcados del entorno de desarrollo web Django.''
+  \end{quote}
+
+  \begin{itemize}
+  \item Comprobar que la biblioteca usada analiza correctamente
+    documentos del subconjunto \ac{JSON} de \ac{YAML} 1.1 que emplean
+    los volcados de Django y los marcadores de Firefox, y en caso
+    contrario reemplazar la existente. Tiempo estimado: 1 día ideal. Completada.
+
+  \item Comprobar que se procesan debidamente documentos codificados
+    en \acs{UTF}-8 con caracteres fuera del conjunto \acs{ASCII} de 7
+    bits. Tiempo estimado: 1 día ideal. Completada.
+
+  \item Implementar hojas de estilos especializadas para los
+    marcadores de Firefox y volcados de Django. Tiempo estimado: 2
+    días ideales. Pospuesta.
+  \end{itemize}
+
+\end{enumerate}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../memoria"
+%%% End: 

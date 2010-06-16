@@ -1,0 +1,221 @@
+%%
+%% Detalles de implementación interesantes
+%% Copyright (C) 2008 Antonio García Domínguez
+%% $Id: implementacion.tex 629 2008-07-06 13:47:58Z antonio $
+%%
+
+\subsection{Perl}
+\label{sec:codificacion_perl}
+
+Se usaron la obra~\cite{perlbyexample} y la web~\cite{perldoc} como
+referencias para los aspectos de división en módulos y la
+implementación en Perl del paradigma orientado a objetos.
+
+Varios detalles de implementación de ciertos patrones y otras
+prácticas recomendadas para Perl se obtuvieron de~\cite{perloowiki}.
+
+\lstset{language=Perl}
+
+\subsubsection{Perl y el paradigma OO}
+\label{sec:perl_oo}
+
+No hay que confundir el hecho de emplear el paradigma orientado a
+objetos con el uso de un lenguaje orientado a objetos.
+
+Perl proporciona mecanismos para implementar la mayoría de la
+funcionalidad necesaria para este paradigma, pero no proporciona un
+soporte directo a través del lenguaje de muchas construcciones, como
+una sintaxis específica para declaración de clases con palabras
+reservadas para control de acceso, por ejemplo.
+
+Otras veces ha de usarse una sintaxis algo más compleja de lo usual,
+como en el caso de las variables de instancia.
+
+Para implementar los métodos, por ejemplo, Perl permite ``bendecir''
+una referencia cualquiera con el nombre de un módulo. A partir de ese
+momento, se buscará la subrutina \metodo{metodo} dentro del módulo con
+el que se bendijo \verb!$variable! al usar esta sintaxis:
+\begin{lstlisting}
+ $variable->metodo(@args);
+\end{lstlisting}%$
+
+Un módulo puede declarar a otros como base, que serán consultados
+mediante un recorrido primero en profundidad sobre el árbol de
+generalizaciones durante la búsqueda de un método. Este mecanismo es
+el que implementa la herencia y los métodos virtuales.
+
+\subsubsection{Internacionalización}
+\label{sec:cod_perl_l10n}
+
+La internacionalización de los mensajes se consigue en
+\postprocesador{} a través del módulo \modulo{Locale::Maketext}, que
+permite usar una jerarquía de clases donde la clase base define la
+lógica común y los idiomas por omisión y sus hijas contienen un
+diccionario que realiza la localización para cada idioma (posiblemente
+especificando el país).
+
+El uso es muy sencillo:
+\begin{lstlisting}[caption=Ejemplo de uso de Locale::Maketext]
+# Obtenemos el manejador a la localización que más se ajuste,
+# subclase de ACL2::Localizacion, que es a su vez subclase
+# de Locale::Maketext.
+my $lh = ACL2::Localizacion->get_handle();
+
+# Buscamos en el diccionario y sustituimos
+# la cadena original: buscando 'Hola [_1]' se hallaría 
+# 'Hello [_1]' y luego se sustituiría, dando 'Hello Pablo'.
+print $lh->maketext("Hola [_1]", 'Pablo');
+\end{lstlisting}
+
+Dicho módulo es técnicamente superior al conocido \texttt{Gettext},
+por la flexibilidad que su enfoque orientado a objetos le aporta: se
+pueden definir funciones para manejar las formas plurales según el
+lenguaje, por ejemplo, simplemente redefiniendo un método en la clase
+correspondiente. 
+
+También numera los parámetros de las cadenas, permitiendo mayor
+flexibilidad que la usual cadena con parámetros para \metodo{printf},
+que da resultados pobres en casos en los que haya que cambiar el orden
+de las palabras.
+
+\subsubsection{Distribución mediante \acs{PAR}}
+
+Distribuir \postprocesador{} era bastante complejo e incómodo en su
+anterior versión. Se deseaba facilitar este aspecto en la mayor medida
+de lo posible, permitiendo instalar de forma automática las
+dependencias o empaquetarlas en un formato cómodo de utilizar.
+
+Este problema no es único a \postprocesador{}: empezando por \yaxml{},
+prácticamente todo módulo sufre de él. Existen muchas alternativas,
+como \verb#perlcc# (retirado a partir de Perl 5.10), Perl2Exe o
+Perl2App, pero entre todas ellas destacan \modulo{PAR} y
+\modulo{PAR::Packer}.
+
+De forma muy similar a los ficheros \fichero{.jar} de Java,
+\modulo{PAR::Packer} y su herramienta \verb#pp# nos permiten crear
+ficheros \fichero{.par} con todo el código fuente de los conversores y
+sus dependencias que no forman parte de los módulos estándar de
+Perl. 
+
+Instalar estos conversores y sus hojas se convierte en algo tan
+sencillo como descargar el \fichero{.par} correspondiente a nuestra
+plataforma y descomprimirlo sobre el directorio raíz de
+XMLEye. Además, si nuestra aplicación es Perl puro, el \fichero{.par}
+generado puede ser usado en cualquier arquitectura y sistema
+operativo.
+
+Si no queremos obligar a nuestros usuarios a tener que instalar un
+entorno Perl y los módulos \modulo{PAR} y \modulo{PAR::Packer} (cosa
+particularmente molesta en Windows), también podemos crear ejecutables
+monolíticos, específicos del sistema operativo y arquitectura bajo el
+que se creen, que incluyen hasta el propio intérprete de Perl con sus
+módulos estándar.
+
+Estas imágenes no son tan grandes como se esperaría: los
+\fichero{.par} para \yaxml{} y \postprocesador{} no llegan a los
+100KiB, y los ejecutables, una vez comprimidos, no alcanzan los
+2MiB. Además, estas distribuciones comprimidas incluyen todos los
+descriptores de formato y hojas de usuario necesarias.
+
+\subsection{Java}
+\label{sec:cod_java}
+
+\lstset{language=Java}
+
+Un texto útil ha sido la referencia del lenguaje~\cite{javalang},
+escrita por los creadores de Java. La web~\cite{swingwiki} detalla
+además algunas prácticas recomendadas, funcionalidades no documentadas
+y soluciones temporales a fallos conocidos de Swing.
+
+Un ejemplo es la disponibilidad no documentada de fuentes con
+anti-aliasing bajo la \ac{J2SE} 5.0, o la necesidad de forzar
+manualmente un tamaño mínimo sobre los hijos de \clase{JFrame}, un
+fallo documentado en la propia base de datos de Sun y corregido en la
+próxima \ac{J2SE} 6.0 ``Mustang''.
+
+El uso del \ac{IDE} Eclipse 3.3.2 ha sido fundamental gracias a su
+soporte para la realización sencilla de refactorizaciones a gran
+escala, pudiendo renombrar métodos y clases completas sin introducir
+errores en el código, entre otras cosas.
+
+\subsubsection{Controles HTML}
+\label{sec:cod_java_html}
+
+Los controles para navegación \ac{HTML} incluidos en Swing dejan
+bastante que desear a la hora de usar el teclado para navegar o
+seleccionar enlaces.
+
+Para cubrir estas carencias, se especializó la clase
+\clase{JEditorPane} en \clase{Browser}.
+
+Otros componentes útiles incluyen un observador de enlaces capaz de
+lanzar uno de los navegadores web del usuario (el navegador por
+defecto en Windows y Mac OS X) al pulsar enlaces con \acs{URL}
+válidas.
+
+\subsubsection{Internacionalización}
+\label{sec:cod_java_l10n}
+
+En el lado de Java, la internacionalización se obtiene a partir de los
+\clase{ResourceBundle}s, de los que hay dos tipos:
+\begin{itemize}
+\item \clase{PropertyResourceBundle}s, que acceden a ficheros
+  \fichero{.properties} de fácil mantenimiento, al sólo contener
+  cadenas de texto.
+\item Especializaciones de \clase{ListResourceBundle}, que pueden
+  contener cualquier tipo de objeto.
+\end{itemize}
+
+La capa de aplicación sólo maneja mensajes de texto y usa el primer
+tipo, y la capa de presentación usa el segundo tipo, al necesitar
+además iconos y atajos de teclado.
+
+La clase \clase{ResourceBundle} de la biblioteca estándar de Java es
+la ocupada de hallar e instanciar el \clase{PropertyResourceBundle} o
+\clase{ListResourceBundle} que se ajuste mejor a la localización del usuario.
+
+\paragraph{Componentes especializados}
+
+Para facilitar la internacionalización, se han definido una serie de
+clases genéricas que se inicializan a partir de un
+\clase{ResourceBundle}.
+
+En particular, se ha definido una especialización de
+\clase{AbstractAction} llamada \clase{ResourceBackedAction}, que
+extrae sus valores de un \clase{ResourceBundle} que sigue un esquema
+específico de nombrado de claves.
+
+La clase \clase{AbstractAction} es la clase base de todas nuestras
+\patron{Orden}es (ver~\S\ref{sec:presentacion_orden}), que proporciona
+implementaciones por defecto para la mayoría de los métodos de la
+interfaz \clase{Action}, a seguir por toda \patron{Orden} de Swing.
+
+Todas las Órdenes usadas son clases internas de
+\clase{WndMain}: las más complejas tienen entidad propia, y
+las demás son anónimas. Puede verse un diagrama \ac{UML} de las
+primeras en la figura~\ref{fig:diag_clases_impl_ordenes} de la
+página~\pageref{fig:diag_clases_impl_ordenes}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.95\textwidth]{desarrollo/implementacion/clases_localizacion}
+  \caption{Diagrama de clases de Órdenes}
+  \label{fig:diag_clases_impl_ordenes}
+\end{figure}
+
+También hay menús (\clase{ResourceBackedMenu}) y botones
+(\clase{ResourceBackedButton}) que extraen sus valores de los
+\clase{ResourceBundle}.
+
+\subsection{Hojas XSLT}
+\label{sec:cod_xsl}
+
+Las propias hojas \ac{XSLT} deben seguir una serie de convenciones en
+su código y forma de operar. Estas convenciones se hallan documentadas
+en el apartado del manual de usuario dedicado a explicar cómo crear
+nuevas hojas \ac{XSLT}.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../memoria"
+%%% End: 

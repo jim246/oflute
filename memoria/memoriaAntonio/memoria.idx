@@ -1,0 +1,358 @@
+\indexentry{analizador!sint�ctico|hyperpage}{17}
+\indexentry{analizador!l�xico|hyperpage}{17}
+\indexentry{analizador!sem�ntico|hyperpage}{17}
+\indexentry{lenguaje|hyperpage}{17}
+\indexentry{metalenguaje|hyperpage}{17}
+\indexentry{lenguaje!de marcado|hyperpage}{17}
+\indexentry{lenguaje!de serializaci�n|hyperpage}{17}
+\indexentry{GML|hyperpage}{18}
+\indexentry{SGML|hyperpage}{18}
+\indexentry{HTML|hyperpage}{18}
+\indexentry{lenguaje!aplicativo|hyperpage}{19}
+\indexentry{lenguaje!funcional|hyperpage}{19}
+\indexentry{m�dulo Perl!XML::Writer|hyperpage}{22}
+\indexentry{XML::Writer|see{m�dulo Perl!XML::Writer}}{22}
+\indexentry{m�dulo Perl!XML::Validate|hyperpage}{22}
+\indexentry{XML::Validate|see{m�dulo Perl!XML::Validate}}{22}
+\indexentry{libxml2|hyperpage}{23}
+\indexentry{libxslt|hyperpage}{23}
+\indexentry{libyaml|hyperpage}{23}
+\indexentry{readline|hyperpage}{23}
+\indexentry{analizador!l�xico|hyperpage}{26}
+\indexentry{analizador!sint�ctico|hyperpage}{26}
+\indexentry{analizador!sem�ntico|hyperpage}{26}
+\indexentry{deserializaci�n|hyperpage}{26}
+\indexentry{forja|hyperpage}{27}
+\indexentry{lenguaje!definici�n|hyperpage}{27}
+\indexentry{lenguaje!de marcado|hyperpage}{27}
+\indexentry{lenguaje!de serializaci�n|hyperpage}{27}
+\indexentry{metalenguaje|hyperpage}{27}
+\indexentry{lenguaje!meta-|hyperpage}{27}
+\indexentry{serializaci�n|hyperpage}{27}
+\indexentry{s�mbolo!no terminal|hyperpage}{27}
+\indexentry{s�mbolo!terminal|hyperpage}{28}
+\indexentry{wiki|hyperpage}{28}
+\indexentry{alias|see{YAML!alias}}{28}
+\indexentry{YAML!alias|hyperpage}{28}
+\indexentry{ancla|see{YAML!ancla}}{28}
+\indexentry{YAML!ancla|hyperpage}{28}
+\indexentry{documento|see{YAML!documento}}{28}
+\indexentry{YAML!documento|hyperpage}{28}
+\indexentry{flujo|see{YAML!flujo}}{28}
+\indexentry{YAML!flujo|hyperpage}{28}
+\indexentry{nodo|see{YAML!nodo}}{29}
+\indexentry{YAML!nodo|hyperpage}{29}
+\indexentry{escalar|see{YAML!escalar}}{29}
+\indexentry{YAML!escalar|hyperpage}{29}
+\indexentry{esquema|see{YAML!esquema}}{29}
+\indexentry{YAML!esquema|hyperpage}{29}
+\indexentry{etiqueta|see{YAML!etiqueta}}{29}
+\indexentry{YAML!etiqueta|hyperpage}{29}
+\indexentry{secuencia|see{YAML!secuencia}}{29}
+\indexentry{YAML!secuencia|hyperpage}{29}
+\indexentry{vector asociativo|see{YAML!vector asociativo}}{29}
+\indexentry{YAML!vector asociativo|hyperpage}{29}
+\indexentry{�tomo Lisp|hyperpage}{29}
+\indexentry{clausura lambda|hyperpage}{29}
+\indexentry{dependencia inversa|see{ACL2!dependencia inversa}}{29}
+\indexentry{ACL2!dependencia inversa|hyperpage}{29}
+\indexentry{evento|see{ACL2!evento}}{30}
+\indexentry{ACL2!evento|hyperpage}{30}
+\indexentry{libro|see{ACL2!libro}}{30}
+\indexentry{ACL2!libro|hyperpage}{30}
+\indexentry{meta|see{ACL2!meta}}{30}
+\indexentry{ACL2!meta|hyperpage}{30}
+\indexentry{mundo l�gico|see{ACL2!mundo l�gico}}{30}
+\indexentry{ACL2!mundo l�gico|hyperpage}{30}
+\indexentry{paquete Lisp|hyperpage}{30}
+\indexentry{par Lisp|hyperpage}{30}
+\indexentry{proyecto|see{ACL2!proyecto}}{30}
+\indexentry{ACL2!proyecto|hyperpage}{30}
+\indexentry{S-expresi�n|hyperpage}{30}
+\indexentry{XSLT|hyperpage}{31}
+\indexentry{XPath|hyperpage}{31}
+\indexentry{YAXML|hyperpage}{31}
+\indexentry{iteraciones!XMLEye|hyperpage}{33}
+\indexentry{iteraciones!ACL2::Procesador|hyperpage}{35}
+\indexentry{iteraciones!YAXML::Reverse|hyperpage}{37}
+\indexentry{Gantt!diagrama|hyperpage}{37}
+\indexentry{porcentajes de esfuerzo|hyperpage}{38}
+\indexentry{dependencia inversa|hyperpage}{46}
+\indexentry{Perl|hyperpage}{48}
+\indexentry{Java|hyperpage}{48}
+\indexentry{Locale::Maketext|hyperpage}{50}
+\indexentry{m�dulo Perl!File::ShareDir|hyperpage}{50}
+\indexentry{m�dulo Perl!Module::Install|hyperpage}{50}
+\indexentry{Module::Install|see{m�dulo Perl!Module::Install}}{50}
+\indexentry{m�dulo Perl!File::Spec|hyperpage}{50}
+\indexentry{m�dulo Perl!Getopt::Long|hyperpage}{50}
+\indexentry{m�dulo Perl!Module::Install|hyperpage}{50}
+\indexentry{m�dulo Perl!ExtUtils::MakeMaker|hyperpage}{50}
+\indexentry{ExtUtils::MakeMaker|see{m�dulo Perl!ExtUtils::MakeMaker}}{50}
+\indexentry{m�dulo Perl!Module::Build|hyperpage}{50}
+\indexentry{Module::Build|see{m�dulo Perl!Module::Build}}{50}
+\indexentry{m�dulo Perl!File::ShareDir|hyperpage}{50}
+\indexentry{File::ShareDir|see{m�dulo Perl!File::ShareDir}}{50}
+\indexentry{m�dulo Perl!PAR|hyperpage}{50}
+\indexentry{m�dulo Perl!PAR::Packer|hyperpage}{51}
+\indexentry{m�dulo Perl!PAR|hyperpage}{51}
+\indexentry{PAR|see{m�dulo Perl!PAR}}{51}
+\indexentry{m�dulo Perl!Pod::Usage|hyperpage}{51}
+\indexentry{m�dulo Perl!Test::More|hyperpage}{51}
+\indexentry{m�dulo Perl!Test::Simple|hyperpage}{51}
+\indexentry{Test::Simple|see{m�dulo Perl!Test::Simple}}{51}
+\indexentry{m�dulo Perl!Test::Pod::Coverage|hyperpage}{51}
+\indexentry{m�dulo Perl!XML::LibXML|hyperpage}{51}
+\indexentry{m�dulo Perl!XML::Validate|hyperpage}{51}
+\indexentry{XML::Validate|see{m�dulo Perl!XML::Validate}}{51}
+\indexentry{m�dulo Perl!XML::SemanticDiff|hyperpage}{51}
+\indexentry{XML::Validate|hyperpage}{51}
+\indexentry{m�dulo Perl!XML::Writer|hyperpage}{51}
+\indexentry{Look \& Feel|hyperpage}{51}
+\indexentry{Apache!XSLTC|hyperpage}{52}
+\indexentry{XSLTC|see{Apache!XSLTC}}{52}
+\indexentry{Apache!Xalan|hyperpage}{52}
+\indexentry{Xalan|see{Apache!Xalan}}{52}
+\indexentry{translet|hyperpage}{52}
+\indexentry{Xerces|see{Apache!Xerces}}{52}
+\indexentry{Apache!Xerces|hyperpage}{52}
+\indexentry{Crimson|see{Apache!Crimson}}{52}
+\indexentry{Apache!Crimson|hyperpage}{52}
+\indexentry{Xerces|hyperpage}{52}
+\indexentry{Ant|see{Apache!Ant}}{52}
+\indexentry{Apache!Ant|hyperpage}{52}
+\indexentry{Eclipse|hyperpage}{52}
+\indexentry{JUnit|hyperpage}{52}
+\indexentry{pruebas!de unidad|hyperpage}{52}
+\indexentry{JUnit|hyperpage}{52}
+\indexentry{m�todos �giles|hyperpage}{56}
+\indexentry{XP|see{Extreme Programming}}{56}
+\indexentry{Extreme Programming|hyperpage}{56}
+\indexentry{valor XP!simplicidad|hyperpage}{56}
+\indexentry{simplicidad|see{valor XP!simplicidad}}{56}
+\indexentry{valor XP!comunicaci�n|hyperpage}{57}
+\indexentry{comunicaci�n|see{valor XP!comunicaci�n}}{57}
+\indexentry{valor XP!aprendizaje|hyperpage}{57}
+\indexentry{aprendizaje|see{valor XP!aprendizaje}}{57}
+\indexentry{principio XP!flujo|hyperpage}{57}
+\indexentry{flujo|see{principio XP!flujo}}{57}
+\indexentry{principio XP!margen|hyperpage}{57}
+\indexentry{margen|see{principio XP!margen}}{57}
+\indexentry{principio XP!calidad|hyperpage}{57}
+\indexentry{calidad|see{principio XP!calidad}}{57}
+\indexentry{principio XP!centrado en las personas|hyperpage}{58}
+\indexentry{centrado en las personas|see{principio XP!centrado en las personas}}{58}
+\indexentry{pr�ctica XP!historia de usuario|hyperpage}{58}
+\indexentry{historia de usuario|see{pr�cticas XP!historia de usuario}}{58}
+\indexentry{pr�ctica XP!integraci�n continua|hyperpage}{59}
+\indexentry{integraci�n continua|see{pr�ctica XP!integraci�n continua}}{59}
+\indexentry{pr�ctica XP!ciclo semanal|hyperpage}{59}
+\indexentry{ciclo semanal|see{pr�ctica XP!ciclo semanal}}{59}
+\indexentry{pr�ctica XP!compilaci�n en 10 minutos|hyperpage}{59}
+\indexentry{compilaci�n en 10 minutos|see{pr�ctica XP!compilaci�n en 10 minutos}}{59}
+\indexentry{pr�ctica XP!programaci�n basada en pruebas|hyperpage}{59}
+\indexentry{programaci�n basada en pruebas|see{pr�ctica XP!programaci�n basada en pruebas}}{59}
+\indexentry{m�dulo Perl!Test::More|hyperpage}{60}
+\indexentry{Test::More|see{m�dulo Perl!Test::More}}{60}
+\indexentry{m�dulo Perl!Test::Simple|hyperpage}{60}
+\indexentry{Test::Simple|see{m�dulo Perl!Test::Simple}}{60}
+\indexentry{pr�ctica XP!dise�o incremental|hyperpage}{60}
+\indexentry{dise�o incremental|see{pr�ctica XP!dise�o incremental}}{60}
+\indexentry{requisitos!interfaces|hyperpage}{61}
+\indexentry{prototipos!interfaz|hyperpage}{62}
+\indexentry{requisitos!funcionales|hyperpage}{62}
+\indexentry{requisitos!atributos|hyperpage}{65}
+\indexentry{historia de usuario|see{pr�ctica XP!historia de usuario}}{66}
+\indexentry{meta de usuario|see{casos de uso!meta de usuario}}{71}
+\indexentry{subfunci�n|see{casos de uso!subfunci�n}}{71}
+\indexentry{casos de uso!meta de usuario|hyperpage}{71}
+\indexentry{casos de uso!subfunci�n|hyperpage}{71}
+\indexentry{YAML!flujo|hyperpage}{85}
+\indexentry{YAML!operaciones|hyperpage}{85}
+\indexentry{volcado|see{YAML!operaciones}}{85}
+\indexentry{carga|see{YAML!operaciones}}{85}
+\indexentry{YAML!modelos de informaci�n|hyperpage}{86}
+\indexentry{YAML!documento|hyperpage}{86}
+\indexentry{YAML!escalar|hyperpage}{86}
+\indexentry{YAML!vector asociativo|hyperpage}{86}
+\indexentry{YAML!secuencia|hyperpage}{86}
+\indexentry{forma can�nica|see{YAML!forma can�nica}}{87}
+\indexentry{YAML!forma can�nica|hyperpage}{87}
+\indexentry{YAML!ancla|hyperpage}{87}
+\indexentry{YAML!alias|hyperpage}{87}
+\indexentry{patr�n arquitect�nico!Capas|hyperpage}{89}
+\indexentry{Capas|see{patr�n arquitect�nico!Capas}}{89}
+\indexentry{capa!presentaci�n|hyperpage}{89}
+\indexentry{capa!aplicaci�n|hyperpage}{90}
+\indexentry{capa!filtrado|hyperpage}{90}
+\indexentry{capa!servicios t�cnicos|hyperpage}{90}
+\indexentry{patr�n arquitect�nico!Tuber�as y Filtros|hyperpage}{90}
+\indexentry{Tuber�as y Filtros|see{patr�n arquitect�nico!Tuber�as y     Filtros}}{90}
+\indexentry{XSLT!ventajas|hyperpage}{93}
+\indexentry{translet|hyperpage}{93}
+\indexentry{patr�n arquitect�nico!MVC|hyperpage}{93}
+\indexentry{patr�n arquitect�nico!MVP|hyperpage}{93}
+\indexentry{patr�n arquitect�nico!Controlador Supervisor|hyperpage}{93}
+\indexentry{patr�n arquitect�nico!Vista Pasiva|hyperpage}{93}
+\indexentry{patr�n arquitect�nico!Modelo de Presentaci�n|hyperpage}{93}
+\indexentry{MVC|see{patr�n arquitect�nico!MVC}}{93}
+\indexentry{MVP|see{patr�n arquitect�nico!MVP}}{93}
+\indexentry{Controlador Supervisor|see{patr�n arquitect�nico!Controlador Supervisor}}{93}
+\indexentry{Vista Pasiva|see{patr�n arquitect�nico!Vista Pasiva}}{93}
+\indexentry{Modelo de Presentaci�n|see{patr�n arquitect�nico!Modelo de Presentaci�n}}{93}
+\indexentry{�rbol Perl|hyperpage}{97}
+\indexentry{duck typing|hyperpage}{101}
+\indexentry{EAFP|hyperpage}{102}
+\indexentry{reflexi�n|hyperpage}{102}
+\indexentry{patr�n de dise�o!M�todo F�brica|hyperpage}{102}
+\indexentry{M�todo F�brica|see{patr�n de dise�o!M�todo F�brica}}{102}
+\indexentry{paquete Lisp|hyperpage}{102}
+\indexentry{patr�n de dise�o!M�todo Plantilla|hyperpage}{103}
+\indexentry{M�todo Plantilla|see{patr�n de dise�o!M�todo Plantilla}}{103}
+\indexentry{operaciones de enganche|hyperpage}{103}
+\indexentry{patr�n de dise�o!F�brica Abstracta|hyperpage}{105}
+\indexentry{m�dulo Perl!YAML::XS|hyperpage}{108}
+\indexentry{YAML::XS|see{m�dulo Perl!YAML::XS}}{108}
+\indexentry{m�dulo Perl!YAML::XS|hyperpage}{108}
+\indexentry{YAML::XS|see{m�dulo Perl!YAML::XS}}{108}
+\indexentry{YAML!ancla|hyperpage}{111}
+\indexentry{YAML!alias|hyperpage}{111}
+\indexentry{m�dulo Perl!YAML::XS|hyperpage}{111}
+\indexentry{YAML::XS|see{m�dulo Perl!YAML::XS}}{111}
+\indexentry{m�dulo Perl!YAML::XS|hyperpage}{111}
+\indexentry{YAML::XS|see{m�dulo Perl!YAML::XS}}{111}
+\indexentry{or�culo|hyperpage}{112}
+\indexentry{m�dulo Perl!YAML::XS|hyperpage}{112}
+\indexentry{YAML::XS|see{m�dulo Perl!YAML::XS}}{112}
+\indexentry{m�dulo Perl!YAML::XS|hyperpage}{113}
+\indexentry{YAML::XS|see{m�dulo Perl!YAML::XS}}{113}
+\indexentry{m�dulo Perl!Tie::RefHash|hyperpage}{113}
+\indexentry{Tie::RefHash|see{m�dulo Perl!Tie::RefHash}}{113}
+\indexentry{m�dulo Perl!YAML::XS|hyperpage}{114}
+\indexentry{YAML::XS|see{m�dulo Perl!YAML::XS}}{114}
+\indexentry{hoja de usuario!definici�n|hyperpage}{115}
+\indexentry{hoja de usuario!punto de acceso|hyperpage}{115}
+\indexentry{hoja de usuario!preprocesado|hyperpage}{115}
+\indexentry{hoja de usuario!visualizaci�n|hyperpage}{115}
+\indexentry{patr�n de dise�o!Observador|hyperpage}{118}
+\indexentry{Singleton|see{patr�n de dise�o!Observador}}{118}
+\indexentry{patr�n de dise�o!Observador|hyperpage}{118}
+\indexentry{Singleton|see{patr�n de dise�o!Observador}}{118}
+\indexentry{patr�n de dise�o!Inyecci�n de Dependencias|hyperpage}{121}
+\indexentry{patr�n de dise�o!Singleton|hyperpage}{121}
+\indexentry{Inyecci�n de Dependencias|see{patr�n de dise�o!Inyecci�n de Dependencias}}{121}
+\indexentry{Singleton|see{patr�n de dise�o!Singleton}}{121}
+\indexentry{patr�n arquitect�nico!MVP|hyperpage}{123}
+\indexentry{patr�n arquitect�nico!Modelo de Presentaci�n|hyperpage}{123}
+\indexentry{patr�n de dise�o!Observador|hyperpage}{124}
+\indexentry{patr�n de dise�o!MVP|hyperpage}{124}
+\indexentry{patr�n de dise�o!Inyecci�n de Dependencias|hyperpage}{124}
+\indexentry{patr�n arquitect�nico!Observador|hyperpage}{124}
+\indexentry{patr�n arquitect�nico!Singleton|hyperpage}{126}
+\indexentry{patr�n arquitect�nico!MVC|hyperpage}{126}
+\indexentry{patr�n arquitect�nico!Documento-Vista|hyperpage}{126}
+\indexentry{patr�n arquitect�nico!Orden|hyperpage}{128}
+\indexentry{m�dulo Perl!Locale::Maketext|hyperpage}{131}
+\indexentry{Locale::Maketext|see{m�dulo Perl!Locale::Maketext}}{131}
+\indexentry{m�dulo Perl!PAR|hyperpage}{131}
+\indexentry{PAR|see{m�dulo Perl!PAR}}{131}
+\indexentry{m�dulo Perl!PAR::Packer|hyperpage}{131}
+\indexentry{PAR::Packer|see{m�dulo Perl!PAR::Packer}}{131}
+\indexentry{m�dulo Perl!PAR::Packer|hyperpage}{131}
+\indexentry{PAR::Packer|see{m�dulo Perl!PAR::Packer}}{131}
+\indexentry{m�dulo Perl!PAR|hyperpage}{132}
+\indexentry{PAR|see{m�dulo Perl!PAR}}{132}
+\indexentry{m�dulo Perl!PAR::Packer|hyperpage}{132}
+\indexentry{PAR::Packer|see{m�dulo Perl!PAR::Packer}}{132}
+\indexentry{prueba!unidad|hyperpage}{135}
+\indexentry{prueba!aceptaci�n|hyperpage}{135}
+\indexentry{prueba!integraci�n|hyperpage}{135}
+\indexentry{prueba!implantaci�n|hyperpage}{135}
+\indexentry{m�dulo Perl!XML::SemanticDiff|hyperpage}{142}
+\indexentry{XML::SemanticDiff|see{m�dulo Perl!XML::SemanticDiff}}{142}
+\indexentry{m�dulo Perl!ExtUtils::MakeMaker|hyperpage}{142}
+\indexentry{ExtUtils::MakeMaker|see{m�dulo Perl!ExtUtils::MakeMaker}}{142}
+\indexentry{m�dulo Perl!YAML::Syck|hyperpage}{143}
+\indexentry{YAML::Syck|see{m�dulo Perl!YAML::Syck}}{143}
+\indexentry{m�dulo Perl!YAML::XS|hyperpage}{143}
+\indexentry{YAML::XS|see{m�dulo Perl!YAML::XS}}{143}
+\indexentry{XMLEye|hyperpage}{169}
+\indexentry{XMLEye|hyperpage}{169}
+\indexentry{pprocACL2|hyperpage}{169}
+\indexentry{gcc|hyperpage}{172}
+\indexentry{PAR|hyperpage}{173}
+\indexentry{PAR::Packer|hyperpage}{173}
+\indexentry{PAR::Packer|hyperpage}{173}
+\indexentry{libxml2|hyperpage}{174}
+\indexentry{autotools|hyperpage}{175}
+\indexentry{YAXML::Reverse|hyperpage}{176}
+\indexentry{exslt|hyperpage}{177}
+\indexentry{gdbm|hyperpage}{177}
+\indexentry{gcrypt|hyperpage}{177}
+\indexentry{XML::LibXSLT|hyperpage}{177}
+\indexentry{man|hyperpage}{186}
+\indexentry{gettext|hyperpage}{192}
+\indexentry{dpkg|hyperpage}{201}
+\indexentry{RPM|hyperpage}{201}
+\indexentry{mplayer|hyperpage}{201}
+\indexentry{reprepro|hyperpage}{203}
+\indexentry{dpkg|hyperpage}{204}
+\indexentry{chroot|hyperpage}{205}
+\indexentry{dpkg-buildpackage|hyperpage}{205}
+\indexentry{debuild|hyperpage}{205}
+\indexentry{pbuilder|hyperpage}{205}
+\indexentry{cowdancer|hyperpage}{205}
+\indexentry{dpkg|hyperpage}{206}
+\indexentry{reprepro|hyperpage}{206}
+\indexentry{mirrorer|hyperpage}{206}
+\indexentry{reprepro|hyperpage}{211}
+\indexentry{apt|hyperpage}{211}
+\indexentry{Synaptic|hyperpage}{214}
+\indexentry{apt|hyperpage}{214}
+\indexentry{debhelper|hyperpage}{215}
+\indexentry{debhelper|hyperpage}{216}
+\indexentry{debhelper|hyperpage}{218}
+\indexentry{autotools|hyperpage}{218}
+\indexentry{autotools|hyperpage}{218}
+\indexentry{chroot|hyperpage}{219}
+\indexentry{zsnes|hyperpage}{221}
+\indexentry{debhelper|hyperpage}{222}
+\indexentry{debhelper|hyperpage}{224}
+\indexentry{debhelper|hyperpage}{225}
+\indexentry{man|hyperpage}{225}
+\indexentry{man|hyperpage}{225}
+\indexentry{docbook-to-man|hyperpage}{225}
+\indexentry{debhelper|hyperpage}{227}
+\indexentry{chroot|hyperpage}{228}
+\indexentry{dash|hyperpage}{228}
+\indexentry{bash|hyperpage}{228}
+\indexentry{chroot|hyperpage}{229}
+\indexentry{man|hyperpage}{230}
+\indexentry{grep|hyperpage}{231}
+\indexentry{man|hyperpage}{231}
+\indexentry{dpatch|hyperpage}{231}
+\indexentry{quilt|hyperpage}{232}
+\indexentry{simple-patchsys|hyperpage}{232}
+\indexentry{Subversion|hyperpage}{234}
+\indexentry{grep|hyperpage}{236}
+\indexentry{vim|hyperpage}{237}
+\indexentry{chroot|hyperpage}{238}
+\indexentry{chroot|hyperpage}{238}
+\indexentry{vim|hyperpage}{238}
+\indexentry{lftp|hyperpage}{239}
+\indexentry{Apache Ant|hyperpage}{240}
+\indexentry{Ant|hyperpage}{240}
+\indexentry{GNU Make|hyperpage}{240}
+\indexentry{chroot|hyperpage}{240}
+\indexentry{Ant|hyperpage}{241}
+\indexentry{chroot|hyperpage}{241}
+\indexentry{Gimp|hyperpage}{242}
+\indexentry{debhelper|hyperpage}{245}
+\indexentry{apt-file|hyperpage}{246}
+\indexentry{checkinstall|hyperpage}{246}
+\indexentry{autotools|hyperpage}{246}
+\indexentry{autoconf|hyperpage}{246}
+\indexentry{automake|hyperpage}{246}
+\indexentry{libtool|hyperpage}{246}
+\indexentry{YaST|hyperpage}{247}
+\indexentry{alien|hyperpage}{249}

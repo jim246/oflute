@@ -1,0 +1,1175 @@
+%%
+%% Pruebas realizadas
+%% Copyright (C) 2008 Antonio García Domínguez
+%% $Id: pruebas.tex 635 2008-07-10 23:33:38Z antonio $
+%%
+
+Se dará una breve introducción a los conceptos relacionados con las
+pruebas de software en \ac{XP} y a continuación se describirá el plan
+de pruebas, junto con la especificación de los casos de prueba y su
+procedimiento de ejecución.
+
+\subsection{Pruebas en XP}
+\label{sec:pruebas_xp}
+
+La metodología \ac{XP} realiza cuatro tipos de pruebas:
+
+\begin{description}
+\item[Pruebas de unidad] 
+  \index{prueba!unidad} 
+
+  Las pruebas de unidad comprueban de forma automática la
+  funcionalidad de un conjunto reducido y cohesivo de clases. Son
+  escritas por los propios programadores, siguiendo la práctica de
+  \ac{XP} de la programación basada en pruebas.
+
+\item[Pruebas de aceptación] 
+  \index{prueba!aceptación}
+
+  Las pruebas de aceptación son escritas
+  por el propio cliente con asistencia de los miembros especializados
+  en pruebas del equipo de desarrollo.
+
+  Más que probar el funcionamiento de un par de clases o de un método
+  determinado, lo que se intenta probar es la implementación
+  satisfactoria de una historia de usuario.
+
+  Así, las pruebas de aceptación suelen describirse mediante una serie
+  de pasos en los cuales se utiliza el sistema completo para llevar a
+  cabo una tarea. Cada paso tiene un resultado esperado asociado.
+
+\item[Pruebas de integración]
+  \index{prueba!integración}
+
+  En \ac{XP}, las pruebas de integración se realizan de forma
+  constante. Aunque en mi caso no son importantes al ser un proyecto
+  individual, \ac{XP} requiere que todo cambio hecho en una sesión de
+  programación (en parejas, por supuesto) sea integrado inmediatamente
+  en el repositorio central.
+
+  Por supuesto, esto implica que dichas modificaciones deben de haber
+  pasado antes por todas las pruebas con éxito, asegurándonos de que
+  no se han introducido nuevos fallos en otras partes del programa
+  inadvertidamente.
+
+\item[Pruebas de implantación] 
+  \index{prueba!implantación}
+
+  Una de las prácticas recomendadas (que no obligatorias) de \ac{XP}
+  es la implantación incremental. Desde el inicio de un proyecto, el
+  sistema debe de implantarse en un entorno similar al real,
+  posiblemente a menor escala, y comprobarse su correcto
+  funcionamiento.
+
+  Estas pruebas, sin embargo, no son especialmente importantes para
+  una aplicación de escritorio como la de este proyecto.
+
+\end{description}
+
+\subsection{Plan de pruebas}
+\label{sec:pruebas_plan}
+
+\subsubsection{Alcance}
+
+Se determinó que, con las limitaciones de tiempo establecidas, no se
+podían realizar pruebas de todas y cada una de las partes de \visor{},
+\yaxml{} y \postprocesador{}.
+
+Se decidió implementar pruebas automáticas sobre los elementos
+fundamentales y utilizar pruebas de aceptación manuales sobre lo
+demás. En particular, se descartaron aquellas clases cuya
+funcionalidad dependía en su mayoría de bibliotecas externas, como la
+interfaz gráfica o el controlador de transformaciones \ac{XSLT}.
+
+En un futuro, se espera reemplazar la mayor parte de las pruebas sobre
+la interfaz por pruebas automáticas, utilizando los nuevos modelos de
+presentación. Actualmente ya se ha comenzado esta labor sobre el
+diálogo de gestión de formatos.
+
+\subsubsection{Tiempo y lugar}
+
+Además del propio uso frecuente de los conversores y \visor{}, mis
+directores de proyecto contribuyeron a la ejecución de pruebas de
+aceptación de manera informal a lo largo de la ejecución del PFC.
+
+Las pruebas se han realizado en todo momento durante el desarrollo del
+PFC (especialmente las automatizadas), siguiendo la práctica ``Flujo''
+de \ac{XP}. Al final de cada iteración, se dedicó un tiempo adicional
+para la realización de pruebas de aceptación manuales.
+
+\subsubsection{Naturaleza de las pruebas}
+
+La totalidad de las pruebas usadas son pruebas de caja negra, por ser
+fáciles de mantener a pesar de cambios en la implementación.
+
+\subsection{Diseño de pruebas}
+\label{sec:pruebas_diseno}
+
+A primera vista, se puede determinar que existen cuatro elementos
+fundamentales a probar:
+\begin{itemize}
+\item \postprocesador{}: ¿procesa correctamente la salida de
+  \ac{ACL2}? ¿Se obtiene un documento que corresponda sin pérdidas al
+  original y que siga el formato de la \ac{DTD}? ¿Se trata de un
+  módulo Perl correctamente estructurado y documentado?
+
+\item \yaxml{}: ¿analiza sin errores los ficheros de entrada? ¿Realiza
+  una conversión sin pérdidas ni modificaciones de la información del
+  fichero fuente \ac{YAML}? Al igual que en el caso anterior, ¿tiene
+  un nivel mínimo de calidad como módulo Perl?
+
+\item El visor \visor{}: ¿se validan las entradas? ¿Se reacciona bien
+  ante acciones no válidas del usuario? ¿Obtiene el usuario los
+  resultados esperados?
+\item La integración entre los conversores y \visor{}: ¿se realiza con
+  éxito? ¿Se capturan y muestran correctamente los fallos?
+\end{itemize}
+
+En base a esto, cada parte requiere una combinación determinada de
+varios tipos de pruebas:
+\begin{description}
+\item[\nombrepostprocesador{}] El desarrollo de este conversor se
+  halla guiado por los enunciados Lisp y las salidas de \ac{ACL2} que
+  ha de procesar. Por lo pronto, resulta natural estructurar las
+  pruebas simplemente alrededor de dichos casos.
+
+  Se puede implementar un mecanismo de pruebas de regresión usando
+  estos enunciados: una vez se haya validado una salida determinada
+  como correcta, se puede mantener dicha salida y comparar las salidas
+  posteriores con ella, notificando cualquier cambio de interés de
+  forma automática.
+
+  En un futuro, cuando el alcance del procesador se amplíe a
+  demostraciones de mayor envergadura, se añadirán pruebas de unidad
+  sobre las clases de mayor importancia.
+
+\item[\nombreyaxml{}] 
+
+  De forma similar al caso anterior, el desarrollo y revisión de este
+  conversor se apoya sobre una serie de entradas conocidas: cuando
+  alguna entrada falla, se añade como caso de prueba y se revisa
+  \yaxml{} hasta que vuelven a superarse todas las pruebas.
+
+  A diferencia de \postprocesador{}, no necesitamos registrar las
+  salidas anteriores ``buenas'' y compararlas con las actuales, sino
+  que podemos usar el ciclo \ac{YAML} $\rightarrow$ \ac{XML}
+  $\rightarrow$ \ac{YAML} implementado y establecer directamente la
+  equivalencia semántica de los dos ficheros \ac{YAML} original y
+  final. Este proceso se halla descrito a mayor nivel de detalle
+  en~\S\ref{sec:yaxml_equivalencia}
+  (página~\pageref{sec:yaxml_equivalencia}).
+
+\item[\nombrevisor{}] 
+  Se podría dividir \visor{} en tres partes:
+
+  \begin{enumerate}
+  \item La interfaz de usuario: Las limitaciones de tiempo, combinadas
+    con la dificultad y la escasez en herramientas automatizadas de
+    prueba de las interfaces gráficas obliga a usar pruebas de
+    aceptación manuales por lo pronto. En un futuro cercano, el nuevo
+    diseño de la capa de presentación basado en modelos de
+    presentación permitirá automatizar estas pruebas, limitándonos a
+    enviar notificaciones de gestos a los modelos de presentación.
+
+    Sin embargo, los componentes relacionados con los árboles \ac{XML}
+    son cruciales para la aplicación, y deben de incluir sin falta
+    pruebas automatizadas sobre las propiedades que deben cumplir y el
+    comportamiento que deben seguir.
+
+  \item Las hojas de usuario: aunque su realización sería técnicamente
+    factible, las pruebas de unidad de estas hojas no podrían
+    mantenerse estables, puesto que el formato de salida no lo es: al
+    ser \ac{XHTML}, está sujeto a muchos cambios y retoques a lo largo
+    del tiempo. Se puede decir lo mismo acerca del paso de
+    preprocesado.
+
+  \item La capa de aplicación: esta capa provee los servicios básicos
+    sobre los que se apoya la capa de presentación. No probaremos
+    aquellas partes que únicamente dependan de la capa de servicios
+    técnicos, como el funcionamiento de las transformaciones
+    \ac{XSLT}, por ejemplo, pero sí los servicios de nivel superior.
+
+    Por ejemplo, habrá que depurar los repositorios de hojas de estilo
+    y de descriptores de formatos, la validación de los campos de los
+    descriptores de formato, la correspondencia entre rutas XPath y
+    nodos de un árbol \ac{DOM} \ac{XML}, o las extensiones XPath,
+    entre otras cosas.
+  \end{enumerate}
+
+\item[Integración] 
+
+  La integración es otro aspecto difícil de probar automáticamente,
+  dado que depende en gran medida del entorno empleado por el usuario
+  y de la configuración que haya establecido.
+
+  Sin embargo, se presta bien a pruebas de aceptación manuales sobre
+  una configuración realizada de antemano. Se habrá de probar que la
+  integración reacciona bien a errores de los programas y de su
+  invocación, fallando cuando debe y permitiendo una recuperación
+  rápida.
+
+\end{description}
+
+\subsection{Especificación de los casos de prueba}
+\label{sec:pruebas_especificacion}
+
+\subsubsection{\nombrepostprocesador{}}
+\label{sec:pruebas_postprocesador}
+
+Cada una de las fuentes Lisp y su salida correspondiente a filtrar por
+\postprocesador{} según las historias de usuario planteadas es
+utilizada como una prueba de regresión semiautomática.
+
+Describiremos brevemente el contenido de las fuentes Lisp usadas como
+casos de prueba. Por claridad, usaremos notación infija. Todos estos
+enunciados se encuentran bajo el subdirectorio \fichero{t/testInputs}
+de \postprocesador{}.
+
+Durante las pruebas se desactiva todo almacenamiento de resultados
+intermedios y se obliga a actualizar el grafo completo de dependencias,
+para evitar que en ejecuciones distintas de las pruebas se consigan
+resultados distintos.
+
+\begin{itemize}
+\item \fichero{triple-rev}
+
+  \fichero{triple-rev} fue el objetivo de la primera iteración. En
+  esta demostración se comprueba para una función de inversión de
+  listas Lisp \evento{rev} que $$rev(rev(rev(x))) = rev(x)$$ para
+  toda lista que le pasemos, sea cual sea su estructura.
+
+\item \fichero{equal-app}
+
+  En esta demostración se comprueban ciertas propiedades acerca de las
+  funciones \evento{app} para concatenación de listas, \evento{dup}
+  para duplicación de cada elemento y \evento{properp} para
+  comprobación de listas propias, terminadas mediante \evento{nil},
+  como \evento{(a b)} o \evento{(a . (b))} pero no \evento{(a . b)}.
+
+  \begin{itemize}
+  \item Asociatividad: $app(app(a,b), c) = app(a, app(b, c))$
+  \item Distributividad de la duplicación de cada elemento respecto de
+    la concatenación: $app(dup(a),dup(b)) = dup(app(a,b))$
+  \item Toda lista a la que se añade \lisp{nil} es propia:
+    $properp(app(a,nil))$.
+  \end{itemize}
+
+\item \fichero{fallo-defun}
+
+  Realmente, este guión no trata de probar nada: está diseñado para
+  ver si \postprocesador{} es capar de tratar los fallos en las
+  demostraciones de los \orden{defun}.
+
+  En primer lugar, declaramos una función de cálculo de factorial
+  correcta, que siempre da un resultado correcto y siempre para.
+
+  La siguiente versión erróneamente usa $=$ en vez de $zp$, y por lo
+  tanto no para nunca para otra cosa que no sea un natural. $zp$ es
+  verdadero para toda cosa que no sea un número mayor que cero:
+  listas, átomos, enteros no positivos (incluyendo el cero, claro),
+  etc. Sin embargo, $=$ sólo es verdadero si lo que se pasa es cero,
+  por lo que ante un número negativo, por ejemplo, nunca llegaría al
+  caso base y se quedaría siempre en el caso recursivo.
+
+  En la tercera versión, no hay caso base: se ha reemplazado por una
+  llamada recursiva a sí mismo. Y en la cuarta y última, no se reduce
+  el tamaño de la entrada, imposibilitando también la parada.
+
+\item \fichero{hanoi}
+
+  No es uno, sino realmente cuatro casos de prueba, al tratarse de un
+  proyecto de \ac{ACL2} con tres ficheros Lisp. Tenemos un caso de
+  prueba por fichero y otro caso de prueba más para la detección del
+  grafo que forman y su correcto uso:
+
+  \begin{itemize}
+  \item \fichero{hanoi-use.lisp} es el fichero raíz del
+    proyecto. Utiliza la orden \orden{include\hyp{}book} para acceder
+    a la definición de la función que resuelve el problema de las
+    torres de Hanoi, \evento{hanoi::hanoi}, que se halla en el libro
+    \libro{books/hanoi}.
+
+  \item \fichero{books/hanoi.acl2} es el fichero Lisp que sirve para
+    certificar los contenidos del libro \libro{hanoi} dentro de su mundo
+    lógico inicial. Se podría haber llamado \fichero{cert.acl2} si se
+    hubiera deseado emplear para cualquier libro dentro de
+    \fichero{books}, siguiendo las convenciones usuales de manejo de
+    libros de \ac{ACL2}~\cite{ACL2:BookMakefiles}, pero se ha
+    preferido esta forma específica, para cuando se añadan más libros
+    posteriormente.
+
+  \item \fichero{books/hanoi.lisp} es el propio libro con las
+    definiciones necesarias, que asume que se halla dentro del mundo
+    lógico inicial definido por el fichero de certificación
+    anterior. Define las funciones \evento{move}, que genera una
+    instrucción del tipo ``mover un disco de la pila A a la pila B'' y
+    \evento{hanoi}, que resuelve el problema de las Torres de Hanoi
+    para $n$ discos. También incluye un teorema, \evento{len-append},
+    que establece que la longitud de la concatenación de dos listas es
+    la suma de sus longitudes.
+
+  \end{itemize}
+
+\item \fichero{mapnil}
+
+  En este caso, se demuestra la conmutatividad entre la duplicación de
+  los elementos mediante \evento{dup} y la sustitución de todo
+  elemento de una lista Lisp por \evento{nil} mediante
+  \evento{mapnil}.
+
+\item \fichero{memp}
+
+  Dada una función \evento{memp} que comprueba la pertenencia de un
+  elemento a una lista y otra función \evento{app} que concatena dos
+  listas, se demuestra que $$memp(e, app(a,b)) \equiv memp(e,a) \vee
+  memp(e,b),$$ es decir, que todo elemento de la concatenación de las
+  dos listas pertenecerá a una u a otra.
+  
+\item \fichero{miscDefs}
+
+  Comprobamos que \postprocesador{} es capaz de filtrar una
+  diversidad de funciones, como búsquedas en diccionarios,
+  implementación de aritmética mediante el uso de la longitud de las
+  listas, recolección de elementos únicos, potenciación, etc.
+
+  Algunos ejemplos:
+  \begin{itemize}
+  \item $mapnil(x)$ convierte todos los elementos a \lisp{nil}.
+  \item $add(x,y)$ realiza la suma mediante el número de elementos de
+  ambas listas. Es decir, implementamos la suma creando una lista de 5
+  elementos cuando nos dan una de 2 y otra de 3.
+  \item $app(a,b)$ Concatenamos dos listas.
+  \item $mem(e,x)$ Devuelve el primer par de la lista tal que el primer
+    elemento sea $e$, o $nil$.
+  \item $lonesomep(e,lst)$ Comprobamos que $e$ es único en la lista.
+  \item $collect-lonesomep(a,b)$ Recoge los elementos de la lista $a$ que
+    son únicos en la lista $b$.
+  \item $mult(x,y)$ Multiplica a través de longitudes de listas. Si le damos
+    una lista con 2 elementos y otra con 3, nos crea una lista con 6.
+  \item $fact(n,a)$ Calcula el productorio en aritmética sobre
+    longitud de listas de las sublistas de la lista que le pasemos.
+  \item $fact1(n,a)$ Versión recursiva final de \evento{fact}.
+  \item $foundp(x,a)$ Busca una clave dentro de un diccionario Lisp. Si el
+    diccionario es la lista Lisp de la forma \lisp{((a 2) (b 3))}, sus
+    claves son $a$ y $b$.
+  \end{itemize}
+  
+\item \fichero{suma}
+
+  Este caso comprueba que se tratan de forma correcta los
+  \evento{defthm} que no requieren inducción alguna. Aquí, \ac{ACL2}
+  sólo tiene que aplicar sus reglas predefinidas sobre la aritmética
+  decimal para ver que $2 + 2 = 4$ o que $a + b + c = b + c + a$.
+
+  También se comprueba que se manejan bien los elementos de listas
+  Lisp con la sintaxis \verb!|texto|!.
+
+\item \fichero{swaptree}
+
+  Se define una función \evento{swaptree} que invierte dos árboles
+  Lisp, y se demuestra que es idempotente.
+
+\item \fichero{tail-rev}
+
+  Se define una implementación trivial de la inversión de una lista
+  \evento{rev} sabiendo que es correcta. Hecho eso, definimos una
+  implementación recursiva final obtenida por la transformación
+  mediante desplegado-plegado \evento{rev1}. Ahora comprobamos que
+  está bien hecha, es decir, que da los mismos resultados que la
+  versión original.
+
+\item \fichero{treecopy}
+
+  Es parecida a \evento{swaptree}, pero en este caso lo que se hace es
+  copiar un árbol Lisp, y comprobar que dicha función repite siempre
+  la entrada que se le suministra.
+
+\item \fichero{triple-rev-misspell}
+
+  Este caso de prueba es una modificación de \fichero{triple-rev} con
+  un fallo en el nombre de un parámetro formal introducido
+  intencionadamente, que origina una demostración fallida de la
+  longitud suficiente como para ser de interés. Además, permite
+  comprobar que se tratan bien los errores de \evento{defthm}.
+
+\item \fichero{tutorialWebACL2}
+
+  Este otro caso de prueba es el proyecto de un solo fichero más
+  completo de todos. En este caso, se desea probar que un algoritmo
+  para la inversión de una lista Lisp que sólo hace uso de las
+  funciones predefinidas \lisp{endp} (predicado para detectar el
+  final de una lista), \lisp{cons} (creación de un par Lisp),
+  \lisp{car} (extracción de la cabecera) y \lisp{cdr} (extracción
+  de la cola) es equivalente al algoritmo trivial.
+
+  El proceso es algo más complicado que los ejemplos anteriores, y
+  puede verse en~\cite{jsmweb}, donde se usa ``El Método'',
+  acumulándose teoremas a demostrar en forma de una pila, donde un
+  teorema puede requerir para su demostración verificar otros teoremas
+  o lemas.
+
+  Se hacen uso de algunos elementos más avanzados, como \orden{thm},
+  que lanza una demostración pero no guarda sus resultados en el mundo
+  lógico de \ac{ACL2}, \orden{local} que evita que las reglas
+  generadas por un evento sean accesibles fuera de un
+  \orden{encapsulate} o libro, y \orden{encapsulate}, que permite
+  realizar demostraciones controlando qué reglas se producen y cuál es
+  la signatura de las funciones definidas.
+
+\end{itemize}
+
+Las pruebas de regresión comparan los árboles \ac{XML} de los
+resultados esperados con los obtenidos, empleando el módulo
+\modulo{XML::SemanticDiff}. Las diferencias detectadas son filtradas
+por un predicado que determinan si constituyen una regresión o
+no. Actualmente, algunas de las diferencias ignoradas son:
+
+\begin{itemize}
+\item Cambios en los tiempos de ejecución.
+\item Cambios en la versión de \ac{ACL2}.
+\item Cambios de mayúsculas y minúsculas y barras en nombres de
+  fichero en Windows.
+\item Mensajes de compilación durante la certificación de un libro
+  (dependen del compilador y sistema operativo usado).
+\end{itemize}
+
+Las pruebas de regresión no son las únicas realizadas. Integradas
+dentro del marco de pruebas creado por el módulo
+\modulo{ExtUtils::MakeMaker} se hallan también algunas pruebas de
+carácter más general:
+
+\begin{itemize}
+\item El módulo principal debe de poder cargarse con éxito. Esto nos
+  asegura de que no nos hayamos olvidado de instalar o referenciar a
+  algún módulo importante en nuestro código.
+
+\item Se debe de haber retirado el texto inútil de las plantillas
+  inicialmente generadas por \verb#h2xs#, la herramienta ocupada de
+  crear el esqueleto básico de todo módulo Perl.
+
+\item Todos los ficheros fuente del módulo Perl han de incluir el
+  aviso de la licencia \ac{GPL}.
+\end{itemize}
+
+\subsubsection{\nombreyaxml{}}
+\label{sec:pruebas_yaxml}
+
+Como otro módulo Perl más, \yaxml{} emplea el mismo marco de pruebas y
+las pruebas de carácter general de \postprocesador{}. Este módulo usa
+también pruebas de regresión, pero son completamente automáticas en
+este caso, como ya se explicó anteriormente. Ciertas pruebas de
+regresión son más bien para la versión refinada de \ac{YAXML}
+implementada para cerrar el ciclo \ac{YAML} $\rightarrow$ \ac{XML}
+$\rightarrow$ \ac{YAML} que para \yaxml{} en sí.
+
+Algunos casos de prueba se corresponden con documentos reales usados
+por herramientas conocidas, y algunos sólo depuran ciertos aspectos
+esenciales. Existe cierto solapamiento entre ambos tipos. Los ficheros
+\fichero{.yaml} utilizados como casos de prueba son:
+
+\begin{itemize}
+\item \fichero{djangoJSON}
+
+  Este es un ejemplo de un volcado de una base de datos realizado por
+  el entorno de desarrollo de aplicaciones Web Django
+  (\url{http://www.djangoproject.com/}). Tiene la particularidad de
+  usar \ac{JSON}, un subconjunto de \ac{YAML} 1.1, motivando el cambio
+  del módulo \modulo{YAML::Syck} a \modulo{YAML::XS}.
+
+  % JSON: YAML 1.1
+
+\item \fichero{djangoJSON\_blockIndicatorTest}
+
+  % Indicador de texto
+
+  Otro volcado de Django en el cual se hace patente la necesidad en
+  \ac{YAXML} de tener cuidado con el espaciado en blanco y no
+  cambiarlo inadvertidamente. En particular, hay que tener cuidado con
+  el último salto de línea final, evitando introducirlo cuando
+  originalmente no estaba, utilizando el indicador ``|-'' en el estilo
+  de bloque para escalares.
+
+\item \fichero{firefoxBookmarks}
+
+  % Ejemplo del "mundo real", JSON, UTF-8
+
+  Una copia de seguridad de los marcadores de Firefox 3 realizada
+  también en \ac{JSON}, que en este caso tenía la complicación de
+  emplear caracteres de \ac{UTF}-8, en particular ideogramas
+  japoneses. Se identificaron y resolvieron diversas cuestiones
+  relacionadas gracias a este ejemplo.
+
+\item \fichero{fiveMinutes1}
+
+  % Soporte básico
+
+  Es uno de los casos más básicos: un flujo de 4 documentos que
+  emplean secuencias de \ac{YAML}. Es compatible con \ac{YAML} 1.0 en
+  adelante, al igual que todos los casos de prueba que vienen a
+  continuación.
+
+\item \fichero{fiveMinutes2}
+
+  % Claves que no son valores válidos en XML
+
+  Este ejemplo muestra ejemplos de vectores asociativos de \ac{YAML}
+  1.0, y fue el primer caso de prueba que mostraba la necesidad de
+  rodear las limitaciones de \ac{XML} respecto a los identificadores
+  válidos para una etiqueta utilizando los elementos \verb#_key# y
+  \verb#_value#.
+
+\item \fichero{fiveMinutes3}
+
+  % Claves que requieren cuidado especial al devolverlas a YAML
+
+  Desarrollando sobre el ejemplo anterior, este caso de prueba también
+  usa claves de vectores asociativos no directamente representables en
+  \ac{XML}, pero además una de ellas requiere un especial cuidado a
+  devolverla a \ac{YAML}, o produciría un error de sintaxis, al
+  contener la secuencia ``: ''.
+
+\item \fichero{fiveMinutes4}
+
+  % Estilos de bloques escalares
+
+  Este caso de prueba utiliza los estilos literal y de líneas reunidas
+  para los escalares. En el estilo literal el espaciado no es
+  modificado excepto por el indentado de cada línea. En el estilo de
+  líneas reunidas, todas las palabras separadas por únicamente un
+  carácter de espaciado (como un espacio o un salto de línea) son
+  reunidas en una sola línea.
+
+\item \fichero{fiveMinutes5}
+
+  % Estilos de bloque y flujo de colecciones
+
+  El último ejemplo de la serie~\cite{YamlInFiveMinutes} ilustra cómo
+  pueden escribirse también las colecciones con distintos estilos, ya
+  sea de bloque, con un elemento por línea, o de flujo, que permite
+  definir más de un elemento en cada línea.
+
+\item \fichero{invoice}
+
+  % Manejo de anclas y alias (mapa anclado)
+  % YAML complejo
+
+  Este caso de prueba es uno de los ejemplos incluidos en la
+  especificación \ac{YAML}~\cite{YAML}, y precisamente el que ilustra
+  el uso de anclas y alias para evitar tener que repetir el contenido
+  común a dos nodos.
+
+\item \fichero{mappingAnchoredSequence}
+
+  % Manejo de anclas y alias (secuencia anclada)
+
+  Aquí probamos a transformar un documento en que el documento anclado
+  no es un mapa, sino una secuencia.
+
+\item \fichero{podExample}
+
+  % Depura el ejemplo del POD de YAXML::Reverse
+
+  Este ejemplo tan sencillo es el usado en la documentación \ac{POD}
+  de \yaxml{}, para poder garantizar que funcione.
+
+\item \fichero{yaxmlReverseMETA}
+
+  % YAML del "mundo real"
+  
+  Se trata del fichero \fichero{META.yaml} de \yaxml{}. Estos ficheros
+  son utilizado por diversas herramientas automáticas, como las que
+  utiliza el CPAN, para obtener información de autoría y dependencias.
+
+\end{itemize}
+
+\subsubsection{Visor e integración}
+\label{sec:pruebas_visor}
+
+\paragraph{Pruebas de unidad}
+\label{sec:pruebas_visor_unidad}
+
+Las pruebas de unidad definidas para cada clase comprueban una serie
+de propiedades acerca de su comportamiento. En lugar de dar una
+especificación exacta de cada prueba (que sólo sería repetir el
+código), listaremos las propiedades que verifican.
+
+Estas pruebas, basadas en el marco JUnit, se ejecutan de forma
+automática y son un objetivo más dentro del fichero de tareas Ant.
+
+Toda clase de pruebas tiene el nombre formado por el nombre de la
+clase cuyo funcionamiento comprueba y a continuación el sufijo
+``Test''.
+
+\begin{description}
+\item[\clase{CommandBuilderTest}] 
+
+  Se comprueba que se realiza la sustitución de las claves y la
+  división en argumentos correctamente, independientemente de que los
+  argumentos contengan espacios, mientras tengan comillas alrededor de
+  la orden original.
+
+\item[\clase{DataDrivenTreeModelTest}] 
+
+  Todo nodo del documento \ac{XML} oculto mediante el atributo
+  correspondiente debe ser inaccesible a través de un recorrido
+  exhaustivo.
+
+  Además, el modelo ha de informar de que todo nodo con el atributo
+  requerido para la falsa poda activado no tiene hijos, y éstos deben
+  ser completamente inaccesibles desde dicho modelo.
+
+\item[\clase{DOMTreeModelTest}] 
+
+  El modelo ofrecido por dicha clase debe de ser el mismo que ofrece
+  el árbol \ac{DOM} original del documento, limitándose a los nodos
+  de tipo elemento.
+
+\item[\clase{DOMTreeTest}] 
+
+  Debe de poderse realizar una navegación completa a través del árbol,
+  ignorando toda petición no válida, como intentar ir al padre de la
+  raíz.
+
+\item[\clase{ExtensionFileFilterTest}] 
+
+  Se prueba que se añade automáticamente la extensión al nombre de
+  fichero si no está presente, que se conserva si ya está, y que se
+  conserva el nombre de fichero si no se usa un filtro
+  \clase{FiltroExtensión}.
+
+\item[\clase{FormatDescriptorRepositoryTest}] 
+
+  Utilizando un repositorio a dos niveles con el descriptor de formato
+  \fichero{xml.format} incluido con \visor{}, se comprueba que se
+  inicializa correctamente. También se prueba a cambiar un descriptor,
+  guardarlo y volver a cargar, para ver si los cambios se han
+  realizado.
+
+  A continuación se hacen pruebas sobre la capacidad de localizar las
+  cadenas de un descriptor de formato, de que los cambios realizados a
+  un descriptor vayan al repositorio de mayor prioridad, y que se
+  puedan restaurar las opciones originales de un formato.
+
+  Finalmente, se comprueba que los mutadores de todo descriptor de
+  formato lancen ciertas excepciones al pasarles algún valor
+  no válido.
+
+\item[\clase{SerializedPreferencesManagerTest}] 
+
+  Se comprueba que se puede crear un fichero de preferencias nuevo, y
+  que inicialmente está vacío. Debe además poder guardar de forma
+  persistente escalares y listas.
+
+\item[\clase{StylesheetRepositoryTest}] 
+
+  Se verifica que las hojas incluidas en \visor{} pueden localizarse
+  sin problemas dentro del repositorio, que se hallan debidamente
+  configuradas y que su código \ac{XSLT} compila sin problemas.
+
+\item[\clase{VectorNodeListTest}] 
+
+  Se prueba que el método \metodo{invertir} realmente cumple su tarea,
+  y que la inversión es idempotente.
+
+\item[\clase{WndFormatsPresentationModelTest}] 
+
+  Se comprueba que cuando el usuario seleccione un elemento, cambie el
+  nombre y confirme los cambios estos se realicen de forma correcta y
+  persistente.
+
+\item[\clase{XHTMLSearchKeyHighlighterTest}] 
+
+  Al destacar una clave dentro de un documento \ac{XHTML} los
+  elementos \ac{XHTML} deben de conservarse intactos. No debe
+  modificarse otra cosa que el contenido del documento en sí, es
+  decir, el fragmento situado dentro del elemento \verb|body|.
+
+  Deben además de manejarse bien los casos en que la clave a marcar
+  está justo antes o después de un elemento \ac{XHTML}. Otros casos
+  importantes a tratar incluyen el manejo correcto de marcado de sólo
+  palabras completas o sin tener en cuenta mayúsculas y minúsculas.
+
+\item[\clase{XPathExtensionsTest}] 
+
+  Se comprueba que se obtienen coincidencias de la forma esperada para
+  varias combinaciones posibles de tipos de clave y cadena de
+  búsqueda.
+
+  Así, la clave de búsqueda podría componerse sólo de caracteres
+  alfanuméricos. También podría contener espacios o caracteres no
+  alfanuméricos. Se podría dar el caso de que el usuario introdujera
+  algún carácter que debería escaparse para no ser interpretado como
+  un metacarácter en una expresión regular.
+
+  El texto en el que buscar podría contener espacios iniciales o
+  finales, o saltos de línea.
+
+  También podría darse el caso en que la clave y el texto fueran
+  iguales, o que alguno de los dos estuviera vacío.
+
+\item[\clase{XPathPathManagerTest}] 
+
+  Se comprueba que la ruta XPath generada de cualquier nodo del árbol
+  \ac{DOM} de un determinado documento \ac{XML} es correcta, y que la
+  obtención de un nodo a partir de su ruta XPath se realiza también
+  con éxito.
+  
+\end{description}
+
+\paragraph{Pruebas de aceptación}
+\label{sec:pruebas_visor_acept}
+
+Pasaremos a establecer una prueba de aceptación para cada una de las
+historias de usuario acumuladas desde las primeras versiones de
+\visor{} hasta ahora. Dichas pruebas se ejecutan de forma manual.
+
+\begin{itemize}
+\item
+
+  \begin{quote}
+    ``Visualizar un documento \ac{XML} arbitrario en forma de árbol,
+    permitiendo expandir y contraer los nodos y buscar información.''
+  \end{quote}
+
+  Cuadro~\ref{acept:visualizarxml}, página~\pageref{acept:visualizarxml}.
+
+  \begin{table}[tbp]
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario solicita la apertura de un fichero. & Se muestra el
+      diálogo de elección de ficheros. \\ \hline
+
+      El usuario elige un fichero \ac{XML}. & Tras la compilación de las
+      hojas y el preprocesado, se muestra el primer nodo del documento. \\ \hline
+
+      El usuario cambia la hoja de preprocesado a \verb|xml|. & El árbol
+      del documento muestra el árbol \ac{XML} original. \\ \hline
+
+      El usuario cambia la hoja de visualización a \verb|xml|. & La
+      visualización muestra todos los atributos, ancestros e hijos. \\ \hline
+
+      El usuario cambia la hoja de visualización a \verb|xmlSource|. &
+      La visualización muestra el código \ac{XML} completo de cada
+      nodo seleccionado tras su preprocesado. \\ \hline
+
+      El usuario navega por el árbol, usando cada una de las opciones
+      disponibles de navegación [...] & La visualización se actualiza en
+      cada cambio de nodo, mostrando la información correcta. \\ \hline
+
+      El usuario solicita expandir el árbol. & El árbol del documento se
+      expande en su totalidad. \\ \hline
+
+      El usuario solicita contraer el árbol. & El árbol del documento
+      se contrae, y se muestra solamente el primer nodo del
+      documento. \\ \hline
+
+      El usuario realiza una búsqueda de una clave existente en el
+      documento. & Se muestra el primer resultado, con el marcado de la
+      clave de búsqueda en la visualización. \\ \hline
+
+      El usuario pulsa de nuevo en el botón de Buscar del diálogo o
+      utiliza el elemento del menú Navegar ``Buscar Siguiente''. & Se
+      muestran el resto de los resultados. \\ \hline
+
+      El usuario lanza de nuevo la búsqueda al llegar al último
+      resultado. & Se muestra de nuevo el primer resultado. \\ \hline
+
+      El usuario prueba con el resto de las opciones de filtrado en
+      secuencia y compara con los resultados anteriores [...] & Se
+      comprueba el filtrado del conjunto de resultados obtenido
+      anteriormente. \\ \hline
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Visualizar XML genérico''}
+    \label{acept:visualizarxml}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``El visor no debería saber absolutamente nada de \ac{ACL2}. Nada
+    en su interfaz gráfica ni en su implementación nos debe recordar
+    que podemos trabajar con \ac{ACL2}.''
+  \end{quote}
+
+  Cuadro~\ref{acept:indepacl2}, página~\pageref{acept:indepacl2}. Se
+  asume en esta historia que \visor{} ha sido instalado desde cero,
+  sin ningún otro añadido.
+
+  \begin{table}
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario abre \visor{}. & Se muestra la ventana principal. \\
+      \hline
+
+      El usuario abre un documento \ac{XML} cualquiera. & Se muestra
+      su primer nodo. \\ \hline
+
+      El usuario comprueba la lista de hojas de preprocesado
+      disponibles. & Sólo se dispone de la hoja \verb#xml#. \\ \hline
+
+      El usuario comprueba la lista de hojas de visualización
+      disponibles. & Sólo se dispone de las hojas \verb#xml# y
+      \verb#xmlSource#. \\ \hline
+
+      El usuario intenta abrir otro documento, y prueba a desplegar el
+      filtro de tipos de documento. & Sólo se dispone de las
+      opciones ``Todos los ficheros'' o ``Fichero XML normal''. \\
+      \hline
+
+      El usuario cancela su acción y abre el diálogo de gestión de
+      formatos. & Se muestra el diálogo con un único formato:
+      ``Fichero XML normal''. \\ \hline
+      
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Hacer a \visor{} independiente de \acs{ACL2}''}
+    \label{acept:indepacl2}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``Añadir soporte para visualizar varios ficheros a la vez y
+    enlazarlos entre sí.''
+  \end{quote}
+
+  Cuadro~\ref{acept:multidoc}, página~\pageref{acept:multidoc}. Se
+  asume que se ha instalado \ac{ACL2}, \postprocesador{}, sus hojas de
+  usuario y su descriptor de formato de la manera descrita en el
+  manual de usuario.
+
+  \begin{table}
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario abre un documento \ac{XML} cualquiera. & Se muestra
+      su primer nodo. \\ \hline
+
+      El usuario cambia las hojas de visualización y preprocesado a
+      las hojas básicas \verb#xml#. & Se muestra el documento \ac{XML}
+      tal y como está, listando en cada nodo sus atributos y dando las
+      cabeceras y pies apropiados. \\ \hline
+
+      El usuario abre el caso de prueba \fichero{hanoi-use.lisp} de
+      \postprocesador{}. & Se muestra su primer nodo en una pestaña
+      aparte, con las mismas hojas que en la primera pestaña. \\
+      \hline
+
+      El usuario cambia las hojas de visualización y preprocesado a
+      las hojas \verb#ppACL2#. & Se muestran las órdenes
+      \orden{include-book} y \orden{defthm} que conforman al
+      fichero. \\ \hline
+
+      El usuario selecciona el sumario del \orden{defthm}. & Aparecen
+      enlaces a \evento{HANOI::HANOI} entre las reglas usadas. \\ \hline
+
+      El usuario activa el enlace a \evento{HANOI::HANOI}. & Se abre
+      \fichero{hanoi.acl2} en una pestaña, con el nodo en cuestión
+      seleccionado. \\ \hline
+
+      El usuario vuelve a \fichero{hanoi-use.lisp}, y esta vez activa
+      \evento{HANOI::MOVE}. & Se cambia de nuevo a la pestaña de
+      \fichero{hanoi.acl2}, moviéndose al nodo seleccionado. \\ \hline
+
+      El usuario cambia a la pestaña del documento \ac{XML}. & El
+      documento mantiene la selección anterior y utiliza las hojas de
+      preprocesado y visualización \verb#xml#. \\ \hline
+      
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Visualizar y enlazar varios documentos entre sí.''}
+    \label{acept:multidoc}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``Proporcionar una lista de documentos recientes.''
+  \end{quote}
+
+  Cuadro~\ref{acept:recentdocs}, página~\pageref{acept:recentdocs}.
+
+  \begin{table}[tbp]
+    \begin{pruebaaceptacion}
+      El usuario abre un documento \ac{XML} no presente aún en el
+      historial. & Se muestra dicho documento y aparece su
+      entrada en el historial. \\ \hline
+      
+      El usuario cierra \visor{}. &
+      Se guarda el historial de documentos recientes. \\ \hline
+      
+      El usuario vuelve a ejecutar el programa y examina el historial. &
+      Se sigue mostrando entre sus entradas el anterior fichero
+      abierto. \\ \hline
+
+      El usuario selecciona dicha entrada. & Se abre de nuevo el
+      documento. \\ \hline
+
+      El usuario cierra \visor{}, cambia al documento de localización y
+      vuelve a ejecutar \visor{}. & Se sigue listando al fichero
+      en su historial. \\ \hline
+
+      El usuario selecciona la entrada anterior. & Se informa
+      que el fichero no existe y elimina la entrada del historial. \\ \hline
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Historial de documentos recientes''}
+    \label{acept:recentdocs}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``Integrar el visor y el editor preferido del usuario.''
+  \end{quote}
+  
+  Cuadro~\ref{acept:integraredit},
+  página~\pageref{acept:integraredit}.
+
+  \begin{table}[tbp]
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario abre un documento \ac{XML} genérico. & El sistema
+      muestra dicho documento según las hojas actuales. \\ \hline
+
+      El usuario solicita abrir el diálogo de gestión de formatos
+      admitidos. & Se abre el diálogo de gestión de formatos
+      admitidos, incluyendo al menos al elemento ``Fichero XML
+      normal''. No se puede acceder al formulario principal. \\ \hline
+
+      El usuario comprueba el editor establecido y cierra el
+      diálogo. & Se cierra el diálogo, volviendo a poder acceder al
+      formulario principal. \\ \hline
+
+      El usuario solicita la edición del documento. & Se lanza el
+      editor que antes estaba especificado sobre el fichero actual.
+      La interfaz gráfica puede seguir usándose en paralelo sin
+      problemas. \\ \hline
+
+      El usuario cierra el editor, utiliza el diálogo de formatos
+      admitidos para cambiar la orden a otro editor existente en el
+      sistema y confirma sus cambios. & Los cambios son guardados. \\
+      \hline
+
+      El usuario solicita de nuevo la edición del documento. & Se
+      lanza el editor especificado anteriormente, y la interfaz
+      gráfica se puede seguir usando sin problemas. \\ \hline
+
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Integrar editor''}
+    \label{acept:integraredit}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``Vigilar directamente el fichero fuente en caso de cambios, en vez de
+    solamente cuando se cierra el editor. Así, si uno abre el editor, hace
+    un par de cambios y guarda (sin cerrar el editor), también se
+    actualizará. En caso de que se desactive temporalmente la
+    reimportación automática, también debería funcionar correctamente si
+    en ese intervalo se hicieron cambios.''
+  \end{quote}
+
+  Cuadro~\ref{acept:autoactualizar},
+  página~\pageref{acept:autoactualizar}.
+
+  \begin{table}[tbp]
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario abre un documento \ac{XML} cualquiera. & El
+      sistema muestra dicho documento según las hojas actuales. \\
+      \hline
+
+      El usuario solicita la edición del documento. & Se abre el
+      editor registrado por el usuario para el formato empleado. \\ \hline
+
+      El usuario activa la actualización automática en las
+      preferencias. & La entrada del menú pasa a estar marcada como
+      activa. \\ \hline
+
+      El usuario cambia el contenido del documento, manteniendo su
+      corrección sintáctica, y guarda los cambios. & El documento se
+      vuelve a abrir, y los cambios se reflejan en él. \\ \hline
+
+      El usuario desactiva la actualización automática en las
+      preferencias. & La entrada del menú pasa a estar marcada como
+      inactiva. \\ \hline
+
+      El usuario deshace el cambio anterior, y guarda los cambios. &
+      El documento no se reabre. \\ \hline
+
+      El usuario activa de nuevo la actualización automática en las
+      preferencias. & La entrada del menú vuelve a aparecer como
+      activa y el documento se reabre, reflejando los cambios
+      realizados. \\ \hline
+
+      El usuario hace cambios que violan la corrección sintáctica de
+      la entrada. & El proceso de análisis sintáctico falla,
+      notificándose al usuario del hecho, y por lo demás operando de
+      forma normal. La copia antigua del documento sigue abierta y
+      funciona sin problemas. \\ \hline
+
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Actualizar automáticamente''}
+    \label{acept:autoactualizar}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``Guardar las preferencias automáticamente al cerrar el programa.''
+  \end{quote}
+
+  Cuadro~\ref{acept:saveprefs}, página~\pageref{acept:saveprefs}.
+
+  \begin{table}[tbp]
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario, tras abrir un documento \ac{XML}, cambia la hoja de
+      preprocesado a un valor distinto. & Se actualiza el documento
+      según la nueva hoja. \\ \hline
+
+      El usuario cierra \visor{}. & Se guarda las
+      preferencias. \\ \hline 
+
+      El usuario ejecuta de nuevo \visor{}, y abre un documento
+      \ac{XML}. & Se conserva la selección de hoja de preprocesado de
+      la ejecución anterior. \\ \hline
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Guardar preferencias''}
+    \label{acept:saveprefs}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``Visualizar un fichero Lisp integrando \visor{} con \postprocesador{}.''
+  \end{quote}
+
+  Cuadro~\ref{acept:visualizarxmlpp},
+  página~\pageref{acept:visualizarxmlpp}. Se asume que se ha instalado
+  \ac{ACL2}, \postprocesador{}, sus hojas de usuario y su descriptor de
+  formato de la manera descrita en el manual de usuario.
+
+  \begin{table}[tbp]
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario abre el caso de prueba
+      \fichero{triple\hyp{}rev\hyp{}misspell.lisp} de \postprocesador{}. & El
+      sistema muestra el primer nodo del documento. \\ \hline
+
+      El usuario selecciona la hoja de preprocesado
+      \fichero{ppACL2}. & Se actualiza el documento y muestra
+      el árbol debidamente decorado con los nombres de los eventos y
+      los iconos de éxito y fracaso, seleccionando y mostrando el
+      primer nodo de la visualización. En particular, debería de haber
+      un único elemento marcado como fracaso: \evento{REV-REV}, hijo
+      directo del nodo raíz. \\ \hline
+
+      El usuario selecciona la hoja de visualización
+      \fichero{ppACL2}. & Se actualiza la visualización del
+      nodo actual, pasando a mostrar solamente la información
+      relacionada con \ac{ACL2}: los nombres de cada evento y el
+      código Lisp asociado.  \\ \hline
+
+      El usuario navega por el árbol del documento [...] & Se
+      visualiza la información correspondiente al nodo de la forma
+      esperada. En particular, debería de informar del punto exacto
+      del fracaso de \evento{REV-REV} a través de una cadena de iconos
+      de fracaso. \\ \hline
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Integrar \visor{} y \postprocesador{}''}
+    \label{acept:visualizarxmlpp}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``Implementar la hoja \fichero{summaries}, que pode el árbol y deje
+    solamente los resúmenes, y la hoja \fichero{reverse}, que invierta
+    el orden de los eventos, para mostrar primero las conclusiones y
+    luego sus antecedentes.''
+  \end{quote}
+
+  Cuadro~\ref{acept:summaryrev}, página~\pageref{acept:summaryrev}. Se
+  asume que se ha instalado \postprocesador{}, su descriptor de
+  formato y sus hojas de usuario tal y como se describe en el manual
+  de usuario.
+
+  \begin{table}[tbp]
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario abre un documento Lisp. & El
+      sistema muestra el primer nodo del documento. \\ \hline
+      El usuario selecciona la hoja de visualización \fichero{ppACL2}. & El
+      sistema actualiza el nodo seleccionado. \\ \hline
+      El usuario selecciona la hoja de preprocesado \fichero{summaries}. & El
+      sistema actualiza el documento, que ahora sólo muestra las órdenes
+      y los sumarios. \\ \hline
+      El usuario selecciona la hoja de preprocesado \fichero{reverse}. & El
+      sistema actualiza el documento, en el que los eventos se hallan en
+      orden inverso al que siguen en la fuente Lisp. \\ \hline
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Hojas \fichero{summary} y \fichero{reverse}''}
+    \label{acept:summaryrev}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``Añadir información acerca del uso de una meta, como sus
+    dependencias inversas.''
+  \end{quote}
+
+  Cuadro~\ref{acept:usometa}, página~\pageref{acept:usometa}. Se asume
+  que \postprocesador{} se halla debidamente instalado.
+
+  \begin{table}[tbp]
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario abre un documento Lisp. & El
+      sistema muestra el primer nodo de dicho documento según las
+      hojas actuales. \\ \hline
+
+      El usuario selecciona la hoja de preprocesado \fichero{ppACL2} y
+      la hoja de visualización \fichero{ppACL2}. & Se actualiza
+      el documento y la visualización, ahora estructurados ambos en
+      órdenes y demostraciones de \ac{ACL2}. \\ \hline
+
+      El usuario selecciona el primer evento usado por otros
+      eventos. & Se muestra dicho nodo, con una lista de enlaces a los
+      eventos que lo mencionan. \\
+      \hline
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Ver usos de una meta''}
+    \label{acept:usometa}
+  \end{table}
+
+\item 
+  \begin{quote}
+    ``Abrir documentos \ac{YAML} en \nombrevisor{} sin que suponga una
+    pérdida o alteración de la información disponible.''
+  \end{quote}
+
+  Cuadro~\ref{acept:integraryaxml},
+  página~\pageref{acept:integraryaxml}. Se asume que se ha instalado
+  \yaxml{} con su descriptor de formato y hojas de usuario debidamente.
+
+  \begin{table}
+    \centering
+    \begin{pruebaaceptacion}
+      El usuario abre el caso de prueba \fichero{invoice.yaml} de
+      \yaxml{}. & Se muestra su primer nodo. \\ \hline
+
+      El usuario cambia a las hojas de preprocesado y visualización
+      \verb#yaxml#. & Se muestra un árbol con un único documento
+      anónimo, que contiene los mismos elementos que el documento
+      \ac{YAML} original. \\ \hline
+
+      El usuario selecciona el elemento \fichero{bill-to} del
+      documento. & Se muestran los atributos del elemento, apareciendo
+      un enlace en el atributo \verb#yaml:alias#. \\ \hline
+
+      El usuario activa el enlace. & Se selecciona el elemento
+      \verb#ship-to# del documento al que hace referencia el ancla. \\
+      \hline
+      
+    \end{pruebaaceptacion}
+    \caption{Prueba de aceptación para ``Integrar \visor{} y \yaxml{}''}
+    \label{acept:integraryaxml}
+  \end{table}
+
+\end{itemize}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../memoria"
+%%% End: 

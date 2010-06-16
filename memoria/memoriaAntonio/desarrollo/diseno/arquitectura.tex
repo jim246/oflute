@@ -1,0 +1,340 @@
+%%
+%% Arquitectura del sistema
+%% Copyright (C) 2008 Antonio García Domínguez
+%% $Id: arquitectura.tex 629 2008-07-06 13:47:58Z antonio $
+%%
+
+Para poder decidir la arquitectura del sistema, primero habría que
+definir cuáles son las condiciones que afectarán a su estructura.
+
+Dichas condiciones se basan tanto en la funcionalidad esperada del
+sistema, como en los requisitos no funcionales antes mencionados y
+otros factores de calidad del software, como la flexibilidad,
+mantenibilidad, reusabilidad o fiabilidad, entre otros.
+
+La mantenibilidad requiere una arquitectura que evite la propagación
+de cambios realizados sobre una parte del sistema, definiendo
+interfaces estables entre estas partes. Dicha arquitectura debe ser
+además lo más sencilla posible, para facilitar cambios en su
+estructura y elementos.
+
+La división en partes con límites e interfaces bien definidas mejora
+también la reusabilidad y facilita las pruebas, evitando
+acoplamientos innecesariamente complejos que dificulten el desarrollo
+de una aplicación fiable y con la funcionalidad deseada.
+
+\subsubsection{Separación de responsabilidades: división en capas}
+\label{sec:arquitec_capas}
+\index{patrón arquitectónico!Capas}
+\index{Capas|see{patrón arquitectónico!Capas}}
+
+En el caso de este proyecto, se deseaba separar \visor{} de los
+detalles de los conversores externos, como \postprocesador{} y
+\yaxml{}, y viceversa. En un futuro, se implementarán nuevas
+interfaces de usuario para \visor{}, por lo que también habrá que
+separar la lógica de aplicación y de presentación de \visor{}.
+
+Bajo este contexto, se puede ver que la aplicación del patrón
+arquitectónico Capas (descrito con mayor detalle
+en~\cite{archpatterns}) es natural. Se ha dividido la aplicación en
+cuatro capas:
+
+\begin{description}
+\item[Presentación] 
+  \index{capa!presentación}
+
+  Se ocupa de la interacción persona-máquina en general y en
+  particular de la visualización de la información y la navegación a
+  través de ésta. Define las transformaciones a realizar sobre las
+  representaciones creadas en la capa de filtrado.
+
+\item[Aplicación] 
+  \index{capa!aplicación}
+
+  Responde a las peticiones de la capa superior, ejecutándolas de
+  forma independiente a la interfaz escogida. Implementa la
+  infraestructura necesaria para la ejecución de las transformaciones
+  de la capa de usuario, posibilitando su selección en tiempo de
+  ejecución, enlazado de nodos y localización de cadenas. Incorpora la
+  lógica necesaria para la integración con los conversores de la capa
+  de filtrado.
+
+\item[Filtrado] 
+  \index{capa!filtrado}
+
+  A diferencia de la usual capa de dominio en un modelo de tres capas,
+  no manipula instancias de los objetos del dominio, sino que los
+  transforma a una representación manejable por las capas superiores,
+  de ahí su nombre. 
+
+  Se halla constituida por una serie de conversores independientes
+  entre sí y de \visor{}, como \postprocesador{} o \yaxml{}. \visor{}
+  sólo ha de conocer la orden a ejecutar, que ha de seguir unas pautas
+  muy sencillas:
+
+  \begin{itemize}
+  \item El código de retorno de la orden debe indicar el éxito o
+    fracaso en la conversión.
+  \item El resultado \ac{XML} ha de volcarse por la salida estándar, y
+    el estado de la conversión por la salida estándar de errores.
+  \end{itemize}
+
+\item[Servicios técnicos] 
+  \index{capa!servicios técnicos}
+
+  En esta capa hemos situado todas las bibliotecas, módulos externos y
+  demás que proporcionan parte de la funcionalidad común del sistema,
+  y son internos a éste.
+
+\end{description}
+
+Se ha detallado la visión en capas (modeladas por paquetes \ac{UML}) a
+lo largo del eje vertical y en particiones a lo largo del eje
+horizontal en la figura~\ref{fig:arquitec_capas} de la
+página~\pageref{fig:arquitec_capas}.
+
+Más tarde examinaremos cada una de estas capas por separado.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.8\textwidth]{desarrollo/diseno/arquitec_capas}
+  \caption{Diagrama arquitectónico del sistema}
+  \label{fig:arquitec_capas}
+\end{figure}
+
+\subsubsection{Transformaciones configurables: tuberías y filtros}
+\label{sec:tuberias_filtros}
+\index{patrón arquitectónico!Tuberías y Filtros}
+\index{Tuberías y Filtros|see{patrón arquitectónico!Tuberías y
+    Filtros}}
+
+\paragraph{Descripción}
+
+Otro patrón arquitectónico usado (con ciertas licencias) en el diseño
+de este proyecto fue Tuberías y Filtros. Dicho patrón será familiar a
+todo usuario de un sistema UNIX, de donde se inspiró precisamente.
+
+Consiste en el encadenamiento de una serie de Filtros, partiendo de
+una Fuente de información, y llegando hasta un Sumidero, destino de la
+información transformada. A cada paso, la información llega a un
+Filtro a través de una Tubería, saliendo por otra Tubería hacia el
+siguiente Filtro o el Sumidero final.
+
+El patrón original (ver~\cite{archpatterns}) tiene las ventajas de ser
+fácilmente paralelizable en filtros incrementales que no necesiten
+leer toda la entrada antes de poder operar, y permitir una gran
+flexibilidad cambiando el filtro exacto usado a cada paso, dado que
+están diseñados para ser intercambiables entre sí, con ciertas
+limitaciones.
+
+Sus desventajas consisten en la dificultad de mantener un estado
+compartido y de realizar un control detallado de errores, al ser
+usualmente tratada toda la transformación como una unidad.
+
+\paragraph{Uso}
+
+El uso de este patrón a lo largo de este proyecto se fundamentó en la
+necesidad de permitir la extensibilidad de la visualización por parte
+del usuario sin necesidad de una recompilación, usando un enfoque
+puramente dirigido por datos.
+
+Así, en el caso de una demostración de \ac{ACL2}, si consideramos al
+sistema externo \ac{ACL2} como la fuente de la información y a la
+visualización por parte de la biblioteca Swing como el sumidero,
+tendríamos cuatro filtros intermedios:
+
+\begin{enumerate}
+\item \postprocesador{}, con el enunciado Lisp para \ac{ACL2} como
+  entrada, genera una representación en \ac{XML} del contenido de la
+  demostración realizada. El formato de salida se conoce a través de
+  una \ac{DTD}, incrustada en el propio documento de salida.
+
+\item El segundo filtro, definido en la capa de presentación, realiza
+  una transformación previa, potencialmente costosa, que afecta a todo
+  el documento, y que sólo se realiza una vez.
+  
+  Aquí el usuario puede definir el aspecto que tendrá el árbol del
+  documento, ocultando nodos o cambiando la etiqueta o icono a
+  mostrar. La descripción de la hoja define las entradas esperadas y
+  el formato de la salida.
+
+\item El tercer filtro, también en la capa de presentación, transforma
+  un nodo a su visualización \ac{XHTML} utilizando una hoja \ac{XSLT}
+  para el formato de la salida. La transformación se repite cada vez
+  que el usuario cambia de nodo.
+
+  En este caso, se sabe que la salida es \ac{XHTML}, y que sigue por
+  lo tanto una \ac{DTD} conocida. También podemos deducir a partir del
+  nombre de la hoja qué entrada espera y qué salida produce.
+
+  Así, sabemos que la hoja \fichero{ppACL2} de visualización tomará la
+  salida de la hoja de preprocesado \fichero{ppACL2} o una derivada
+  suya y mostrará la información relevante a demostraciones de
+  \ac{ACL2} contenida en dicho documento.
+
+  Una hoja de visualización es diseñada suponiendo que la salida del
+  preprocesado sigue el formato de salida de ciertas hojas de usuario
+  de preprocesado. En el caso contrario, la transformación no fallará,
+  pero no se obtendrán los resultados esperados.
+
+\item El cuarto filtro, controlado por la capa de aplicación, marca
+  las coincidencias de la clave de la búsqueda en curso en el texto,
+  si se da el caso. También se aplica una hoja de estilos \ac{CSS},
+  que no modifica la estructura pero sí el aspecto del resultado
+  final.
+
+\end{enumerate}
+
+Como vemos, los dos filtros intermedios se ocupan de la mayor parte de
+la visualización, y según los requisitos funcionales, éstos deberían
+ser modificables por el usuario sin necesidad de recompilación.
+
+\paragraph{Implementación}
+
+\index{XSLT!ventajas}
+
+Se eligió \ac{XSLT} para implementar estos dos filtros por la
+flexibilidad que ofrece al estar basado en ficheros de texto
+fácilmente intercambiables y por su capacidad de describir
+declarativamente las transformaciones sobre la fuente \ac{XML} a otros
+formatos.
+
+Se optó por una visualización basada en \ac{XHTML} para evitar el uso
+de numerosos componentes discretos Swing, complicando el diseño de la
+interfaz y las extensiones por parte del usuario. El uso de hipertexto
+permite, además de ofrecer mayor información visual al usuario,
+establecer enlaces entre los distintos elementos de la
+demostración.
+
+Existen varias diferencias con el patrón original. Los filtros aquí
+usados no son incrementales (el uso de \ac{XML} no lo permite),
+perdiéndose la capacidad de paralelización.
+
+Por otro lado, la pérdida de capacidad de detección detallada de
+errores no aparece en nuestro caso, al basarse las tuberías en lógica
+de la capa de aplicación y no en otros mecanismos de menor nivel de
+abstracción, como memoria compartida.
+
+No ha sido necesario ningún estado compartido, por lo que esta otra
+desventaja tampoco ha resultado ser ninguna limitación.
+
+\index{translet}
+
+En cuanto a rendimiento, hay que considerar el uso de \emph{translets}
+por el procesador \ac{XSLT} Xalan XSLTC. Éstos son representaciones
+compiladas a bytecode Java de hojas \ac{XSLT} cuya ejecución es
+notablemente más rápida que la ejecución interpretada clásica, a costa
+de cierta funcionalidad innecesaria para este proyecto.
+
+La disposición e interconexión de los componentes que intervienen en
+la transformación se ha recogido en el diagrama \ac{UML} de
+componentes de la figura~\ref{fig:componentes_filtros} de la
+página~\pageref{fig:componentes_filtros}.
+
+La capa de aplicación no aparece en él, pero se halla implícita, como
+capa de control. Tampoco han de confundirse las hojas \ac{XSLT}
+usadas, que pertenecen a la capa de presentación, con su lógica de
+control, parte de la capa de aplicación.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{desarrollo/diseno/componentes}
+  \caption{Diagrama de componentes para visualización}
+  \label{fig:componentes_filtros}
+\end{figure}
+
+\subsubsection{Integración de las capas de aplicación y presentación: patrones \acs{MVP}}
+\label{sec:arquitectura_mvp}
+
+\index{patrón arquitectónico!MVC}
+\index{patrón arquitectónico!MVP}
+\index{patrón arquitectónico!Controlador Supervisor}
+\index{patrón arquitectónico!Vista Pasiva}
+\index{patrón arquitectónico!Modelo de Presentación}
+\index{MVC|see{patrón arquitectónico!MVC}}
+\index{MVP|see{patrón arquitectónico!MVP}}
+\index{Controlador Supervisor|see{patrón arquitectónico!Controlador Supervisor}}
+\index{Vista Pasiva|see{patrón arquitectónico!Vista Pasiva}}
+\index{Modelo de Presentación|see{patrón arquitectónico!Modelo de Presentación}}
+
+En el visor del Proyecto que precede a éste, se había establecido una
+comunicación entre las capas de aplicación y de presentación mediante
+Fachadas. Estas Fachadas constituían el único punto de acceso a la
+funcionalidad de cada capa, y evitaban que la capa superior tuviera
+que conocer los detalles de la capa inferior.
+
+Aunque para sistemas con interfaces más sencillos se podría haber
+continuado su uso, en el caso de \visor{} se vio cómo las Fachadas
+iban tomando demasiadas responsabilidades al mismo tiempo. También se
+dio el caso de que la capa inferior forzaba a la capa superior a una
+serie de restricciones, siendo la más grave la de tratar un único
+documento.
+
+Otro problema que aquejaba al antiguo diseño es la prácticamente nula
+capacidad para poder realizar pruebas de unidad de forma cómoda en la
+aplicación. Existen herramientas que permiten automatizar pulsaciones
+y entrada de teclado, pero las pruebas de este tipo son extremadamente
+frágiles: cualquier cambio en la disposición de los controles de la
+interfaz las invalidaría.
+
+Para resolver ambos problemas, se estudiaron las diversas alternativas
+ofrecidas en~\cite{Fowler:GUIArch}, y en particular las derivaciones
+del patrón \ac{MVP}. Este patrón es una derivación del
+\ac{MVC}~\cite{gof} original en el que en vez de tener un trío
+modelo-vista-controlador para cada control de la interfaz (como un
+campo de texto, por ejemplo), tenemos un trío para el formulario
+completo. Ahora el modelo del formulario es el conjunto de clases del
+dominio usadas, la vista es la estructura formada por todos los
+controles gráficos del formulario, y el presentador es el componente
+al que se notifican todas las acciones de interés realizadas por el
+usuario.
+
+El presentador es el ocupado de modificar el modelo, y posteriormente
+la vista se actualizará con los cambios hechos por el presentador al
+modelo. Hay diversos mecanismos para garantizar esta sincronización,
+constituyendo variantes distintas del patrón \ac{MVP} básico:
+
+\begin{description}
+\item[Controlador Supervisor] Para los casos simples, la
+  sincronización modelo-vista se establece a partir del patrón
+  Observador o algún otro enfoque declarativo. En casos más complejos,
+  el presentador interviene directamente sobre los controles de la
+  interfaz.
+
+\item[Vista Pasiva] La vista en este caso carece de cualquier lógica
+  de sincronización, y es el presentador el que rellena todos los
+  campos. Una posibilidad para evitar acoplar demasiado el presentador
+  a los controles usados es definir una interfaz en el formulario para
+  su relleno: de esta forma, durante las pruebas de unidad podemos
+  sustituir la vista por un Doble para Pruebas~\cite{Meszaros:XUnit} y
+  depurar prácticamente toda la funcionalidad.
+
+\item[Modelo de Presentación] El presentador contiene el estado
+  abstracto que debería presentar el formulario. Puede que sea el
+  modelo de presentación el que manipule la vista, o que sea la vista
+  la que se actualice a partir del modelo de presentación. En el
+  primer caso, ambos elementos están más acoplados pero podemos probar
+  la sincronización. En el segundo caso, la sincronización no se puede
+  depurar tan fácilmente, pero el modelo de presentación es
+  completamente independiente de la interfaz usada.
+
+\end{description}
+
+De entre estos enfoques, se escogió el Modelo de Presentación, ya que
+en un futuro se desean crear nuevas interfaces para \visor{}: el
+presentador no debería de saber nada acerca de la vista. Por la misma
+razón, es la vista la que se actualiza al estado encapsulado por el
+modelo de presentación.
+
+El uso de un modelo de presentación también facilita la implementación
+de una interfaz multidocumento: cada documento puede imponer su propio
+estado de presentación sin afectar a los demás.
+
+En cuanto a la división en modelo-vista-presentador, tendríamos a los
+modelos y otros servicios de alto nivel en la capa de aplicación, y a
+las vistas y presentadores en la capa de presentación.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../../memoria"
+%%% End: 
