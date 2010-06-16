@@ -1,0 +1,215 @@
+%%
+%% memoria.tex
+%% 
+\documentclass[a4paper,12pt,titlepage,halfparskip,cleardoubleempty]{scrbook}
+\pagestyle{headings}
+\usepackage{xr-hyper}
+%\usepackage[pdftex, breaklinks=false]{hyperref}
+\usepackage[pdftex, breaklinks=false, colorlinks=true, linkcolor=black, anchorcolor=black, urlcolor=blue, citecolor=red]{hyperref}
+
+%\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+
+\usepackage[printonlyused]{acronym-custom}
+
+\usepackage{charter}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{courier}
+\usepackage{hyphenat}
+\usepackage{makeidx}
+\usepackage{tocbibind}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{hyphenat}
+\usepackage{rotating}
+\usepackage{amstext}
+\usepackage{alltt}
+\usepackage{listings}
+\usepackage{dcolumn}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{wrapfig}
+\usepackage{array}
+\usepackage{xspace}
+\usepackage{subfigure}
+\makeindex
+\begin{document}
+
+
+\input{ordenes.tex}
+
+
+% Portada.
+\begin{titlepage}
+  \centering
+  \includegraphics[width=.3\textwidth]{logo_uca}
+
+  \bigskip
+  \bigskip
+  \bigskip
+  
+  \begin{changemargin}{3em}{3em}
+    \centering
+
+    {\Huge \textsc{\nohyphens{Escuela Superior de Ingeniería}}}
+    
+    \bigskip
+    \bigskip
+    \bigskip
+
+    {\huge \nohyphens{Ingeniería Técnica en Informática de Sistemas}}
+
+    \bigskip
+    \bigskip
+    \bigskip
+    \bigskip
+    \bigskip
+    \bigskip
+
+    {\LARGE \nohyphens{oFlute}}
+
+    \bigskip
+    \bigskip
+    \bigskip
+    \bigskip
+
+    {\large Curso 2009-2010}
+
+    \bigskip
+    \bigskip
+    \bigskip
+    \bigskip
+    \bigskip
+    \bigskip
+    \bigskip
+      
+    \end{changemargin}
+
+    {\Large José Tomás Tocino García \\}
+    {\large Cádiz, \today}
+
+\end{titlepage}
+
+{
+  \thispagestyle{empty}
+  \centering
+  \includegraphics[width=.2\textwidth]{logo_uca}
+
+  \bigskip
+  \bigskip
+  \bigskip
+  
+  \begin{changemargin}{3em}{3em}
+
+    \begin{center}
+      {\Huge \textsc{\nohyphens{Escuela Superior de Ingeniería}}}
+      
+      \bigskip
+      \bigskip
+      
+      {\huge \nohyphens{Ingeniería Técnica en Informática de Sistemas}}
+      
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      
+      {\LARGE \nohyphens{oFlute}}
+      
+      \bigskip
+      \bigskip
+      \bigskip
+      \bigskip
+      
+    \end{center}
+  \end{changemargin}
+
+  \begin{flushleft}
+    \Large
+
+    \textsc{Departamento}: \nohyphens{Lenguajes y Sistemas Informáticos.} \\
+    \textsc{Director del proyecto}: \nohyphens{Manuel Palomo Duarte.} \\
+    \textsc{Autor del Proyecto}: \nohyphens{José Tomás Tocino García}. \\
+  \end{flushleft}
+  
+  \bigskip
+  \bigskip
+  \bigskip
+  
+  \begin{flushright}
+    \large
+    Cádiz, \today
+    
+    Fdo.: José Tomás Tocino García
+    
+  \end{flushright}
+
+}
+
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
+Este documento se halla bajo la licencia \ac{FDL}. Según estipula la
+licencia, se muestra aquí el aviso de copyright. Se ha usado la
+versión inglesa de la licencia, al ser la única reconocida
+oficialmente por la \ac{FSF}.
+
+\begin{quote}
+  Copyright \copyright  2010 José Tomás Tocino García.
+  
+  Permission is granted to copy, distribute and/or modify this document
+  under the terms of the GNU Free Documentation License, Version 1.2
+  or any later version published by the Free Software Foundation;
+  with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+  A copy of the license is included in the section entitled "GNU
+  Free Documentation License".
+\end{quote}
+
+\clearpage
+
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter{Introducción}
+\input{1.introduc/introduccion.tex}
+
+\chapter{Desarrollo del calendario}
+\input{2.calendario/calendario.tex}
+ 
+\chapter{Descripción general del proyecto}
+\input{3.descripcion/descripcion.tex}
+ 
+\chapter{Desarrollo del proyecto}
+\input{4.desarrollo/desarrollo.tex}
+
+\chapter{Resumen}
+%\input{resumen/resumen.tex}
+ 
+\chapter{Conclusiones}
+%\input{conclusiones/conclusiones.tex}
+
+\chapter{Manual del usuario}
+%\input{manuales/manual_usuario.tex}
+ 
+\chapter{Guía de ampliación}
+%\input{manuales/manual_desarrollador.tex}
+
+\appendix
+
+\chapter{Guía de desarrollo de paquetes Debian}
+%\input{manuales/manual_debian.tex}
+
+\input{fdl.tex}
+
+
+\bibliographystyle{hispa-annote}
+\bibliography{bibliografia}
+
+\printindex
+
+\end{document}
