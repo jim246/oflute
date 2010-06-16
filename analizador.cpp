@@ -38,7 +38,11 @@ void Analizador::detener(){
 }
 
 t_altura Analizador::notaActual(){
-    return proxy . notaActual();
+    if(lectorConfig.sonidoLimite() <= volumenActual()){
+	return proxy . notaActual();
+    }else{
+	return Silencio;
+    }
 }
 
 float Analizador::volumenActual(){

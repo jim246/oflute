@@ -36,12 +36,12 @@
 #include "configuracion.h"
 #include "analizadorProxy.h"
 
-
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread/thread.hpp>
 
 
 class Analizador{
+    lectorConfiguracion lectorConfig;
     AnalizadorProxy proxy;
     boost::scoped_ptr<boost::thread> hilo;
 public:

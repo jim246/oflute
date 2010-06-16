@@ -34,7 +34,6 @@ Texto::Texto(Gosu::Graphics& graphics,
 void Texto::poblarVectores(){
     fuentes.clear();
     fuentesSombra.clear();
-    int n = dividirTexto();
 
     fuente.reset(new Gosu::Font(graphics, Gosu::widen(rutaFuente), tam));
 
