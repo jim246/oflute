@@ -1,6 +1,6 @@
 CC=g++
 CXXFLAGS += -I. -Igosu `gosu/bin/gosu-config --cxxflags`
-CXXFLAGS += -Ipugixml
+CXXFLAGS += -Ipugixml -Ikissfft
 CXXFLAGS += -g #-Wall -Wextra
 CXXFLAGS += `pkg-config --cflags libpulse-simple`
 
@@ -13,6 +13,7 @@ LDLIBS += -lboost_filesystem
 LDLIBS += -lboost_regex
 LDLIBS += -lboost_thread
 LDLIBS += pugixml/pugixml.a
+LDLIBS += kissfft/kissfft.a
 
 OBJECTS += main.o juego.o estado.o estadoImagenFija.o
 OBJECTS += estadoMenu.o FFT.o
@@ -28,19 +29,15 @@ OBJECTS += global.o
 EXE=programa
 
 all: $(OBJECTS)
-	cd pugixml; $(MAKE)
+	make -C pugixml
+	make -C kissfft
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(EXE) $(LDLIBS)
 
 libgosu:
 	cd gosu/linux ; make clean ; ./configure && make
 
 regosu:
-	cd gosu/linux ; make
-
-prueba: pruebaFuentes.cpp
-	g++ -o programa pruebaFuentes.cpp `gosu/bin/gosu-config --libs --cxxflags` -Igosu gosu/lib/libgosu.a
-
-
+	make -C gosu/linux
 
 FFT.o: FFT.h
 juego.o: juego.h
@@ -72,4 +69,6 @@ analizador.o: analizador.h configuracion.h analizadorProxy.h log.h
 
 clean:
 	rm -rf $(OBJECTS) $(EXE)
-	cd pugixml; $(MAKE) clean
+	make -C pugixml clean
+	make -C kissfft clean
+
