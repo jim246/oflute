@@ -1,13 +1,13 @@
 CC=g++
 CXXFLAGS += -I. -Igosu `gosu/bin/gosu-config --cxxflags`
 CXXFLAGS += -Ipugixml -Ikissfft
-CXXFLAGS += -g #-Wall -Wextra
+CXXFLAGS += -g -Wall
 CXXFLAGS += `pkg-config --cflags libpulse-simple`
 
 LDFLAGS += `gosu/bin/gosu-config --libs --cxxflags` 
 LDFLAGS += `pkg-config --libs libpulse-simple`
 
-LDLIBS += gosu/lib/libgosu.a -lportaudiocpp 
+LDLIBS += gosu/lib/libgosu.a
 LDLIBS += -lSDL_ttf
 LDLIBS += -lboost_filesystem
 LDLIBS += -lboost_regex
@@ -26,9 +26,11 @@ OBJECTS += estadoCalibrarMicro.o
 OBJECTS += analizadorProxy.o analizador.o
 OBJECTS += global.o
 
-EXE=programa
+EXE=oflute
 
-all: $(OBJECTS)
+all: $(EXE)
+
+$(EXE): $(OBJECTS)
 	make -C pugixml
 	make -C kissfft
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $(EXE) $(LDLIBS)
