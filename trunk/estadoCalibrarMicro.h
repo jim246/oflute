@@ -44,7 +44,6 @@ class Juego;
 class EstadoCalibrarMicro : public Estado{
     lectorConfiguracion archivoConf;
 
-    ControlSonido controlSonido;
     Analizador analizador;
 
     myTimer crono;

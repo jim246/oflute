@@ -39,7 +39,7 @@ void EstadoCalibrarMicro::update(){
 	valoresLeidos.push_back(analizador.volumenActual());
 
 	if(crono.elapsed() > 2000){
-	    controlSonido.detenerFlujo();
+	    analizador.detener();
 	    estadoCaptura = 2;
 
 	    double suma = 0;
@@ -68,6 +68,9 @@ void EstadoCalibrarMicro::buttonDown(Gosu::Button boton){
 	if(boton == Gosu::kbSpace){
 	    lDEBUG << "Se inicia la calibración...";
 
+	    analizador.iniciar();
+
+	    /*
 	    if (!controlSonido . configurarFlujo(analizador)){
 		lERROR << " No se pudo configurar el flujo.";
 	    }
@@ -75,6 +78,7 @@ void EstadoCalibrarMicro::buttonDown(Gosu::Button boton){
 	    if(!controlSonido . iniciarFlujo()){
 		lERROR << " No se pudo iniciar el análisis.";
 	    }
+	    //*/
 
 	    crono.restart();
 	    estadoCaptura = 1;
