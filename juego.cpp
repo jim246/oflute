@@ -77,6 +77,7 @@ void Juego::cambiarEstado(std::string destino){
 
     else if(destino == "estadoAnalizador"){
 	estadoActual.reset(new EstadoAnalizador(this));
+	estadoActual -> lanzar();
     }
 
     else if(destino == "estadoLecciones"){

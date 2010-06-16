@@ -40,13 +40,11 @@ using namespace std;
 #include "claseTimer.h"
 #include "elementosInterfaz.h"
 
-#include "controlSonido.h"
 #include "analizador.h"
 
 class Juego;
 
 class Cancion{
-    ControlSonido controlSonido;
     Analizador analizador;
 
     int bpm;

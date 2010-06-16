@@ -134,13 +134,15 @@ void Cancion::update(){
 	    lDEBUG << "Animaciones de interfaz terminadas.";
 	    estadoActual = e2;
 
+/*
 	    if (!controlSonido . configurarFlujo(analizador)){
 		lERROR << " No se pudo configurar el flujo.";
 	    }
 
 	    if(!controlSonido . iniciarFlujo()){
 		lERROR << " No se pudo iniciar el análisis.";
-	    }
+	    } //*/
+
 	}
     }else if (estadoActual == e2){
 	notaLeida = analizador . notaActual();
@@ -194,7 +196,7 @@ void Cancion::buttonDown(Gosu::Button boton){
     }
 
     else if(boton == Gosu::kbEscape){
-	controlSonido . detenerFlujo();
+	//controlSonido . detenerFlujo();
     }
 
     else if(boton == Gosu::kbDown){

@@ -2,23 +2,27 @@ CC=g++
 CXXFLAGS += -I. -Igosu `gosu/bin/gosu-config --cxxflags`
 CXXFLAGS += -Ipugixml
 CXXFLAGS += -g #-Wall -Wextra
+CXXFLAGS += `pkg-config --cflags libpulse-simple`
 
 LDFLAGS += `gosu/bin/gosu-config --libs --cxxflags` 
+LDFLAGS += `pkg-config --libs libpulse-simple`
 
 LDLIBS += gosu/lib/libgosu.a -lportaudiocpp 
 LDLIBS += -lSDL_ttf
 LDLIBS += -lboost_filesystem
 LDLIBS += -lboost_regex
+LDLIBS += -lboost_thread
 LDLIBS += pugixml/pugixml.a
 
 OBJECTS += main.o juego.o estado.o estadoImagenFija.o
-OBJECTS += estadoMenu.o FFT.o analizador.o controlSonido.o 
+OBJECTS += estadoMenu.o FFT.o
 OBJECTS += estadoAnalizador.o animacion.o ecuaciones.o
 OBJECTS += estadoLecciones.o log.o
 OBJECTS += texto.o elementosInterfaz.o
 OBJECTS += elementosInterfaz_imagen.o elementosInterfaz_texto.o elementosInterfaz_combinado.o
 OBJECTS += estadoCancion.o estadoMenuCanciones.o
-OBJECTS += estadoCalibrarMicro.o
+OBJECTS += estadoCalibrarMicro.o 
+OBJECTS += analizadorProxy.o analizador.o
 OBJECTS += global.o
 
 EXE=programa
@@ -37,7 +41,7 @@ prueba: pruebaFuentes.cpp
 	g++ -o programa pruebaFuentes.cpp `gosu/bin/gosu-config --libs --cxxflags` -Igosu gosu/lib/libgosu.a
 
 
-analizador.o: analizador.h configuracion.h
+
 FFT.o: FFT.h
 juego.o: juego.h
 main.o: estado.h juego.h
@@ -45,7 +49,7 @@ estado.o: estado.h
 log.o: log.h
 estadoImagenFija.o: estadoImagenFija.h estado.h juego.h
 estadoMenu.o: estado.h estadoMenu.h juego.h customFont.h animacion.h botonMenu.h
-estadoAnalizador.o: estado.h estadoAnalizador.h juego.h analizador.h controlSonido.h
+estadoAnalizador.o: estado.h estadoAnalizador.h juego.h analizador.h controlSonido.h analizadorProxy.h
 texto.o: texto.h
 controlSonido.o: controlSonido.h
 animacion.o:animacion.h
@@ -59,6 +63,9 @@ estadoMenuCanciones.o: estadoMenuCanciones.h estado.h juego.h estadoCancion.h
 estadoCancion.o: estadoCancion.h estado.h juego.h nota.h claseTimer.h
 global.o: global.h
 estadoCalibrarMicro.o: estadoCalibrarMicro.h estado.h elementosInterfaz.h log.h juego.h configuracion.h
+
+analizadorProxy.o: analizadorProxy.h
+analizador.o: analizador.h configuracion.h analizadorProxy.h log.h
 
 .cpp.o:
 	$(CC) $(CXXFLAGS) -c $< -o $@

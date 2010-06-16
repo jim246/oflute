@@ -26,7 +26,6 @@ EstadoAnalizador::EstadoAnalizador (Juego * p) :
     cartelCargando.reset(new Gosu::Image(padre -> graphics(), L"media/imgCargando.png"));
 
     cargarRecursos();
-    lanzar();
 }
 
 void EstadoAnalizador::cargarRecursos(){
@@ -45,25 +44,15 @@ void EstadoAnalizador::cargarRecursos(){
 void EstadoAnalizador::lanzar(){
     cout << "* EstadoAnalizador lanzado" << endl;
     lanzado = true;
-}
-
-void EstadoAnalizador::activar(){
-    if(running) return;
     running = true;
-    
-    if (!controlSonido . configurarFlujo(analizador)){
-	cout << "*** Error al configurar el flujo." << endl;
-    }
-
-    if(!controlSonido . iniciarFlujo()){
-	cout << "*** Error al iniciar el análisis." << endl;
-    }//*/
+    analizador . iniciar();
 }
-
 
 void EstadoAnalizador::update(){
+    /*
     if(!firstFrame && !running)
 	activar();
+    //*/
 }
 
 void EstadoAnalizador::draw(){
@@ -80,6 +69,8 @@ void EstadoAnalizador::draw(){
 
     boost::shared_ptr<Gosu::Image> p;
     bool sil = false;
+
+    
     switch(analizador . notaActual()){
     case Do5:
 	p = imgDo5; break;
@@ -104,10 +95,9 @@ void EstadoAnalizador::draw(){
 	break;
     }
     partitura -> draw(0,0,2);
-//    if(!controlSonido . miBuffer.silencio){
     if(!sil)
 	p -> draw(584,138,3);
-//    } //*/
+    //*/
 
 
 }
@@ -116,12 +106,15 @@ void EstadoAnalizador::buttonDown(Gosu::Button boton){
     if(!lanzado) 
 	return;
     if (boton == Gosu::kbEscape){
-	controlSonido . detenerFlujo();
+	lDEBUG << "Deteniendo flujo...";
+//	controlSonido . detenerFlujo();
+//	analizador . detener();
 	padre -> cambiarEstado("estadoMenuSinFondo");
 
     }
 }
 
 EstadoAnalizador::~EstadoAnalizador(){
+    analizador.detener();
     cout << "EstadoAnalizador::~EstadoAnalizador()" << endl;
 }

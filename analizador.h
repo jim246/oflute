@@ -34,70 +34,24 @@
 
 #include "global.h"
 #include "configuracion.h"
-
-/**
- * @class tipoBuffer
- *
- * @brief Búffer en el que se guardan los datos de la captura.
- *
- * El sistema de audio va capturando audio y volcando los datos en este búffer, que luego se pasa a la función de Fourier
- * para calcular la frecuencia. 
- *
- * @author José Tomás Tocino García <theom3ga@gmail.com> 
- *
- */
+#include "analizadorProxy.h"
 
 
-class tipoBuffer{
-public:
-    tipoBuffer():pos(0), silencio(false){}
-    int pos;
-    float in[4096];
-    float out[2048];
-    float lastVolume;
-    float mayores[5];
-    bool silencio;
-};
-
-
-/**
- * @class Analizador
- *
- * @brief Clase que hace el análisis general.
- *
- * Partiendo de los datos del búffer, apli
- *
- * @author José Tomás Tocino García <theom3ga@gmail.com> 
- *
- */
+#include <boost/scoped_ptr.hpp>
+#include <boost/thread/thread.hpp>
 
 
 class Analizador{
-
-    t_altura asociarNota (double frecuencia);
-    std::map<double, t_altura> notas;
-    bool iniciado;
-
-    float int_to_hz, hz_to_int;
-    lectorConfiguracion L;
-
+    AnalizadorProxy proxy;
+    boost::scoped_ptr<boost::thread> hilo;
 public:
-
-    tipoBuffer * miBuffer;
-
     Analizador();
+    void iniciar();
+    void detener();
 
     t_altura notaActual();
     float volumenActual();
-
-    int funcionCallback(const void * inB, 
-			void * outB, 
-			unsigned long nFrames, 
-			const PaStreamCallbackTimeInfo * timeInfo,
-			PaStreamCallbackFlags statusFlags);
-
-    ~Analizador();
-
+    
 };
 
 #endif /* _ANALIZADOR_H_ */
