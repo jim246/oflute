@@ -26,6 +26,7 @@ Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, REFRESCO){
     animacionFondo -> set(0, 0, 255);
 
     cambiarEstado("estadoAutor");
+
 }
 
 void Juego::update(){

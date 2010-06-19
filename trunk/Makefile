@@ -43,7 +43,7 @@ regosu:
 
 FFT.o: FFT.h
 juego.o: juego.h
-main.o: estado.h juego.h
+main.o: estado.h juego.h global.h
 estado.o: estado.h
 log.o: log.h
 estadoImagenFija.o: estadoImagenFija.h estado.h juego.h
