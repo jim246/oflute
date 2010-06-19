@@ -1,8 +1,11 @@
 %%
 %% memoria.tex
 %% 
-\documentclass[a4paper,12pt,titlepage,halfparskip,cleardoubleempty]{scrbook}
+%\documentclass[a4paper,12pt,titlepage,halfparskip, cleardoubleempty]{scrbook}
+\documentclass[a4paper,12pt]{scrbook}
 \pagestyle{headings}
+
+% Referencias externas
 \usepackage{xr-hyper}
 %\usepackage[pdftex, breaklinks=false]{hyperref}
 \usepackage[pdftex, breaklinks=false, colorlinks=true, linkcolor=black, anchorcolor=black, urlcolor=blue, citecolor=red]{hyperref}
@@ -13,25 +16,64 @@
 
 \usepackage[printonlyused]{acronym-custom}
 
+%\usepackage{titlesec}
+
+
+
+%%%%%%%%%%%%%%%
+% Paquetes para fuentes
+
+% Paquete para la fuente charter
 \usepackage{charter}
+
+% Paquete para la fuente helvética
 \usepackage[scaled=0.92]{helvet}
-\usepackage{courier}
+
+% Paquete para la fuente Courier
+% \usepackage{courier}
+
+% Guiones de hyphenado
 \usepackage{hyphenat}
+
+% Paquete para hacer un índice
 \usepackage{makeidx}
+
+% Extra ToC listings
 \usepackage{tocbibind}
+
+% Gráficos
 \usepackage{graphicx}
+
+% Extensión para el entorno enumerate ¿?
 \usepackage{enumerate}
-\usepackage{hyphenat}
+
+% Paquete para cosas rotatorias ¿?¿?
 \usepackage{rotating}
+
+% Paquete de matemáticas
 \usepackage{amstext}
+
+% Define el entorno altt, como un verbatim pero se pueden utilizar fórmulas matemáticas
 \usepackage{alltt}
+
+% Listados de código
 \usepackage{listings}
+
+% Herramientas para alinear las comas decimales en columnas en un entorno tabular o array
 \usepackage{dcolumn}
 \usepackage{array}
+
+% Extensión para el entorno tabular
 \usepackage{tabularx}
+
+% Entornos wrapfigure y wraptable para poner texto alrededor de figuras
 \usepackage{wrapfig}
-\usepackage{array}
-\usepackage{xspace}
+
+
+
+%\usepackage{xspace}
+
+% Inclusión de pequeñas figuras ¿?¿?¿
 \usepackage{subfigure}
 \makeindex
 \begin{document}
@@ -39,116 +81,15 @@
 
 \input{ordenes.tex}
 
+% Portada
+\input{portada.tex}
 
-% Portada.
-\begin{titlepage}
-  \centering
-  \includegraphics[width=.3\textwidth]{logo_uca}
+\cleardoublepage
 
-  \bigskip
-  \bigskip
-  \bigskip
-  
-  \begin{changemargin}{3em}{3em}
-    \centering
+% Segunda portada ¿?¿?
+\input{subportada.tex}
 
-    {\Huge \textsc{\nohyphens{Escuela Superior de Ingeniería}}}
-    
-    \bigskip
-    \bigskip
-    \bigskip
-
-    {\huge \nohyphens{Ingeniería Técnica en Informática de Sistemas}}
-
-    \bigskip
-    \bigskip
-    \bigskip
-    \bigskip
-    \bigskip
-    \bigskip
-
-    {\LARGE \nohyphens{oFlute}}
-
-    \bigskip
-    \bigskip
-    \bigskip
-    \bigskip
-
-    {\large Curso 2009-2010}
-
-    \bigskip
-    \bigskip
-    \bigskip
-    \bigskip
-    \bigskip
-    \bigskip
-    \bigskip
-      
-    \end{changemargin}
-
-    {\Large José Tomás Tocino García \\}
-    {\large Cádiz, \today}
-
-\end{titlepage}
-
-{
-  \thispagestyle{empty}
-  \centering
-  \includegraphics[width=.2\textwidth]{logo_uca}
-
-  \bigskip
-  \bigskip
-  \bigskip
-  
-  \begin{changemargin}{3em}{3em}
-
-    \begin{center}
-      {\Huge \textsc{\nohyphens{Escuela Superior de Ingeniería}}}
-      
-      \bigskip
-      \bigskip
-      
-      {\huge \nohyphens{Ingeniería Técnica en Informática de Sistemas}}
-      
-      \bigskip
-      \bigskip
-      \bigskip
-      \bigskip
-      
-      {\LARGE \nohyphens{oFlute}}
-      
-      \bigskip
-      \bigskip
-      \bigskip
-      \bigskip
-      
-    \end{center}
-  \end{changemargin}
-
-  \begin{flushleft}
-    \Large
-
-    \textsc{Departamento}: \nohyphens{Lenguajes y Sistemas Informáticos.} \\
-    \textsc{Director del proyecto}: \nohyphens{Manuel Palomo Duarte.} \\
-    \textsc{Autor del Proyecto}: \nohyphens{José Tomás Tocino García}. \\
-  \end{flushleft}
-  
-  \bigskip
-  \bigskip
-  \bigskip
-  
-  \begin{flushright}
-    \large
-    Cádiz, \today
-    
-    Fdo.: José Tomás Tocino García
-    
-  \end{flushright}
-
-}
-
-\bigskip
-\bigskip
+\cleardoublepage
 \bigskip
 \bigskip
 
@@ -168,8 +109,13 @@ oficialmente por la \ac{FSF}.
   Free Documentation License".
 \end{quote}
 
-\clearpage
+\cleardoublepage
 
+\section*{Agradecimientos}
+
+A Julian Raschke por crear y mantener Gosu
+
+\cleardoublepage
 
 \tableofcontents
 \listoffigures
