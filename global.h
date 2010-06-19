@@ -35,4 +35,18 @@ float durfig(t_figura t);
 #define FULLSCREEN false
 #define REFRESCO 20
 
+
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
+#include <string>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+void inicializarTrad(string lang = "es");
+
+string _(const char * S);
+
 #endif /* _GLOBAL_H_ */

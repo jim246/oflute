@@ -24,10 +24,13 @@
  * 02110-1301, USA.
  */
 
+#include "global.h"
 #include "juego.h"
 
 int main(int argc, char *argv[])
 {
+    inicializarTrad();
+
     Juego juego;
     juego.show();
     return 0;
