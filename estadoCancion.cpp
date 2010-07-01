@@ -7,6 +7,7 @@
 #include <boost/regex.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/format.hpp>
 
 
 
@@ -18,7 +19,7 @@ Cancion::Cancion(Gosu::Graphics & g, string ruta) : g(g), ruta(ruta) {
 }
 
 void Cancion::lanzar(){
-    distanciaPulso = 90;
+    distanciaPulso = 200;
     margenIzquierdo = 100;
     esperaInicial = 3; // 3 tiempos
 
@@ -63,6 +64,11 @@ void Cancion::lanzar(){
     barraInferior -> animacion -> set(0,0,0);
     barraInferior -> animacion -> set(1, 600, 461); //*/
 
+    for (int i = 0; i < 10; ++i)
+    {
+	lDEBUG << boost::format("%i : %f") % i % Nota::devolverAltura((t_altura)i);
+    }
+
     parsear ();
 }
 void Cancion::parsear(){
@@ -85,11 +91,15 @@ void Cancion::parsear(){
     // Iterador de regexp para iterar por las diferentes notas captadas
     boost::sregex_iterator myIt(cadenaNotas.begin(), cadenaNotas.end(), myRegExp), itEnd;
 
+    float acumulado = 2;
+    
     for(;myIt != itEnd; myIt++){
 	string figura = (*myIt)[3];
 	string alturaRead = string((*myIt)[1]) + string((*myIt)[2]);
 
 	t_altura alturaLocal = Do5;
+	t_figura figuraLocal = Negra;
+	float duracionLocal = 0;
 
 	if(alturaRead == "do5") alturaLocal = Do5;
 	else if(alturaRead == "re5") alturaLocal = Re5;
@@ -101,6 +111,25 @@ void Cancion::parsear(){
 	else if(alturaRead == "do6") alturaLocal = Do6;
 	else if(alturaRead == "re6") alturaLocal = Re6;
 
+	if(figura == "r"){
+	    figuraLocal = Redonda;
+	    duracionLocal = 4;
+	}else if(figura == "b"){
+	    figuraLocal = Blanca;
+	    duracionLocal = 2;
+	}else if(figura == "n"){
+	    figuraLocal = Negra;
+	    duracionLocal = 1;
+	}else if(figura == "c"){
+	    figuraLocal = Corchea;
+	    duracionLocal = 0.5;
+	}
+
+	lDEBUG << boost::format("Nota: %s %s, durLocal: %f") % alturaRead % figura % duracionLocal;
+
+	conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(g, alturaLocal, figuraLocal, acumulado)));
+	acumulado += duracionLocal;
+	lDEBUG << boost::format("%|30| %||") % "Acumulado: " % acumulado;
     }
 
 
@@ -120,7 +149,7 @@ void Cancion::parsear(){
 	   << distanciaPulso * bpm / 60. << " píxeles por segundo.";
 
     
-    conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(g, Do5, Negra, 2)));
+
     px=0;
 }
 
@@ -160,11 +189,11 @@ void Cancion::draw(){
 	barraProgreso -> draw(184, 564, 5, 0.5, 1);
 	
 	if(notaLeida != Silencio){
-	    resalteNotaActual -> draw(0, 259+(9-notaLeida)*18.5, 5);
+	    // TO - DO
+	    resalteNotaActual -> draw(0, Nota::devolverAltura(notaLeida), 5);
 	}
     }
-    /*
-    imagenPartitura -> draw(0, 200, 3);
+
     if(lanzado){
 	double transcurrido = temporizador.elapsed();
 	double pulsosTranscurridos = transcurrido / milisegundosPorPulso;
@@ -177,7 +206,7 @@ void Cancion::draw(){
 	    posHorizontal = margenIzquierdo +
 		(estaNota + esperaInicial - pulsosTranscurridos) * distanciaPulso;
 
-	    N -> draw(posHorizontal, 200);
+	    N -> draw(posHorizontal, 160 + Nota::devolverAltura(N -> altura));
 	}
     }//*/
 }
@@ -186,6 +215,7 @@ void Cancion::buttonDown(Gosu::Button boton){
     if(boton == Gosu::kbP){
 	temporizador.restart();
 	lanzado = true;
+	lDEBUG << "Lanzado!!";
     }
 
     else if(boton == Gosu::kbEscape){

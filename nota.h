@@ -4,10 +4,12 @@
 #include <Gosu/Gosu.hpp>
 
 #include <boost/shared_ptr.hpp>
-#include "global.h"
+#include <boost/format.hpp>
 
-class Nota{
-public:
+#include "global.h"
+#include "log.h"
+
+struct Nota{
     /// Imagen 
     boost::shared_ptr<Gosu::Image> imagen;
 
@@ -19,6 +21,9 @@ public:
     Nota(Gosu::Graphics & g, t_altura altura, t_figura figura, float tiempos) : 
 	altura(altura), figura(figura), tiemposDelante(tiempos){
 	imagen.reset ( new Gosu::Image (g, L"media/negra.png"));
+
+	lDEBUG << Log::CON("Nota") 
+	       << boost::format(" %i %i %f") % altura % figura % tiempos;
     }
     
     /// Tiempos antes de la nota
@@ -26,6 +31,9 @@ public:
     
     void draw(int x, int y){
 	imagen -> draw(x, y, 5);
+    }
+    static float devolverAltura(t_altura t){
+	return (9 - t) * 18.5;
     }
 };
 

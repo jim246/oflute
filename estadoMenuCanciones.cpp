@@ -26,7 +26,7 @@ void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
 
     else if(boton == Gosu::kbReturn){
 
-	lDEBUG << "Se pulsón enter";
+	lDEBUG << "Se pulsó enter";
 	if(cancion != 0)
 	    delete cancion;
 
