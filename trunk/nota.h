@@ -29,11 +29,13 @@ struct Nota{
     /// Tiempos antes de la nota
     float tiemposDelante;
     
-    void draw(int x, int y){
-	imagen -> draw(x, y, 5);
-    }
+
     static float devolverAltura(t_altura t){
-	return (9 - t) * 18.5;
+	return (9 - t) * 18.6;
+    }
+
+    void draw(int x){
+	imagen -> draw(x, 160 + Nota::devolverAltura(altura), 5);
     }
 };
 

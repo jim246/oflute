@@ -190,7 +190,7 @@ void Cancion::draw(){
 	
 	if(notaLeida != Silencio){
 	    // TO - DO
-	    resalteNotaActual -> draw(0, Nota::devolverAltura(notaLeida), 5);
+	    resalteNotaActual -> draw(0, Nota::devolverAltura(notaLeida)+258.5, 5);
 	}
     }
 
@@ -206,7 +206,7 @@ void Cancion::draw(){
 	    posHorizontal = margenIzquierdo +
 		(estaNota + esperaInicial - pulsosTranscurridos) * distanciaPulso;
 
-	    N -> draw(posHorizontal, 160 + Nota::devolverAltura(N -> altura));
+	    N -> draw(posHorizontal);
 	}
     }//*/
 }

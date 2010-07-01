@@ -66,6 +66,7 @@ class Cancion{
     bool lanzado;
 
     vector<boost::shared_ptr<Nota> > conjNotas;
+    t_altura notaEnLinea;
 
     t_altura notaLeida;
 
