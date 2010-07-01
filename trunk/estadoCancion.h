@@ -69,8 +69,6 @@ class Cancion{
 
     t_altura notaLeida;
 
-//    boost::scoped_ptr<Gosu::Image> imagenPartitura;
-
     Gosu::Graphics & g;
     
     string ruta;

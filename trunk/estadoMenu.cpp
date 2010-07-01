@@ -51,6 +51,7 @@ void EstadoMenu::lanzar(){
     // btnUca.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/btnUca.png"));//*/
     btn1.reset(new BotonMenu(padre -> graphics(), _("Analizador de notas"), Gosu::Color(255,3,69,90)));  // _("PRUEBA")
     btn2.reset(new BotonMenu(padre -> graphics(), _("Canciones"), Gosu::Color(255,34,139,114)));
+
     btn3.reset(new BotonMenu(padre -> graphics(), _("Lecciones"), Gosu::Color(255,188,216,56)));
     btn4.reset(new BotonMenu(padre -> graphics(), _("Calibrar micrófono"), Gosu::Color(255,245,215,19)));
     btn5.reset(new BotonMenu(padre -> graphics(), _("Salir"), Gosu::Color(255,250,115,0), 95));
