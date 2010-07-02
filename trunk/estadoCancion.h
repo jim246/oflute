@@ -70,11 +70,11 @@ class Cancion{
 
     t_altura notaLeida;
 
+    int puntos;
+
     Gosu::Graphics & g;
     
     string ruta;
-
-    int px;
 
     enum {e1, e2, e3};
 
