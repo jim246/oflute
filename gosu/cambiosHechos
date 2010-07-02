@@ -1,3 +1,0 @@
-Por un lado, quité lo del escalado para conseguir antialias en Gosu::Font.
-Por otro, arreglé lo del alto mínimo en drawtext
-
