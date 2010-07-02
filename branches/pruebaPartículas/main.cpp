@@ -12,13 +12,13 @@ class pruebaParticle : public Gosu::Window{
 public:
     pruebaParticle() : Gosu::Window(800, 600, false){
 	cout << "+++ pruebaParticle::CONSTRUCTOR" << endl;
-	SP . reset(new SistemaParticulas(graphics(), 150, 160, // cantidad y duración
-					 300, 0.5,  // distancia y escala
+	SP . reset(new SistemaParticulas(graphics(), 150, 150, // cantidad y duración
+					 150, 1,  // distancia y escala
 					 Gosu::Color(255,125,125)));
     }
 
     void update(){
-
+	SP -> update();
     }
     
     void draw(){
@@ -38,7 +38,8 @@ public:
 	if(boton == Gosu::kbEscape){
 	    close();
 	}else{
-	    SP -> inicializar();
+	    SP -> toggle();
+//	    SP -> inicializar();
 	}
     }
 
