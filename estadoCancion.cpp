@@ -8,7 +8,9 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/format.hpp>
+#include <boost/bind.hpp>
 
+#include <algorithm>
 
 
 Cancion::Cancion(Gosu::Graphics & g, string ruta) : g(g), ruta(ruta) {
@@ -16,11 +18,14 @@ Cancion::Cancion(Gosu::Graphics & g, string ruta) : g(g), ruta(ruta) {
     lanzado = false;
     lDEBUG << Log::CON("EstadoCanción") << " (" << ruta << ")";
     estadoActual = e1;
+    puntos = 0;
+
 }
 
 void Cancion::lanzar(){
     distanciaPulso = 200;
-    margenIzquierdo = 100;
+    margenIzquierdo = 150;
+
     esperaInicial = 3; // 3 tiempos
 
     resalteNotaActual.reset( new Gosu::Image(g, L"media/cancionesIndicadorNota.png"));
@@ -150,7 +155,6 @@ void Cancion::parsear(){
 
     
 
-    px=0;
 }
 
 void Cancion::update(){
@@ -168,6 +172,46 @@ void Cancion::update(){
 	}
     }else if (estadoActual == e2){
 	notaLeida = analizador . notaActual();
+
+	if(lanzado){
+	    double transcurrido = temporizador.elapsed();
+	    double pulsosTranscurridos = transcurrido / milisegundosPorPulso;
+
+	    float estaNota, posHorizontal;
+
+	    foreach(boost::shared_ptr<Nota>& N, conjNotas){
+		estaNota = N -> tiemposDelante;
+		
+		posHorizontal = (estaNota + esperaInicial - pulsosTranscurridos) * distanciaPulso;
+
+		/*
+		  Para ver qué nota corresponde en cada momento,
+		  hacemos el siguiente cálculo.  MargenIzquierdo es el
+		  punto en el que se empieza a tocar la nota. Así,
+		  para que una nota sea la que debe tocarse en ese
+		  momento, debe estar en, o a la izquierda del margen,
+		  y su punto final (es decir, el punto inicial +
+		  duración) debe estar a la derecha del margen (ya que
+		  si está a la izquierda es que ya ha acabado su
+		  tiempo.
+
+
+		 */
+		if(posHorizontal <= margenIzquierdo
+		   &&
+		   margenIzquierdo < (posHorizontal + Nota::devolverDuracion(N -> figura) * distanciaPulso) ){
+		    notaEnLinea = N -> altura;
+		}
+
+		N -> updatePos(posHorizontal);		
+		
+	    }
+
+	    if(notaEnLinea == notaLeida)
+		puntos += 10;
+
+	    barraSuperior -> setText(boost::lexical_cast<string>(puntos));
+	}//*/
     }
 
     
@@ -189,26 +233,14 @@ void Cancion::draw(){
 	barraProgreso -> draw(184, 564, 5, 0.5, 1);
 	
 	if(notaLeida != Silencio){
-	    // TO - DO
 	    resalteNotaActual -> draw(0, Nota::devolverAltura(notaLeida)+258.5, 5);
+	}
+	if(lanzado){
+	    for_each(conjNotas.begin(), conjNotas.end(), boost::bind(&Nota::draw, _1));
 	}
     }
 
-    if(lanzado){
-	double transcurrido = temporizador.elapsed();
-	double pulsosTranscurridos = transcurrido / milisegundosPorPulso;
 
-	//lDEBUG << transcurrido << " ms, " << transcurrido / milisegundosPorPulso << " pulsos";
-	float estaNota, posHorizontal;
-	foreach(boost::shared_ptr<Nota>& N, conjNotas){
-	    estaNota = N -> tiemposDelante;
-	    
-	    posHorizontal = margenIzquierdo +
-		(estaNota + esperaInicial - pulsosTranscurridos) * distanciaPulso;
-
-	    N -> draw(posHorizontal);
-	}
-    }//*/
 }
 
 void Cancion::buttonDown(Gosu::Button boton){
@@ -220,13 +252,8 @@ void Cancion::buttonDown(Gosu::Button boton){
 
     else if(boton == Gosu::kbEscape){
 	analizador.detener();
-	//controlSonido . detenerFlujo();
     }
 
-    else if(boton == Gosu::kbDown){
-	px ++;
-	lDEBUG << VARV(px);
-    }
 }
 
 Cancion::~Cancion(){
