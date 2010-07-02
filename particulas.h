@@ -9,93 +9,144 @@
 #include "animacion.h"
 
 #include <ctime>
+#include <vector>
 
+#define lim 0.70
+
+struct Particula{
+
+    float angulo;
+
+    float distancia;
+
+    float tamanyo;
+
+    int duracion;
+    
+    boost::shared_ptr<Gosu::Image> imagen;
+
+    Gosu::Color color;
+
+    int pasoActual;
+
+    float posX;
+
+    float posY;
+
+    float posTemp;
+
+    float coefTam;
+
+    Particula(float angulo,
+	      float distancia,
+	      float tamanyo,
+	      int duracion,
+	      boost::shared_ptr<Gosu::Image> img,
+	      Gosu::Color color) :
+	angulo(angulo),
+	distancia(distancia),
+	tamanyo(tamanyo),
+	duracion(duracion),
+	imagen(img),
+	color(color),
+	pasoActual(0),
+	posX(0),
+	posY(0){
+	
+    }
+    void update(){
+	if(pasoActual != duracion) pasoActual ++;
+
+	posTemp = Animacion::easeOutQuart(pasoActual, 0, 1, duracion); 
+
+	if(posTemp >= lim){
+	    color.setAlpha ( 255 * (1 - (posTemp - lim) / (1 - lim)));
+	}else{
+	    color.setAlpha(255);
+	}
+
+	coefTam = tamanyo * (1 - posTemp);
+	
+	posX = Gosu::offsetX(angulo, posTemp * distancia) 
+	    - imagen -> width() * coefTam / 2;
+	posY = Gosu::offsetY(angulo, posTemp * distancia) 
+	    - imagen -> height() * coefTam / 2;
+    }
+
+    void draw(int oX, int oY){
+	imagen -> draw(oX + posX, oY + posY, 7, coefTam, coefTam, color, Gosu::amAdditive);
+    }
+
+    float estado(){
+	return (float)pasoActual / (float)duracion;
+    }
+};
 
 class SistemaParticulas{
     Gosu::Graphics & g;
     unsigned cantidadParticulas, duracion, distancia;
-    float * angulos, * distancias, * tamanyo, escala;
+    float escala;
     bool * tipo;
 
     Gosu::Color color;
 
-    boost::scoped_ptr<Gosu::Image> partc1, partc2;
-    boost::scoped_ptr<Animacion> anim;
+    boost::shared_ptr<Gosu::Image> partc1, partc2;
+
+    vector<boost::shared_ptr<Particula> > vectorParticulas;
+
+    bool activo;
 public:
-    SistemaParticulas(Gosu::Graphics& g, unsigned n, unsigned d, unsigned distancia=200, float escala=1, Gosu::Color color = Gosu::Color::WHITE) : 
-	g(g), cantidadParticulas(n), duracion(d), distancia(distancia), escala(escala), color(color){
+    SistemaParticulas(Gosu::Graphics& g, unsigned n, unsigned d, 
+		      unsigned distancia=200, float escala=1, 
+		      Gosu::Color color = Gosu::Color::WHITE) : 
+	g(g), cantidadParticulas(n), duracion(d), 
+	distancia(distancia), escala(escala), color(color){
+
+	activo = true;
 
 	std::srand(std::clock());
 	
 	partc1 . reset(new Gosu::Image(g, L"partc1.png"));
 	partc2 . reset(new Gosu::Image(g, L"partc2.png"));
 
-	anim . reset(new Animacion(0, 0, 1, 1, duracion, Animacion::tEaseOutCubic));
-		     
-	// Si tenemos n partículas, tenemos que crear un vector
-	// con el ángulo de cada partícula,
-	// y la distancia de la misma
-	angulos = new float[cantidadParticulas];
-	distancias = new float[cantidadParticulas];
-	tipo = new bool[cantidadParticulas];
-	tamanyo = new float[cantidadParticulas];
+//	vectorParticulas.resize(cantidadParticulas);
 
-	inicializar();
-    }
-
-    void inicializar(){
-	for (unsigned i = 0; i < cantidadParticulas; ++i)
+	for (size_t i = 0; i < cantidadParticulas; ++i)
 	{
-	    angulos[i] = Gosu::random(0, 360);
-	    distancias[i] = Gosu::random(0,1);
-	    tipo[i] = (Gosu::random(0,1) < 0.5)?true:false;
-	    tamanyo[i] = Gosu::random(0,escala);
+	    vectorParticulas.push_back(boost::shared_ptr<Particula>(nuevaPartc()));
 	}
-
-	anim . reset(new Animacion(0, 0, 1, 1, duracion, Animacion::tEaseOutQuart));
     }
+
+    Particula * nuevaPartc(){
+	return new Particula(Gosu::random(0,360),
+			     Gosu::random(0, 1) * distancia,
+			     Gosu::random(0, escala),
+			     Gosu::random(0.1, 1) * duracion,
+			     (Gosu::random(0,1)? partc1 : partc2),
+			     color);
+    }
+
+    void update(){
+	for (unsigned i = 0; i < cantidadParticulas; ++i){
+	    vectorParticulas[i] -> update();
+	    if(activo)
+		if(vectorParticulas[i] -> estado() > 0.5){
+		    vectorParticulas[i].reset(nuevaPartc());
+		}
+	}	//*/
+    
+    }
+
+    void toggle(){ activo = !activo; }
+
     void draw(int origX, int origY){
-	float pos = anim -> getX();
-
-	    // Lo suyo es que se vayan desvaneciendo cuando esté ya algo alejado del centro, es decir, cuando pos se acerque a 1
-
-	float lim = 0.70;
-
-	if(pos >= lim){
- 
-	    color.setAlpha ( 255 * (1 - (pos - lim) / (1 - lim)));
-	}else{
-	    color.setAlpha(255);
+	for (unsigned i = 0; i < cantidadParticulas; ++i){
+	    vectorParticulas[i] -> draw(origX, origY);
 	}
-
-	for (unsigned i = 0; i < cantidadParticulas; ++i)
-	{
-	    // Coeficiente del tamaño
-	    float coefTam = tamanyo[i] * (1 - pos);
-	    
-	    if(tipo[i]){
-		partc1 -> draw(origX + Gosu::offsetX(angulos[i], pos * distancias[i] * distancia) - partc1 -> width() * coefTam / 2,
-			       origY + Gosu::offsetY(angulos[i], pos * distancias[i] * distancia) - partc1 -> height() * coefTam / 2,
-			       1,
-			       coefTam, coefTam,
-			       color, Gosu::amAdditive);
-	    }else{
-		partc2 -> draw(origX + Gosu::offsetX(angulos[i], pos * distancias[i] * distancia) - partc1 -> width() * coefTam / 2,
-			       origY + Gosu::offsetY(angulos[i], pos * distancias[i] * distancia) - partc1 -> height() * coefTam / 2,
-			       1,
-			       coefTam, coefTam,
-			       color, Gosu::amAdditive);
-
-	    }
-	}
-
-	anim -> update();
     }
 
     ~SistemaParticulas(){
-	delete angulos;
-	delete distancias;
-	delete tipo;
+
     }
 };
 
