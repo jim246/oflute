@@ -78,7 +78,7 @@ void Cancion::lanzar(){
 					       80, 0.5,  // distancia y escala
 					       Gosu::Color(255,255,255)));
 
-
+    Nota::initImagenes(g);
     parsear ();
 }
 void Cancion::parsear(){
@@ -96,7 +96,7 @@ void Cancion::parsear(){
     string cadenaNotas = documento.child("Song").child("Notes").first_child().value();
 
     // Expresión regular para cazar las notas
-    boost::regex myRegExp("(do|re|mi|fa|sol|la|si|xx)(5|6|0)(r|b|n|c)");
+    boost::regex myRegExp("(do|re|mi|fa|sol|la|si|xx)(5|6|0)(r|b|n|c)(p)?");
 
     // Iterador de regexp para iterar por las diferentes notas captadas
     boost::sregex_iterator myIt(cadenaNotas.begin(), cadenaNotas.end(), myRegExp), itEnd;
@@ -104,11 +104,12 @@ void Cancion::parsear(){
     float acumulado = 2;
     
     for(;myIt != itEnd; myIt++){
+	bool puntillo = ((*myIt)[4] == "p");
 	string figura = (*myIt)[3];
 	string alturaRead = string((*myIt)[1]) + string((*myIt)[2]);
 
 	t_altura alturaLocal = Do5;
-	t_figura figuraLocal = Negra;
+	t_figura figuraLocal = (t_figura) Negra | Puntillo;
 	float duracionLocal = 0;
 
 	if(alturaRead == "do5") alturaLocal = Do5;
@@ -125,15 +126,26 @@ void Cancion::parsear(){
 	if(figura == "r"){
 	    figuraLocal = Redonda;
 	    duracionLocal = 4;
-	}else if(figura == "b"){
+	}
+
+	else if(figura == "b"){
 	    figuraLocal = Blanca;
 	    duracionLocal = 2;
-	}else if(figura == "n"){
+	}
+
+	else if(figura == "n"){
 	    figuraLocal = Negra;
 	    duracionLocal = 1;
-	}else if(figura == "c"){
+	}
+
+	else if(figura == "c"){
 	    figuraLocal = Corchea;
 	    duracionLocal = 0.5;
+	}
+
+	if(puntillo){
+	    duracionLocal += duracionLocal / 2;
+	    figuraLocal = figuraLocal | Puntillo;
 	}
 
 	lDEBUG << boost::format("Nota: %s %s, durLocal: %f") % alturaRead % figura % duracionLocal;

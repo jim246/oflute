@@ -23,7 +23,18 @@
 #define _GLOBAL_H_
 
 enum t_altura { Silencio, Do5, Re5, Mi5, Fa5, Sol5, La5, Si5, Do6, Re6 };
-enum t_figura { Redonda, Blanca, Negra, Corchea, Nulo };
+//typedef int t_figura;
+
+enum t_figura { Redonda = 1, 
+		Blanca = 2, 
+		Negra = 4, 
+		Corchea = 8, 
+		Nulo = 16,
+		Puntillo = 32};
+
+inline t_figura operator | (t_figura A, t_figura B){
+    return t_figura( (int) A | (int) B );
+}
 
 float durfig(t_figura t);
 
