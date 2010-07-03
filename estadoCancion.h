@@ -39,6 +39,7 @@ using namespace std;
 #include "nota.h"
 #include "claseTimer.h"
 #include "elementosInterfaz.h"
+#include "particulas.h"
 
 #include "analizador.h"
 
@@ -89,6 +90,8 @@ class Cancion{
     boost::scoped_ptr<ElementoCombinado> barraInferior;
 
     void parsear();
+
+    boost::scoped_ptr<SistemaParticulas> sistemaPartc;
 
 public:
     Cancion(Gosu::Graphics & g, string ruta);

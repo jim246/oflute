@@ -11,18 +11,10 @@
 
 AnalizadorProxy::AnalizadorProxy() : iniciado(false), salir(false){
     lDEBUG << Log::CON("AnalizadorProxy");
+    
+    sIn = NULL;
 
     miBuffer = new tipoBuffer;
-
-    notas[523.25] = Do5;
-    notas[592.163] = Re5;
-    notas[656.763] = Mi5;
-    notas[699.829] = Fa5;
-    notas[785.692] = Sol5;
-    notas[893.628] = La5;
-    notas[1001.29] = Si5;
-    notas[1076.66] = Do6;
-    notas[1195.09] = Re6;
 
     // Definimos dos constantes para hacer las conversiones desde 
     // posición del vector a frecuencia y viceversa
@@ -38,7 +30,7 @@ AnalizadorProxy::AnalizadorProxy() : iniciado(false), salir(false){
 
 AnalizadorProxy::AnalizadorProxy(const AnalizadorProxy& copia){
     lDEBUG << Log::CON("AnalizadorProxy Constructor de copia");
-    notas = copia.notas;
+    //notas = copia.notas;
     int_to_hz = copia.int_to_hz;
     hz_to_int = copia.hz_to_int;
     iniciado = copia.iniciado;
@@ -46,27 +38,13 @@ AnalizadorProxy::AnalizadorProxy(const AnalizadorProxy& copia){
     miBuffer = new tipoBuffer;    
 }
 
-t_altura AnalizadorProxy::asociarNota(double frecuencia){
-    std::map<double, t_altura> diferencias;
-    std::map<double, t_altura>::iterator iter;
 
-    for(iter = notas.begin();
-	iter != notas.end();
-	++iter)
-    {
-	diferencias[abs(frecuencia - iter -> first)] = iter -> second;
-    }
-    
-    iter = min_element(diferencias.begin(), diferencias.end());
-    return iter -> second;
-    
-}
 
-t_altura AnalizadorProxy::notaActual(){
+float AnalizadorProxy::notaActual(){
     if(miBuffer -> silencio)
-	return Silencio;
+	return 0;
 
-    return asociarNota(miBuffer -> mayores[0]);
+    return miBuffer -> mayores[0];
 }
 
 
@@ -78,12 +56,23 @@ void AnalizadorProxy::detener(){
     lDEBUG << "AnalizadorProxy::detener...";
     iniciado = false;
     salir = true;
+
+    //pa_simple_free(sIn);
+
     lDEBUG << VARV(iniciado);
     lDEBUG << VARV(salir);
 }
 
+void AnalizadorProxy::cerrarFlujo(){
+
+}
+
 AnalizadorProxy::~AnalizadorProxy(){
     lDEBUG << Log::DES("AnalizadorProxy");
+
+    pa_simple_free(sIn);
+    //pa_simple_free(sOut);
+
     if(miBuffer != 0){
 	delete miBuffer;
 	miBuffer = NULL;
@@ -102,8 +91,7 @@ void AnalizadorProxy::operator()(){
 
     lDEBUG << "Tamaño del formato: " << pa_sample_size(&ss);
 
-    pa_simple * sIn = NULL;
-    pa_simple * sOut = NULL;
+
 
     int error;
 
@@ -119,22 +107,19 @@ void AnalizadorProxy::operator()(){
 	cerr << "ERROR" << endl;
     }
 
+    /*
     if (!(sOut = pa_simple_new(NULL, "nozin", PA_STREAM_PLAYBACK, NULL, 
 			       "playback", &ss, NULL, &atr, &error))) {
 	cout << "ERROR" << endl;
     }
+
+    //*/
 
     cout << "Frame size: " << pa_frame_size(&ss) << endl
 	 << "Sample size: " << pa_sample_size(&ss) << endl
 	 << "Formato intermedio: " << sizeof(int16_t) << endl
 	 << "Convers: " << sizeof(int) << endl;
     
-    /*
-    fstream F;
-    F.open("test", fstream::in | fstream::out);
-    cout << "Failed? " << F.fail() << endl;
-    //*/
-
     float magnitude;
 
     int limInf = 450 * hz_to_int;
@@ -162,8 +147,6 @@ void AnalizadorProxy::operator()(){
 	    for (int i = 0; i < BUFSIZE; ++i)
 	    {
 		in[i] = (float)buf[i];
-		//F << (int)buf[i] << endl;
-		//F << in[i] << endl;
 	    }
 
 #if 1
@@ -212,6 +195,7 @@ void AnalizadorProxy::operator()(){
 
 
 	if(!iniciado && salir){
+
 	    return;
 	    
 	    // cout << "Cerrando archivo..." << endl;
