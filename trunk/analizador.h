@@ -44,6 +44,9 @@ class Analizador{
     lectorConfiguracion lectorConfig;
     AnalizadorProxy proxy;
     boost::scoped_ptr<boost::thread> hilo;
+
+    t_altura asociarNota (double frecuencia);
+    std::map<double, t_altura> notas;
 public:
     Analizador();
     void iniciar();

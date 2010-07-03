@@ -38,8 +38,6 @@ class AnalizadorProxy{
     float int_to_hz;
     float hz_to_int;
 
-    t_altura asociarNota (double frecuencia);
-    std::map<double, t_altura> notas;
     bool iniciado;
     bool salir;
 
@@ -49,13 +47,17 @@ public:
     AnalizadorProxy(const AnalizadorProxy& copia);
 
     tipoBuffer * miBuffer;
-    t_altura notaActual();
+    float notaActual();
     
     void operator()();
     void lanzar();
     void detener();
+    void cerrarFlujo();
 
     ~AnalizadorProxy(); //*/
+
+private:
+    pa_simple * sIn;
 };
 
 #endif /* _ANALIZADORPROXY_H_ */

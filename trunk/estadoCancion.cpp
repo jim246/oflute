@@ -74,6 +74,11 @@ void Cancion::lanzar(){
 	lDEBUG << boost::format("%i : %f") % i % Nota::devolverAltura((t_altura)i);
     }
 
+    sistemaPartc . reset(new SistemaParticulas(g, 150, 150, // cantidad y duración
+					       80, 0.5,  // distancia y escala
+					       Gosu::Color(255,255,255)));
+
+
     parsear ();
 }
 void Cancion::parsear(){
@@ -174,6 +179,8 @@ void Cancion::update(){
 	notaLeida = analizador . notaActual();
 
 	if(lanzado){
+	    sistemaPartc -> update();
+
 	    double transcurrido = temporizador.elapsed();
 	    double pulsosTranscurridos = transcurrido / milisegundosPorPulso;
 
@@ -207,8 +214,13 @@ void Cancion::update(){
 		
 	    }
 
-	    if(notaEnLinea == notaLeida)
+	    if(notaEnLinea == notaLeida){
 		puntos += 10;
+		sistemaPartc -> on();
+	    }else{
+		sistemaPartc -> off();
+	    }
+
 
 	    barraSuperior -> setText(boost::lexical_cast<string>(puntos));
 	}//*/
@@ -236,6 +248,7 @@ void Cancion::draw(){
 	    resalteNotaActual -> draw(0, Nota::devolverAltura(notaLeida)+258.5, 5);
 	}
 	if(lanzado){
+	    sistemaPartc -> draw(margenIzquierdo, Nota::devolverAltura(notaEnLinea) + 283);
 	    for_each(conjNotas.begin(), conjNotas.end(), boost::bind(&Nota::draw, _1));
 	}
     }

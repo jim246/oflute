@@ -59,7 +59,7 @@ elementosInterfaz_imagen.o: elementosInterfaz.h
 elementosInterfaz_texto.o: elementosInterfaz.h texto.h
 elementosInterfaz_combinado.o: elementosInterfaz.h texto.h
 estadoMenuCanciones.o: estadoMenuCanciones.h estado.h juego.h estadoCancion.h
-estadoCancion.o: estadoCancion.h estado.h juego.h nota.h claseTimer.h
+estadoCancion.o: estadoCancion.h estado.h juego.h nota.h claseTimer.h particulas.h analizador.h analizadorProxy.h
 global.o: global.h
 estadoCalibrarMicro.o: estadoCalibrarMicro.h estado.h elementosInterfaz.h log.h juego.h configuracion.h
 
