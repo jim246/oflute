@@ -21,7 +21,7 @@ OBJECTS += estadoAnalizador.o animacion.o ecuaciones.o
 OBJECTS += estadoLecciones.o log.o
 OBJECTS += texto.o elementosInterfaz.o
 OBJECTS += elementosInterfaz_imagen.o elementosInterfaz_texto.o elementosInterfaz_combinado.o
-OBJECTS += estadoCancion.o estadoMenuCanciones.o
+OBJECTS += estadoCancion.o estadoMenuCanciones.o nota.o
 OBJECTS += estadoCalibrarMicro.o 
 OBJECTS += analizadorProxy.o analizador.o
 OBJECTS += global.o
@@ -62,7 +62,7 @@ estadoMenuCanciones.o: estadoMenuCanciones.h estado.h juego.h estadoCancion.h
 estadoCancion.o: estadoCancion.h estado.h juego.h nota.h claseTimer.h particulas.h analizador.h analizadorProxy.h
 global.o: global.h
 estadoCalibrarMicro.o: estadoCalibrarMicro.h estado.h elementosInterfaz.h log.h juego.h configuracion.h
-
+nota.o:nota.h global.h
 analizadorProxy.o: analizadorProxy.h
 analizador.o: analizador.h configuracion.h analizadorProxy.h log.h
 
