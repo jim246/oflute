@@ -148,11 +148,12 @@ void Cancion::parsear(){
 	    figuraLocal = figuraLocal | Puntillo;
 	}
 
-	lDEBUG << boost::format("Nota: %s %s, durLocal: %f") % alturaRead % figura % duracionLocal;
+	lDEBUG << boost::format("Nota: %s %s %i, durLocal: %.2f") 
+	    % alturaRead % figura % puntillo % duracionLocal;
 
 	conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(g, alturaLocal, figuraLocal, acumulado)));
 	acumulado += duracionLocal;
-	lDEBUG << boost::format("%|30| %||") % "Acumulado: " % acumulado;
+	lDEBUG << boost::format("%|30| %|| \n") % "Acumulado: " % acumulado;
     }
 
 
