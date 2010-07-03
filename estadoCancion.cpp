@@ -96,7 +96,7 @@ void Cancion::parsear(){
     string cadenaNotas = documento.child("Song").child("Notes").first_child().value();
 
     // Expresión regular para cazar las notas
-    boost::regex myRegExp("(do|re|mi|fa|sol|la|si)(5|6)(r|b|n|c)");
+    boost::regex myRegExp("(do|re|mi|fa|sol|la|si|xx)(5|6|0)(r|b|n|c)");
 
     // Iterador de regexp para iterar por las diferentes notas captadas
     boost::sregex_iterator myIt(cadenaNotas.begin(), cadenaNotas.end(), myRegExp), itEnd;
@@ -120,6 +120,7 @@ void Cancion::parsear(){
 	else if(alturaRead == "si5") alturaLocal = Si5;
 	else if(alturaRead == "do6") alturaLocal = Do6;
 	else if(alturaRead == "re6") alturaLocal = Re6;
+	else if(alturaRead == "xx0") alturaLocal = Silencio;
 
 	if(figura == "r"){
 	    figuraLocal = Redonda;
