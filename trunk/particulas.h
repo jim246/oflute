@@ -52,9 +52,9 @@ struct Particula{
 	posX(0),
 	posY(0){
 
-	color = Gosu::Color(Gosu::random(0.5, 1) * c.red(),
-			    Gosu::random(0.5, 1) * c.green(),
-			    Gosu::random(0.5, 1) * c.blue());
+	color = Gosu::Color(Gosu::random(0, 1) * c.red(),
+			    Gosu::random(0, 1) * c.green(),
+			    Gosu::random(0, 1) * c.blue());
     }
     void update(){
 	if(pasoActual != duracion) pasoActual ++;
