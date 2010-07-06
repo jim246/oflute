@@ -4,6 +4,8 @@
 #include "global.h"
 
 #include <string>
+#include <cmath>
+
 using std::string;
 
 EstadoCalibrarMicro::EstadoCalibrarMicro (Juego * p) : Estado(p){
@@ -47,9 +49,15 @@ void EstadoCalibrarMicro::update(){
 		suma += f;
 	    }
 	    mediaValores = suma / valoresLeidos.size();
+	    
 	    lDEBUG << "Media: " << mediaValores;
-	    archivoConf.setSonidoLimite(mediaValores);
-	    cartelCapturando -> setText("Calibración completa.\nPulse escape para volver al menú.");
+
+	    if(isnan(mediaValores)){
+		cartelCapturando -> setText("Calibración errónea.\nPulse espacio para repetir la calibración.");
+	    }else{
+		archivoConf.setSonidoLimite(mediaValores);
+		cartelCapturando -> setText("Calibración completa.\nPulse escape para volver al menú.");
+	    }
 	}
     }
 }
@@ -64,7 +72,7 @@ void EstadoCalibrarMicro::draw(){
 }
 
 void EstadoCalibrarMicro::buttonDown(Gosu::Button boton){
-    if(estadoCaptura == 0){
+    if(estadoCaptura != 1){
 	if(boton == Gosu::kbSpace){
 	    lDEBUG << "Se inicia la calibración...";
 

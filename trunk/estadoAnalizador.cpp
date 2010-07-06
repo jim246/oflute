@@ -20,26 +20,62 @@ typedef int MY_TYPE;
 
 
 EstadoAnalizador::EstadoAnalizador (Juego * p) : 
-    Estado(p),  firstFrame(true), running(false){
+    Estado(p),  running(false){
     cout << "+++ [Constructor] EstadoAnalizador" << endl;
 
-    cartelCargando.reset(new Gosu::Image(padre -> graphics(), L"media/imgCargando.png"));
 
+    // CONFIGURACIÓN DE LA IMAGEN DEL LOGOTIPO
+    imgLogotipo.reset(new ElementoImagen(padre -> graphics(),
+					"media/ofluteLogoGrande.png",
+					3, Animacion::tAlpha));
+
+    imgLogotipo -> setXY(55, 100);
+    imgLogotipo -> animacion = new Animacion(1, 50, Animacion::tEaseOutCubic);
+    imgLogotipo -> animacion -> set(0, 0, 255);
+
+
+
+    // CONFIGURACIÓN DE LA IMAGEN DE LA PARTITURA
+    imgPartitura.reset(new ElementoImagen(padre -> graphics(),
+					 "media/secAnalizador/trozoPartitura.png",
+					 3, Animacion::tPos));
+
+    imgPartitura -> animacion = new Animacion(2, 40, Animacion::tEaseOutCubic, 10);
+    imgPartitura -> animacion -> set(0, 800, 351);
+    imgPartitura -> animacion -> set(1, 116, 116);
+
+
+
+    // CONFIGURACIÓN DEL SUBTÍTULO
+    txtSubtitulo.reset(new ElementoTexto(padre -> graphics(),
+					 "Analizador de notas",
+					 "media/fNormal.ttf",
+					 34, Gosu::Color(0xffa4a4a4),
+					 Texto::alignCentro,
+					 true, 10, 3, 
+					 Animacion::tAlpha));
+
+    txtSubtitulo -> setXY(160, 425);
+    txtSubtitulo -> animacion = new Animacion(1, 40, Animacion::tEaseOutCubic, 10);
+    txtSubtitulo -> animacion -> set(0, 0, 255);
+
+
+    imgFigura.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/negraGrande.png"));
     cargarRecursos();
 }
 
 void EstadoAnalizador::cargarRecursos(){
-    partitura.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/baseAnalizador.png"));
-    imgDo5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/do5.png"));
-    imgRe5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/re5.png"));
-    imgMi5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/mi5.png"));
-    imgFa5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/fa5.png"));
-    imgSol5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/sol5.png"));
-    imgLa5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/la5.png"));
-    imgSi5.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/si5.png"));
-    imgDo6.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/do6.png"));
-    imgRe6.reset(new Gosu::Image(padre -> graphics(), L"media/analizadorAssets/re6.png"));
-
+    /*
+    imgDo5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/do5.png"));
+    imgRe5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/re5.png"));
+    imgMi5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/mi5.png"));
+    imgFa5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/fa5.png"));
+    imgSol5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/sol5.png"));
+    imgLa5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/la5.png"));
+    imgSi5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/si5.png"));
+    imgDo6.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/do6.png"));
+    imgRe6.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/re6.png"));
+    //*/
 }
 void EstadoAnalizador::lanzar(){
     cout << "* EstadoAnalizador lanzado" << endl;
@@ -49,57 +85,24 @@ void EstadoAnalizador::lanzar(){
 }
 
 void EstadoAnalizador::update(){
-    /*
-    if(!firstFrame && !running)
-	activar();
-    //*/
+
 }
 
 void EstadoAnalizador::draw(){
     if(!lanzado){
-
-	return;
-    }
-    if(firstFrame){
-	cartelCargando -> draw(ANCHO/2 - 200/2,
-			       ALTO/2 - 50/2, 1);
-	firstFrame = false;
 	return;
     }
 
-    boost::shared_ptr<Gosu::Image> p;
-    bool sil = false;
+    imgPartitura -> draw();
+    imgLogotipo -> draw();
+    txtSubtitulo -> draw();
 
-    
-    switch(analizador . notaActual()){
-    case Do5:
-	p = imgDo5; break;
-    case Re5:
-	p = imgRe5; break;
-    case Mi5:
-	p = imgMi5; break;
-    case Fa5:
-	p = imgFa5; break;
-    case Sol5:
-	p = imgSol5; break;
-    case La5:
-	p = imgLa5; break;
-    case Si5:
-	p = imgSi5; break;
-    case Do6:
-	p = imgDo6; break;
-    case Re6:
-	p = imgRe6; break;
-    case Silencio:
-	sil = true;
-	break;
+
+    float posY = 76 + 27 * (9 - analizador . notaActual());
+
+    if(analizador.notaActual() != Silencio){
+	imgFigura -> draw(637, posY, 4);
     }
-    partitura -> draw(0,0,2);
-    if(!sil)
-	p -> draw(584,138,3);
-    //*/
-
-
 }
 
 void EstadoAnalizador::buttonDown(Gosu::Button boton){
@@ -108,7 +111,7 @@ void EstadoAnalizador::buttonDown(Gosu::Button boton){
     if (boton == Gosu::kbEscape){
 	lDEBUG << "Deteniendo flujo...";
 //	controlSonido . detenerFlujo();
-//	analizador . detener();
+	analizador . detener();
 	padre -> cambiarEstado("estadoMenuSinFondo");
 
     }
