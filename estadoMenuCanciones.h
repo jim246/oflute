@@ -30,6 +30,7 @@
 
 #include "estado.h"
 
+#include "elementosInterfaz.h"
 
 class Juego;
 class Cancion;
@@ -47,6 +48,8 @@ class Cancion;
 
 class EstadoMenuCanciones : public Estado{
     Cancion * cancion;
+
+    boost::scoped_ptr<ElementoImagen> imgLogotipo;
 public:
     EstadoMenuCanciones(Juego * p);
 

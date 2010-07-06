@@ -28,13 +28,12 @@
 #include <Gosu/Gosu.hpp>
 #include "boost/scoped_ptr.hpp"
 
-#include "portaudio.h"
-
-
 #include "global.h"
 
 #include "controlSonido.h"
 #include "analizador.h"
+
+#include "elementosInterfaz.h"
 
 #include <string>
 #include <map>
@@ -43,13 +42,15 @@ class Juego;
 
 class EstadoAnalizador : public Estado{
     bool lanzado;
-    boost::scoped_ptr<Gosu::Image> partitura;
-    boost::shared_ptr<Gosu::Image> imgDo5, imgRe5, imgMi5, imgFa5, imgSol5, imgLa5, imgSi5, imgDo6, imgRe6;
-    boost::scoped_ptr<Gosu::Image> cartelCargando;
+    boost::scoped_ptr<ElementoImagen> imgLogotipo;
+    boost::scoped_ptr<ElementoImagen> imgPartitura;
+    boost::scoped_ptr<ElementoTexto> txtSubtitulo;
+
+    boost::scoped_ptr<Gosu::Image> imgFigura;
 
     Analizador analizador;
 
-    bool firstFrame, running;
+    bool running;
 
     void cargarRecursos();
 public:

@@ -17,9 +17,9 @@ void EstadoMenu::lanzar(){
     estadoAnim = eBOTONESIN;
  
     // Poblamos el puntero de las imágenes
-    logoCusl.reset(new Gosu::Image(padre -> graphics(), L"media/logo-cusl4.png"));
-    logotipo.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/logoMenu.png"));
-    barraRoja.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/barraInferior.png"));
+    logoCusl.reset(new Gosu::Image(padre -> graphics(), L"media/secMenu/logo-cusl4.png"));
+    logotipo.reset(new Gosu::Image(padre -> graphics(), L"media/secMenu/logoMenu.png"));
+    barraRoja.reset(new Gosu::Image(padre -> graphics(), L"media/secMenu/barraInferior.png"));
 
     int duracionSalidaBotones = 50;
     
@@ -48,7 +48,7 @@ void EstadoMenu::lanzar(){
     animLogotipo -> set(0, 0, 255);
 
     // Inicializamos los botones del menú
-    // btnUca.reset(new Gosu::Image(padre -> graphics(), L"media/menuAssets/btnUca.png"));//*/
+
     btn1.reset(new BotonMenu(padre -> graphics(), _("Analizador de notas"), Gosu::Color(255,3,69,90)));  // _("PRUEBA")
     btn2.reset(new BotonMenu(padre -> graphics(), _("Canciones"), Gosu::Color(255,34,139,114)));
 

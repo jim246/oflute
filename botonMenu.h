@@ -115,8 +115,8 @@ public:
 	margenSup = 51 / 6 - 2;
 
 	fuente.reset(new Gosu::Font(graphics, L"media/fNormal.ttf", tamanyo));
-	//if(sombra) fuenteSombra.reset(new customFont(graphics, L"media/fNormal.ttf", tamanyo));
-	imagen.reset(new Gosu::Image(graphics, L"media/btnTemplate.png", 0, 0, 800, altura));
+
+	imagen.reset(new Gosu::Image(graphics, L"media/secMenu/btnTemplate.png", 0, 0, 800, altura));
 
 	lDEBUG << Log::CON("BotonMenu");	    
     }

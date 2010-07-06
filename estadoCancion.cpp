@@ -28,24 +28,24 @@ void Cancion::lanzar(){
 
     esperaInicial = 3; // 3 tiempos
 
-    resalteNotaActual.reset( new Gosu::Image(g, L"media/cancionesIndicadorNota.png"));
+    resalteNotaActual.reset( new Gosu::Image(g, L"media/secCanciones/cancionesIndicadorNota.png"));
 
-    barraProgresoFondo.reset( new ElementoImagen(g, "media/cancionesBarraProgreso.png",
+    barraProgresoFondo.reset( new ElementoImagen(g, "media/secCanciones/cancionesBarraProgreso.png",
 						 3, Animacion::tAlpha));
     barraProgresoFondo -> animacion = new Animacion(1, 20, Animacion::tEaseOutQuad, 30);
     barraProgresoFondo -> animacion -> set(0,0,255);
     barraProgresoFondo -> setXY(180, 560);
 
-    barraProgreso.reset(new Gosu::Image(g, L"media/cancionesBarraRelleno.png"));
+    barraProgreso.reset(new Gosu::Image(g, L"media/secCanciones/cancionesBarraRelleno.png"));
 
-    imagenPartitura.reset( new ElementoImagen(g, "media/partitura.png", 3, Animacion::tAlpha));
+    imagenPartitura.reset( new ElementoImagen(g, "media/secCanciones/partitura.png", 3, Animacion::tAlpha));
     imagenPartitura -> animacion = new Animacion(1, 20, Animacion::tEaseOutQuad, 20);
     imagenPartitura -> animacion -> set (0, 0, 255);
     imagenPartitura -> setXY(0, 200);
 
 
     barraSuperior.reset(new ElementoCombinado(g, Animacion::tPos, 3));
-    barraSuperior -> setImagen("media/cancionesTopBar.png");
+    barraSuperior -> setImagen("media/secCanciones/cancionesTopBar.png");
     barraSuperior -> setTexto("00000", "media/fNormal.ttf",
 			      49, 0xffffffff,
 			      Texto::alignCentro,
@@ -58,7 +58,7 @@ void Cancion::lanzar(){
 
 
     barraInferior.reset(new ElementoCombinado(g, Animacion::tPos, 3));
-    barraInferior -> setImagen("media/cancionesBottomBar.png");
+    barraInferior -> setImagen("media/secCanciones/cancionesBottomBar.png");
     barraInferior -> setTexto("Progreso total:", "media/fNormal.ttf",
 			      32, 0xffffffff,
 			      Texto::alignIzq,
