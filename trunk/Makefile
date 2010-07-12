@@ -42,7 +42,7 @@ regosu:
 	make -C gosu/linux
 
 FFT.o: FFT.h
-juego.o: juego.h
+juego.o: juego.h estadoAnalizador.h estadoCalibrarMicro.h estadoLecciones.h estadoMenuCanciones.h estadoMenu.h estado.h
 main.o: estado.h juego.h global.h
 estado.o: estado.h
 log.o: log.h

@@ -41,6 +41,20 @@
 class Juego;
 
 class EstadoAnalizador : public Estado{
+public:
+
+    EstadoAnalizador(Juego * p);
+    void lanzar ();
+    void update();
+    void draw();
+    void buttonDown(Gosu::Button boton);
+    ~EstadoAnalizador();
+
+private:
+
+    enum tTrans{ transIn, transHold, transOut };
+    tTrans estadoTransicion;
+
     bool lanzado;
     boost::scoped_ptr<ElementoImagen> imgLogotipo;
     boost::scoped_ptr<ElementoImagen> imgPartitura;
@@ -51,16 +65,6 @@ class EstadoAnalizador : public Estado{
     Analizador analizador;
 
     bool running;
-
-    void cargarRecursos();
-public:
-
-    EstadoAnalizador(Juego * p);
-    void lanzar ();
-    void update();
-    void draw();
-    void buttonDown(Gosu::Button boton);
-    ~EstadoAnalizador();
 };
 
 #endif

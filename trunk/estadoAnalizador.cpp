@@ -23,6 +23,7 @@ EstadoAnalizador::EstadoAnalizador (Juego * p) :
     Estado(p),  running(false){
     cout << "+++ [Constructor] EstadoAnalizador" << endl;
 
+    estadoTransicion = transIn;
 
     // CONFIGURACIÓN DE LA IMAGEN DEL LOGOTIPO
     imgLogotipo.reset(new ElementoImagen(padre -> graphics(),
@@ -61,22 +62,8 @@ EstadoAnalizador::EstadoAnalizador (Juego * p) :
 
 
     imgFigura.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/negraGrande.png"));
-    cargarRecursos();
 }
 
-void EstadoAnalizador::cargarRecursos(){
-    /*
-    imgDo5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/do5.png"));
-    imgRe5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/re5.png"));
-    imgMi5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/mi5.png"));
-    imgFa5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/fa5.png"));
-    imgSol5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/sol5.png"));
-    imgLa5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/la5.png"));
-    imgSi5.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/si5.png"));
-    imgDo6.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/do6.png"));
-    imgRe6.reset(new Gosu::Image(padre -> graphics(), L"media/secAnalizador/re6.png"));
-    //*/
-}
 void EstadoAnalizador::lanzar(){
     cout << "* EstadoAnalizador lanzado" << endl;
     lanzado = true;
@@ -85,7 +72,13 @@ void EstadoAnalizador::lanzar(){
 }
 
 void EstadoAnalizador::update(){
+    if(estadoTransicion == transIn && imgPartitura -> animacion -> finished()){
+	estadoTransicion = transHold;
+    }
 
+    else if(estadoTransicion == transOut && imgPartitura -> animacion -> finished()){
+	padre -> cambiarEstado("estadoMenuSinFondo");
+    }
 }
 
 void EstadoAnalizador::draw(){
@@ -109,11 +102,22 @@ void EstadoAnalizador::buttonDown(Gosu::Button boton){
     if(!lanzado) 
 	return;
     if (boton == Gosu::kbEscape){
-	lDEBUG << "Deteniendo flujo...";
-//	controlSonido . detenerFlujo();
-	analizador . detener();
-	padre -> cambiarEstado("estadoMenuSinFondo");
+	if(estadoTransicion == transHold){
+	    lDEBUG << "Deteniendo flujo...";
 
+	    analizador . detener();
+	    
+	    imgLogotipo -> animacion -> reverse();
+	    imgLogotipo -> animacion -> init();
+
+	    imgPartitura -> animacion -> reverse();
+	    imgPartitura -> animacion -> init();
+
+	    txtSubtitulo -> animacion -> reverse();
+	    txtSubtitulo -> animacion -> init();
+
+	    estadoTransicion = transOut;
+	}
     }
 }
 
