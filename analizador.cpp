@@ -22,6 +22,8 @@ using namespace std;
 Analizador::Analizador(){
     lDEBUG << Log::CON("Analizador");
 
+    detenido = true;
+
     notas[523.25] = Do5;
     notas[592.163] = Re5;
     notas[656.763] = Mi5;
@@ -52,16 +54,21 @@ t_altura Analizador::asociarNota(double frecuencia){
 
 void Analizador::iniciar(){
     lDEBUG << "Analizador::iniciar...";
+    detenido = false;
+
     proxy . lanzar();
     hilo.reset(new boost::thread(boost::ref(proxy)));
     lDEBUG << "Hilo lanzado!";
 }
 
 void Analizador::detener(){
-    lDEBUG << "Analizador::detener...";
-    proxy . detener();
-    hilo -> join();
-    proxy . cerrarFlujo();
+    if(!detenido){
+	detenido = true;
+	lDEBUG << "Analizador::detener...";
+	proxy . detener();
+	hilo -> join();
+	proxy . cerrarFlujo();
+    }
 }
 
 t_altura Analizador::notaActual(){

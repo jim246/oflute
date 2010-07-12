@@ -47,6 +47,8 @@ class Analizador{
 
     t_altura asociarNota (double frecuencia);
     std::map<double, t_altura> notas;
+
+    bool detenido;
 public:
     Analizador();
     void iniciar();

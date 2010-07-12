@@ -102,7 +102,7 @@ void AnalizadorProxy::operator()(){
     atr.fragsize = 1;
     atr.tlength = 1;
 
-    if (!(sIn = pa_simple_new(NULL, "nozin", PA_STREAM_RECORD, NULL, 
+    if (!(sIn = pa_simple_new(NULL, "oFlute", PA_STREAM_RECORD, NULL, 
 			      "record", &ss, NULL, &atr, &error))) {
 	cerr << "ERROR" << endl;
     }
@@ -172,13 +172,14 @@ void AnalizadorProxy::operator()(){
 	    miBuffer -> mayores[2] = maxPos[2]  * int_to_hz;
 
 	    int ancho = 18;
+	    /*
 	    std::cout << '\xd' << "Datos:" 
 		      << std::setw(ancho) << miBuffer -> mayores[0] 
 		      << std::setw(ancho) << miBuffer -> mayores[1]  
 		      << std::setw(ancho) << miBuffer -> mayores[2]  
 		      << std::setw(ancho) << maxValue[0]
 		      << std::flush;        
-
+	    //*/
 	    
 #endif
 	    /*
