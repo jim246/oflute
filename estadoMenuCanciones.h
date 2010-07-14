@@ -47,9 +47,6 @@ class Cancion;
 
 
 class EstadoMenuCanciones : public Estado{
-    Cancion * cancion;
-
-    boost::scoped_ptr<ElementoImagen> imgLogotipo;
 public:
     EstadoMenuCanciones(Juego * p);
 
@@ -58,6 +55,15 @@ public:
     void buttonDown(Gosu::Button boton);
 
     ~EstadoMenuCanciones();
+
+private:
+    enum tTrans{ transIn, transHold, mostrandoCancion, transOut };
+    tTrans estadoTransicion;
+
+    boost::scoped_ptr<Cancion> cancion;
+
+    boost::scoped_ptr<ElementoImagen> imgLogotipo;
+    boost::scoped_ptr<ElementoTexto> txtSubtitulo;
 };
 
 #endif /* _ESTADOMENUCANCIONES_H_ */
