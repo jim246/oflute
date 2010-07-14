@@ -27,8 +27,7 @@
 #include "global.h"
 #include "juego.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
     inicializarTrad();
 
     Juego juego;
