@@ -77,7 +77,7 @@ $(OBJDIR)/analizador.o: $(INCDIR)/analizador.h $(INCDIR)/configuracion.h $(INCDI
 	$(CC) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJECTS) $(EXE)
+	rm -rf $(OBJS) $(EXE)
 	make -C pugixml clean
 	make -C kissfft clean
 

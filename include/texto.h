@@ -4,8 +4,6 @@
  * @author José Tomás Tocino García
  * @date 2010
  *
- * 
- * 
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
@@ -35,7 +33,6 @@
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "customFont.h"
 #include "log.h"
 
 using namespace std;
@@ -44,8 +41,6 @@ using namespace std;
  * @class Texto
  *
  * @brief Pinta un cuadro de texto
- *
- * 
  *
  * @author José Tomás Tocino García <theom3ga@gmail.com> 
  *
@@ -101,7 +96,7 @@ class Texto{
     string rutaFuente;
     
     /** @brief Divide el texto según los saltos de línea, metiendo cada línea en el vector lineas.
-     *  función adaptada de http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
+     *  Función adaptada de http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
      */
     int dividirTexto();
     
