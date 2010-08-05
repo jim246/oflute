@@ -1,10 +1,34 @@
-#include "analizadorProxy.h"
-
-#include "kissfft/tools/kiss_fftr.h"
+/**
+ * @file analizadorProxy.cpp
+ * 
+ * @author José Tomás Tocino García
+ * @date 2010
+ *
+ * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #include <iomanip>
 #include <fstream>
 #include <cmath>
+
+#include "analizadorProxy.h"
+
+#include "kissfft/tools/kiss_fftr.h"
 
 #define BUFSIZE 4096
 
@@ -22,7 +46,7 @@ AnalizadorProxy::AnalizadorProxy() : iniciado(false), salir(false){
     //Para pasar de pos de vector a frecuencia, multiplicamos por 22050/2048
     int_to_hz = 22050./(BUFSIZE / 2.); // ~ 10.76660156250000000000000
 
-    // PAra pasar de frecuencia a posición de vector, multiplicamos por 2048/22050
+    // Para pasar de frecuencia a posición de vector, multiplicamos por 2048/22050
     hz_to_int = (BUFSIZE / 2.)/22050.; // ~ 0.928798185941043083900226
 
     lDEBUG << VARV(int_to_hz) << "  " << VARV(hz_to_int);
@@ -30,7 +54,6 @@ AnalizadorProxy::AnalizadorProxy() : iniciado(false), salir(false){
 
 AnalizadorProxy::AnalizadorProxy(const AnalizadorProxy& copia){
     lDEBUG << Log::CON("AnalizadorProxy Constructor de copia");
-    //notas = copia.notas;
     int_to_hz = copia.int_to_hz;
     hz_to_int = copia.hz_to_int;
     iniciado = copia.iniciado;
@@ -38,12 +61,7 @@ AnalizadorProxy::AnalizadorProxy(const AnalizadorProxy& copia){
     miBuffer = new tipoBuffer;    
 }
 
-
-
 float AnalizadorProxy::notaActual(){
-    if(miBuffer -> silencio)
-	return 0;
-
     return miBuffer -> mayores[0];
 }
 
@@ -61,10 +79,6 @@ void AnalizadorProxy::detener(){
 
     lDEBUG << VARV(iniciado);
     lDEBUG << VARV(salir);
-}
-
-void AnalizadorProxy::cerrarFlujo(){
-
 }
 
 AnalizadorProxy::~AnalizadorProxy(){
@@ -171,8 +185,8 @@ void AnalizadorProxy::operator()(){
 	    miBuffer -> mayores[1] = maxPos[1]  * int_to_hz;
 	    miBuffer -> mayores[2] = maxPos[2]  * int_to_hz;
 
-	    int ancho = 18;
 	    /*
+	    int ancho = 18;
 	    std::cout << '\xd' << "Datos:" 
 		      << std::setw(ancho) << miBuffer -> mayores[0] 
 		      << std::setw(ancho) << miBuffer -> mayores[1]  
@@ -196,11 +210,7 @@ void AnalizadorProxy::operator()(){
 
 
 	if(!iniciado && salir){
-
 	    return;
-	    
-	    // cout << "Cerrando archivo..." << endl;
-	    // F.close();
 	}
     }
 

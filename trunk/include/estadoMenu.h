@@ -30,7 +30,6 @@
 #define _ESTADOMENU_H_
 
 #include "estado.h"
-#include "customFont.h"
 
 #include "botonMenu.h"
 
