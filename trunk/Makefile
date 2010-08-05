@@ -1,5 +1,10 @@
-CC=g++
-CXXFLAGS += -I. -Igosu `gosu/bin/gosu-config --cxxflags`
+OBJDIR := obj
+SRCDIR := src
+INCDIR := include
+
+CC       := g++
+CXXFLAGS += -I. -I$(INCDIR)
+CXXFLAGS += -Igosu `gosu/bin/gosu-config --cxxflags`
 CXXFLAGS += -Ipugixml -Ikissfft
 CXXFLAGS += -g -Wall
 CXXFLAGS += `pkg-config --cflags libpulse-simple`
@@ -15,25 +20,27 @@ LDLIBS += -lboost_thread
 LDLIBS += pugixml/pugixml.a
 LDLIBS += kissfft/kissfft.a
 
-OBJECTS += main.o juego.o estado.o estadoImagenFija.o
-OBJECTS += estadoMenu.o FFT.o
-OBJECTS += estadoAnalizador.o animacion.o ecuaciones.o
-OBJECTS += estadoLecciones.o log.o
-OBJECTS += texto.o elementosInterfaz.o
-OBJECTS += elementosInterfaz_imagen.o elementosInterfaz_texto.o elementosInterfaz_combinado.o
-OBJECTS += estadoCancion.o estadoMenuCanciones.o nota.o
-OBJECTS += estadoCalibrarMicro.o 
-OBJECTS += analizadorProxy.o analizador.o
-OBJECTS += global.o
+OUTPUT += oflute
 
-EXE=oflute
+SRCS := $(notdir $(shell ls -t $(SRCDIR)/*.cpp))
 
-all: $(EXE)
+OBJS := $(addprefix $(OBJDIR)/, $(addsuffix .o,$(basename $(SRCS))))
 
-$(EXE): $(OBJECTS)
-	make -C pugixml
-	make -C kissfft
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $(EXE) $(LDLIBS)
+all: $(OUTPUT)
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	@echo "Compiling..." $(notdir $<)
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(OUTPUT): $(OBJS)	
+	echo $(OBJS)
+	@echo "Compiling pugixml..."
+	@make -C pugixml
+	@echo "Compiling kissfft..."
+	@make -C kissfft
+	@echo "Linking binary..."
+	@$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS) 
+	@echo "Done."
 
 libgosu:
 	cd gosu/linux ; make clean ; ./configure && make
@@ -41,30 +48,30 @@ libgosu:
 regosu:
 	make -C gosu/linux
 
-FFT.o: FFT.h
-juego.o: juego.h estadoAnalizador.h estadoCalibrarMicro.h estadoLecciones.h estadoMenuCanciones.h estadoMenu.h estado.h
-main.o: estado.h juego.h global.h
-estado.o: estado.h
-log.o: log.h
-estadoImagenFija.o: estadoImagenFija.h estado.h juego.h
-estadoMenu.o: estado.h estadoMenu.h juego.h customFont.h animacion.h botonMenu.h
-estadoAnalizador.o: estado.h estadoAnalizador.h juego.h analizador.h controlSonido.h analizadorProxy.h
-texto.o: texto.h
-controlSonido.o: controlSonido.h
-animacion.o:animacion.h
-ecuaciones.o:animacion.h
-estadoLecciones.o: estadoLecciones.h elementosInterfaz.h leccion.h
-elementosInterfaz.o: elementosInterfaz.h texto.h
-elementosInterfaz_imagen.o: elementosInterfaz.h
-elementosInterfaz_texto.o: elementosInterfaz.h texto.h
-elementosInterfaz_combinado.o: elementosInterfaz.h texto.h
-estadoMenuCanciones.o: estadoMenuCanciones.h estado.h juego.h estadoCancion.h
-estadoCancion.o: estadoCancion.h estado.h juego.h nota.h claseTimer.h particulas.h analizador.h analizadorProxy.h
-global.o: global.h
-estadoCalibrarMicro.o: estadoCalibrarMicro.h estado.h elementosInterfaz.h log.h juego.h configuracion.h
-nota.o:nota.h global.h
-analizadorProxy.o: analizadorProxy.h
-analizador.o: analizador.h configuracion.h analizadorProxy.h log.h
+$(OBJDIR)/FFT.o: $(INCDIR)/FFT.h
+$(OBJDIR)/juego.o: $(INCDIR)/juego.h $(INCDIR)/estadoAnalizador.h $(INCDIR)/estadoCalibrarMicro.h $(INCDIR)/estadoLecciones.h $(INCDIR)/estadoMenuCanciones.h $(INCDIR)/estadoMenu.h $(INCDIR)/estado.h
+$(OBJDIR)/main.o: $(INCDIR)/estado.h $(INCDIR)/juego.h $(INCDIR)/global.h
+$(OBJDIR)/estado.o: $(INCDIR)/estado.h
+$(OBJDIR)/log.o: $(INCDIR)/log.h
+$(OBJDIR)/estadoImagenFija.o: $(INCDIR)/estadoImagenFija.h $(INCDIR)/estado.h $(INCDIR)/juego.h
+$(OBJDIR)/estadoMenu.o: $(INCDIR)/estado.h $(INCDIR)/estadoMenu.h $(INCDIR)/juego.h $(INCDIR)/customFont.h $(INCDIR)/animacion.h $(INCDIR)/botonMenu.h
+$(OBJDIR)/estadoAnalizador.o: $(INCDIR)/estado.h $(INCDIR)/estadoAnalizador.h $(INCDIR)/juego.h $(INCDIR)/analizador.h $(INCDIR)/controlSonido.h $(INCDIR)/analizadorProxy.h
+$(OBJDIR)/texto.o: $(INCDIR)/texto.h
+$(OBJDIR)/controlSonido.o: $(INCDIR)/controlSonido.h
+$(OBJDIR)/animacion.o:$(INCDIR)/animacion.h
+$(OBJDIR)/ecuaciones.o:$(INCDIR)/animacion.h
+$(OBJDIR)/estadoLecciones.o: $(INCDIR)/estadoLecciones.h $(INCDIR)/elementosInterfaz.h $(INCDIR)/leccion.h
+$(OBJDIR)/elementosInterfaz.o: $(INCDIR)/elementosInterfaz.h $(INCDIR)/texto.h
+$(OBJDIR)/elementosInterfaz_imagen.o: $(INCDIR)/elementosInterfaz.h
+$(OBJDIR)/elementosInterfaz_texto.o: $(INCDIR)/elementosInterfaz.h $(INCDIR)/texto.h
+$(OBJDIR)/elementosInterfaz_combinado.o: $(INCDIR)/elementosInterfaz.h $(INCDIR)/texto.h
+$(OBJDIR)/estadoMenuCanciones.o: $(INCDIR)/estadoMenuCanciones.h $(INCDIR)/estado.h $(INCDIR)/juego.h $(INCDIR)/estadoCancion.h
+$(OBJDIR)/estadoCancion.o: $(INCDIR)/estadoCancion.h $(INCDIR)/estado.h $(INCDIR)/juego.h $(INCDIR)/nota.h $(INCDIR)/claseTimer.h $(INCDIR)/particulas.h $(INCDIR)/analizador.h $(INCDIR)/analizadorProxy.h
+$(OBJDIR)/global.o: $(INCDIR)/global.h
+$(OBJDIR)/estadoCalibrarMicro.o: $(INCDIR)/estadoCalibrarMicro.h $(INCDIR)/estado.h $(INCDIR)/elementosInterfaz.h $(INCDIR)/log.h $(INCDIR)/juego.h $(INCDIR)/configuracion.h
+$(OBJDIR)/nota.o:$(INCDIR)/nota.h $(INCDIR)/global.h
+$(OBJDIR)/analizadorProxy.o: $(INCDIR)/analizadorProxy.h
+$(OBJDIR)/analizador.o: $(INCDIR)/analizador.h $(INCDIR)/configuracion.h $(INCDIR)/analizadorProxy.h $(INCDIR)/log.h
 
 .cpp.o:
 	$(CC) $(CXXFLAGS) -c $< -o $@
