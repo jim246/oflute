@@ -4,8 +4,6 @@
  * @author José Tomás Tocino García
  * @date 2010
  *
- * Archivo para la clase Timer
- * 
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
@@ -30,6 +28,11 @@
 
 #include <Gosu/Gosu.hpp>
 
+#include <vector>
+#include <numeric>
+
+using std::vector;
+
 /**
  * @class myTimer
  *
@@ -40,6 +43,12 @@
  * \code
  * myTimer T;
  * cout << "Tiempo transcurrido: " << T.elapsed() << "ms" << endl;
+ * // Es posible pausar y reanudar el temporizador
+ * T.pause();
+ * // ...
+ * T.resume();
+ * // ...
+ * // Lógicamente también podemos reiniciarlo
  * T.restart();
  * \endcode
  *
@@ -48,24 +57,57 @@
  */
 
 class myTimer{
-    /// Guarda el momento en el que se inicia el temporizador.
-    unsigned long inicial;
+
 public:
     /// Crea un nuevo temporizador.
     myTimer(){
 	restart();
     }
 
+    /// Pausa el temporizador, guardando el tiempo acumulado.
+    void pause(){
+	if(corriendo){
+	    corriendo = false;
+	    tiempoAcumulado += lecturaParcial();
+	}
+    }
+
+    /// Reanuda el temporizador, partiendo de la posición por donde lo había dejado.
+    void resume(){	
+	corriendo = true;
+	ultimoTiempoLeido = Gosu::milliseconds();
+    }
+
     /// Reinicia el temporizador.
     void restart(){
-	inicial = Gosu::milliseconds();
+	corriendo = true;
+	ultimoTiempoLeido = Gosu::milliseconds();
+	tiempoAcumulado = 0;
     }
 
     /// Devuelve el tiempo transcurrido desde el último reinicio del temporizador.
     unsigned long elapsed(){
-	return Gosu::milliseconds() - inicial;
+	if(corriendo){
+	    return lecturaParcial() + tiempoAcumulado;
+	}else{
+	    return tiempoAcumulado;
+	}
     }
-    
+  
+private:
+    /// Devuelve el tiempo desde la última parada
+    unsigned long lecturaParcial(){
+	return Gosu::milliseconds() - ultimoTiempoLeido;
+    }
+
+    /// Guarda el momento en el que se inicia el temporizador.
+    unsigned long ultimoTiempoLeido;  
+
+    /// Guarda el tiempo acumulado entre paradas
+    unsigned long tiempoAcumulado;
+
+    /// Indica si el temporizador está corriendo o no
+    bool corriendo;
 };
 
 #endif /* _CLASETIMER_H_ */

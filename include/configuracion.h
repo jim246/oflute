@@ -4,8 +4,6 @@
  * @author José Tomás Tocino García
  * @date 2010
  *
- * 
- * 
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
@@ -34,13 +32,16 @@
 #include "log.h"
 
 #include <iostream>
+
 using namespace std;
+
 /**
  * @class lectorConfiguracion
  *
  * @brief Lee la configuración de un archivo ini estándar.
  *
- * Aún por desarrollar
+ * Por ahora el único atributo implementado es la lectura del volumen
+ * mínimo para la captura de sonidos del micrófono.
  *
  * @author José Tomás Tocino García <theom3ga@gmail.com> 
  *
@@ -48,10 +49,16 @@ using namespace std;
 
 
 class lectorConfiguracion{
+    /// Volumen mínimo del micrófono
     float limiteSonido;
+
+    /// Árbol de atributos
     boost::property_tree::ptree arbol;
 
 public:
+    /// Abre y lee el fichero de configuración <em>config.ini</em> y
+    /// carga el valor <em>sonido.limite</em>.
+
     lectorConfiguracion(){
 	try{
 	    read_ini("config.ini", arbol);
@@ -65,10 +72,14 @@ public:
 	lDEBUG << "Configuración leída. Sonido.límite: " << limiteSonido; 
     }
 
+    /// Devuelve el valor leído
     float sonidoLimite(){
 	return limiteSonido;
     }
 
+    /// Asigna el valor recibido como parámetro al elemento
+    /// <i>sonido.limite</i> y escribe el fichero con el nuevo
+    /// contenido.
     void setSonidoLimite(float s){
 	s *= 10;
 	limiteSonido = s;

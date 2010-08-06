@@ -3,8 +3,6 @@
  * 
  * @author José Tomás Tocino García
  * @date 2010
- *
- * 
  * 
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
  * 
@@ -31,40 +29,84 @@
 #include "elementosInterfaz.h"
 #include "claseTimer.h"
 
-#include <vector>
-
-#include "controlSonido.h"
 #include "analizador.h"
 #include "configuracion.h"
+
+#include <vector>
 
 using namespace std;
 
 class Juego;
 
+/**
+ * @class EstadoCalibrarMicro
+ *
+ * @brief Estado para calibrar el micrófono.
+ *
+ * Es una de las opciones del menú principal, y sirve para calcular
+ * cuál es el umbral del micrófono cuando no hay sonido siendo
+ * capturado, para poder tener una referencia.
+ *
+ * Al iniciar la captura, se le pide al usuario que guarde silencio y
+ * se capturan sonidos a intervalos regulares, guardando el volumen en
+ * cada momento. Al finalizar la captura, se hace la media de esos valores.
+ *
+ * @author José Tomás Tocino García <theom3ga@gmail.com> 
+ *
+ */
+
+
 class EstadoCalibrarMicro : public Estado{
+public:
+    /// Crea un nuevo estado, cargando las imágenes 
+    EstadoCalibrarMicro(Juego * p);
+
+    /// Durante la captura, guarda los valores leídos para luego hacer
+    /// el cálculo del valor medio.
+    void update();
+
+    /// Dibuja los elementos y textos en pantalla.
+    void draw();
+
+    /// Detecta pulsaciones de botones.
+    void buttonDown (Gosu::Button boton);
+
+    /// Destruye el estado
+    ~EstadoCalibrarMicro();
+
+private:
+    /// Se utiliza para escribir en el fichero de configuración el
+    /// valor calculado
     lectorConfiguracion archivoConf;
 
+    /// Lleva a cabo el análisis y control de sonido.
     Analizador analizador;
 
+    /// Se utiliza para calcular el tiempo que está capturando sonidos
+    /// para hacer la media.
     myTimer crono;
+
+    //@{ 
+    /// @name Elementos gráficos
 
     boost::scoped_ptr<ElementoImagen> imgMicro;
     boost::scoped_ptr<ElementoTexto> textoDesc;
     boost::scoped_ptr<ElementoTexto> cartelCapturando;
 
+    //@}
+
+    /// Vector de valores leídos para hacer la media.
     vector<float> valoresLeidos;
+
+    /// Media calculada
     float mediaValores;
+
+    /// Estado de la captura.
+    /// 0 = La captura no se ha iniciado.
+    /// 1 = Captura iniciada
+    /// 2 = Captura terminada
+
     int estadoCaptura;
-
-public:
-    EstadoCalibrarMicro(Juego * p);
-    void update();
-    void draw();
-    void buttonDown (Gosu::Button boton);
-
-    ~EstadoCalibrarMicro();
-
-
 };
 
 #endif /* _ESTADOCALIBRARMICRO_H_ */
