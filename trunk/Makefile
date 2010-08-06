@@ -1,6 +1,7 @@
 OBJDIR := obj
 SRCDIR := src
 INCDIR := include
+DEPFILE := obj/dependencias.d
 
 CC       := g++
 CXXFLAGS += -I. -I$(INCDIR)
@@ -26,14 +27,13 @@ SRCS := $(notdir $(shell ls -t $(SRCDIR)/*.cpp))
 
 OBJS := $(addprefix $(OBJDIR)/, $(addsuffix .o,$(basename $(SRCS))))
 
-all: $(OUTPUT)
+all: $(DEPFILE) $(OUTPUT)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "Compiling..." $(notdir $<)
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OUTPUT): $(OBJS)	
-	echo $(OBJS)
 	@echo "Compiling pugixml..."
 	@make -C pugixml
 	@echo "Compiling kissfft..."
@@ -48,36 +48,18 @@ libgosu:
 regosu:
 	make -C gosu/linux
 
-$(OBJDIR)/FFT.o: $(INCDIR)/FFT.h
-$(OBJDIR)/juego.o: $(INCDIR)/juego.h $(INCDIR)/estadoAnalizador.h $(INCDIR)/estadoCalibrarMicro.h $(INCDIR)/estadoLecciones.h $(INCDIR)/estadoMenuCanciones.h $(INCDIR)/estadoMenu.h $(INCDIR)/estado.h
-$(OBJDIR)/main.o: $(INCDIR)/estado.h $(INCDIR)/juego.h $(INCDIR)/global.h
-$(OBJDIR)/estado.o: $(INCDIR)/estado.h
-$(OBJDIR)/log.o: $(INCDIR)/log.h
-$(OBJDIR)/estadoImagenFija.o: $(INCDIR)/estadoImagenFija.h $(INCDIR)/estado.h $(INCDIR)/juego.h
-$(OBJDIR)/estadoMenu.o: $(INCDIR)/estado.h $(INCDIR)/estadoMenu.h $(INCDIR)/juego.h $(INCDIR)/customFont.h $(INCDIR)/animacion.h $(INCDIR)/botonMenu.h
-$(OBJDIR)/estadoAnalizador.o: $(INCDIR)/estado.h $(INCDIR)/estadoAnalizador.h $(INCDIR)/juego.h $(INCDIR)/analizador.h $(INCDIR)/controlSonido.h $(INCDIR)/analizadorProxy.h
-$(OBJDIR)/texto.o: $(INCDIR)/texto.h
-$(OBJDIR)/controlSonido.o: $(INCDIR)/controlSonido.h
-$(OBJDIR)/animacion.o:$(INCDIR)/animacion.h
-$(OBJDIR)/ecuaciones.o:$(INCDIR)/animacion.h
-$(OBJDIR)/estadoLecciones.o: $(INCDIR)/estadoLecciones.h $(INCDIR)/elementosInterfaz.h $(INCDIR)/leccion.h
-$(OBJDIR)/elementosInterfaz.o: $(INCDIR)/elementosInterfaz.h $(INCDIR)/texto.h
-$(OBJDIR)/elementosInterfaz_imagen.o: $(INCDIR)/elementosInterfaz.h
-$(OBJDIR)/elementosInterfaz_texto.o: $(INCDIR)/elementosInterfaz.h $(INCDIR)/texto.h
-$(OBJDIR)/elementosInterfaz_combinado.o: $(INCDIR)/elementosInterfaz.h $(INCDIR)/texto.h
-$(OBJDIR)/estadoMenuCanciones.o: $(INCDIR)/estadoMenuCanciones.h $(INCDIR)/estado.h $(INCDIR)/juego.h $(INCDIR)/estadoCancion.h
-$(OBJDIR)/estadoCancion.o: $(INCDIR)/estadoCancion.h $(INCDIR)/estado.h $(INCDIR)/juego.h $(INCDIR)/nota.h $(INCDIR)/claseTimer.h $(INCDIR)/particulas.h $(INCDIR)/analizador.h $(INCDIR)/analizadorProxy.h
-$(OBJDIR)/global.o: $(INCDIR)/global.h
-$(OBJDIR)/estadoCalibrarMicro.o: $(INCDIR)/estadoCalibrarMicro.h $(INCDIR)/estado.h $(INCDIR)/elementosInterfaz.h $(INCDIR)/log.h $(INCDIR)/juego.h $(INCDIR)/configuracion.h
-$(OBJDIR)/nota.o:$(INCDIR)/nota.h $(INCDIR)/global.h
-$(OBJDIR)/analizadorProxy.o: $(INCDIR)/analizadorProxy.h
-$(OBJDIR)/analizador.o: $(INCDIR)/analizador.h $(INCDIR)/configuracion.h $(INCDIR)/analizadorProxy.h $(INCDIR)/log.h
 
-.cpp.o:
-	$(CC) $(CXXFLAGS) -c $< -o $@
+depend: $(DEPFILE)
+
+$(DEPFILE): $(shell ls -t $(SRCDIR)/*.cpp) $(shell ls -t $(INCDIR)/*.h)
+	gcc -MM $(CXXFLAGS) $(shell ls -t $(SRCDIR)/*.cpp) | sed 's/^\([a-zA-Z]\+.o\)/$(OBJDIR)\/\1/g' > $(DEPFILE)
+
+
+-include $(DEPFILE)
 
 clean:
-	rm -rf $(OBJS) $(EXE)
+	rm -rf $(OBJS) $(EXE) $(DEPFILE)
 	make -C pugixml clean
 	make -C kissfft clean
+
 

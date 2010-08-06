@@ -30,7 +30,6 @@
 
 #include "global.h"
 
-#include "controlSonido.h"
 #include "analizador.h"
 
 #include "elementosInterfaz.h"

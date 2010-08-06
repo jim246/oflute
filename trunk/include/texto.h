@@ -49,59 +49,6 @@ using namespace std;
 
 class Texto{
 
-
-    /// Objeto que será el destino gráfico.
-    Gosu::Graphics& graphics;
-
-    /// Fuente del texto
-    boost::scoped_ptr<Gosu::Font> fuente;
-
-    /// Texto a escribir.
-    string texto;
-
-    /// Texto dividido en líneas.
-    vector<string> lineas;
-
-    /// Tamaño del texto.
-    unsigned tam;
-
-    /// Color del texto.
-    Gosu::Color color;
-
-    /// Alineación, 1 = izquierda, 2 = centrado, 3 = derecha.
-    unsigned alineacion;
-
-    /// Existencia de la sombra
-    bool sombra;
-
-    /// Opacidad de la sombra
-    unsigned opacidadSombra;
-
-    //@{
-    /** Posición del texto.
-	Para el texto justificado a la izquierda, es la esquina sup izq.
-	Para el texto justif. a la derecha, es la esquina sup der.
-	Para el texto centrado, es la posición central superior
-    **/
-    unsigned x, y;
-    //@}
-    
-    /// Profundidad
-    double z;
-
-    ///Desplazamiento de la sombra respecto al texto
-    int offsetShadow[2];
-
-    /// Ruta de la fuente
-    string rutaFuente;
-    
-    /** @brief Divide el texto según los saltos de línea, metiendo cada línea en el vector lineas.
-     *  Función adaptada de http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
-     */
-    int dividirTexto();
-    
-    void poblarVectores();
-
 public:
     enum tAlign{ alignIzq = 1, alignCentro, alignDer };
 
@@ -163,6 +110,64 @@ public:
     void draw(int x_, int y_, int z_, int a_ = 255);
 
     unsigned getAlineacion() { return alineacion; }
+
+private:
+
+
+    /// Objeto que será el destino gráfico.
+    Gosu::Graphics& graphics;
+
+    /// Fuente del texto
+    boost::scoped_ptr<Gosu::Font> fuente;
+
+    /// Texto a escribir.
+    string texto;
+
+    /// Texto dividido en líneas.
+    vector<string> lineas;
+
+    /// Tamaño del texto.
+    unsigned tam;
+
+    /// Color del texto.
+    Gosu::Color color;
+
+    /// Alineación, 1 = izquierda, 2 = centrado, 3 = derecha.
+    unsigned alineacion;
+
+    /// Existencia de la sombra
+    bool sombra;
+
+    /// Opacidad de la sombra
+    unsigned opacidadSombra;
+
+    //@{
+    /** @name Posición del texto.
+
+	Para el texto justificado a la
+	izquierda, es la esquina sup izq. Para el texto justif. a la
+	derecha, es la esquina sup der. Para el texto centrado, es la
+	posición central superior
+    **/
+    unsigned x, y;
+    //@}
+    
+    /// Profundidad
+    double z;
+
+    ///Desplazamiento de la sombra respecto al texto
+    int offsetShadow[2];
+
+    /// Ruta de la fuente
+    string rutaFuente;
+    
+    /** @brief Divide el texto según los saltos de línea, metiendo cada línea en el vector lineas.
+     *  Función adaptada de http://oopweb.com/CPP/Documents/CPPHOWTO/Volume/C++Programming-HOWTO-7.html
+     */
+    int dividirTexto();
+    
+    /// Carga la fuente a utilizar en el texto
+    void poblarVectores();
 
 };
 
