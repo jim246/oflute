@@ -4,8 +4,6 @@
  * @author José Tomás Tocino García
  * @date 2010
  *
- * 
- * 
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
@@ -36,6 +34,7 @@ class Juego;
 class Cancion;
 /**
  * @class EstadoMenuCanciones
+ * @ingroup estadosPrincipales
  *
  * @brief Menú de elección de canción.
  *
@@ -50,19 +49,32 @@ class EstadoMenuCanciones : public Estado{
 public:
     EstadoMenuCanciones(Juego * p);
 
+	/// Gestiona las transiciones
     void update();
+
+	/// Dibuja los elementos gráficos
     void draw();
+
+	/// Responde a la entrada del usuario
     void buttonDown(Gosu::Button boton);
 
+	/// Liberación de recursos
     ~EstadoMenuCanciones();
 
 private:
+	/// Diferentes estados de transición
     enum tTrans{ transIn, transHold, mostrandoCancion, transOut };
+
+	/// Estado de transición actual
     tTrans estadoTransicion;
 
+	/// Canción actualmente cargada
     boost::scoped_ptr<Cancion> cancion;
 
+	/// Imagen del logotipo
     boost::scoped_ptr<ElementoImagen> imgLogotipo;
+
+	/// Subtítulo
     boost::scoped_ptr<ElementoTexto> txtSubtitulo;
 };
 

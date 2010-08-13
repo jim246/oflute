@@ -42,12 +42,38 @@ class Juego;
 
 /**
  * @class EstadoMenu
+ * @ingroup estadosPrincipales
  * 
  * @brief Menú principal del juego.
  *
  * Controla la aparición de los botones, su pulsación y demás.
  */
 class EstadoMenu : public Estado{
+
+public:
+    /// Constructor. Crea un nuevo menú para el juego p.
+    EstadoMenu(Juego * p);
+
+    /// Carga de recursos
+    void lanzar ();
+
+	/// Gestión de los estados de transición
+    void update();
+
+	/// Dibujado de los elementos gráficos
+    void draw();
+
+	/// Quita la demora inicial en la que aparece el fondo al volver de otros menús.
+    void quitarDemoraInicial(){ sinDemoraInicial = true; }
+
+	/// Gestiona la entrada del usuario
+    void buttonDown(Gosu::Button boton);
+
+	/// Liberación de recursos
+    ~EstadoMenu();
+
+private:
+
     /// Flag que indica si el estado ha sido lanzado
     bool lanzado;
 
@@ -56,9 +82,6 @@ class EstadoMenu : public Estado{
 
     /// Logotipo
     boost::scoped_ptr<Gosu::Image> logotipo;
-
-    /// Botón de "Universidad de Cádiz"
-    boost::scoped_ptr<Gosu::Image> btnUca;
 
     /// Imagen del logo del CUSL
     boost::scoped_ptr<Gosu::Image>  logoCusl;
@@ -84,17 +107,6 @@ class EstadoMenu : public Estado{
 
     //float posY[5]; //, posFinalesX[5];
     bool sinDemoraInicial;
-public:
-    /// Constructor. Crea un nuevo menú para el juego p.
-    EstadoMenu(Juego * p);
-
-    /// 
-    void lanzar ();
-    void update();
-    void draw();
-    void quitarDemoraInicial(){ sinDemoraInicial = true; }
-    void buttonDown(Gosu::Button boton);
-    ~EstadoMenu();
 };
 
 #endif

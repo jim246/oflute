@@ -27,7 +27,7 @@
 
 #include "estado.h"
 #include "elementosInterfaz.h"
-#include "claseTimer.h"
+#include "crono.h"
 
 #include "analizador.h"
 #include "configuracion.h"
@@ -84,7 +84,7 @@ private:
 
     /// Se utiliza para calcular el tiempo que está capturando sonidos
     /// para hacer la media.
-    myTimer crono;
+    Crono crono;
 
     //@{ 
     /// @name Elementos gráficos

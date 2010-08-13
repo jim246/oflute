@@ -28,7 +28,10 @@
 #include "juego.h"
 
 int main(int argc, char *argv[]){
-    inicializarTrad();
+
+	setlocale(LC_ALL, "");
+    bindtextdomain("oflute", "lang" );
+    textdomain("oflute");
 
     Juego juego;
     juego.show();

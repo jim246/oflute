@@ -1,5 +1,5 @@
 /**
- * @file estadoLecciones.cpp
+ * @file estadoMenuLecciones.cpp
  * 
  * @author José Tomás Tocino García
  * @date 2010
@@ -24,7 +24,7 @@
 
 
 #include "juego.h"
-#include "estadoLecciones.h"
+#include "estadoMenuLecciones.h"
 #include "leccion.h"
 
 #include <boost/filesystem.hpp>
