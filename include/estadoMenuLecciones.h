@@ -1,5 +1,5 @@
 /**
- * @file estadoLecciones.h
+ * @file estadoMenuLecciones.h
  * 
  * @author José Tomás Tocino García
  * @date 2010

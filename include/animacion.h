@@ -4,8 +4,6 @@
  * @author José Tomás Tocino García
  * @date 2010
  *
- * 
- * 
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
@@ -23,8 +21,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-
-
 
 #ifndef _ANIMACION_H_
 #define _ANIMACION_H_
@@ -68,8 +64,6 @@ using namespace std;
 
  * Contiene una serie de ecuaciones con las que lograr efectos de aceleración y deceleración en las animaciones.
  *
- * 
- *
  * @author José Tomás Tocino García <theom3ga@gmail.com> 
  *
  */
@@ -86,39 +80,6 @@ public:
 
     enum atribAnim{ tNada, tAlpha, tPos, tAlphaPos };
 
-private:
-
-    /// Número de atributos a animar
-    int numAttr;
-
-    /// Duración de la animación
-    int duracion;
-
-    /// Espera inicial antes de iniciar la animación
-    int esperaInicial;
-
-    /// Contador del tiempo pasado
-    int time;
-
-    /// Vector de posiciones iniciales
-    int * inicial;
-
-    /// Vector de posiciones finales
-    int * final;
-
-    /// Vector de recorridos (diferencia entre final e inicial)
-    int * change;
-
-    /// Vector de posiciones actuales
-    float * actual;
-
-    /// Tipo de animación a realizar
-    tipoAnim anim;
-
-    /// Puntero a la función de animación
-    float (*puntFun) (float, float, float, float);
-    
-public:
     /**
      * @brief Crea una nueva animación
      * 
@@ -195,6 +156,7 @@ public:
      */
     void setFinal(int i, int v);
 
+	/// Invierte el sentido de la animación.
     void reverse();
 
     ///@}
@@ -231,6 +193,7 @@ public:
     void update(bool a = true);
 
 
+    //@{
     /**
      * @name Ecuaciones de tweening
      * Todas las ecuaciones de tweening reciben cuatro argumentos:
@@ -239,9 +202,6 @@ public:
      * - Diferencia entre el valor final y el inicial.
      * - Duración de la animación.
      */
-
-    //@{
-
 
     static float easeLinear(float t, float b, float c, float d);
 
@@ -263,6 +223,38 @@ public:
 
     /// Libera la memoria de los diferentes vectores.
     ~Animacion();
+
+private:
+
+    /// Número de atributos a animar
+    int numAttr;
+
+    /// Duración de la animación
+    int duracion;
+
+    /// Espera inicial antes de iniciar la animación
+    int esperaInicial;
+
+    /// Contador del tiempo pasado
+    int time;
+
+    /// Vector de posiciones iniciales
+    int * inicial;
+
+    /// Vector de posiciones finales
+    int * final;
+
+    /// Vector de recorridos (diferencia entre final e inicial)
+    int * change;
+
+    /// Vector de posiciones actuales
+    float * actual;
+
+    /// Tipo de animación a realizar
+    tipoAnim anim;
+
+    /// Puntero a la función de animación
+    float (*puntFun) (float, float, float, float);
 };
 
 #endif /* _ANIMACION_H_ */

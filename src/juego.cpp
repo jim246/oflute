@@ -5,7 +5,7 @@
 #include "estadoImagenFija.h"
 #include "estadoMenu.h"
 #include "estadoAnalizador.h"
-#include "estadoLecciones.h"
+#include "estadoMenuLecciones.h"
 #include "estadoMenuCanciones.h"
 #include "estadoCalibrarMicro.h"
 
@@ -81,7 +81,7 @@ void Juego::cambiarEstado(std::string destino){
 	estadoActual -> lanzar();
     }
 
-    else if(destino == "estadoLecciones"){
+    else if(destino == "estadoMenuLecciones"){
 	estadoActual.reset(new EstadoMenuLecciones(this));
     }
 

@@ -34,7 +34,6 @@
 
 #include <Gosu/Gosu.hpp>
 
-#include "customFont.h"
 #include "log.h"
 
 using namespace std;
@@ -56,40 +55,6 @@ using namespace std;
 
 
 class BotonMenu{
-    /// Referencia al objeto gráficos en el que pintar el botón.
-    Gosu::Graphics& graphics;
-
-    /// Color del fondo del botón.
-    Gosu::Color color;
-
-    /// Texto del botón.
-    std::wstring texto;
-
-    /// Tamaño del texto, por defecto 34.
-    int tamanyo;
-
-    /// Altura del botón, por defecto 51.
-    int altura;
-
-    /// Margen superior del botón (espacio desde el borde al texto)
-    int margenSup;
-
-    /// Fuentes del texto.
-    //boost::scoped_ptr<customFont> fuente;
-    boost::scoped_ptr<Gosu::Font> fuente;
-    
-    /// Fuente de la sombra.
-    //boost::scoped_ptr<customFont>fuenteSombra;
-
-    /// Imagen del fondo.
-    boost::scoped_ptr<Gosu::Image> imagen;
-
-    // Coordenadas para controlar la última posición.
-    int lastX, lastY; ///< WAT
-
-    /// Indica si hay sombra o no
-    bool sombra;
-
 public:
     /**
      * @brief Crea un nuevo botón para el menú
@@ -167,6 +132,42 @@ public:
     ~BotonMenu(){
 	lDEBUG << Log::DES("BotonMenu");
     }
+private:
+    /// Referencia al objeto gráficos en el que pintar el botón.
+    Gosu::Graphics& graphics;
+
+    /// Color del fondo del botón.
+    Gosu::Color color;
+
+    /// Texto del botón.
+    std::wstring texto;
+
+    /// Tamaño del texto, por defecto 34.
+    int tamanyo;
+
+    /// Altura del botón, por defecto 51.
+    int altura;
+
+    /// Margen superior del botón (espacio desde el borde al texto)
+    int margenSup;
+
+    /// Fuentes del texto.
+    //boost::scoped_ptr<customFont> fuente;
+    boost::scoped_ptr<Gosu::Font> fuente;
+    
+    /// Fuente de la sombra.
+    //boost::scoped_ptr<customFont>fuenteSombra;
+
+    /// Imagen del fondo.
+    boost::scoped_ptr<Gosu::Image> imagen;
+
+	//@{
+    /// @name Coordenadas para controlar la última posición del botón.
+    int lastX, lastY;
+	//@}
+
+    /// Indica si hay sombra o no
+    bool sombra;
 
 };
 

@@ -27,13 +27,14 @@ SRCS := $(notdir $(shell ls -t $(SRCDIR)/*.cpp))
 
 OBJS := $(addprefix $(OBJDIR)/, $(addsuffix .o,$(basename $(SRCS))))
 
-all: $(DEPFILE) $(OUTPUT)
+all: $(OUTPUT)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "Compiling..." $(notdir $<)
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(OUTPUT): $(OBJS)	
+# $(DEPFILE)
+$(OUTPUT):  $(OBJS)	
 	@echo "Compiling pugixml..."
 	@make -C pugixml
 	@echo "Compiling kissfft..."
@@ -42,20 +43,19 @@ $(OUTPUT): $(OBJS)
 	@$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS) 
 	@echo "Done."
 
+#depende: $(DEPFILE)
+
+$(DEPFILE): $(shell ls -t $(SRCDIR)/*.cpp) $(shell ls -t $(INCDIR)/*.h)
+	@echo "Generating dependency file..."
+	@gcc -MM $(CXXFLAGS) $(shell ls -t $(SRCDIR)/*.cpp) | sed 's/^\([a-zA-Z]\+.o\)/$(OBJDIR)\/\1/g' > $(DEPFILE)
+
+sinclude $(DEPFILE)
+
 libgosu:
 	cd gosu/linux ; make clean ; ./configure && make
 
 regosu:
 	make -C gosu/linux
-
-
-depend: $(DEPFILE)
-
-$(DEPFILE): $(shell ls -t $(SRCDIR)/*.cpp) $(shell ls -t $(INCDIR)/*.h)
-	gcc -MM $(CXXFLAGS) $(shell ls -t $(SRCDIR)/*.cpp) | sed 's/^\([a-zA-Z]\+.o\)/$(OBJDIR)\/\1/g' > $(DEPFILE)
-
-
--include $(DEPFILE)
 
 clean:
 	rm -rf $(OBJS) $(EXE) $(DEPFILE)

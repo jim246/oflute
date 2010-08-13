@@ -37,7 +37,7 @@
 using namespace std;
 
 #include "nota.h"
-#include "claseTimer.h"
+#include "crono.h"
 #include "elementosInterfaz.h"
 #include "particulas.h"
 
@@ -62,7 +62,7 @@ class Cancion{
     /// Espera inicial antes de la primera nota
     float esperaInicial;
 
-    myTimer temporizador;
+    Crono temporizador;
 
     bool lanzado;
 
