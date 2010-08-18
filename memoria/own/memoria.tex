@@ -7,6 +7,7 @@
 
 % Referencias externas
 \usepackage{xr-hyper}
+
 %\usepackage[pdftex, breaklinks=false]{hyperref}
 \usepackage[pdftex, breaklinks=false, colorlinks=true, linkcolor=black, anchorcolor=black, urlcolor=blue, citecolor=red]{hyperref}
 
@@ -75,7 +76,9 @@
 
 % Inclusión de pequeñas figuras ¿?¿?¿
 \usepackage{subfigure}
+
 \makeindex
+
 \begin{document}
 
 
@@ -113,7 +116,7 @@ oficialmente por la \ac{FSF}.
 
 \section*{Agradecimientos}
 
-A Julian Raschke por crear y mantener Gosu
+A Julian Raschke por crear y mantener Gosu.
 
 \cleardoublepage
 
@@ -121,17 +124,22 @@ A Julian Raschke por crear y mantener Gosu
 \listoffigures
 \listoftables
 
+\setlength{\parskip}{1.2ex plus 0.5ex minus 0.2ex}
+
 \chapter{Introducción}
-\input{1.introduc/introduccion.tex}
+\input{introduccion/introduccion.tex}
+
+\chapter{Conceptos básicos}
+\input{conceptos/conceptos.tex}
 
 \chapter{Desarrollo del calendario}
-\input{2.calendario/calendario.tex}
+\input{calendario/calendario.tex}
  
 \chapter{Descripción general del proyecto}
-\input{3.descripcion/descripcion.tex}
+\input{descripcion/descripcion.tex}
  
 \chapter{Desarrollo del proyecto}
-\input{4.desarrollo/desarrollo.tex}
+\input{desarrollo/desarrollo.tex}
 
 \chapter{Resumen}
 %\input{resumen/resumen.tex}
