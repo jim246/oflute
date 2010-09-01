@@ -30,6 +30,9 @@
 
 #include "elementosInterfaz.h"
 
+#include <vector>
+using std::vector;
+
 class Juego;
 class Cancion;
 /**
@@ -74,8 +77,36 @@ private:
 	/// Imagen del logotipo
     boost::scoped_ptr<ElementoImagen> imgLogotipo;
 
+	boost::scoped_ptr<ElementoImagen> imgSeleccion;
+
+	boost::scoped_ptr<ElementoImagen> imgBtnUp;
+	boost::scoped_ptr<ElementoImagen> imgBtnDown;
+	boost::scoped_ptr<ElementoImagen> imgBtnOk;
+
 	/// Subtítulo
     boost::scoped_ptr<ElementoTexto> txtSubtitulo;
+
+	class EntradaMenuCanciones{
+	public:
+		EntradaMenuCanciones(Gosu::Graphics & g, string titulo, 
+		                     string descripcion, string ruta, int pos);
+
+		void draw();
+	private:
+		Gosu::Graphics & g;
+
+		string titulo;
+
+		string descripcion;
+
+		string ruta;
+
+		int pos;
+
+		boost::scoped_ptr<Gosu::Font> txtTitulo, txtDescripcion;
+	};
+
+	vector<boost::shared_ptr<EntradaMenuCanciones> > conjuntoCanciones;
 };
 
 #endif /* _ESTADOMENUCANCIONES_H_ */

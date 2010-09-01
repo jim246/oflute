@@ -47,7 +47,7 @@ $(OUTPUT):  $(OBJS)
 
 $(DEPFILE): $(shell ls -t $(SRCDIR)/*.cpp) $(shell ls -t $(INCDIR)/*.h)
 	@echo "Generating dependency file..."
-	@gcc -MM $(CXXFLAGS) $(shell ls -t $(SRCDIR)/*.cpp) | sed 's/^\([a-zA-Z]\+.o\)/$(OBJDIR)\/\1/g' > $(DEPFILE)
+#	@gcc -MM $(CXXFLAGS) $(shell ls -t $(SRCDIR)/*.cpp) | sed 's/^\([a-zA-Z]\+.o\)/$(OBJDIR)\/\1/g' > $(DEPFILE)
 
 sinclude $(DEPFILE)
 
