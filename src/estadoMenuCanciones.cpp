@@ -49,7 +49,32 @@ EstadoMenuCanciones::EstadoMenuCanciones(Juego * p)
 
 	imgSeleccion -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 10);
 	imgSeleccion -> animacion -> set(0, 800, 397);
-	imgSeleccion -> animacion -> set(1, 200, 200);
+	imgSeleccion -> animacion -> set(1, 100, 100);
+
+	
+
+	imgBtnUp.reset(new ElementoImagen(padre -> graphics(),
+	                                  "media/selCanUp.png",
+	                                  3, Animacion::tPos));
+	imgBtnUp -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 30);
+	imgBtnUp -> animacion -> set(0, 360, 360);
+	imgBtnUp -> animacion -> set(1, -40, 101);
+
+	imgBtnDown.reset(new ElementoImagen(padre -> graphics(),
+	                                  "media/selCanDown.png",
+	                                  3, Animacion::tPos));
+	imgBtnDown -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 20);
+	imgBtnDown -> animacion -> set(0, 360, 360);
+	imgBtnDown -> animacion -> set(1, -40, 139);
+
+
+	imgBtnOk.reset(new ElementoImagen(padre -> graphics(),
+	                                  "media/selCanOk.png",
+	                                  3, Animacion::tPos));
+	imgBtnOk -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 10);
+	imgBtnOk -> animacion -> set(0, 360, 360);
+	imgBtnOk -> animacion -> set(1, -40, 176);
+
 
 	// CONFIGURACIÓN DEL SUBTÍTULO
 	txtSubtitulo.reset(new ElementoTexto(padre -> graphics(),
@@ -63,6 +88,7 @@ EstadoMenuCanciones::EstadoMenuCanciones(Juego * p)
 	txtSubtitulo -> setXY(180, 425);
 	txtSubtitulo -> animacion = new Animacion(1, 40, Animacion::tEaseOutCubic, 10);
 	txtSubtitulo -> animacion -> set(0, 0, 255);
+
 
 
 
@@ -97,8 +123,11 @@ void EstadoMenuCanciones::draw(){
 	}else{
 		imgLogotipo -> draw();
 		txtSubtitulo -> draw();
-		conjuntoCanciones[0] -> draw();
+//		conjuntoCanciones[0] -> draw();
 		imgSeleccion -> draw();
+		imgBtnUp -> draw();
+		imgBtnDown -> draw();
+		imgBtnOk -> draw();
 	}
 }
 
