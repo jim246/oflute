@@ -48,7 +48,7 @@ EstadoAnalizador::EstadoAnalizador (Juego * p) : Estado(p){
 
 	// CONFIGURACIÓN DEL SUBTÍTULO
 	txtSubtitulo.reset(new ElementoTexto(padre -> graphics(),
-	                                     "Analizador de notas",
+	                                     _("Analizador de notas"),
 	                                     "media/fNormal.ttf",
 	                                     34, Gosu::Color(0xffa4a4a4),
 	                                     Texto::alignCentro,

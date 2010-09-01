@@ -123,6 +123,8 @@ struct tConfAnim
     tConfAnim ();
 };
 
+
+
 /**
  * @class Elemento
  *
@@ -133,8 +135,6 @@ struct tConfAnim
  * @author José Tomás Tocino García <theom3ga@gmail.com> 
  *
  */
-
-
 class Elemento
 {
 protected:
@@ -168,6 +168,7 @@ protected:
 
     /// Actualiza la posición actual según la animación definida.
     void actualizarPosicion ();
+
 public:
     Animacion * animacion;
 

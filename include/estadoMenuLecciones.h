@@ -55,122 +55,122 @@ class Juego;
 class EstadoMenuLecciones : public Estado{
 
 public:
-    /// Crea el menú de lecciones
-    EstadoMenuLecciones(Juego * p);
+	/// Crea el menú de lecciones
+	EstadoMenuLecciones(Juego * p);
 
-    /// Controla la lógica de transiciones
-    void update();
+	/// Controla la lógica de transiciones
+	void update();
     
-    /// Dibuja los elementos en pantalla
-    void draw();
+	/// Dibuja los elementos en pantalla
+	void draw();
 
-    /// Lee las lecciones contenidas en el directorio <b>lecciones</b>
-    /// y las carga en el contenedor de lecciones.
-    void listarLecciones();
+	/// Lee las lecciones contenidas en el directorio <b>lecciones</b>
+	/// y las carga en el contenedor de lecciones.
+	void listarLecciones();
 
-    void buttonDown(Gosu::Button boton);
+	void buttonDown(Gosu::Button boton);
 
-    /// Pasa a la anterior lección
-    void anteriorLec();
+	/// Pasa a la anterior lección
+	void anteriorLec();
 
-    /// Pasa a la siguiente lección
-    void siguienteLec();
+	/// Pasa a la siguiente lección
+	void siguienteLec();
 
-    /// Cambia a la lección n-ésima
-    void cambiarLeccion(unsigned n);
+	/// Cambia a la lección n-ésima
+	void cambiarLeccion(unsigned n);
 
-    /// Lanza la lección, ocultando temporalmente el menú
-    void lanzarLeccion();
+	/// Lanza la lección, ocultando temporalmente el menú
+	void lanzarLeccion();
 
-    ~EstadoMenuLecciones();
+	~EstadoMenuLecciones();
 
 private:
-    /// Imagen de la pizarra
-    boost::shared_ptr<ElementoImagen> pizarra;
+	/// Imagen de la pizarra
+	boost::shared_ptr<ElementoImagen> pizarra;
 
-    /// Imagen de la barra superior
-    boost::shared_ptr<ElementoCombinado> barraSuperior;
+	/// Imagen de la barra superior
+	boost::shared_ptr<ElementoCombinado> barraSuperior;
 
-    /// Imagen de la barra inferior
-    boost::shared_ptr<ElementoCombinado> barraInferior;
+	/// Imagen de la barra inferior
+	boost::shared_ptr<ElementoCombinado> barraInferior;
 
-    /// Imagen del bloque con el título de la lección
-    boost::shared_ptr<ElementoCombinado> btnTitular;
+	/// Imagen del bloque con el título de la lección
+	boost::shared_ptr<ElementoCombinado> btnTitular;
 
-    /// Imagen del bloque con el bloque de descripción
-    boost::shared_ptr<ElementoCombinado> btnDescripcion;
+	/// Imagen del bloque con el bloque de descripción
+	boost::shared_ptr<ElementoCombinado> btnDescripcion;
 
-    /// Texto de la descripción
-    boost::shared_ptr<ElementoTexto> textoDesc;
+	/// Texto de la descripción
+	boost::shared_ptr<ElementoTexto> textoDesc;
 
-    /// Botón comenzar
-    boost::shared_ptr<ElementoCombinado> btnComenzar;
+	/// Botón comenzar
+	boost::shared_ptr<ElementoCombinado> btnComenzar;
 
-    /// Botón anterior lección
-    boost::shared_ptr<ElementoCombinado> btnAntLec;
+	/// Botón anterior lección
+	boost::shared_ptr<ElementoCombinado> btnAntLec;
 
-    /// Botón siguiente lección
-    boost::shared_ptr<ElementoCombinado> btnSigLec;
+	/// Botón siguiente lección
+	boost::shared_ptr<ElementoCombinado> btnSigLec;
 
-    /// Contenedor de todos los elementos
-    vector<boost::shared_ptr<Elemento> > conjuntoElementos;
+	/// Contenedor de todos los elementos
+	vector<boost::shared_ptr<Elemento> > conjuntoElementos;
 
-    /**
-     * @class InfoLeccion
-     *
-     * @brief Estructura con información de las lecciones cargadas
-     *
-     * @author José Tomás Tocino García <theom3ga@gmail.com> 
-     *
-     */
+	/**
+	 * @class InfoLeccion
+	 *
+	 * @brief Estructura con información de las lecciones cargadas
+	 *
+	 * @author José Tomás Tocino García <theom3ga@gmail.com> 
+	 *
+	 */
     
 
-    struct InfoLeccion{ 
-	/// Posición de la lección
-	int indice;
+	struct InfoLeccion{ 
+		/// Posición de la lección
+		int indice;
 	
-	/// Nombre de la lección
-	string nombre;
+		/// Nombre de la lección
+		string nombre;
 	
-	/// Descripción de la lección
-	string descrip;
+		/// Descripción de la lección
+		string descrip;
 
-	/// Ruta al XML de la lección
-	string ruta;
-    };
+		/// Ruta al XML de la lección
+		string ruta;
+	};
 
-    /// Objeto función para ordenar las lecciones según su índice
-    struct ordenarLecciones{
-	bool operator()(InfoLeccion a, InfoLeccion b){
-	    return b.indice > a.indice;
-	}
-    };
+	/// Objeto función para ordenar las lecciones según su índice
+	struct ordenarLecciones{
+		bool operator()(InfoLeccion a, InfoLeccion b){
+			return b.indice > a.indice;
+		}
+	};
 
-    /// Indicador de la lección actual
-    int leccionActual;
+	/// Indicador de la lección actual
+	int leccionActual;
 
-    /// Contenedor para las lecciones listadas
-    vector<InfoLeccion> leccionesCargadas;
+	/// Contenedor para las lecciones listadas
+	vector<InfoLeccion> leccionesCargadas;
 
-    /// Enumerado de estados de transición
-    enum {eMostrando, eMenu, eOcultarInter, eMostrarInter, eLeccion, eOcultando};
+	/// Enumerado de estados de transición
+	enum {eMostrando, eMenu, eOcultarInter, eMostrarInter, eLeccion, eOcultando};
 
-    /// Estado de transición actual
-    int estadoActual;
+	/// Estado de transición actual
+	int estadoActual;
 
-    /// Lección actualmente cargada
-    Leccion * leccionMostrada;
+	/// Lección actualmente cargada
+	Leccion * leccionMostrada;
 
-    /// Direcciones de las transiciones.
-    enum{dirMOSTRAR, dirOCULTAR};
+	/// Direcciones de las transiciones.
+	enum{dirMOSTRAR, dirOCULTAR};
 
-    /** Inicia las animaciones para esconder los botones
-     *
-     * @param dir Dirección, dirMOSTRAR o dirOCULTAr
-     * @param saltarBarraInferior Indica si la barra de abajo debe ocultarse o no.
-     **/
+	/** Inicia las animaciones para esconder los botones
+	 *
+	 * @param dir Dirección, dirMOSTRAR o dirOCULTAr
+	 * @param saltarBarraInferior Indica si la barra de abajo debe ocultarse o no.
+	 **/
 
-    void iniciarAnimacionSalida(int dir, bool saltarBarraInferior = true);
+	void iniciarAnimacionSalida(int dir, bool saltarBarraInferior = true);
 };
 
 #endif /* _ESTADOLECCIONES_H_ */
