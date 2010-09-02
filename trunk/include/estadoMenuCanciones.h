@@ -52,61 +52,64 @@ class EstadoMenuCanciones : public Estado{
 public:
     EstadoMenuCanciones(Juego * p);
 
-	/// Gestiona las transiciones
+    /// Gestiona las transiciones
     void update();
 
-	/// Dibuja los elementos gráficos
+    /// Dibuja los elementos gráficos
     void draw();
 
-	/// Responde a la entrada del usuario
+    /// Responde a la entrada del usuario
     void buttonDown(Gosu::Button boton);
 
-	/// Liberación de recursos
+    /// Liberación de recursos
     ~EstadoMenuCanciones();
 
 private:
-	/// Diferentes estados de transición
+    /// Diferentes estados de transición
     enum tTrans{ transIn, transHold, mostrandoCancion, transOut };
 
-	/// Estado de transición actual
+    /// Estado de transición actual
     tTrans estadoTransicion;
 
-	/// Canción actualmente cargada
-    boost::scoped_ptr<Cancion> cancion;
+    /// Canción actualmente cargada
+//    boost::scoped_ptr<Cancion> cancion;
 
-	/// Imagen del logotipo
+
+    bool cancionCargada;
+
+    /// Imagen del logotipo
     boost::scoped_ptr<ElementoImagen> imgLogotipo;
 
-	boost::scoped_ptr<ElementoImagen> imgSeleccion;
+    boost::scoped_ptr<ElementoImagen> imgSeleccion;
 
-	boost::scoped_ptr<ElementoImagen> imgBtnUp;
-	boost::scoped_ptr<ElementoImagen> imgBtnDown;
-	boost::scoped_ptr<ElementoImagen> imgBtnOk;
+    boost::scoped_ptr<ElementoImagen> imgBtnUp;
+    boost::scoped_ptr<ElementoImagen> imgBtnDown;
+    boost::scoped_ptr<ElementoImagen> imgBtnOk;
 
-	/// Subtítulo
+    /// Subtítulo
     boost::scoped_ptr<ElementoTexto> txtSubtitulo;
 
-	class EntradaMenuCanciones{
-	public:
-		EntradaMenuCanciones(Gosu::Graphics & g, string titulo, 
-		                     string descripcion, string ruta, int pos);
+    class EntradaMenuCanciones{
+    public:
+	EntradaMenuCanciones(Gosu::Graphics & g, string titulo, 
+			     string descripcion, string ruta, int pos);
 
-		void draw();
-	private:
-		Gosu::Graphics & g;
+	void draw();
+    private:
+	Gosu::Graphics & g;
 
-		string titulo;
+	string titulo;
 
-		string descripcion;
+	string descripcion;
 
-		string ruta;
+	string ruta;
 
-		int pos;
+	int pos;
 
-		boost::scoped_ptr<Gosu::Font> txtTitulo, txtDescripcion;
-	};
+	boost::scoped_ptr<Gosu::Font> txtTitulo, txtDescripcion;
+    };
 
-	vector<boost::shared_ptr<EntradaMenuCanciones> > conjuntoCanciones;
+    vector<boost::shared_ptr<EntradaMenuCanciones> > conjuntoCanciones;
 };
 
 #endif /* _ESTADOMENUCANCIONES_H_ */

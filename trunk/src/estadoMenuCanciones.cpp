@@ -29,130 +29,156 @@
 #include "estadoMenuCanciones.h"
 
 EstadoMenuCanciones::EstadoMenuCanciones(Juego * p)
-	: Estado(p), cancion(0){
+    : Estado(p), cancionCargada(false){
 
-	estadoTransicion = transIn;
+    lDEBUG << Log::CON("EstadoMenuCanciones");
 
-	// CONFIGURACIÓN DE LA IMAGEN DEL LOGOTIPO
-	imgLogotipo.reset(new ElementoImagen(padre -> graphics(),
-	                                     "media/ofluteLogoGrande.png",
-	                                     3, Animacion::tAlpha));
+    estadoTransicion = transIn;
 
-	imgLogotipo -> setXY(75, 100);
-	imgLogotipo -> animacion = new Animacion(1, 50, Animacion::tEaseOutCubic);
-	imgLogotipo -> animacion -> set(0, 0, 255);
+    // CONFIGURACIÓN DE LA IMAGEN DEL LOGOTIPO
+    imgLogotipo.reset(new ElementoImagen(padre -> graphics(),
+					 "media/ofluteLogoGrande.png",
+					 3, Animacion::tAlpha));
+
+    imgLogotipo -> setXY(75, 100);
+    imgLogotipo -> animacion = new Animacion(1, 50, Animacion::tEaseOutCubic);
+    imgLogotipo -> animacion -> set(0, 0, 255);
 
 
-	imgSeleccion.reset(new ElementoImagen(padre -> graphics(),
-	                                      "media/selCanMark.png",
-	                                      3, Animacion::tPos));
+    imgSeleccion.reset(new ElementoImagen(padre -> graphics(),
+					  "media/selCanMark.png",
+					  3, Animacion::tPos));
 
-	imgSeleccion -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 10);
-	imgSeleccion -> animacion -> set(0, 800, 397);
-	imgSeleccion -> animacion -> set(1, 100, 100);
+    imgSeleccion -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 10);
+    imgSeleccion -> animacion -> set(0, 800, 397);
+    imgSeleccion -> animacion -> set(1, 100, 100);
 
 	
 
-	imgBtnUp.reset(new ElementoImagen(padre -> graphics(),
-	                                  "media/selCanUp.png",
-	                                  3, Animacion::tPos));
-	imgBtnUp -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 30);
-	imgBtnUp -> animacion -> set(0, 360, 360);
-	imgBtnUp -> animacion -> set(1, -40, 101);
+    imgBtnUp.reset(new ElementoImagen(padre -> graphics(),
+				      "media/selCanUp.png",
+				      3, Animacion::tPos));
+    imgBtnUp -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 30);
+    imgBtnUp -> animacion -> set(0, 360, 360);
+    imgBtnUp -> animacion -> set(1, -40, 101);
 
-	imgBtnDown.reset(new ElementoImagen(padre -> graphics(),
-	                                  "media/selCanDown.png",
-	                                  3, Animacion::tPos));
-	imgBtnDown -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 20);
-	imgBtnDown -> animacion -> set(0, 360, 360);
-	imgBtnDown -> animacion -> set(1, -40, 139);
-
-
-	imgBtnOk.reset(new ElementoImagen(padre -> graphics(),
-	                                  "media/selCanOk.png",
-	                                  3, Animacion::tPos));
-	imgBtnOk -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 10);
-	imgBtnOk -> animacion -> set(0, 360, 360);
-	imgBtnOk -> animacion -> set(1, -40, 176);
+    imgBtnDown.reset(new ElementoImagen(padre -> graphics(),
+					"media/selCanDown.png",
+					3, Animacion::tPos));
+    imgBtnDown -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 20);
+    imgBtnDown -> animacion -> set(0, 360, 360);
+    imgBtnDown -> animacion -> set(1, -40, 139);
 
 
-	// CONFIGURACIÓN DEL SUBTÍTULO
-	txtSubtitulo.reset(new ElementoTexto(padre -> graphics(),
-	                                     _("Seleccione una canción"),
-	                                     "media/fNormal.ttf",
-	                                     34, Gosu::Color(0xffa4a4a4),
-	                                     Texto::alignCentro,
-	                                     true, 10, 3, 
-	                                     Animacion::tAlpha));
-
-	txtSubtitulo -> setXY(180, 425);
-	txtSubtitulo -> animacion = new Animacion(1, 40, Animacion::tEaseOutCubic, 10);
-	txtSubtitulo -> animacion -> set(0, 0, 255);
+    imgBtnOk.reset(new ElementoImagen(padre -> graphics(),
+				      "media/selCanOk.png",
+				      3, Animacion::tPos));
+    imgBtnOk -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 10);
+    imgBtnOk -> animacion -> set(0, 360, 360);
+    imgBtnOk -> animacion -> set(1, -40, 176);
 
 
+    // CONFIGURACIÓN DEL SUBTÍTULO
+    txtSubtitulo.reset(new ElementoTexto(padre -> graphics(),
+					 _("Seleccione una canción"),
+					 "media/fNormal.ttf",
+					 34, Gosu::Color(0xffa4a4a4),
+					 Texto::alignCentro,
+					 true, 10, 3, 
+					 Animacion::tAlpha));
 
+    txtSubtitulo -> setXY(180, 425);
+    txtSubtitulo -> animacion = new Animacion(1, 40, Animacion::tEaseOutCubic, 10);
+    txtSubtitulo -> animacion -> set(0, 0, 255);
 
+    boost::shared_ptr<EntradaMenuCanciones> E(
+	new EntradaMenuCanciones(padre -> graphics(),
+				 "Título de prueba",
+				 "Descripción de prueba blablabla",
+				 "", 0)
+	);
 
-	boost::shared_ptr<EntradaMenuCanciones> E(
-		new EntradaMenuCanciones(padre -> graphics(),
-		                         "Título de prueba",
-		                         "Descripción de prueba blablabla",
-		                         "", 0)
-		);
-
-	conjuntoCanciones.push_back(E);
+    conjuntoCanciones.push_back(E);
 
 }
 
 void EstadoMenuCanciones::update(){
-	if(estadoTransicion == transIn){
-		if(imgLogotipo -> animacion -> finished() &&
-		   txtSubtitulo -> animacion -> finished()){
-			estadoTransicion = transHold;
-		}
-	}
+    if(cancionCargada == true) {
+	lDEBUG << LOC() << " WATTTTTTTTTTTTTTTTTTTTT????????????????????????????????????????????";
+    }
 
-	if(cancion != 0) {
-		cancion -> update();
+
+    if(estadoTransicion == transIn){
+	if(imgLogotipo -> animacion -> finished() &&
+	   txtSubtitulo -> animacion -> finished()){
+	    estadoTransicion = transHold;
 	}
+    }
+	
+    else if(estadoTransicion == transOut && imgBtnUp -> animacion -> finished()){
+	padre -> cambiarEstado("estadoMenuSinFondo");
+    }
+
 }
 
 void EstadoMenuCanciones::draw(){
-	if(estadoTransicion == mostrandoCancion){
-		cancion -> draw();
-	}else{
-		imgLogotipo -> draw();
-		txtSubtitulo -> draw();
+    if(estadoTransicion == mostrandoCancion){
+//		cancion -> draw();
+    }else{
+	imgLogotipo -> draw();
+	txtSubtitulo -> draw();
 //		conjuntoCanciones[0] -> draw();
-		imgSeleccion -> draw();
-		imgBtnUp -> draw();
-		imgBtnDown -> draw();
-		imgBtnOk -> draw();
-	}
+	imgSeleccion -> draw();
+	imgBtnUp -> draw();
+	imgBtnDown -> draw();
+	imgBtnOk -> draw();
+    }
 }
 
 void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
-	if(cancion != 0)
-		cancion -> buttonDown(boton);
+    if(cancionCargada == true){
+//		cancion -> buttonDown(boton);
+    }
 
-	if(boton == Gosu::kbEscape){
-		padre -> cambiarEstado("estadoMenuSinFondo");
+    if(boton == Gosu::kbEscape){
+	if(estadoTransicion == transHold){
+	    estadoTransicion = transOut;
+
+	    imgLogotipo -> animacion -> reverse();
+	    imgLogotipo -> animacion -> init();
+
+	    imgSeleccion -> animacion -> reverse();
+	    imgSeleccion -> animacion -> init();
+
+	    imgBtnUp -> animacion -> reverse();
+	    imgBtnUp -> animacion -> init();
+
+	    imgBtnDown -> animacion -> reverse();
+	    imgBtnDown -> animacion -> init();
+
+	    imgBtnOk -> animacion -> reverse();
+	    imgBtnOk -> animacion -> init();
+
+	    estadoTransicion = transOut;
+
 	}
+    }
 
-	else if(boton == Gosu::kbReturn){
+    else if(boton == Gosu::kbReturn){
 
-		lDEBUG << "Se pulsó enter";
+	lDEBUG << "Se pulsó enter";
+	cancionCargada = true;
 
-		cancion.reset(new Cancion(padre -> graphics(), "song1.xml"));
-		cancion -> lanzar();
+	//	cancion.reset(new Cancion(padre -> graphics(), "song1.xml"));
+	//  cancion -> lanzar();
 
-		estadoTransicion = mostrandoCancion;
-	}
+	estadoTransicion = mostrandoCancion;
+    }
 
    
 }
 
 EstadoMenuCanciones::~EstadoMenuCanciones(){
-
+    lDEBUG << Log::DES("EstadoMenuCanciones");
 }
 

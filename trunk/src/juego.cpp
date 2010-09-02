@@ -14,7 +14,7 @@
 #include <boost/lexical_cast.hpp>
 
 
-Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, REFRESCO){
+Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, REFRESCO), cambiandoEstado(false){
     lDEBUG << Log::CON("Juego");
     setCaption(L"oFlute .:.");
 
@@ -30,10 +30,14 @@ Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, REFRESCO){
 }
 
 void Juego::update(){
-    estadoActual -> update();
+    if(cambiandoEstado){
+	realizarCambioEstado();
+    }else{
+	estadoActual -> update();
     
-    if(estadoCadena != "estadoAutor" && estadoCadena != "estadoIntro"){
-	animacionFondo -> update();
+	if(estadoCadena != "estadoAutor" && estadoCadena != "estadoIntro"){
+	    animacionFondo -> update();
+	}
     }
 }
 
@@ -50,51 +54,60 @@ void Juego::draw(){
 
 
 void Juego::cambiarEstado(std::string destino){
-    lDEBUG << "\t>>>>>>>>>>>>> Nuevo estado: " << destino;
-    estadoCadena = destino;
+    lDEBUG << "Petición para cambiar estado a: " << Log::cRojo << destino << Log::cDef;
+    cambiandoEstado = true;
+    siguienteEstado = destino;
+}
+
+void Juego::realizarCambioEstado(){
+    lDEBUG << "Realizando el cambio de estado.";
+    estadoCadena = siguienteEstado;
+
+    cambiandoEstado = false;
+    siguienteEstado = "";
     
-    if (destino == "estadoAutor"){
+    if (estadoCadena == "estadoAutor"){
 	estadoActual.reset( 
 	    new EstadoImagenFija(this, L"media/estadoAutor.png", "estadoIntro"));
 	estadoActual -> lanzar();	
     }
 
-    else if(destino == "estadoIntro"){
+    else if(estadoCadena == "estadoIntro"){
 	estadoActual.reset(
 	    new EstadoImagenFija(this, L"media/estadoIntro.png", "estadoMenu"));
 	estadoActual -> lanzar();
     }
 	
-    else if(destino == "estadoMenu"){
+    else if(estadoCadena == "estadoMenu"){
 	estadoActual.reset(new EstadoMenu(this));
 	estadoActual -> lanzar();
     }
     
-    else if(destino == "estadoMenuSinFondo"){
+    else if(estadoCadena == "estadoMenuSinFondo"){
 	estadoActual.reset(new EstadoMenu(this));
 	static_cast<EstadoMenu * >(estadoActual . get()) -> quitarDemoraInicial();
 	estadoActual -> lanzar();
     }
 
-    else if(destino == "estadoAnalizador"){
+    else if(estadoCadena == "estadoAnalizador"){
 	estadoActual.reset(new EstadoAnalizador(this));
 	estadoActual -> lanzar();
     }
 
-    else if(destino == "estadoMenuLecciones"){
+    else if(estadoCadena == "estadoMenuLecciones"){
 	estadoActual.reset(new EstadoMenuLecciones(this));
     }
 
-    else if(destino == "estadoCancion"){
+    else if(estadoCadena == "estadoMenuCanciones"){
 	estadoActual.reset(new EstadoMenuCanciones(this));
 	estadoActual -> lanzar();
     }
 
-    else if(destino == "estadoCalibrar"){
+    else if(estadoCadena == "estadoCalibrar"){
 	estadoActual.reset(new EstadoCalibrarMicro(this));
     }
 	
-    else if(destino == "salir"){
+    else if(estadoCadena == "salir"){
 	close();
     }
 }

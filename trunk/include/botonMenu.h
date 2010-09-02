@@ -90,22 +90,27 @@ public:
      * @brief Dibuja el botón en la posición indicada.
      */
 
-    void draw(int x, int y, Gosu::ZPos z){
+    void draw(float x, float y, Gosu::ZPos z){
 	lastX = x;
 	lastY = y;
 	imagen -> draw(x, y, z, 1, 1, color);
 
-	int ancho = fuente -> textWidth(texto);
+	float ancho = fuente -> textWidth(texto);
 	int posHorizontal = 800/2 - ancho/2;
-	int posVertical = y + margenSup;
+	float posVertical = y + margenSup;
 
-	fuente -> draw(texto, 800/2 - ancho/2, y + margenSup, 
+	fuente -> draw(texto, 
+		       posHorizontal, 
+		       posVertical, 
 		       z + 0.1, 1, 1, Gosu::Color(255,255,255,255));
 
 
 	if(sombra){
 	    int offsetShadow[] = {1,2};
-	    fuente -> draw(texto, posHorizontal + offsetShadow[0], posVertical + offsetShadow[1], z, 1, 1, Gosu::Color(80,0,0,0));
+	    fuente -> draw(texto, 
+			   posHorizontal + offsetShadow[0], 
+			   posVertical + offsetShadow[1], 
+			   z, 1, 1, Gosu::Color(80,0,0,0));
 	}
     }
     

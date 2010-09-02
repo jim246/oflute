@@ -158,9 +158,9 @@ protected:
     
     ///@{
     ///@name Atributos con el valor actual
-    int currentX;
-    int currentY;
-    int currentAlpha;
+    float currentX;
+    float currentY;
+    float currentAlpha;
     ///@}
 
     /// Inicializa el objeto animación. 
@@ -181,10 +181,10 @@ public:
     virtual int getHeight () = 0;
 
     /// Devuelve la posición horizontal actual.
-    int currX ();
+    float currX ();
 
     /// Devuelve la posición vertical actual.
-    int currY ();
+    float currY ();
 
     /// Ajsuta las posiciones finales para elementos no animados
     void setXY(int x, int y);
@@ -196,7 +196,7 @@ public:
     void draw ();
 
     /// Método final de dibujado. Cada subclase debe implementarlo según sea conveniente.
-    virtual void drawEnd (int x, int y, double z, int a) = 0;
+    virtual void drawEnd (float x, float y, double z, int a) = 0;
 
     ~ Elemento ();
 };
@@ -214,7 +214,7 @@ class ElementoImagen : public Elemento
 public:
     ElementoImagen (Gosu::Graphics & g, string ruta, double z, Animacion::atribAnim animar);
 
-    void drawEnd (int x, int y, double z, int a);
+    void drawEnd (float x, float y, double z, int a);
     int getWidth ();
     int getHeight ();
 };
@@ -235,7 +235,7 @@ public:
 		   double z,
 		   Animacion::atribAnim animar);
 
-    void drawEnd (int x, int y, double z, int a);
+    void drawEnd (float x, float y, double z, int a);
     void setText (string s);
     int getWidth ();
     int getHeight ();
@@ -266,7 +266,7 @@ public:
     void setTextoXY (int x, int y);
     void setImagen (string ruta);
     void setText(string s);
-    void drawEnd (int x, int y, double z, int a);
+    void drawEnd (float x, float y, double z, int a);
     int getWidth ();
     int getHeight ();
 };
