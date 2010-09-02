@@ -115,7 +115,7 @@ void EstadoMenuCanciones::update(){
 	}
     }
 	
-    else if(estadoTransicion == transOut && imgBtnUp -> animacion -> finished()){
+    else if(estadoTransicion == transOut && imgBtnOk -> animacion -> finished()){
 	padre -> cambiarEstado("estadoMenuSinFondo");
     }
 
@@ -152,12 +152,18 @@ void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
 
 	    imgBtnUp -> animacion -> reverse();
 	    imgBtnUp -> animacion -> init();
+	    imgBtnUp -> animacion -> setEspera(10);
 
 	    imgBtnDown -> animacion -> reverse();
 	    imgBtnDown -> animacion -> init();
+	    imgBtnDown -> animacion -> setEspera(20);
 
 	    imgBtnOk -> animacion -> reverse();
 	    imgBtnOk -> animacion -> init();
+	    imgBtnOk -> animacion -> setEspera(30);
+
+	    txtSubtitulo -> animacion -> reverse();
+	    txtSubtitulo -> animacion -> init();
 
 	    estadoTransicion = transOut;
 
