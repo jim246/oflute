@@ -52,20 +52,6 @@ class Estado;
  */
 
 class Juego : public Gosu::Window{
-    /// Contenedor del estado actual
-    boost::scoped_ptr <Estado> estadoActual;
-
-    /// Cadena con el estado actual
-    std::string estadoCadena;
-
-    /// Imagen para el cursor del ratón
-    boost::scoped_ptr <Gosu::Image> cursor;
-
-    /// Fondo común en todas las pantallas del juego excepto los créditos 
-    boost::scoped_ptr <Gosu::Image> fondoComun;
-
-    /// Animación para el fondo
-    boost::scoped_ptr <Animacion> animacionFondo;
 
 public:
     /** 
@@ -93,10 +79,11 @@ public:
     void draw();
 
     /**
-     * @brief Cambia el estado al que se le indique.
+     * @brief Activa el proceso de cambio de estado
      *
-     * Recibe una cadena con el nombre del estado o la información
-     * necesaria para pasar de un estado a otro.
+     * Recibe una cadena con el estado al que pasar, que se guarda.
+     * Al terminar la iteración actual se llama a realizarCambioEstado
+     * para que se termine el cambio de estado.
      *
      * @param destino Una cadena con información sobre el estado al que cambiar
      *
@@ -116,6 +103,34 @@ public:
      *
      **/
     ~Juego();
+
+private:
+    /// Contenedor del estado actual
+    boost::scoped_ptr <Estado> estadoActual;
+
+    /// Cadena con el estado actual
+    std::string estadoCadena;
+
+    /// Flag que indica si en la próxima iteración se cambiará el estado.
+    /// Esto es así para no cambiar el estado a mitad de la iteración, pues
+    /// puede provocar errores.
+    bool cambiandoEstado;
+
+    /// Cadena que guarda el siguiente estado
+    std::string siguienteEstado;
+
+    /// Finaliza el proceso de cambio de estado
+    void realizarCambioEstado();
+
+    /// Imagen para el cursor del ratón
+    boost::scoped_ptr <Gosu::Image> cursor;
+
+    /// Fondo común en todas las pantallas del juego excepto los créditos 
+    boost::scoped_ptr <Gosu::Image> fondoComun;
+
+    /// Animación para el fondo
+    boost::scoped_ptr <Animacion> animacionFondo;
+
 };
 
 #endif /* _JUEGO_H_ */

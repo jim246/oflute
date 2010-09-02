@@ -13,7 +13,7 @@ ElementoTexto::ElementoTexto (Gosu::Graphics & g,
 			  sombra, opacidadSombra));
 }
 
-void ElementoTexto::drawEnd (int x, int y, double z, int a)
+void ElementoTexto::drawEnd (float x, float y, double z, int a)
 {
     texto -> draw(x, y, z, a);
 }

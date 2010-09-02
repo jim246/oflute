@@ -44,7 +44,7 @@ void ElementoCombinado::setImagen (string ruta)
     imagen.reset(new Gosu::Image(g, Gosu::widen(ruta)));
 }
 
-void ElementoCombinado::drawEnd (int x, int y, double z, int a)
+void ElementoCombinado::drawEnd (float x, float y, double z, int a)
 {
     //lDEBUG << "DrawEnd " << x << "," << y << "," << z << ", alfa: " << a;
     imagen -> draw(x,y,z,1,1,Gosu::Color(a,255,255,255));

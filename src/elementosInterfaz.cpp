@@ -53,11 +53,11 @@ void Elemento::setXY(int x, int y){
     finalY = y;
 }
 
-int Elemento::currX (){ 
+float Elemento::currX (){ 
     return currentX; 
 }
 
-int Elemento::currY (){ 
+float Elemento::currY (){ 
     return currentY; 
 }
 

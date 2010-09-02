@@ -24,10 +24,10 @@ Animacion::Animacion(int n, int d, tipoAnim anim, int e) :
 
 
 Animacion::~Animacion(){
-    delete inicial;
-    delete final;
-    delete change;
-    delete actual;
+    delete[] inicial;
+    delete[] final;
+    delete[] change;
+    delete[] actual;
     
     lDEBUG << Log::DES("Animación");
 }
@@ -143,6 +143,29 @@ void Animacion::reverse(){
 	inicial[i] = final[i];
 	final[i] = a;
 	change[i] = final[i] - inicial[i];
+    }
+
+    if(anim == tEaseInQuad){
+	setTipoAnimacion(tEaseOutQuad);
+    }
+    else if(anim == tEaseOutQuad){
+	setTipoAnimacion(tEaseInQuad);
+    }
+    
+    // Cubic
+    else if(anim == tEaseInCubic){
+	setTipoAnimacion(tEaseOutCubic);
+    }
+    else if(anim == tEaseOutCubic){
+	setTipoAnimacion(tEaseInCubic);
+    }
+    
+    // Quart
+    else if(anim == tEaseInQuart){
+	setTipoAnimacion(tEaseOutQuart);
+    }
+    else if(anim == tEaseOutQuart){
+	setTipoAnimacion(tEaseInQuart);
     }
 
 }
