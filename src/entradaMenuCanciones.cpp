@@ -27,13 +27,15 @@
 EstadoMenuCanciones::EntradaMenuCanciones::EntradaMenuCanciones (Gosu::Graphics & g, string titulo, 
                                                                  string descripcion, string ruta, 
                                                                  int pos)
-	: g(g), titulo(titulo), descripcion(descripcion), ruta(ruta), pos(pos){
+    : g(g), titulo(titulo), descripcion(descripcion), ruta(ruta), pos(pos){
 	
 	txtTitulo.reset(new Gosu::Font(g, L"media/fNormal.ttf", 34, 0));
 	txtDescripcion.reset(new Gosu::Font(g, L"media/fNormal.ttf", 34, 0));
 }
 
 void EstadoMenuCanciones::EntradaMenuCanciones::draw(){
-	txtTitulo -> draw(Gosu::utf8ToWstring(titulo), 440, 
-	                  200 + pos * 40, 5, 1, 1, Gosu::Color(0xff000000));
+    int posInicial = 110;
+
+    txtTitulo -> draw(Gosu::utf8ToWstring(titulo), 440, 
+		      posInicial + pos * 100, 5, 1, 1, Gosu::Color(0xff000000));
 }

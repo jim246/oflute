@@ -28,6 +28,14 @@
 
 #include "estadoMenuCanciones.h"
 
+#include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
+#include <pugixml.hpp>
+
+#include <string>
+
+
+
 EstadoMenuCanciones::EstadoMenuCanciones(Juego * p)
     : Estado(p), cancionCargada(false){
 
@@ -91,15 +99,6 @@ EstadoMenuCanciones::EstadoMenuCanciones(Juego * p)
     txtSubtitulo -> animacion = new Animacion(1, 40, Animacion::tEaseOutCubic, 10);
     txtSubtitulo -> animacion -> set(0, 0, 255);
 
-    boost::shared_ptr<EntradaMenuCanciones> E(
-	new EntradaMenuCanciones(padre -> graphics(),
-				 "Título de prueba",
-				 "Descripción de prueba blablabla",
-				 "", 0)
-	);
-
-    conjuntoCanciones.push_back(E);
-
 }
 
 void EstadoMenuCanciones::update(){
@@ -114,6 +113,7 @@ void EstadoMenuCanciones::update(){
 
 	    lDEBUG << "Botones en su sitio";
 	    estadoTransicion = transHold;
+	    listarCanciones();
 	}
     }
 	
@@ -130,11 +130,17 @@ void EstadoMenuCanciones::draw(){
     }else{
 	imgLogotipo -> draw();
 	txtSubtitulo -> draw();
-//		conjuntoCanciones[0] -> draw();
 	imgSeleccion -> draw();
 	imgBtnUp -> draw();
 	imgBtnDown -> draw();
 	imgBtnOk -> draw();
+
+	if(estadoTransicion == transHold && !conjuntoCanciones.empty()){
+	    boost::shared_ptr<EntradaMenuCanciones> E;
+	    foreach(E, conjuntoCanciones){
+		E -> draw();
+	    }
+	}
     }
 }
 
@@ -176,22 +182,109 @@ void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
     else if(boton == Gosu::kbReturn){
 
 	lDEBUG << "Se pulsó enter";
+
+	/*
 	cancionCargada = true;
 
 	//	cancion.reset(new Cancion(padre -> graphics(), "song1.xml"));
 	//  cancion -> lanzar();
 
 	estadoTransicion = mostrandoCancion;
+
+	//*/
     }
 
-   
+    else if(boton == Gosu::msLeft){
+	int x = padre -> input().mouseX();
+	int y = padre -> input().mouseY();
+
+	if(estadoTransicion == transHold){
+	    if(imgBtnUp -> clicked(x,y)){
+		lDEBUG << "UP";
+	    }else if(imgBtnDown -> clicked(x,y)){
+		lDEBUG << "Down";
+	    }else if(imgBtnOk -> clicked(x,y)){
+		lDEBUG << "Ok";
+	    }
+	}
+    }
 }
 
 EstadoMenuCanciones::~EstadoMenuCanciones(){
     lDEBUG << Log::DES("EstadoMenuCanciones");
 }
 
-void EstadoMenuCanciones::cargarCanciones(){
+void EstadoMenuCanciones::listarCanciones(){
 
+    boost::filesystem::path rutaDirectorio("./canciones");
+    boost::filesystem::directory_iterator inicial(rutaDirectorio), final;
+
+    pugi::xml_document documento;
+    pugi::xml_parse_result resultado;
+    pugi::xml_node nodoActual, nodoVacio;
+    pugi::xml_attribute atributo;
+
+    unsigned contadorCanciones = 0;
+
+    for(; inicial != final ; ++ inicial){
+	if(boost::to_lower_copy(inicial -> path() . extension()) == ".xml"){
+
+
+	    string atrRuta, atrTitulo, atrDescripcion, atrPos;
+
+
+	    atrRuta = boost::lexical_cast<string>(inicial -> path());
+
+	    lDEBUG << "Intentando cargar archivo " << atrRuta;
+
+	    resultado = documento . load_file(atrRuta.c_str());
+
+	    if(!resultado){
+		lERROR << LOC() << " Error al leer el documento: " << atrRuta;
+		lERROR << resultado.description(); 
+		continue;
+	    }
+
+	    //lecActual.atrRuta = atrRuta;
+
+	    /////////////////
+	    // Leemos el título de la canción
+
+	    nodoActual = documento.child("Song").child("Title");
+
+	    if(nodoActual == nodoVacio){
+		lERROR << "El fichero " << atrRuta << " no está bien formado. "
+		       << "(Falta nombre)";
+		continue;
+	    }
+
+	    atrTitulo = nodoActual.first_child().value();
+
+	    /////////////////////
+	    // Leemos la descripción
+	    nodoActual = documento.child("Song").child("Desc");
+
+	    if(nodoActual == nodoVacio){
+		lERROR << "El fichero " << atrRuta << " no está bien formado. "
+		       << "(Falta descripción)";
+		continue;
+	    }
+
+	    atrDescripcion = nodoActual.first_child().value();
+
+	    boost::shared_ptr<EntradaMenuCanciones> cancionActual;
+	    
+	    cancionActual.reset(new EntradaMenuCanciones(padre -> graphics(),
+							 atrTitulo, atrDescripcion, atrRuta, 
+							 contadorCanciones++));
+
+	    conjuntoCanciones.push_back(cancionActual);
+
+	}
+    }
+
+    //sort(leccionesCargadas.begin(), leccionesCargadas.end(), ordenarLecciones());
+    //leccionActual = 0;
+    //cambiarLeccion(leccionActual);
 
 }

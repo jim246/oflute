@@ -30,7 +30,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "pugixml.hpp"
+#include <pugixml.hpp>
 
 EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
