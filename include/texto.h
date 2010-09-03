@@ -72,7 +72,7 @@ public:
     Texto(Gosu::Graphics& graphics, 
 	  string texto, string rutaFuente, unsigned tam, Gosu::Color color = Gosu::Color::WHITE,
 	  unsigned alineacion = 1, 
-	  bool sombra = false, unsigned opSombra = 80, int x = 0, int y = 0, int z = 0);
+	  bool sombra = false, unsigned opSombra = 80, float x = 0, float y = 0, float z = 0);
 
     void update();
 
@@ -84,6 +84,8 @@ public:
     void draw();
 
     void setText(string s);
+
+    string getText();
 
     /**
      * @brief Pinta el texto con la opacidad indicada.
@@ -101,13 +103,13 @@ public:
      *
      */
 
-    void draw(int z_);
+    void draw(float z_);
 
     /**
      * @brief Pinta el texto en la posición indicada
      *
      */
-    void draw(int x_, int y_, int z_, int a_ = 255);
+    void draw(float x_, float y_, float z_, int a_ = 255);
 
     unsigned getAlineacion() { return alineacion; }
 
@@ -149,7 +151,7 @@ private:
 	derecha, es la esquina sup der. Para el texto centrado, es la
 	posición central superior
     **/
-    unsigned x, y;
+    float x, y;
     //@}
     
     /// Profundidad
