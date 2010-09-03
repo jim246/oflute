@@ -1,3 +1,14 @@
+obj/entradaMenuCanciones.o: src/entradaMenuCanciones.cpp \
+ include/estadoMenuCanciones.h include/estado.h gosu/Gosu/Gosu.hpp \
+ gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp gosu/Gosu/IO.hpp \
+ gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp gosu/Gosu/Color.hpp \
+ gosu/Gosu/GraphicsBase.hpp gosu/Gosu/Directories.hpp gosu/Gosu/Font.hpp \
+ gosu/Gosu/Graphics.hpp gosu/Gosu/Image.hpp gosu/Gosu/RotFlip.hpp \
+ gosu/Gosu/ImageData.hpp gosu/Gosu/Input.hpp gosu/Gosu/ButtonsX.hpp \
+ gosu/Gosu/Math.hpp gosu/Gosu/Sockets.hpp gosu/Gosu/Text.hpp \
+ gosu/Gosu/TextInput.hpp gosu/Gosu/Timing.hpp gosu/Gosu/Utility.hpp \
+ gosu/Gosu/Window.hpp include/log.h include/elementosInterfaz.h \
+ include/animacion.h include/texto.h
 obj/estadoMenuCanciones.o: src/estadoMenuCanciones.cpp include/juego.h \
  gosu/Gosu/Gosu.hpp gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp \
  gosu/Gosu/IO.hpp gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp \
@@ -48,17 +59,6 @@ obj/estadoMenuLecciones.o: src/estadoMenuLecciones.cpp include/juego.h \
  include/estadoMenuLecciones.h include/estado.h include/log.h \
  include/elementosInterfaz.h include/texto.h include/leccion.h \
  pugixml/pugixml.hpp pugixml/pugiconfig.hpp
-obj/entradaMenuCanciones.o: src/entradaMenuCanciones.cpp \
- include/estadoMenuCanciones.h include/estado.h gosu/Gosu/Gosu.hpp \
- gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp gosu/Gosu/IO.hpp \
- gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp gosu/Gosu/Color.hpp \
- gosu/Gosu/GraphicsBase.hpp gosu/Gosu/Directories.hpp gosu/Gosu/Font.hpp \
- gosu/Gosu/Graphics.hpp gosu/Gosu/Image.hpp gosu/Gosu/RotFlip.hpp \
- gosu/Gosu/ImageData.hpp gosu/Gosu/Input.hpp gosu/Gosu/ButtonsX.hpp \
- gosu/Gosu/Math.hpp gosu/Gosu/Sockets.hpp gosu/Gosu/Text.hpp \
- gosu/Gosu/TextInput.hpp gosu/Gosu/Timing.hpp gosu/Gosu/Utility.hpp \
- gosu/Gosu/Window.hpp include/log.h include/elementosInterfaz.h \
- include/animacion.h include/texto.h
 obj/texto.o: src/texto.cpp include/texto.h gosu/Gosu/Gosu.hpp \
  gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp gosu/Gosu/IO.hpp \
  gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp gosu/Gosu/Color.hpp \
