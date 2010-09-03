@@ -111,11 +111,14 @@ void EstadoMenuCanciones::update(){
     if(estadoTransicion == transIn){
 	if(imgLogotipo -> animacion -> finished() &&
 	   txtSubtitulo -> animacion -> finished()){
+
+	    lDEBUG << "Botones en su sitio";
 	    estadoTransicion = transHold;
 	}
     }
 	
     else if(estadoTransicion == transOut && imgBtnOk -> animacion -> finished()){
+	lDEBUG << "Animaciones de ocultación terminadas";
 	padre -> cambiarEstado("estadoMenuSinFondo");
     }
 
@@ -188,3 +191,7 @@ EstadoMenuCanciones::~EstadoMenuCanciones(){
     lDEBUG << Log::DES("EstadoMenuCanciones");
 }
 
+void EstadoMenuCanciones::cargarCanciones(){
+
+
+}

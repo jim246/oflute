@@ -46,10 +46,12 @@ void ElementoCombinado::setImagen (string ruta)
 
 void ElementoCombinado::drawEnd (float x, float y, double z, int a)
 {
-    //lDEBUG << "DrawEnd " << x << "," << y << "," << z << ", alfa: " << a;
+    
     imagen -> draw(x,y,z,1,1,Gosu::Color(a,255,255,255));
+    
+
     switch(texto -> getAlineacion()){
-    case Texto::alignIzq:
+    case Texto::alignIzq:	
 	texto -> draw(x + textoX, y + textoY, z + 0.1, a);
 	break;
 

@@ -110,6 +110,8 @@ private:
     };
 
     vector<boost::shared_ptr<EntradaMenuCanciones> > conjuntoCanciones;
+
+    void cargarCanciones();
 };
 
 #endif /* _ESTADOMENUCANCIONES_H_ */

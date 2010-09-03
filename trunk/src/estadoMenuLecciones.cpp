@@ -34,167 +34,167 @@
 
 EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 
-	estadoActual = eMostrando;
+    estadoActual = eMostrando;
 
-	leccionMostrada = NULL;
-	leccionActual = -1;
+    leccionMostrada = NULL;
+    leccionActual = -1;
 
-	////////////////////////////////////////
-	// Definición de la imagen de la pizarra
+    ////////////////////////////////////////
+    // Definición de la imagen de la pizarra
 
-	pizarra.reset(new ElementoImagen(padre -> graphics(), "media/menuLecciones/pizarra.png", 
-	                                 2, Animacion::tAlphaPos));
-	pizarra -> animacion = new Animacion(3, 30, Animacion::tEaseOutQuad, 0);
-	pizarra -> animacion -> set(0, 0, 255); // alfa
-	pizarra -> animacion -> set(1, -450, 35); // x
-	pizarra -> animacion -> set(2, 128, 128); // y
+    pizarra.reset(new ElementoImagen(padre -> graphics(), "media/menuLecciones/pizarra.png", 
+				     2, Animacion::tAlphaPos));
+    pizarra -> animacion = new Animacion(3, 30, Animacion::tEaseOutQuad, 0);
+    pizarra -> animacion -> set(0, 0, 255); // alfa
+    pizarra -> animacion -> set(1, -450, 35); // x
+    pizarra -> animacion -> set(2, 128, 128); // y
 
-	conjuntoElementos.push_back(pizarra);
+    conjuntoElementos.push_back(pizarra);
 
-	////////////////////////////////////////
-	// Definición de la barra superior
+    ////////////////////////////////////////
+    // Definición de la barra superior
 
-	barraSuperior.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
+    barraSuperior.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
 
-	// Configuramos la animación
+    // Configuramos la animación
 
-	barraSuperior -> animacion = new Animacion(2, 30, Animacion::tEaseOutQuad, 0);
-	barraSuperior -> animacion -> set(0, 0, 0); // Sin movimiento en el eje X
-	barraSuperior -> animacion -> set(1, -70, 0); // Movimiento vertical
+    barraSuperior -> animacion = new Animacion(2, 30, Animacion::tEaseOutQuad, 0);
+    barraSuperior -> animacion -> set(0, 0, 0); // Sin movimiento en el eje X
+    barraSuperior -> animacion -> set(1, -70, 0); // Movimiento vertical
 
-	// Configuramos el texto
+    barraSuperior -> setImagen("media/menuLecciones/mTop.png");
 
-	tConfTexto * cTexto = new tConfTexto();
-	cTexto-> cadena = _("Listado de lecciones");
-	cTexto-> rutaFuente = "media/fLight.ttf";
-	cTexto-> tam = 56;
-	barraSuperior -> setTexto(*cTexto, 34, 0);
-	delete cTexto;
+    // Configuramos el texto
 
-	// Configuramos la imagen
+    tConfTexto * cTexto = new tConfTexto;
+    cTexto-> cadena = _("Listado de lecciones");
+    cTexto-> rutaFuente = "media/fLight.ttf";
+    cTexto-> tam = 54;
+    barraSuperior -> setTexto(*cTexto, 34, 0);
 
-	barraSuperior -> setImagen("media/menuLecciones/mTop.png");
-	conjuntoElementos.push_back(barraSuperior);
+    delete cTexto;
 
-
-	//////////////////////////////////////
-	// Definición de la barra inferior
-	barraInferior.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
-
-	barraInferior -> animacion = new Animacion(2, 30, Animacion::tEaseOutQuad, 0);
-	barraInferior -> animacion -> set(0, 0, 0);
-	barraInferior -> animacion -> set(1, 600, 554);
-
-	barraInferior -> setImagen("media/menuLecciones/mBottom.png");
-
-	tConfTexto * confInferiorTexto = new tConfTexto;
-	confInferiorTexto -> cadena = _("Volver al menú");
-	confInferiorTexto -> rutaFuente = "media/fNormal.ttf";
-	confInferiorTexto -> tam = 28;
-	barraInferior -> setTexto(*confInferiorTexto, 52, 7);
-
-	delete confInferiorTexto;
-
-	conjuntoElementos.push_back(barraInferior);
-
-	//////////////////////////////////////////
-	// Definición del primer botón (En el que aparece "Lección nº1")
-
-	btnTitular.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
-
-	btnTitular -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 10);
-	btnTitular -> animacion -> set(0, 800, 400);
-	btnTitular -> animacion -> set(1, 69, 69);
-
-	btnTitular -> setImagen("media/menuLecciones/mBtn1.png");
-
-	tConfTexto * confBtnTexto = new tConfTexto;
-	confBtnTexto -> cadena = _("Lección nº1");
-	confBtnTexto -> rutaFuente = "media/fNormal.ttf";
-	confBtnTexto -> tam = 36;
-	confBtnTexto -> sombra = false;
-	confBtnTexto -> alineacion = Texto::alignDer;
-	btnTitular -> setTexto(*confBtnTexto, -20, 7);
-
-	conjuntoElementos.push_back(btnTitular);
+    conjuntoElementos.push_back(barraSuperior);
 
 
-	///////////////////////////////
-	// Definición del fondo de la descripción
+    //////////////////////////////////////
+    // Definición de la barra inferior
+    barraInferior.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
 
-	btnDescripcion.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
+    barraInferior -> animacion = new Animacion(2, 30, Animacion::tEaseOutQuad, 0);
+    barraInferior -> animacion -> set(0, 0, 0);
+    barraInferior -> animacion -> set(1, 600, 554);
 
-	btnDescripcion -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 20);
-	btnDescripcion -> animacion -> set(0, 800, 400);
-	btnDescripcion -> animacion -> set(1, 127, 127);
+    barraInferior -> setImagen("media/menuLecciones/mBottom.png");
 
-	btnDescripcion -> setImagen("media/menuLecciones/mBtn2.png");
+    tConfTexto * confInferiorTexto = new tConfTexto;
+    confInferiorTexto -> cadena = _("Volver al menú");
+    confInferiorTexto -> rutaFuente = "media/fNormal.ttf";
+    confInferiorTexto -> tam = 28;
+    barraInferior -> setTexto(*confInferiorTexto, 52, 7);
 
-	confBtnTexto -> cadena = _("Descripción:");
-	confBtnTexto -> sombra = true;
-	confBtnTexto -> color = Gosu::Color(255, 227, 253, 94);
-	btnDescripcion -> setTexto(*confBtnTexto, -20, 10);
+    delete confInferiorTexto;
 
-	conjuntoElementos.push_back(btnDescripcion);
+    conjuntoElementos.push_back(barraInferior);
 
-	//////////////////////////////////////
-	// Definición del texto de la descripción
+    //////////////////////////////////////////
+    // Definición del primer botón (En el que aparece "Lección nº1")
 
-	textoDesc . reset( new ElementoTexto( padre -> graphics(), " ", "media/fNormal.ttf",
-	                                      36, 0xffffffff, Texto::alignDer,
-	                                      true, 80,
-	                                      4, Animacion::tAlpha) );
-	textoDesc -> animacion = new Animacion(1, 20, Animacion::tEaseOutQuad, 13);
-	textoDesc -> animacion -> set(0,0,255);
-	textoDesc -> setXY(780, 175);
+    btnTitular.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
 
-	conjuntoElementos.push_back(textoDesc);
-	///////////////////////////////
-	// Botón comenzar 
+    btnTitular -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 10);
+    btnTitular -> animacion -> set(0, 800, 400);
+    btnTitular -> animacion -> set(1, 69, 69);
 
-	btnComenzar.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
-	btnComenzar -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 30);
-	btnComenzar -> animacion -> set(0, 800, 400);
-	btnComenzar -> animacion -> set(1, 351, 351);
+    btnTitular -> setImagen("media/menuLecciones/mBtn1.png");
 
-	btnComenzar -> setImagen("media/menuLecciones/mBtn3.png");
-	confBtnTexto -> color = Gosu::Color(255,255,255,255);
-	confBtnTexto -> cadena = _("Comenzar lección");
-	confBtnTexto -> alineacion = Texto::alignCentro;
-	btnComenzar -> setTexto(*confBtnTexto, 10, 10);
+    tConfTexto * confBtnTexto = new tConfTexto;
+    confBtnTexto -> cadena = _("Lección nº1");
+    confBtnTexto -> rutaFuente = "media/fNormal.ttf";
+    confBtnTexto -> tam = 36;
+    confBtnTexto -> sombra = false;
+    confBtnTexto -> alineacion = Texto::alignDer;
+    btnTitular -> setTexto(*confBtnTexto, -20, 7);
 
-	conjuntoElementos.push_back(btnComenzar);
+    conjuntoElementos.push_back(btnTitular);
 
-	///////////////////////////////
-	// Botón Siguiente Lección
-	btnSigLec.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
-	btnSigLec -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 40);
-	btnSigLec -> animacion -> set(0, 800, 400);
-	btnSigLec -> animacion -> set(1, 417, 417);
 
-	btnSigLec -> setImagen("media/menuLecciones/mBtn4.png");
+    ///////////////////////////////
+    // Definición del fondo de la descripción
 
-	confBtnTexto -> cadena = _("Siguiente lección");
-	btnSigLec -> setTexto(*confBtnTexto, 10, 13);
+    btnDescripcion.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
 
-	conjuntoElementos.push_back(btnSigLec);
+    btnDescripcion -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 20);
+    btnDescripcion -> animacion -> set(0, 800, 400);
+    btnDescripcion -> animacion -> set(1, 127, 127);
 
-	/////////////////////////////
-	// Botón Anterior Lección
-	btnAntLec.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
-	btnAntLec -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 50);
-	btnAntLec -> animacion -> set(0, 800, 400);
-	btnAntLec -> animacion -> set(1, 487, 487);
+    btnDescripcion -> setImagen("media/menuLecciones/mBtn2.png");
 
-	btnAntLec -> setImagen("media/menuLecciones/mBtn5.png");
+    confBtnTexto -> cadena = _("Descripción:");
+    confBtnTexto -> sombra = true;
+    confBtnTexto -> color = Gosu::Color(255, 227, 253, 94);
+    btnDescripcion -> setTexto(*confBtnTexto, -20, 10);
 
-	confBtnTexto -> cadena = _("Anterior lección");
-	btnAntLec -> setTexto(*confBtnTexto, 10, 10);
-	conjuntoElementos.push_back(btnAntLec);
+    conjuntoElementos.push_back(btnDescripcion);
 
-	delete confBtnTexto;
+    //////////////////////////////////////
+    // Definición del texto de la descripción
 
-	//*/
+    textoDesc . reset( new ElementoTexto( padre -> graphics(), " ", "media/fNormal.ttf",
+					  36, 0xffffffff, Texto::alignDer,
+					  true, 80,
+					  4, Animacion::tAlpha) );
+    textoDesc -> animacion = new Animacion(1, 20, Animacion::tEaseOutQuad, 13);
+    textoDesc -> animacion -> set(0,0,255);
+    textoDesc -> setXY(780, 175);
+
+    conjuntoElementos.push_back(textoDesc);
+    ///////////////////////////////
+    // Botón comenzar 
+
+    btnComenzar.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
+    btnComenzar -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 30);
+    btnComenzar -> animacion -> set(0, 800, 400);
+    btnComenzar -> animacion -> set(1, 351, 351);
+
+    btnComenzar -> setImagen("media/menuLecciones/mBtn3.png");
+    confBtnTexto -> color = Gosu::Color(255,255,255,255);
+    confBtnTexto -> cadena = _("Comenzar lección");
+    confBtnTexto -> alineacion = Texto::alignCentro;
+    btnComenzar -> setTexto(*confBtnTexto, 10, 10);
+
+    conjuntoElementos.push_back(btnComenzar);
+
+    ///////////////////////////////
+    // Botón Siguiente Lección
+    btnSigLec.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
+    btnSigLec -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 40);
+    btnSigLec -> animacion -> set(0, 800, 400);
+    btnSigLec -> animacion -> set(1, 417, 417);
+
+    btnSigLec -> setImagen("media/menuLecciones/mBtn4.png");
+
+    confBtnTexto -> cadena = _("Siguiente lección");
+    btnSigLec -> setTexto(*confBtnTexto, 10, 13);
+
+    conjuntoElementos.push_back(btnSigLec);
+
+    /////////////////////////////
+    // Botón Anterior Lección
+    btnAntLec.reset( new ElementoCombinado( padre -> graphics(), Animacion::tPos, 2) );
+    btnAntLec -> animacion = new Animacion(2, 20, Animacion::tEaseOutQuad, 50);
+    btnAntLec -> animacion -> set(0, 800, 400);
+    btnAntLec -> animacion -> set(1, 487, 487);
+
+    btnAntLec -> setImagen("media/menuLecciones/mBtn5.png");
+
+    confBtnTexto -> cadena = _("Anterior lección");
+    btnAntLec -> setTexto(*confBtnTexto, 10, 10);
+    conjuntoElementos.push_back(btnAntLec);
+
+    delete confBtnTexto;
+
+    //*/
 
 
 }
@@ -202,267 +202,267 @@ EstadoMenuLecciones::EstadoMenuLecciones(Juego * p) : Estado(p) {
 void EstadoMenuLecciones::listarLecciones(){
 
 
-	boost::filesystem::path rutaDirectorio("./lecciones");
-	boost::filesystem::directory_iterator inicial(rutaDirectorio), final;
+    boost::filesystem::path rutaDirectorio("./lecciones");
+    boost::filesystem::directory_iterator inicial(rutaDirectorio), final;
 
-	pugi::xml_document documento;
-	pugi::xml_parse_result resultado;
-	pugi::xml_node nodoActual, nodoVacio;
-	pugi::xml_attribute atributo;
+    pugi::xml_document documento;
+    pugi::xml_parse_result resultado;
+    pugi::xml_node nodoActual, nodoVacio;
+    pugi::xml_attribute atributo;
 
-	for(; inicial != final ; ++ inicial){
-		if(boost::to_lower_copy(inicial -> path() . extension()) == ".xml"){
+    for(; inicial != final ; ++ inicial){
+	if(boost::to_lower_copy(inicial -> path() . extension()) == ".xml"){
 
-			EstadoMenuLecciones::InfoLeccion lecActual;
-			string ruta = boost::lexical_cast<string>(inicial -> path());
+	    EstadoMenuLecciones::InfoLeccion lecActual;
+	    string ruta = boost::lexical_cast<string>(inicial -> path());
 
-			lDEBUG << "Intentando cargar archivo " << ruta;
+	    lDEBUG << "Intentando cargar archivo " << ruta;
 
-			resultado = documento . load_file(ruta.c_str());
+	    resultado = documento . load_file(ruta.c_str());
 
-			if(!resultado){
-				lERROR << LOC() << " Error al leer el documento: " << ruta;
-				lERROR << resultado.description(); 
-				continue;
-			}
+	    if(!resultado){
+		lERROR << LOC() << " Error al leer el documento: " << ruta;
+		lERROR << resultado.description(); 
+		continue;
+	    }
 
-			lecActual.ruta = ruta;
+	    lecActual.ruta = ruta;
 
-			/////////////////////
-			// Leemos el número de lección
+	    /////////////////////
+	    // Leemos el número de lección
 
-			nodoActual = documento.child("Lec").child("index");
+	    nodoActual = documento.child("Lec").child("index");
 
-			if(nodoActual == nodoVacio){
-				lERROR << "El fichero " << ruta << " no está bien formado. "
-				       << "(Falta índice)";
-				continue;
-			}
+	    if(nodoActual == nodoVacio){
+		lERROR << "El fichero " << ruta << " no está bien formado. "
+		       << "(Falta índice)";
+		continue;
+	    }
 
-			lecActual.indice = boost::lexical_cast<int>(nodoActual.first_child().value());
-
-
-			/////////////////
-			// Leemos el nombre de la lección
-
-			nodoActual = documento.child("Lec").child("nombre");
-
-			if(nodoActual == nodoVacio){
-				lERROR << "El fichero " << ruta << " no está bien formado. "
-				       << "(Falta nombre)";
-				continue;
-			}
-
-			lecActual.nombre = nodoActual.first_child().value();
+	    lecActual.indice = boost::lexical_cast<int>(nodoActual.first_child().value());
 
 
-			/////////////////////
-			// Leemos la descripción
-			nodoActual = documento.child("Lec").child("descrip");
+	    /////////////////
+	    // Leemos el nombre de la lección
 
-			if(nodoActual == nodoVacio){
-				lERROR << "El fichero " << ruta << " no está bien formado. "
-				       << "(Falta descripción)";
-				continue;
-			}
+	    nodoActual = documento.child("Lec").child("nombre");
 
-			lecActual.descrip = nodoActual.first_child().value();
+	    if(nodoActual == nodoVacio){
+		lERROR << "El fichero " << ruta << " no está bien formado. "
+		       << "(Falta nombre)";
+		continue;
+	    }
 
-			leccionesCargadas.push_back(lecActual);
+	    lecActual.nombre = nodoActual.first_child().value();
 
-		}
+
+	    /////////////////////
+	    // Leemos la descripción
+	    nodoActual = documento.child("Lec").child("descrip");
+
+	    if(nodoActual == nodoVacio){
+		lERROR << "El fichero " << ruta << " no está bien formado. "
+		       << "(Falta descripción)";
+		continue;
+	    }
+
+	    lecActual.descrip = nodoActual.first_child().value();
+
+	    leccionesCargadas.push_back(lecActual);
+
 	}
+    }
 
-	sort(leccionesCargadas.begin(), leccionesCargadas.end(), ordenarLecciones());
-	leccionActual = 0;
-	cambiarLeccion(leccionActual);
+    sort(leccionesCargadas.begin(), leccionesCargadas.end(), ordenarLecciones());
+    leccionActual = 0;
+    cambiarLeccion(leccionActual);
 }
 
 
 
 void EstadoMenuLecciones::cambiarLeccion(unsigned n){
-	leccionActual = n;
+    leccionActual = n;
 
-	tConfTexto * confBtnTexto = new tConfTexto;
-	confBtnTexto -> cadena = string(_("Lección nº")) + boost::lexical_cast<string>(leccionesCargadas[n].indice);
-	confBtnTexto -> rutaFuente = "media/fNormal.ttf";
-	confBtnTexto -> tam = 36;
-	confBtnTexto -> sombra = false;
-	confBtnTexto -> alineacion = Texto::alignDer;
-	btnTitular -> setTexto(*confBtnTexto, -20, 7);
+    tConfTexto * confBtnTexto = new tConfTexto;
+    confBtnTexto -> cadena = string(_("Lección nº")) + boost::lexical_cast<string>(leccionesCargadas[n].indice);
+    confBtnTexto -> rutaFuente = "media/fNormal.ttf";
+    confBtnTexto -> tam = 36;
+    confBtnTexto -> sombra = false;
+    confBtnTexto -> alineacion = Texto::alignDer;
+    btnTitular -> setTexto(*confBtnTexto, -20, 7);
 
-	delete confBtnTexto;
+    delete confBtnTexto;
 
-	textoDesc -> setText(leccionesCargadas[n] . descrip);
+    textoDesc -> setText(leccionesCargadas[n] . descrip);
 }
 
 
 
 void EstadoMenuLecciones::draw() {
-	barraInferior -> draw();  
+    barraInferior -> draw();  
 
-	if(estadoActual != eLeccion){
-		pizarra -> draw();
-		barraSuperior -> draw();
-		btnTitular -> draw();
-		textoDesc -> draw();
-		btnComenzar -> draw();
-		btnAntLec -> draw();
-		btnSigLec -> draw();
-		btnDescripcion -> draw();
-	}else if(estadoActual == eLeccion){
-		leccionMostrada -> draw();
-	}
+    if(estadoActual != eLeccion){
+	pizarra -> draw();
+	barraSuperior -> draw();
+	btnTitular -> draw();
+	textoDesc -> draw();
+	btnComenzar -> draw();
+	btnAntLec -> draw();
+	btnSigLec -> draw();
+	btnDescripcion -> draw();
+    }else if(estadoActual == eLeccion){
+	leccionMostrada -> draw();
+    }
 	
-	//*/
+    //*/
 }
 
 void EstadoMenuLecciones::anteriorLec(){
-	if(leccionActual <= 0){
-		cambiarLeccion(leccionesCargadas.size() - 1);
-	}else{
-		cambiarLeccion(leccionActual - 1);
-	}
+    if(leccionActual <= 0){
+	cambiarLeccion(leccionesCargadas.size() - 1);
+    }else{
+	cambiarLeccion(leccionActual - 1);
+    }
 	
 }
 
 void EstadoMenuLecciones::siguienteLec(){
-	if(leccionActual == (int)(leccionesCargadas.size() - 1)){
-		cambiarLeccion(0);
-	}else{
-		cambiarLeccion(leccionActual + 1);
-	}
+    if(leccionActual == (int)(leccionesCargadas.size() - 1)){
+	cambiarLeccion(0);
+    }else{
+	cambiarLeccion(leccionActual + 1);
+    }
 }
 
 
 void EstadoMenuLecciones::buttonDown(Gosu::Button boton){
-	if(boton == Gosu::msLeft){
-		int x = padre -> input().mouseX();
-		int y = padre -> input().mouseY();
+    if(boton == Gosu::msLeft){
+	int x = padre -> input().mouseX();
+	int y = padre -> input().mouseY();
 	
-		if(estadoActual == eMenu){
-			if(barraInferior -> clicked(x, y)){
-				estadoActual = eOcultando;
-				iniciarAnimacionSalida(dirOCULTAR, false);
+	if(estadoActual == eMenu){
+	    if(barraInferior -> clicked(x, y)){
+		estadoActual = eOcultando;
+		iniciarAnimacionSalida(dirOCULTAR, false);
 //		padre -> cambiarEstado("estadoMenuSinFondo");
-			}
+	    }
 	    
-			else if(btnAntLec -> clicked(x, y)){
-				anteriorLec();
-			}
+	    else if(btnAntLec -> clicked(x, y)){
+		anteriorLec();
+	    }
 
-			else if(btnSigLec -> clicked(x, y)){
-				siguienteLec();
-			}
+	    else if(btnSigLec -> clicked(x, y)){
+		siguienteLec();
+	    }
 	    
-			else if(btnComenzar -> clicked(x, y)){
-				estadoActual = eOcultarInter;
-				iniciarAnimacionSalida(dirOCULTAR);
-			}
-		}
-
-		else if(estadoActual == eLeccion){	    
-			if(barraInferior -> clicked(x, y)){
-				estadoActual = eMostrarInter;
-				iniciarAnimacionSalida(dirMOSTRAR);  
-				delete leccionMostrada;
-				leccionMostrada = NULL;
-			}
-		}
+	    else if(btnComenzar -> clicked(x, y)){
+		estadoActual = eOcultarInter;
+		iniciarAnimacionSalida(dirOCULTAR);
+	    }
 	}
+
+	else if(estadoActual == eLeccion){	    
+	    if(barraInferior -> clicked(x, y)){
+		estadoActual = eMostrarInter;
+		iniciarAnimacionSalida(dirMOSTRAR);  
+		delete leccionMostrada;
+		leccionMostrada = NULL;
+	    }
+	}
+    }
 }
 
 void EstadoMenuLecciones::iniciarAnimacionSalida(int dir, bool saltarBarraInferior){
-	foreach(boost::shared_ptr<Elemento>& E, conjuntoElementos){
-		if(E == barraInferior && saltarBarraInferior) continue;
-		E -> animacion -> reverse();
-		if(dir == dirMOSTRAR){
-			E -> animacion -> setTipoAnimacion(Animacion::tEaseOutQuad);
-		}else{
-			E -> animacion -> setTipoAnimacion(Animacion::tEaseInQuad);
-		}
-		E -> animacion -> init();
+    foreach(boost::shared_ptr<Elemento>& E, conjuntoElementos){
+	if(E == barraInferior && saltarBarraInferior) continue;
+	E -> animacion -> reverse();
+	if(dir == dirMOSTRAR){
+	    E -> animacion -> setTipoAnimacion(Animacion::tEaseOutQuad);
+	}else{
+	    E -> animacion -> setTipoAnimacion(Animacion::tEaseInQuad);
 	}
+	E -> animacion -> init();
+    }
 }
 
 
 void EstadoMenuLecciones::lanzarLeccion(){
-	lDEBUG << LOC();
+    lDEBUG << LOC();
 
     
-	leccionMostrada = new Leccion(padre -> graphics(), 
-	                              leccionesCargadas[leccionActual].ruta);
-	estadoActual = eLeccion;//*/
+    leccionMostrada = new Leccion(padre -> graphics(), 
+				  leccionesCargadas[leccionActual].ruta);
+    estadoActual = eLeccion;//*/
     
 }
 
 void EstadoMenuLecciones::update(){
 
-	// El Menú está saliendo
-	if(estadoActual == eMostrando){
+    // El Menú está saliendo
+    if(estadoActual == eMostrando){
 
-		/*
-		// Si al estar saliendo se pulsa Escape, se terminan las animaciones
-		if(padre -> input() . down(Gosu::kbEscape)){
-		lDEBUG << "Terminando animaciones...";
-		foreach(boost::shared_ptr<Elemento>& E, conjuntoElementos){
-		E -> animacion -> end();
-		}
-
-		estadoActual = eMenu;
-		} //*/
-
-		if(barraSuperior -> animacion -> finished() && btnAntLec -> animacion -> finished()){
-			estadoActual = eMenu;
-		}
+	/*
+	// Si al estar saliendo se pulsa Escape, se terminan las animaciones
+	if(padre -> input() . down(Gosu::kbEscape)){
+	lDEBUG << "Terminando animaciones...";
+	foreach(boost::shared_ptr<Elemento>& E, conjuntoElementos){
+	E -> animacion -> end();
 	}
 
-	// Menú activo
-	else if(estadoActual == eMenu){
-		if(leccionActual == -1){
-			listarLecciones();
-		}
+	estadoActual = eMenu;
+	} //*/
 
-		if(padre -> input() . down(Gosu::kbEscape)){
-			estadoActual = eOcultando;
-			iniciarAnimacionSalida(dirOCULTAR, false);
-		}
-	} 
+	if(barraSuperior -> animacion -> finished() && btnAntLec -> animacion -> finished()){
+	    estadoActual = eMenu;
+	}
+    }
 
-	else if(estadoActual == eOcultarInter){
-		if(btnAntLec -> animacion -> finished()){
-			estadoActual = eLeccion;
-			leccionMostrada = new Leccion(padre -> graphics(),
-			                              leccionesCargadas[leccionActual].ruta);
-		}
+    // Menú activo
+    else if(estadoActual == eMenu){
+	if(leccionActual == -1){
+	    listarLecciones();
 	}
 
-	else if(estadoActual == eMostrarInter){
-		if(btnAntLec -> animacion -> finished()){
-			estadoActual = eMenu;
-		}
+	if(padre -> input() . down(Gosu::kbEscape)){
+	    estadoActual = eOcultando;
+	    iniciarAnimacionSalida(dirOCULTAR, false);
+	}
+    } 
 
+    else if(estadoActual == eOcultarInter){
+	if(btnAntLec -> animacion -> finished()){
+	    estadoActual = eLeccion;
+	    leccionMostrada = new Leccion(padre -> graphics(),
+					  leccionesCargadas[leccionActual].ruta);
+	}
+    }
+
+    else if(estadoActual == eMostrarInter){
+	if(btnAntLec -> animacion -> finished()){
+	    estadoActual = eMenu;
 	}
 
-	else if(estadoActual == eOcultando){
-		if(btnAntLec -> animacion -> finished()){
-			padre -> cambiarEstado("estadoMenuSinFondo");
-		}
-	}
+    }
 
-	else if(estadoActual == eLeccion){
-		if(padre -> input() . down(Gosu::kbEscape)){
-			estadoActual = eMostrarInter;
-			iniciarAnimacionSalida(dirMOSTRAR);  
-			delete leccionMostrada;
-			leccionMostrada = NULL;
-		}
+    else if(estadoActual == eOcultando){
+	if(btnAntLec -> animacion -> finished()){
+	    padre -> cambiarEstado("estadoMenuSinFondo");
 	}
+    }
+
+    else if(estadoActual == eLeccion){
+	if(padre -> input() . down(Gosu::kbEscape)){
+	    estadoActual = eMostrarInter;
+	    iniciarAnimacionSalida(dirMOSTRAR);  
+	    delete leccionMostrada;
+	    leccionMostrada = NULL;
+	}
+    }
 }
 
 
 EstadoMenuLecciones::~EstadoMenuLecciones(){
-	if(leccionMostrada != NULL){
-		delete leccionMostrada;
-	}
+    if(leccionMostrada != NULL){
+	delete leccionMostrada;
+    }
 }

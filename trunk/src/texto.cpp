@@ -47,7 +47,7 @@ int Texto::dividirTexto(){
 Texto::Texto(Gosu::Graphics& graphics, 
       string texto, string rutaFuente, unsigned tam, Gosu::Color color,
       unsigned alineacion, 
-      bool sombra, unsigned opSombra, int x, int y, int z) 
+      bool sombra, unsigned opSombra, float x, float y, float z) 
     : 
     graphics(graphics), texto(texto), tam(tam), color(color), 
     alineacion(alineacion), sombra(sombra), opacidadSombra(opSombra), 
@@ -76,11 +76,15 @@ void Texto::setText(string s){
     poblarVectores();
 }
 
+string Texto::getText(){
+    return texto;
+}
 
 void Texto::drawAlpha(int a){
 	
     int salto = tam + 5;
     short i = 0;
+
 
 
     BOOST_FOREACH(string& s, lineas)
@@ -100,7 +104,6 @@ void Texto::drawAlpha(int a){
 	else{
 	    destX = x - fuente -> textWidth(Gosu::widen(s)) / 2;
 	}
-
 	color.setAlpha(a);
 	fuente -> draw(Gosu::widen(s), destX, y + salto * i, z + 0.1, 1, 1, color);
 	    
@@ -116,12 +119,12 @@ void Texto::drawAlpha(int a){
 	
 }
 
-void Texto::draw(int z_){
+void Texto::draw(float z_){
     z = z_;
     draw();
 }
 
-void Texto::draw(int x_, int y_, int z_, int a_){
+void Texto::draw(float x_, float y_, float z_, int a_){
     x = x_;
     y = y_;
     z = z_;
