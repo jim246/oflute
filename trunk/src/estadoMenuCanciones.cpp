@@ -37,7 +37,7 @@
 
 
 EstadoMenuCanciones::EstadoMenuCanciones(Juego * p)
-    : Estado(p), cancionCargada(false){
+    : Estado(p), cancionCargada(false), cancionSeleccionada(0){
 
     lDEBUG << Log::CON("EstadoMenuCanciones");
 
@@ -55,7 +55,7 @@ EstadoMenuCanciones::EstadoMenuCanciones(Juego * p)
 
     imgSeleccion.reset(new ElementoImagen(padre -> graphics(),
 					  "media/selCanMark.png",
-					  3, Animacion::tPos));
+					  6, Animacion::tPos));
 
     imgSeleccion -> animacion = new Animacion(2, 30, Animacion::tEaseOutCubic, 10);
     imgSeleccion -> animacion -> set(0, 800, 397);
@@ -200,15 +200,36 @@ void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
 
 	if(estadoTransicion == transHold){
 	    if(imgBtnUp -> clicked(x,y)){
-		lDEBUG << "UP";
+		listaAnterior();
 	    }else if(imgBtnDown -> clicked(x,y)){
-		lDEBUG << "Down";
+		listaSiguiente();
 	    }else if(imgBtnOk -> clicked(x,y)){
 		lDEBUG << "Ok";
 	    }
 	}
     }
 }
+
+void EstadoMenuCanciones::listaSiguiente(){
+    if(cancionSeleccionada == int(conjuntoCanciones.size() - 1)) return;
+    
+    ++cancionSeleccionada;
+    boost::shared_ptr<EntradaMenuCanciones> E;
+    foreach(E, conjuntoCanciones){
+	E -> mover(-1);
+    }
+}
+
+void EstadoMenuCanciones::listaAnterior(){
+    if(cancionSeleccionada == 0) return;
+
+    --cancionSeleccionada;
+    boost::shared_ptr<EntradaMenuCanciones> E;
+    foreach(E, conjuntoCanciones){
+	E -> mover(+1);
+    }
+}
+
 
 EstadoMenuCanciones::~EstadoMenuCanciones(){
     lDEBUG << Log::DES("EstadoMenuCanciones");

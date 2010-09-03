@@ -95,6 +95,7 @@ private:
 			     string descripcion, string ruta, int pos);
 
 	void draw();
+	void mover(int a);
     private:
 	Gosu::Graphics & g;
 
@@ -106,12 +107,22 @@ private:
 
 	int pos;
 
+	float y_final, y_actual, pasos;
+
+	int posInicial;
+
+	int saltoEntreEntradas;
+
 	boost::scoped_ptr<Gosu::Font> txtTitulo, txtDescripcion;
     };
 
     vector<boost::shared_ptr<EntradaMenuCanciones> > conjuntoCanciones;
 
+    int cancionSeleccionada;
+
     void listarCanciones();
+    void listaSiguiente();
+    void listaAnterior();
 };
 
 #endif /* _ESTADOMENUCANCIONES_H_ */
