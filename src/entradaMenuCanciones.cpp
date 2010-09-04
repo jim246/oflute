@@ -37,7 +37,6 @@ EstadoMenuCanciones::EntradaMenuCanciones::EntradaMenuCanciones (Gosu::Graphics 
     y_final = posInicial + pos * saltoEntreEntradas;
     y_actual = 600;
     pasos = 15;
-    lDEBUG << y_final;
 }
 
 void EstadoMenuCanciones::EntradaMenuCanciones::draw(){
