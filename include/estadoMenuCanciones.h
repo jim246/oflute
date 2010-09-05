@@ -66,13 +66,13 @@ public:
 
 private:
     /// Diferentes estados de transición
-    enum tTrans{ transIn, transHold, mostrandoCancion, transOut };
+	enum tTrans{ transIn, transHold, transToCancion, transCancion, transOut };
 
     /// Estado de transición actual
     tTrans estadoTransicion;
 
     /// Canción actualmente cargada
-//    boost::scoped_ptr<Cancion> cancion;
+    boost::scoped_ptr<Cancion> cancion;
 
 
     bool cancionCargada;
@@ -96,6 +96,8 @@ private:
 
 	void draw();
 	void mover(int a);
+	string getRuta();
+
     private:
 	Gosu::Graphics & g;
 
@@ -123,6 +125,8 @@ private:
     void listarCanciones();
     void listaSiguiente();
     void listaAnterior();
+
+    void invertirAnimaciones();
 };
 
 #endif /* _ESTADOMENUCANCIONES_H_ */
