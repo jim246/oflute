@@ -102,19 +102,15 @@ EstadoMenuCanciones::EstadoMenuCanciones(Juego * p)
 }
 
 void EstadoMenuCanciones::update(){
-    if(cancionCargada == true) {
-	lDEBUG << LOC() << " WATTTTTTTTTTTTTTTTTTTTT????????????????????????????????????????????";
-    }
 
+    if(estadoTransicion == transIn && 
+       imgLogotipo -> animacion -> finished() &&
+       txtSubtitulo -> animacion -> finished()){
 
-    if(estadoTransicion == transIn){
-	if(imgLogotipo -> animacion -> finished() &&
-	   txtSubtitulo -> animacion -> finished()){
-
-	    lDEBUG << "Botones en su sitio";
-	    estadoTransicion = transHold;
-	    listarCanciones();
-	}
+	lDEBUG << "Botones en su sitio";
+	estadoTransicion = transHold;
+	listarCanciones();
+	
     }
 	
     else if(estadoTransicion == transOut && imgBtnOk -> animacion -> finished()){
@@ -122,12 +118,32 @@ void EstadoMenuCanciones::update(){
 	padre -> cambiarEstado("estadoMenuSinFondo");
     }
 
+    else if(estadoTransicion == transToCancion && imgBtnOk -> animacion -> finished()){
+	string ruta = conjuntoCanciones.at(cancionSeleccionada) -> getRuta();
+	lDEBUG << "Ocultados botones, cargar canción..." << ruta;
+	estadoTransicion = transCancion;
+
+	cancionCargada = true;
+	cancion.reset(new Cancion(padre -> graphics(), ruta));
+	cancion -> lanzar();
+
+    }
+
+    else if(estadoTransicion == transCancion){
+	cancion -> update();
+    }
 }
 
 void EstadoMenuCanciones::draw(){
-    if(estadoTransicion == mostrandoCancion){
-//		cancion -> draw();
-    }else{
+    if(estadoTransicion == transCancion){
+	cancion -> draw();
+    }
+
+    if(estadoTransicion == transIn || 
+       estadoTransicion == transHold || 
+       estadoTransicion == transToCancion ||
+       estadoTransicion == transOut){
+
 	imgLogotipo -> draw();
 	txtSubtitulo -> draw();
 	imgSeleccion -> draw();
@@ -144,68 +160,84 @@ void EstadoMenuCanciones::draw(){
     }
 }
 
+void EstadoMenuCanciones::invertirAnimaciones(){
+    imgLogotipo -> animacion -> reverse();
+    imgLogotipo -> animacion -> init();
+    
+    imgSeleccion -> animacion -> reverse();
+    imgSeleccion -> animacion -> init();
+    
+    imgBtnUp -> animacion -> reverse();
+    imgBtnUp -> animacion -> init();
+    imgBtnUp -> animacion -> setEspera(10);
+    
+    imgBtnDown -> animacion -> reverse();
+    imgBtnDown -> animacion -> init();
+    imgBtnDown -> animacion -> setEspera(20);
+    
+    imgBtnOk -> animacion -> reverse();
+    imgBtnOk -> animacion -> init();
+    imgBtnOk -> animacion -> setEspera(30);
+    
+    txtSubtitulo -> animacion -> reverse();
+    txtSubtitulo -> animacion -> init();
+}
+
 void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
-    if(cancionCargada == true){
-//		cancion -> buttonDown(boton);
+    if(estadoTransicion == transIn){
+
     }
 
-    if(boton == Gosu::kbEscape){
-	if(estadoTransicion == transHold){
-	    estadoTransicion = transOut;
-
-	    imgLogotipo -> animacion -> reverse();
-	    imgLogotipo -> animacion -> init();
-
-	    imgSeleccion -> animacion -> reverse();
-	    imgSeleccion -> animacion -> init();
-
-	    imgBtnUp -> animacion -> reverse();
-	    imgBtnUp -> animacion -> init();
-	    imgBtnUp -> animacion -> setEspera(10);
-
-	    imgBtnDown -> animacion -> reverse();
-	    imgBtnDown -> animacion -> init();
-	    imgBtnDown -> animacion -> setEspera(20);
-
-	    imgBtnOk -> animacion -> reverse();
-	    imgBtnOk -> animacion -> init();
-	    imgBtnOk -> animacion -> setEspera(30);
-
-	    txtSubtitulo -> animacion -> reverse();
-	    txtSubtitulo -> animacion -> init();
+    else if(estadoTransicion == transHold){
+	if(boton == Gosu::kbEscape){
+	    lDEBUG << "Se pulsó escape";
 
 	    estadoTransicion = transOut;
+	    invertirAnimaciones();
+	}
 
+	else if(boton == Gosu::kbReturn){
+	    lDEBUG << "Se pulsó enter";
+
+	    estadoTransicion = transToCancion;
+	    invertirAnimaciones();
+	}
+
+	else if(boton == Gosu::msLeft){
+	    int x = padre -> input().mouseX();
+	    int y = padre -> input().mouseY();
+
+	    if(estadoTransicion == transHold){
+		if(imgBtnUp -> clicked(x,y)){
+		    listaAnterior();
+		}else if(imgBtnDown -> clicked(x,y)){
+		    listaSiguiente();
+		}else if(imgBtnOk -> clicked(x,y)){
+		    lDEBUG << "Ok";
+		}
+	    }
+	}
+
+	else if(boton == Gosu::kbUp){
+	    listaAnterior();
+	}else if(boton == Gosu::kbDown){
+	    listaSiguiente();
+	}else if(boton == Gosu::kbReturn){
+	    lDEBUG << "OK";
 	}
     }
 
-    else if(boton == Gosu::kbReturn){
+    else if(estadoTransicion == transToCancion){
 
-	lDEBUG << "Se pulsó enter";
-
-	/*
-	cancionCargada = true;
-
-	//	cancion.reset(new Cancion(padre -> graphics(), "song1.xml"));
-	//  cancion -> lanzar();
-
-	estadoTransicion = mostrandoCancion;
-
-	//*/
     }
 
-    else if(boton == Gosu::msLeft){
-	int x = padre -> input().mouseX();
-	int y = padre -> input().mouseY();
-
-	if(estadoTransicion == transHold){
-	    if(imgBtnUp -> clicked(x,y)){
-		listaAnterior();
-	    }else if(imgBtnDown -> clicked(x,y)){
-		listaSiguiente();
-	    }else if(imgBtnOk -> clicked(x,y)){
-		lDEBUG << "Ok";
-	    }
+    else if(estadoTransicion == transCancion){
+	if(boton == Gosu::kbEscape){
+	    cancion.reset(NULL);
+	    invertirAnimaciones();
+	    estadoTransicion = transIn;
+	}else{
+	    cancion -> buttonDown(boton);
 	}
     }
 }
@@ -246,13 +278,12 @@ void EstadoMenuCanciones::listarCanciones(){
     pugi::xml_attribute atributo;
 
     unsigned contadorCanciones = 0;
+    conjuntoCanciones.clear();
+    cancionSeleccionada = 0;
 
     for(; inicial != final ; ++ inicial){
 	if(boost::to_lower_copy(inicial -> path() . extension()) == ".xml"){
-
-
 	    string atrRuta, atrTitulo, atrDescripcion, atrPos;
-
 
 	    atrRuta = boost::lexical_cast<string>(inicial -> path());
 

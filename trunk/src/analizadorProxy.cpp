@@ -32,7 +32,7 @@
 
 #define BUFSIZE 4096
 
-AnalizadorProxy::AnalizadorProxy() : iniciado(false), sIn(0), salir(false){
+AnalizadorProxy::AnalizadorProxy() : sIn(0), iniciado(false), salir(false){
 	lDEBUG << Log::CON("AnalizadorProxy");
     
 	sIn = NULL;

@@ -66,3 +66,7 @@ void EstadoMenuCanciones::EntradaMenuCanciones::mover(int a){
     pos += a;
     y_final = posInicial + pos * saltoEntreEntradas;
 }
+
+string EstadoMenuCanciones::EntradaMenuCanciones::getRuta(){
+    return ruta;
+}

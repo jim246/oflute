@@ -69,10 +69,13 @@ void Cancion::lanzar(){
     barraInferior -> animacion -> set(0,0,0);
     barraInferior -> animacion -> set(1, 600, 461); //*/
 
+/*
     for (int i = 0; i < 10; ++i)
     {
 	lDEBUG << boost::format("%i : %f") % i % Nota::devolverAltura((t_altura)i);
     }
+
+    ///*/
 
     sistemaPartc . reset(new SistemaParticulas(g, 150, 150, // cantidad y duración
 					       80, 0.5,  // distancia y escala
@@ -81,6 +84,7 @@ void Cancion::lanzar(){
     Nota::initImagenes(g);
     parsear ();
 }
+
 void Cancion::parsear(){
     pugi::xml_document documento;
     pugi::xml_parse_result resultado;
@@ -284,5 +288,6 @@ void Cancion::buttonDown(Gosu::Button boton){
 }
 
 Cancion::~Cancion(){
+    analizador.detener();
     lDEBUG << Log::DES("EstadoCanción");
 }
