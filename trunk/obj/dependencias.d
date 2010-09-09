@@ -22,7 +22,8 @@ obj/estadoCancion.o: src/estadoCancion.cpp include/estadoCancion.h \
  include/elementosInterfaz.h include/animacion.h include/texto.h \
  include/particulas.h include/analizador.h include/configuracion.h \
  boost/property_tree/ini_parser.hpp include/analizadorProxy.h \
- include/log.h pugixml/pugixml.hpp pugixml/pugiconfig.hpp
+ include/log.h include/marcadorPuntos.h pugixml/pugixml.hpp \
+ pugixml/pugiconfig.hpp
 obj/nota.o: src/nota.cpp include/nota.h gosu/Gosu/Gosu.hpp \
  gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp gosu/Gosu/IO.hpp \
  gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp gosu/Gosu/Color.hpp \

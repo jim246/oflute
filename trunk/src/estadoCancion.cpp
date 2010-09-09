@@ -1,6 +1,7 @@
 #include "estadoCancion.h"
 
 #include "log.h"
+#include "marcadorPuntos.h"
 
 #include <pugixml.hpp>
 
@@ -26,7 +27,7 @@ Cancion::Cancion(Gosu::Graphics & g, string ruta) : g(g), ruta(ruta) {
 }
 
 void Cancion::lanzar(){
-    distanciaPulso = 200;
+    distanciaPulso = 250;
     margenIzquierdo = 150;
 
     esperaInicial = 5; // 3 tiempos
@@ -91,6 +92,8 @@ void Cancion::parsear(){
 	lERROR << "ERROR";
     }
 
+    tituloCancion = documento.child("Song").child("Title").first_child().value();
+    descripcionCancion =  documento.child("Song").child("Desc").first_child().value();;
     bpm = boost::lexical_cast<int>(documento.child("Song").child("BPM").first_child().value());
 
     string cadenaNotas = documento.child("Song").child("Notes").first_child().value();
@@ -199,8 +202,10 @@ void Cancion::update(){
 	}
     }else if (estadoActual == e2){
 	notaLeida = analizador . notaActual();
-
-	if(lanzado){
+	if(!lanzado){
+	    temporizador.restart();
+	    lanzado = true;
+	}else{
 	    sistemaPartc -> update();
 
 	    double transcurrido = temporizador.elapsed();
@@ -253,7 +258,7 @@ void Cancion::update(){
 		    if(conjNotas.end() == iteradorNota + 1){
 			capturandoPuntos = false;
 			t2.pause();
-			lDEBUG << "FIN CAPTURA PUNTOS: " << t2.elapsed();;
+			lDEBUG << "FIN CAPTURA PUNTOS: " << t2.elapsed();
 		    }
 		}else{
 		    ++iteradorNota;
@@ -295,7 +300,9 @@ void Cancion::update(){
 	{
 	    lDEBUG << "Animaciones de interfaz terminadas.";
 	    estadoActual = e4;
-	    
+	    maximoPuntos = incrementoDePuntos * (t2.elapsed() / REFRESCO);
+	    marcadorFinal.reset(new MarcadorPuntos(g, tituloCancion, descripcionCancion,
+						   puntos, maximoPuntos));
 	    
 	}
 
@@ -327,17 +334,15 @@ void Cancion::draw(){
 	}
     }
 
+    else if(estadoActual == e4){
+	marcadorFinal -> draw();
+    }
+
 
 }
 
 void Cancion::buttonDown(Gosu::Button boton){
-    if(boton == Gosu::kbP){
-	temporizador.restart();
-	lanzado = true;
-	lDEBUG << "Lanzado!!";
-    }
-
-    else if(boton == Gosu::kbEscape){
+    if(boton == Gosu::kbEscape){
 	analizador.detener();
     }
 

@@ -44,7 +44,7 @@ using namespace std;
 #include "analizador.h"
 
 //class Juego;
-
+class MarcadorPuntos;
 class Cancion{
 
 public:
@@ -63,6 +63,10 @@ private:
     int bpm;
 
     float milisegundosPorPulso;
+
+    string tituloCancion;
+
+    string descripcionCancion;
 
     float frecuencia;
 
@@ -92,7 +96,8 @@ private:
 
     t_altura notaLeida;
 
-
+    /// Marcador de puntos
+    boost::scoped_ptr<MarcadorPuntos> marcadorFinal;
 
     Gosu::Graphics & g;
     

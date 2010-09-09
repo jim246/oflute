@@ -35,6 +35,7 @@ using std::vector;
 
 class Juego;
 class Cancion;
+
 /**
  * @class EstadoMenuCanciones
  * @ingroup estadosPrincipales
