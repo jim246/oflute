@@ -43,9 +43,21 @@ using namespace std;
 
 #include "analizador.h"
 
-class Juego;
+//class Juego;
 
 class Cancion{
+
+public:
+    Cancion(Gosu::Graphics & g, string ruta);
+
+    void lanzar();
+    void update();
+    void draw();
+    void buttonDown(Gosu::Button boton);
+    
+    ~Cancion();
+
+private:
     Analizador analizador;
 
     int bpm;
@@ -62,22 +74,31 @@ class Cancion{
     /// Espera inicial antes de la primera nota
     float esperaInicial;
 
-    Crono temporizador;
+    Crono temporizador, t2;
 
     bool lanzado;
+    bool capturandoPuntos;
 
+    float duracionCancion;
+
+    int incrementoDePuntos;
+    int puntos;
+    int maximoPuntos;
+    
     vector<boost::shared_ptr<Nota> > conjNotas;
+    size_t numeroInicialNotas;
+
     t_altura notaEnLinea;
 
     t_altura notaLeida;
 
-    int puntos;
+
 
     Gosu::Graphics & g;
     
     string ruta;
 
-    enum {e1, e2, e3};
+    enum {e1, e2, e3, e4};
 
     int estadoActual;
 
@@ -93,15 +114,6 @@ class Cancion{
 
     boost::scoped_ptr<SistemaParticulas> sistemaPartc;
 
-public:
-    Cancion(Gosu::Graphics & g, string ruta);
-
-    void lanzar();
-    void update();
-    void draw();
-    void buttonDown(Gosu::Button boton);
-    
-    ~Cancion();
 };
 
 #endif /* _CANCION_H_ */
