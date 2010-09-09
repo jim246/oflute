@@ -55,6 +55,7 @@ struct Nota{
     /// Se utilizan atributos estáticos para evitar que cada nota cargue su propia imagen
 
     static boost::shared_ptr<Gosu::Image> imgPuntillo;
+    static boost::shared_ptr<Gosu::Image> imgFinal;
 
     static boost::shared_ptr<Gosu::Image> silRedonda;
     static boost::shared_ptr<Gosu::Image> silBlanca;
@@ -100,6 +101,11 @@ struct Nota{
     void updatePos(float x_);
 
     /// Pinta la nota
+    virtual void draw();
+};
+
+struct NotaFinal : public Nota{
+    NotaFinal(Gosu::Graphics & g, float tiempos);
     void draw();
 };
 

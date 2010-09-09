@@ -26,6 +26,7 @@
 #include "nota.h"
 
 boost::shared_ptr<Gosu::Image> Nota::imgPuntillo;
+boost::shared_ptr<Gosu::Image> Nota::imgFinal;
 
 boost::shared_ptr<Gosu::Image> Nota::silRedonda;
 boost::shared_ptr<Gosu::Image> Nota::silBlanca;
@@ -45,6 +46,7 @@ void Nota::initImagenes(Gosu::Graphics & g){
     wstring cami = L"media/figuras/";
 
     imgPuntillo.reset(new Gosu::Image(g, cami + L"puntillo.png"));
+    imgFinal.reset(new Gosu::Image(g, cami + L"figFinal.png"));
 
     silRedonda.reset(new Gosu::Image(g, cami + L"silRedonda.png"));
     silBlanca.reset(new Gosu::Image(g, cami + L"silBlanca.png"));
@@ -132,7 +134,9 @@ float Nota::devolverAltura(t_altura t, t_figura fig){
 	
     if(t != Silencio){
 	return (9 - t) * 18.6;
-    }else{
+    }
+    // Para los diferentes tipos de silencio
+    else{
 	if(fig == Redonda ){
 	    return 18;
 	}
@@ -160,4 +164,12 @@ void Nota::draw(){
 	    imgPuntillo -> draw(x, 156 + Nota::devolverAltura(altura, figura), 5);
 	}
     }
+}
+
+NotaFinal::NotaFinal(Gosu::Graphics & g, float tiempos) 
+  : Nota(g, Do5, Nulo, tiempos){
+}
+
+void NotaFinal::draw(){
+    imgFinal -> draw(x, 243, 5);
 }

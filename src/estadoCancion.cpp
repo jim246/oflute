@@ -16,6 +16,9 @@
 Cancion::Cancion(Gosu::Graphics & g, string ruta) : g(g), ruta(ruta) {
     
     lanzado = false;
+    capturandoPuntos = false;
+    incrementoDePuntos = 1;
+
     lDEBUG << Log::CON("EstadoCanción") << " (" << ruta << ")";
     estadoActual = e1;
     puntos = 0;
@@ -26,7 +29,7 @@ void Cancion::lanzar(){
     distanciaPulso = 200;
     margenIzquierdo = 150;
 
-    esperaInicial = 3; // 3 tiempos
+    esperaInicial = 5; // 3 tiempos
 
     resalteNotaActual.reset( new Gosu::Image(g, L"media/secCanciones/cancionesIndicadorNota.png"));
 
@@ -38,7 +41,8 @@ void Cancion::lanzar(){
 
     barraProgreso.reset(new Gosu::Image(g, L"media/secCanciones/cancionesBarraRelleno.png"));
 
-    imagenPartitura.reset( new ElementoImagen(g, "media/secCanciones/partitura.png", 3, Animacion::tAlpha));
+    imagenPartitura.reset( new ElementoImagen(g, "media/secCanciones/partitura.png", 
+					      3, Animacion::tAlpha));
     imagenPartitura -> animacion = new Animacion(1, 20, Animacion::tEaseOutQuad, 20);
     imagenPartitura -> animacion -> set (0, 0, 255);
     imagenPartitura -> setXY(0, 200);
@@ -69,14 +73,6 @@ void Cancion::lanzar(){
     barraInferior -> animacion -> set(0,0,0);
     barraInferior -> animacion -> set(1, 600, 461); //*/
 
-/*
-    for (int i = 0; i < 10; ++i)
-    {
-	lDEBUG << boost::format("%i : %f") % i % Nota::devolverAltura((t_altura)i);
-    }
-
-    ///*/
-
     sistemaPartc . reset(new SistemaParticulas(g, 150, 150, // cantidad y duración
 					       80, 0.5,  // distancia y escala
 					       Gosu::Color(255,255,255)));
@@ -105,8 +101,9 @@ void Cancion::parsear(){
     // Iterador de regexp para iterar por las diferentes notas captadas
     boost::sregex_iterator myIt(cadenaNotas.begin(), cadenaNotas.end(), myRegExp), itEnd;
 
-    float acumulado = 2;
-    
+    float acumulado = 0;
+
+
     for(;myIt != itEnd; myIt++){
 	bool puntillo = ((*myIt)[4] == "p");
 	string figura = (*myIt)[3];
@@ -152,14 +149,15 @@ void Cancion::parsear(){
 	    figuraLocal = figuraLocal | Puntillo;
 	}
 
-	lDEBUG << boost::format("Nota: %s %s %i, durLocal: %.2f") 
-	    % alturaRead % figura % puntillo % duracionLocal;
-
-	conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(g, alturaLocal, figuraLocal, acumulado)));
+	conjNotas.push_back(boost::shared_ptr<Nota>(new Nota(g, alturaLocal, 
+							     figuraLocal, acumulado)));
 	acumulado += duracionLocal;
-	lDEBUG << boost::format("%|30| %|| \n") % "Acumulado: " % acumulado;
+
     }
 
+    conjNotas.push_back(boost::shared_ptr<Nota>(new NotaFinal(g, acumulado)));
+
+    numeroInicialNotas = conjNotas.size();
 
     lDEBUG << "BPM: " << bpm;
     milisegundosPorPulso = 1 / (bpm / 60.) * 1000;
@@ -176,7 +174,13 @@ void Cancion::parsear(){
 	   << distanciaPulso * bpm << " píxeles por minuto, ó " 
 	   << distanciaPulso * bpm / 60. << " píxeles por segundo.";
 
-    
+    duracionCancion = acumulado * milisegundosPorPulso;
+    maximoPuntos = incrementoDePuntos * (duracionCancion / REFRESCO);
+
+    lDEBUG << "El total de tiempos de la canción es de " << acumulado << " pulsos.";
+    lDEBUG << "El tiempo de la canción será de: " << duracionCancion << " ms";
+    lDEBUG << "En cada lectura, se añadirán " << incrementoDePuntos << " puntos.";
+    lDEBUG << "Máximo de puntos: " << maximoPuntos;
 
 }
 
@@ -204,8 +208,13 @@ void Cancion::update(){
 
 	    float estaNota, posHorizontal;
 
-	    foreach(boost::shared_ptr<Nota>& N, conjNotas){
-		estaNota = N -> tiemposDelante;
+	    vector<boost::shared_ptr<Nota> >::iterator iteradorNota;
+
+	    for(iteradorNota = conjNotas.begin();
+		iteradorNota != conjNotas.end();
+		){
+
+		estaNota = (*iteradorNota) -> tiemposDelante;
 		
 		posHorizontal = (estaNota + esperaInicial - pulsosTranscurridos) * distanciaPulso;
 
@@ -214,26 +223,46 @@ void Cancion::update(){
 		  hacemos el siguiente cálculo.  MargenIzquierdo es el
 		  punto en el que se empieza a tocar la nota. Así,
 		  para que una nota sea la que debe tocarse en ese
-		  momento, debe estar en, o a la izquierda del margen,
+		  momento, debe estar a la izquierda del margen,
 		  y su punto final (es decir, el punto inicial +
 		  duración) debe estar a la derecha del margen (ya que
 		  si está a la izquierda es que ya ha acabado su
 		  tiempo.
 
 
-		 */
+		*/
 		if(posHorizontal <= margenIzquierdo
 		   &&
-		   margenIzquierdo < (posHorizontal + Nota::devolverDuracion(N -> figura) * distanciaPulso) ){
-		    notaEnLinea = N -> altura;
+		   margenIzquierdo < (posHorizontal + Nota::devolverDuracion((*iteradorNota) -> figura) * distanciaPulso) ){
+		    notaEnLinea = (*iteradorNota) -> altura;
+
+		    if(!capturandoPuntos){
+			capturandoPuntos = true;
+			lDEBUG << "CAPTURANDO PUNTOS";
+			t2.restart();
+		    }
 		}
 
-		N -> updatePos(posHorizontal);		
-		
-	    }
+		(*iteradorNota) -> updatePos(posHorizontal);		
 
-	    if(notaEnLinea == notaLeida){
-		puntos += 10;
+		if(posHorizontal < -25 &&
+		   margenIzquierdo > (posHorizontal + Nota::devolverDuracion((*iteradorNota) -> figura) * distanciaPulso) - 50){
+		    // Nota fuera del pentagrama
+		    iteradorNota = conjNotas.erase(iteradorNota);
+
+		    if(conjNotas.end() == iteradorNota + 1){
+			capturandoPuntos = false;
+			t2.pause();
+			lDEBUG << "FIN CAPTURA PUNTOS: " << t2.elapsed();;
+		    }
+		}else{
+		    ++iteradorNota;
+		}
+		
+	    } // fin for
+
+	    if(notaEnLinea == notaLeida && capturandoPuntos){
+		puntos += incrementoDePuntos;
 		sistemaPartc -> on();
 	    }else{
 		sistemaPartc -> off();
@@ -241,10 +270,36 @@ void Cancion::update(){
 
 
 	    barraSuperior -> setText(boost::lexical_cast<string>(puntos));
-	}//*/
+	    if(conjNotas.empty()){
+		estadoActual = e3;
+		analizador.detener();
+
+		barraSuperior -> animacion -> reverse();
+		barraInferior -> animacion -> reverse();
+		imagenPartitura -> animacion -> reverse();
+		barraProgresoFondo -> animacion -> reverse();
+
+		barraSuperior -> animacion -> init();
+		barraInferior -> animacion -> init();
+		imagenPartitura -> animacion -> init();
+		barraProgresoFondo -> animacion -> init();
+	    }
+	}// fin if lanzado
     }
 
-    
+    else if(estadoActual == e3){
+	if(barraSuperior -> animacion -> finished() &&
+	   barraInferior -> animacion -> finished() &&
+	   imagenPartitura -> animacion -> finished() &&
+	   barraProgresoFondo -> animacion -> finished() )
+	{
+	    lDEBUG << "Animaciones de interfaz terminadas.";
+	    estadoActual = e4;
+	    
+	    
+	}
+
+    }    
 }
 
 
@@ -259,12 +314,13 @@ void Cancion::draw(){
     imagenPartitura -> draw();
     barraProgresoFondo -> draw();
 
-    if(estadoActual == e2){
-	barraProgreso -> draw(184, 564, 5, 0.5, 1);
+    if(estadoActual == e2 || estadoActual == e3){
+	barraProgreso -> draw(184, 564, 5, 1 - (float)conjNotas.size() / (float)numeroInicialNotas, 1);
 	
 	if(notaLeida != Silencio){
 	    resalteNotaActual -> draw(0, Nota::devolverAltura(notaLeida)+258.5, 5);
 	}
+
 	if(lanzado){
 	    sistemaPartc -> draw(margenIzquierdo, Nota::devolverAltura(notaEnLinea) + 283);
 	    for_each(conjNotas.begin(), conjNotas.end(), boost::bind(&Nota::draw, _1));
