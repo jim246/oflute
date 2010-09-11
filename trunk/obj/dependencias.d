@@ -1,3 +1,53 @@
+obj/estadoMenuCanciones.o: src/estadoMenuCanciones.cpp include/juego.h \
+ gosu/Gosu/Gosu.hpp gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp \
+ gosu/Gosu/IO.hpp gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp \
+ gosu/Gosu/Color.hpp gosu/Gosu/GraphicsBase.hpp gosu/Gosu/Directories.hpp \
+ gosu/Gosu/Font.hpp gosu/Gosu/Graphics.hpp gosu/Gosu/Image.hpp \
+ gosu/Gosu/RotFlip.hpp gosu/Gosu/ImageData.hpp gosu/Gosu/Input.hpp \
+ gosu/Gosu/ButtonsX.hpp gosu/Gosu/Math.hpp gosu/Gosu/Sockets.hpp \
+ gosu/Gosu/Text.hpp gosu/Gosu/TextInput.hpp gosu/Gosu/Timing.hpp \
+ gosu/Gosu/Utility.hpp gosu/Gosu/Window.hpp include/animacion.h \
+ include/global.h boost/property_tree/ptree.hpp \
+ boost/property_tree/ptree_fwd.hpp boost/property_tree/string_path.hpp \
+ boost/property_tree/id_translator.hpp boost/property_tree/exceptions.hpp \
+ boost/property_tree/detail/exception_implementation.hpp \
+ boost/property_tree/detail/ptree_utils.hpp \
+ boost/property_tree/stream_translator.hpp \
+ boost/property_tree/detail/ptree_implementation.hpp \
+ boost/property_tree/json_parser.hpp \
+ boost/property_tree/detail/json_parser_read.hpp \
+ boost/property_tree/detail/json_parser_error.hpp \
+ boost/property_tree/detail/file_parser_error.hpp \
+ boost/property_tree/detail/json_parser_write.hpp include/estadoCancion.h \
+ include/nota.h include/log.h include/crono.h include/elementosInterfaz.h \
+ include/texto.h include/particulas.h include/analizador.h \
+ include/configuracion.h boost/property_tree/ini_parser.hpp \
+ include/analizadorProxy.h include/estadoMenuCanciones.h include/estado.h \
+ pugixml/pugixml.hpp pugixml/pugiconfig.hpp
+obj/estadoAnalizador.o: src/estadoAnalizador.cpp include/estadoAnalizador.h \
+ gosu/Gosu/Gosu.hpp gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp \
+ gosu/Gosu/IO.hpp gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp \
+ gosu/Gosu/Color.hpp gosu/Gosu/GraphicsBase.hpp gosu/Gosu/Directories.hpp \
+ gosu/Gosu/Font.hpp gosu/Gosu/Graphics.hpp gosu/Gosu/Image.hpp \
+ gosu/Gosu/RotFlip.hpp gosu/Gosu/ImageData.hpp gosu/Gosu/Input.hpp \
+ gosu/Gosu/ButtonsX.hpp gosu/Gosu/Math.hpp gosu/Gosu/Sockets.hpp \
+ gosu/Gosu/Text.hpp gosu/Gosu/TextInput.hpp gosu/Gosu/Timing.hpp \
+ gosu/Gosu/Utility.hpp gosu/Gosu/Window.hpp include/estado.h \
+ include/log.h include/global.h boost/property_tree/ptree.hpp \
+ boost/property_tree/ptree_fwd.hpp boost/property_tree/string_path.hpp \
+ boost/property_tree/id_translator.hpp boost/property_tree/exceptions.hpp \
+ boost/property_tree/detail/exception_implementation.hpp \
+ boost/property_tree/detail/ptree_utils.hpp \
+ boost/property_tree/stream_translator.hpp \
+ boost/property_tree/detail/ptree_implementation.hpp \
+ boost/property_tree/json_parser.hpp \
+ boost/property_tree/detail/json_parser_read.hpp \
+ boost/property_tree/detail/json_parser_error.hpp \
+ boost/property_tree/detail/file_parser_error.hpp \
+ boost/property_tree/detail/json_parser_write.hpp include/analizador.h \
+ include/configuracion.h boost/property_tree/ini_parser.hpp \
+ include/analizadorProxy.h include/elementosInterfaz.h \
+ include/animacion.h include/texto.h include/FFT.h include/juego.h
 obj/estadoCancion.o: src/estadoCancion.cpp include/estadoCancion.h \
  include/global.h boost/property_tree/ptree.hpp \
  boost/property_tree/ptree_fwd.hpp boost/property_tree/string_path.hpp \
@@ -55,32 +105,6 @@ obj/entradaMenuCanciones.o: src/entradaMenuCanciones.cpp \
  gosu/Gosu/TextInput.hpp gosu/Gosu/Timing.hpp gosu/Gosu/Utility.hpp \
  gosu/Gosu/Window.hpp include/log.h include/elementosInterfaz.h \
  include/animacion.h include/texto.h
-obj/estadoMenuCanciones.o: src/estadoMenuCanciones.cpp include/juego.h \
- gosu/Gosu/Gosu.hpp gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp \
- gosu/Gosu/IO.hpp gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp \
- gosu/Gosu/Color.hpp gosu/Gosu/GraphicsBase.hpp gosu/Gosu/Directories.hpp \
- gosu/Gosu/Font.hpp gosu/Gosu/Graphics.hpp gosu/Gosu/Image.hpp \
- gosu/Gosu/RotFlip.hpp gosu/Gosu/ImageData.hpp gosu/Gosu/Input.hpp \
- gosu/Gosu/ButtonsX.hpp gosu/Gosu/Math.hpp gosu/Gosu/Sockets.hpp \
- gosu/Gosu/Text.hpp gosu/Gosu/TextInput.hpp gosu/Gosu/Timing.hpp \
- gosu/Gosu/Utility.hpp gosu/Gosu/Window.hpp include/animacion.h \
- include/global.h boost/property_tree/ptree.hpp \
- boost/property_tree/ptree_fwd.hpp boost/property_tree/string_path.hpp \
- boost/property_tree/id_translator.hpp boost/property_tree/exceptions.hpp \
- boost/property_tree/detail/exception_implementation.hpp \
- boost/property_tree/detail/ptree_utils.hpp \
- boost/property_tree/stream_translator.hpp \
- boost/property_tree/detail/ptree_implementation.hpp \
- boost/property_tree/json_parser.hpp \
- boost/property_tree/detail/json_parser_read.hpp \
- boost/property_tree/detail/json_parser_error.hpp \
- boost/property_tree/detail/file_parser_error.hpp \
- boost/property_tree/detail/json_parser_write.hpp include/estadoCancion.h \
- include/nota.h include/log.h include/crono.h include/elementosInterfaz.h \
- include/texto.h include/particulas.h include/analizador.h \
- include/configuracion.h boost/property_tree/ini_parser.hpp \
- include/analizadorProxy.h include/estadoMenuCanciones.h include/estado.h \
- pugixml/pugixml.hpp pugixml/pugiconfig.hpp
 obj/estadoMenuLecciones.o: src/estadoMenuLecciones.cpp include/juego.h \
  gosu/Gosu/Gosu.hpp gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp \
  gosu/Gosu/IO.hpp gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp \
@@ -261,30 +285,6 @@ obj/estadoCalibrarMicro.o: src/estadoCalibrarMicro.cpp include/juego.h \
  include/analizador.h include/configuracion.h \
  boost/property_tree/ini_parser.hpp include/analizadorProxy.h \
  include/log.h include/global.h
-obj/estadoAnalizador.o: src/estadoAnalizador.cpp include/estadoAnalizador.h \
- gosu/Gosu/Gosu.hpp gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp \
- gosu/Gosu/IO.hpp gosu/Gosu/Platform.hpp gosu/Gosu/Bitmap.hpp \
- gosu/Gosu/Color.hpp gosu/Gosu/GraphicsBase.hpp gosu/Gosu/Directories.hpp \
- gosu/Gosu/Font.hpp gosu/Gosu/Graphics.hpp gosu/Gosu/Image.hpp \
- gosu/Gosu/RotFlip.hpp gosu/Gosu/ImageData.hpp gosu/Gosu/Input.hpp \
- gosu/Gosu/ButtonsX.hpp gosu/Gosu/Math.hpp gosu/Gosu/Sockets.hpp \
- gosu/Gosu/Text.hpp gosu/Gosu/TextInput.hpp gosu/Gosu/Timing.hpp \
- gosu/Gosu/Utility.hpp gosu/Gosu/Window.hpp include/estado.h \
- include/log.h include/global.h boost/property_tree/ptree.hpp \
- boost/property_tree/ptree_fwd.hpp boost/property_tree/string_path.hpp \
- boost/property_tree/id_translator.hpp boost/property_tree/exceptions.hpp \
- boost/property_tree/detail/exception_implementation.hpp \
- boost/property_tree/detail/ptree_utils.hpp \
- boost/property_tree/stream_translator.hpp \
- boost/property_tree/detail/ptree_implementation.hpp \
- boost/property_tree/json_parser.hpp \
- boost/property_tree/detail/json_parser_read.hpp \
- boost/property_tree/detail/json_parser_error.hpp \
- boost/property_tree/detail/file_parser_error.hpp \
- boost/property_tree/detail/json_parser_write.hpp include/analizador.h \
- include/configuracion.h boost/property_tree/ini_parser.hpp \
- include/analizadorProxy.h include/elementosInterfaz.h \
- include/animacion.h include/texto.h include/FFT.h include/juego.h
 obj/ecuaciones.o: src/ecuaciones.cpp include/animacion.h
 obj/estado.o: src/estado.cpp include/estado.h gosu/Gosu/Gosu.hpp \
  gosu/Gosu/Audio.hpp gosu/Gosu/Fwd.hpp gosu/Gosu/IO.hpp \
