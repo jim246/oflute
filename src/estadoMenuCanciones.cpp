@@ -99,6 +99,23 @@ EstadoMenuCanciones::EstadoMenuCanciones(Juego * p)
     txtSubtitulo -> animacion = new Animacion(1, 40, Animacion::tEaseOutCubic, 10);
     txtSubtitulo -> animacion -> set(0, 0, 255);
 
+    btnVolver.reset(new ElementoCombinado(padre -> graphics(),
+					  Animacion::tPos, 2));
+    btnVolver -> setImagen("media/btnVolver.png");
+
+    btnVolver -> animacion = new Animacion(2, 30, Animacion::tEaseOutQuad, 0);
+    btnVolver -> animacion -> set(0, 0, 0);
+    btnVolver -> animacion -> set(1, 600, 547);
+
+    tConfTexto configuracionTexto;
+    configuracionTexto.cadena = _("Volver");
+    configuracionTexto.rutaFuente = "media/fNormal.ttf";
+    configuracionTexto.tam = 25;
+    configuracionTexto.sombra = true;
+    configuracionTexto.opacidadSombra = 40;
+	
+    btnVolver -> setTexto(configuracionTexto, 48, 16);
+
 }
 
 void EstadoMenuCanciones::update(){
@@ -150,6 +167,7 @@ void EstadoMenuCanciones::draw(){
 	imgBtnUp -> draw();
 	imgBtnDown -> draw();
 	imgBtnOk -> draw();
+	btnVolver -> draw();
 
 	if(estadoTransicion == transHold && !conjuntoCanciones.empty()){
 	    boost::shared_ptr<EntradaMenuCanciones> E;
@@ -181,6 +199,9 @@ void EstadoMenuCanciones::invertirAnimaciones(){
     
     txtSubtitulo -> animacion -> reverse();
     txtSubtitulo -> animacion -> init();
+
+    btnVolver -> animacion -> reverse();
+    btnVolver -> animacion -> init();
 }
 
 void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
@@ -189,16 +210,13 @@ void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
     }
 
     else if(estadoTransicion == transHold){
-	if(boton == Gosu::kbEscape){
-	    lDEBUG << "Se pulsó escape";
 
+	if(boton == Gosu::kbEscape){
 	    estadoTransicion = transOut;
 	    invertirAnimaciones();
 	}
 
 	else if(boton == Gosu::kbReturn){
-	    lDEBUG << "Se pulsó enter";
-
 	    estadoTransicion = transToCancion;
 	    invertirAnimaciones();
 	}
@@ -210,10 +228,20 @@ void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
 	    if(estadoTransicion == transHold){
 		if(imgBtnUp -> clicked(x,y)){
 		    listaAnterior();
-		}else if(imgBtnDown -> clicked(x,y)){
+		}
+
+		else if(imgBtnDown -> clicked(x,y)){
 		    listaSiguiente();
-		}else if(imgBtnOk -> clicked(x,y)){
-		    lDEBUG << "Ok";
+		}
+
+		else if(imgBtnOk -> clicked(x,y)){
+		    estadoTransicion = transToCancion;
+		    invertirAnimaciones();
+		}
+
+		else if(btnVolver -> clicked(x,y)){
+		    estadoTransicion = transOut;
+		    invertirAnimaciones();
 		}
 	    }
 	}
@@ -222,8 +250,6 @@ void EstadoMenuCanciones::buttonDown(Gosu::Button boton){
 	    listaAnterior();
 	}else if(boton == Gosu::kbDown){
 	    listaSiguiente();
-	}else if(boton == Gosu::kbReturn){
-	    lDEBUG << "OK";
 	}
     }
 
@@ -334,9 +360,4 @@ void EstadoMenuCanciones::listarCanciones(){
 
 	}
     }
-
-    //sort(leccionesCargadas.begin(), leccionesCargadas.end(), ordenarLecciones());
-    //leccionActual = 0;
-    //cambiarLeccion(leccionActual);
-
 }

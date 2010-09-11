@@ -74,21 +74,30 @@ private:
 
     /// Canción actualmente cargada
     boost::scoped_ptr<Cancion> cancion;
-
-
+    
+    /// Indica si hay una canción cargada
     bool cancionCargada;
 
     /// Imagen del logotipo
     boost::scoped_ptr<ElementoImagen> imgLogotipo;
 
+    /// Imagen para el marco de selección
     boost::scoped_ptr<ElementoImagen> imgSeleccion;
 
+    /// Imagen para el botón de arriba
     boost::scoped_ptr<ElementoImagen> imgBtnUp;
+
+    /// Imagen para el botón de abajo
     boost::scoped_ptr<ElementoImagen> imgBtnDown;
+
+    /// Imagen para el botón de OK
     boost::scoped_ptr<ElementoImagen> imgBtnOk;
 
     /// Subtítulo
     boost::scoped_ptr<ElementoTexto> txtSubtitulo;
+
+    /// Botón volver
+    boost::scoped_ptr<ElementoCombinado> btnVolver;
 
     class EntradaMenuCanciones{
     public:
@@ -119,14 +128,22 @@ private:
 	boost::scoped_ptr<Gosu::Font> txtTitulo, txtDescripcion;
     };
 
+    /// Conjunto de canciones listadas
     vector<boost::shared_ptr<EntradaMenuCanciones> > conjuntoCanciones;
 
+    /// Indicador de la canción actualmente seleccionada
     int cancionSeleccionada;
 
+    /// Lista las canciones
     void listarCanciones();
+    
+    /// Pasa a la canción siguiente, moviendo el menú.
     void listaSiguiente();
+
+    /// Pasa a la canción anterior, moviendo el menú.
     void listaAnterior();
 
+    /// Iniverte las animaciones de todos los elementos
     void invertirAnimaciones();
 };
 

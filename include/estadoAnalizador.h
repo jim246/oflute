@@ -57,49 +57,55 @@ class Juego;
 class EstadoAnalizador : public Estado{
 public:
 
-	/// Genera un nuevo estado.
+    /// Genera un nuevo estado.
     EstadoAnalizador(Juego * p);
 
-	/// Lanza el estado, activando el analizador.
+    /// Lanza el estado, activando el analizador.
     void lanzar ();
 
-	/// Actualiza los estados de transición.
+    /// Actualiza los estados de transición.
     void update();
 
-	/// Dibuja los elementos gráficos.
+    /// Dibuja los elementos gráficos.
     void draw();
 
-	/// Controla las pulsaciones de botones.
+    /// Controla las pulsaciones de botones.
     void buttonDown(Gosu::Button boton);
 
-	/// Destruye el estado
+    /// Destruye el estado
     ~EstadoAnalizador();
 
 private:
 
-	/// Diferentes estados de transición
+    /// Diferentes estados de transición
     enum tTrans{ transIn, transHold, transOut };
 
-	/// Estado de transición actual
+    /// Estado de transición actual
     tTrans estadoTransicion;
 
-	/// Flag que indica si el estado ha sido lanzado
+    /// Flag que indica si el estado ha sido lanzado
     bool lanzado;
 
-	/// Imagen para el logotipo
+    /// Imagen para el logotipo
     boost::scoped_ptr<ElementoImagen> imgLogotipo;
 
-	/// Imagen de la minipartitura
+    /// Imagen de la minipartitura
     boost::scoped_ptr<ElementoImagen> imgPartitura;
 
-	/// Imagen del texto inferior
+    /// Imagen del texto inferior
     boost::scoped_ptr<ElementoTexto> txtSubtitulo;
 
-	/// Imagen de la figura
+    /// Imagen de la figura
     boost::scoped_ptr<Gosu::Image> imgFigura;
 
-	/// Analizador
+    /// Botón volver
+    boost::scoped_ptr<ElementoCombinado> btnVolver;
+
+    /// Analizador
     Analizador analizador;
+    
+    /// Invierte las animaciones y detiene el analizador
+    void salir();
 
 };
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oflute 0.1\n"
 "Report-Msgid-Bugs-To: theom3ga@gmail.com\n"
-"POT-Creation-Date: 2010-08-21 16:10+0200\n"
+"POT-Creation-Date: 2010-09-11 21:10+0200\n"
 "PO-Revision-Date: 2010-08-13 17:08+0200\n"
 "Last-Translator: jose <theom3ga@gmail.com>\n"
 "Language-Team: English\n"
@@ -72,7 +72,7 @@ msgstr "Lesson no."
 msgid "Lección nº1"
 msgstr "Lesson no.1"
 
-#: src/estadoMenuLecciones.cpp:68
+#: src/estadoMenuLecciones.cpp:70
 msgid "Listado de lecciones"
 msgstr "Lesson list"
 
@@ -88,13 +88,17 @@ msgstr ""
 msgid "Salir"
 msgstr "Exit"
 
-#: src/estadoMenuCanciones.cpp:22
+#: src/estadoMenuCanciones.cpp:91
 msgid "Seleccione una canción"
 msgstr "Choose a song"
 
 #: src/estadoMenuLecciones.cpp:177
 msgid "Siguiente lección"
 msgstr "Next lesson"
+
+#: src/estadoAnalizador.cpp:74 src/estadoMenuCanciones.cpp:111
+msgid "Volver"
+msgstr "Back"
 
 #: src/estadoMenuLecciones.cpp:91
 msgid "Volver al menú"

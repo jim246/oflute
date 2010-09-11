@@ -29,8 +29,8 @@
 #include <boost/lexical_cast.hpp>
 
 #include <Gosu/Gosu.hpp>
-#include "global.h"
 
+#include "global.h"
 #include "estado.h"
 #include "elementosInterfaz.h"
 
