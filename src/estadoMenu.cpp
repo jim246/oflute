@@ -6,7 +6,7 @@
 
 int posFinalesY[] = {281, 332, 383, 434, 485, 589 };
 
-EstadoMenu::EstadoMenu (Juego * p) : Estado(p),sinDemoraInicial(false){
+EstadoMenu::EstadoMenu (Juego * p) : Estado(p), sinDemoraInicial(false){
     lDEBUG << Log::CON("EstadoMenu");
     p -> setCaption(L"oFlute .:. Menú principal");
 

@@ -35,6 +35,7 @@
 #include <Gosu/Gosu.hpp>
 
 #include "log.h"
+#include "dropShadow.h"
 
 using namespace std;
 
@@ -79,7 +80,15 @@ public:
 	// El 1/3 de espacio que sobra se reparte arriba y abajo, por lo que el margen superior será un sexto (y pico ;) )
 	margenSup = 51 / 6 - 2;
 
-	fuente.reset(new Gosu::Font(graphics, L"media/fNormal.ttf", tamanyo));
+	//fuente.reset(new Gosu::Font(graphics, L"media/fNormal.ttf", tamanyo));
+
+	imgTexto.reset(new Gosu::Image(graphics,
+				       Gosu::createText(Gosu::utf8ToWstring(texto), L"media/fNormal.ttf", tamanyo)));
+	textX = 400 - imgTexto -> width() / 2;
+
+	shadowSize = 4;
+
+	imgSombra.reset(new Gosu::Image(graphics, applyShadow(*imgTexto, shadowSize, 0.6)));
 
 	imagen.reset(new Gosu::Image(graphics, L"media/secMenu/btnTemplate.png", 0, 0, 800, altura));
 
@@ -90,10 +99,21 @@ public:
      * @brief Dibuja el botón en la posición indicada.
      */
 
-    void draw(float x, float y, Gosu::ZPos z){
+    void draw(float x, float y, Gosu::ZPos z){	
 	lastX = x;
 	lastY = y;
 	imagen -> draw(x, y, z, 1, 1, color);
+
+#if 1
+	int offsetShadow[] = {1 - shadowSize, 2 - shadowSize};
+
+	imgTexto -> draw(x + textX, y + margenSup, z + 0.1);
+	imgSombra -> draw(x + textX + offsetShadow[0],
+			  y + margenSup + offsetShadow[1],
+			  z);
+
+#else
+	int offsetShadow[] = {1,2};
 
 	float ancho = fuente -> textWidth(texto);
 	int posHorizontal = 800/2 - ancho/2;
@@ -106,12 +126,14 @@ public:
 
 
 	if(sombra){
-	    int offsetShadow[] = {1,2};
+
 	    fuente -> draw(texto, 
 			   posHorizontal + offsetShadow[0], 
 			   posVertical + offsetShadow[1], 
 			   z, 1, 1, Gosu::Color(80,0,0,0));
 	}
+	//*/
+#endif
     }
     
     /**
@@ -159,12 +181,21 @@ private:
     /// Fuentes del texto.
     //boost::scoped_ptr<customFont> fuente;
     boost::scoped_ptr<Gosu::Font> fuente;
-    
-    /// Fuente de la sombra.
-    //boost::scoped_ptr<customFont>fuenteSombra;
+
+    /// Imagen cacheada para el texto
+    boost::scoped_ptr<Gosu::Image> imgTexto;
+
+    /// Imagen cacheada para la sombra
+    boost::scoped_ptr<Gosu::Image> imgSombra;
+
+    /// Tamaño de la sombra
+    int shadowSize;
 
     /// Imagen del fondo.
     boost::scoped_ptr<Gosu::Image> imagen;
+
+    /// Alineación horizontal del texto en el botón
+    int textX;
 
 	//@{
     /// @name Coordenadas para controlar la última posición del botón.
