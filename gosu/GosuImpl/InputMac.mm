@@ -2,6 +2,7 @@
 #import <Carbon/Carbon.h>
 #include <Gosu/Input.hpp>
 #include <Gosu/TextInput.hpp>
+#include <GosuImpl/MacUtility.hpp>
 #include <Gosu/Utility.hpp>
 #include <IOKit/hidsystem/IOLLEvent.h>
 #include <boost/array.hpp>
@@ -20,7 +21,6 @@
 #include <IOKit/IOCFPlugIn.h>
 #include <stdexcept>
 #include <vector>
-#include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
 
 // USB Gamepad code, likely to be moved somewhere else later.
@@ -29,23 +29,7 @@ namespace {
     using namespace std;
     using namespace Gosu;
     using boost::shared_ptr;
-
-    class CFScope : boost::noncopyable
-    {
-        CFTypeRef ref;
-    public:
-        CFScope(CFTypeRef ref) : ref(ref) {}
-        ~CFScope() { CFRelease(ref); }
-    };
-
-    class IOScope : boost::noncopyable
-    {
-        io_object_t ref;
-    public:
-        IOScope(io_object_t ref) : ref(ref) {}
-        ~IOScope() { IOObjectRelease(ref); }
-    };
-
+    
     template<typename Negatable>
     void checkTrue(Negatable cond, const char* message = "work")
     {
@@ -57,6 +41,21 @@ namespace {
     {
         checkTrue(val == kIOReturnSuccess, message);
     }
+    
+    class IOScope : boost::noncopyable
+    {
+        io_object_t ref;
+    public:
+        IOScope(io_object_t ref)
+        :   ref(ref)
+        {
+        }
+        
+        ~IOScope()
+        {
+            IOObjectRelease(ref);
+        }
+    };
 
     string getDictString(CFMutableDictionaryRef dict, CFStringRef key, const char* what)
     {
@@ -130,7 +129,7 @@ namespace {
         Button(CFMutableDictionaryRef dict)
         {
             cookie = (IOHIDElementCookie)getDictSInt32(dict, CFSTR(kIOHIDElementCookieKey),
-                "element cookie");
+                "get an element cookie");
         }
     };
 
@@ -272,15 +271,22 @@ namespace {
                 kCFAllocatorDefault, kNilOptions);
             if (!properties)
                 return;
-            CFScope guard(properties);
+            CFRef<> guard(properties);
             
             if (!isDeviceInteresting(properties))
                 return;
             
             Device newDevice;
             newDevice.interface = getDeviceInterface(object);
-            newDevice.name = getDictString(properties, CFSTR(kIOHIDProductKey),
-                "a product name");
+            try
+            {
+                newDevice.name = getDictString(properties, CFSTR(kIOHIDProductKey),
+                    "get a product name");
+            }
+            catch (const runtime_error&)
+            {
+                newDevice.name = "unnamed device";
+            }
             addElementCollection(newDevice, properties);
             devices.push_back(newDevice);
         }
@@ -622,7 +628,7 @@ Gosu::Button Gosu::Input::charToId(wchar_t ch)
 
 bool Gosu::Input::down(Gosu::Button btn) const
 {
-    if (btn == noButton)
+    if (btn == noButton || btn.id() >= numButtons)
         return false;
 
     return buttonStates.at(btn.id());
@@ -640,7 +646,7 @@ double Gosu::Input::mouseY() const
 
 void Gosu::Input::setMousePosition(double x, double y)
 {
-    NSPoint mousePos = NSMakePoint(x, y);
+    NSPoint mousePos = NSMakePoint(x / pimpl->mouseFactorX, y / pimpl->mouseFactorY);
     if (pimpl->window)
     {
         mousePos.y = [[pimpl->window contentView] frame].size.height - mousePos.y;
@@ -658,6 +664,27 @@ void Gosu::Input::setMouseFactors(double factorX, double factorY)
 {
     pimpl->mouseFactorX = factorX;
     pimpl->mouseFactorY = factorY;
+}
+
+const Gosu::Touches& Gosu::Input::currentTouches() const
+{
+    static Gosu::Touches none;
+    return none;
+}
+
+double Gosu::Input::accelerometerX() const
+{
+    return 0.0;
+}
+
+double Gosu::Input::accelerometerY() const
+{
+    return 0.0;
+}
+
+double Gosu::Input::accelerometerZ() const
+{
+    return 0.0;
 }
 
 void Gosu::Input::update()

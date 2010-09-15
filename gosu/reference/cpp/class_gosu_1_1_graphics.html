@@ -67,7 +67,7 @@ window.onload = initDynSections;
   </div>
 </div>
 <div class="contents">
-<h1>Gosu::Graphics Class Reference</h1><!-- doxytag: class="Gosu::Graphics" -->Serves as the target of all drawing and provides basic drawing functionality.  
+<h1>Gosu::Graphics Class Reference</h1><!-- doxytag: class="Gosu::Graphics" -->Serves as the target of all drawing and provides primitive drawing functionality.  
 <a href="#_details">More...</a>
 <p>
 
@@ -78,10 +78,6 @@ window.onload = initDynSections;
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#2c81cc2bde977fdce58fd353b3d4a6c0">Graphics</a> (unsigned physicalWidth, unsigned physicalHeight, bool fullscreen)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#6010e7c7473d73bffe1e3239f07e6395">~Graphics</a> ()</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#710461bb379979d9e467898c494948b5">factorX</a> () const </td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#baf5d3b9795a97104d841bef7ecc6d88">factorY</a> () const </td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#325c631eb7e8ec63171c803d2cd59f26">setResolution</a> (unsigned virtualWidth, unsigned virtualHeight)</td></tr>
 
@@ -97,15 +93,18 @@ window.onload = initDynSections;
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#ddeab66c3a18c0a12df43067de841b71">end</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Every call to begin must have a matching call to end.  <a href="#ddeab66c3a18c0a12df43067de841b71"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#f6cdee3425e60ec8ffbc4f9ecb1b54ac">flush</a> ()</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Flushes the Z queue to the screen and starts a new one.  <a href="#f6cdee3425e60ec8ffbc4f9ecb1b54ac"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#207f436a09bd02e11ddc474565912135">beginGL</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Finishes all pending <a class="el" href="namespace_gosu.html" title="The library&#39;s main namespace.">Gosu</a> drawing operations and executes the following OpenGL code in a clean environment.  <a href="#207f436a09bd02e11ddc474565912135"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#3e37d9b17e55fa5f6d3ad6116759364f">endGL</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Resets <a class="el" href="namespace_gosu.html" title="The library&#39;s main namespace.">Gosu</a> into its default rendering state.  <a href="#3e37d9b17e55fa5f6d3ad6116759364f"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#8d6d2a3931fc062a7411c69cdee1c4a2">beginClipping</a> (int x, int y, unsigned width, unsigned height)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#41f72426e110063503faf7ef31b65290">beginClipping</a> (double x, double y, double width, double height)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Enables clipping to a specified rectangle.  <a href="#8d6d2a3931fc062a7411c69cdee1c4a2"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Enables clipping to a specified rectangle.  <a href="#41f72426e110063503faf7ef31b65290"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html#b71d990078f8fb93ef5d93f625fec172">endClipping</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Disables clipping.  <a href="#b71d990078f8fb93ef5d93f625fec172"></a><br></td></tr>
@@ -133,10 +132,10 @@ window.onload = initDynSections;
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Turns a portion of a bitmap into something that can be drawn on this graphics object.  <a href="#6b10629453eec979500179e4ceb11434"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-Serves as the target of all drawing and provides basic drawing functionality. 
+Serves as the target of all drawing and provides primitive drawing functionality. 
 <p>
-Usually created by <a class="el" href="class_gosu_1_1_window.html" title="Convenient all-in-one class that serves as the foundation of a standard Gosu application...">Gosu::Window</a>. 
-<p>Definition at line <a class="el" href="_graphics_8hpp_source.html#l00037">37</a> of file <a class="el" href="_graphics_8hpp_source.html">Graphics.hpp</a>.</p>
+Usually created internally by <a class="el" href="class_gosu_1_1_window.html" title="Convenient all-in-one class that serves as the foundation of a standard Gosu application...">Gosu::Window</a>. 
+<p>Definition at line <a class="el" href="_graphics_8hpp_source.html#l00036">36</a> of file <a class="el" href="_graphics_8hpp_source.html">Graphics.hpp</a>.</p>
 <hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="2c81cc2bde977fdce58fd353b3d4a6c0"></a><!-- doxytag: member="Gosu::Graphics::Graphics" ref="2c81cc2bde977fdce58fd353b3d4a6c0" args="(unsigned physicalWidth, unsigned physicalHeight, bool fullscreen)" -->
 <div class="memitem">
@@ -215,32 +214,32 @@ Prepares the graphics object for drawing.
 Nothing must be drawn without calling begin. 
 </div>
 </div><p>
-<a class="anchor" name="8d6d2a3931fc062a7411c69cdee1c4a2"></a><!-- doxytag: member="Gosu::Graphics::beginClipping" ref="8d6d2a3931fc062a7411c69cdee1c4a2" args="(int x, int y, unsigned width, unsigned height)" -->
+<a class="anchor" name="41f72426e110063503faf7ef31b65290"></a><!-- doxytag: member="Gosu::Graphics::beginClipping" ref="41f72426e110063503faf7ef31b65290" args="(double x, double y, double width, double height)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void Gosu::Graphics::beginClipping           </td>
           <td>(</td>
-          <td class="paramtype">int&nbsp;</td>
+          <td class="paramtype">double&nbsp;</td>
           <td class="paramname"> <em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&nbsp;</td>
+          <td class="paramtype">double&nbsp;</td>
           <td class="paramname"> <em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned&nbsp;</td>
+          <td class="paramtype">double&nbsp;</td>
           <td class="paramname"> <em>width</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned&nbsp;</td>
+          <td class="paramtype">double&nbsp;</td>
           <td class="paramname"> <em>height</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -690,42 +689,25 @@ Finishes building the macro and returns it as a drawable object.
 Most usually, the return value is passed to <a class="el" href="class_gosu_1_1_image.html#c055237e043f147da45132de80b2caa0" title="Loads an image from a given filename that can be drawn onto graphics.">Image::Image()</a>. 
 </div>
 </div><p>
-<a class="anchor" name="710461bb379979d9e467898c494948b5"></a><!-- doxytag: member="Gosu::Graphics::factorX" ref="710461bb379979d9e467898c494948b5" args="() const " -->
+<a class="anchor" name="f6cdee3425e60ec8ffbc4f9ecb1b54ac"></a><!-- doxytag: member="Gosu::Graphics::flush" ref="f6cdee3425e60ec8ffbc4f9ecb1b54ac" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double Gosu::Graphics::factorX           </td>
+          <td class="memname">void Gosu::Graphics::flush           </td>
           <td>(</td>
           <td class="paramname">          </td>
           <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-
-</div>
-</div><p>
-<a class="anchor" name="baf5d3b9795a97104d841bef7ecc6d88"></a><!-- doxytag: member="Gosu::Graphics::factorY" ref="baf5d3b9795a97104d841bef7ecc6d88" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double Gosu::Graphics::factorY           </td>
-          <td>(</td>
-          <td class="paramname">          </td>
-          <td>&nbsp;)&nbsp;</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
+Flushes the Z queue to the screen and starts a new one. 
 <p>
-
+Useful for games that are *very* composite in nature (splitscreen). 
 </div>
 </div><p>
 <a class="anchor" name="730cc192034ee1070b2017d41fe7e89e"></a><!-- doxytag: member="Gosu::Graphics::fullscreen" ref="730cc192034ee1070b2017d41fe7e89e" args="() const " -->

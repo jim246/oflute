@@ -95,10 +95,10 @@ window.onload = initDynSections;
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Represents an ARGB color value with 8 bits for each channel.  <a href="class_gosu_1_1_color.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_font.html">Font</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A font can be used to draw text on a <a class="el" href="class_gosu_1_1_graphics.html" title="Serves as the target of all drawing and provides basic drawing functionality.">Graphics</a> object very flexibly.  <a href="class_gosu_1_1_font.html#_details">More...</a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">A font can be used to draw text on a <a class="el" href="class_gosu_1_1_graphics.html" title="Serves as the target of all drawing and provides primitive drawing functionality...">Graphics</a> object very flexibly.  <a href="class_gosu_1_1_font.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_graphics.html">Graphics</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Serves as the target of all drawing and provides basic drawing functionality.  <a href="class_gosu_1_1_graphics.html#_details">More...</a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Serves as the target of all drawing and provides primitive drawing functionality.  <a href="class_gosu_1_1_graphics.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_image.html">Image</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Provides functionality for drawing rectangular images.  <a href="class_gosu_1_1_image.html#_details">More...</a><br></td></tr>
@@ -132,9 +132,6 @@ window.onload = initDynSections;
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_file.html">File</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight"><a class="el" href="class_gosu_1_1_file.html" title="File with the Resource interface.">File</a> with the <a class="el" href="class_gosu_1_1_resource.html" title="Base class for resources.">Resource</a> interface.  <a href="class_gosu_1_1_file.html#_details">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_rot_flip.html">RotFlip</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Light-weight class that encodes a rotation by 0, 90, 180, or 270 degrees as well as optional horizontal and/or vertical flips.  <a href="class_gosu_1_1_rot_flip.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">class &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_message_socket.html">MessageSocket</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wraps an UDP socket.  <a href="class_gosu_1_1_message_socket.html#_details">More...</a><br></td></tr>
@@ -362,33 +359,6 @@ window.onload = initDynSections;
 <a class="el" href="namespace_gosu.html#f3bd16cebaf102e43f576d0a0ca1fcc3d09b16bbdaf86e8a38a7299abad2706d">fmAlter</a>
  }</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668">RotFlipName</a> { <br>
-&nbsp;&nbsp;<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668cf4d5639ae78c456489b6e5b9dc2396f">rfDefault</a>, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668fbcbc584e7851f717c4a70c5d229c418">rfRotate90</a>, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668c45c928f38e0a7551d5263dae4d0152a">rfRotate180</a>, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668beab954d390a904b3558bfc36cbb5c72">rfRotate270</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b3266830029e8e6f855502d3299887bbec218d">rfFlipX</a>, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668a8725397ea4c8bf6e9b18284a9cb3007">rfRotate90FlipX</a>, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b326685fc90df8254501718e6cb570fa09fb69">rfRotate180FlipX</a>, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b3266828421018e513c29f544a09261ad5f1a9">rfRotate270FlipX</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668d2084cbcf1c240e2363ba038114a2d2c">rfFlipY</a> =  rfRotate180FlipX, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b326688c55ec082d5b2e99dfeba304a3042733">rfRotate90FlipY</a> =  rfRotate270FlipX, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668a89e8b0726bf15acce3a827529d3c3df">rfRotate180FlipY</a> =  rfFlipX, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b326680bbe76f0975c728121f9053569ce2d31">rfRotate270FlipY</a> =  rfRotate90FlipX, 
-<br>
-&nbsp;&nbsp;<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668d5bc273b1fca8df803d57c847156e4c2">rfFlipXRotate90</a> =  rfRotate270FlipX, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b326680bbb94f3594e30a591e8717b1de071fd">rfFlipXRotate180</a> =  rfRotate180FlipX, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b326687994b9ebe1995cea43ad29e6cb322cce">rfFlipXRotate270</a> =  rfRotate90FlipX, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668883cde5aeda6eddc0ce28c189a69889f">rfFlipYRotate90</a> =  rfRotate90FlipX, 
-<br>
-&nbsp;&nbsp;<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668ac5fd6e2abb727476d3e3bdf4c25c2bd">rfFlipYRotate180</a> =  rfFlipX, 
-<a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668239ab8e1a88233a52e3efde424313db1">rfFlipYRotate270</a> =  rfRotate270FlipX
-<br>
- }</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Human-understandable descriptions of the variants of rotations and flips that can be constructed.  <a href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#b3663b1e82f7e3aaa65081e06f8f5871">CommMode</a> { <a class="el" href="namespace_gosu.html#b3663b1e82f7e3aaa65081e06f8f5871c5eac1ae7fa89b9a53d6c387e5ea74e1">cmRaw</a>, 
 <a class="el" href="namespace_gosu.html#b3663b1e82f7e3aaa65081e06f8f58718da4ddc0cf3385c1a9c450d3c1ef89d3">cmManaged</a>
  }</td></tr>
@@ -444,13 +414,13 @@ window.onload = initDynSections;
 <tr><td class="memItemLeft" nowrap align="right" valign="top">unsigned&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#2934a7df026d36a3b8793e8097f701c5">screenHeight</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns the height, in pixels, of the user's primary screen.  <a href="#2934a7df026d36a3b8793e8097f701c5"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="namespace_gosu.html#fc543993017eada52ee25cbfaea7f53a">Transform</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#e3aab40f28c69f92e576451ce3552cf0">rotate</a> (double angle, double aroundX=0, double aroundY=0)</td></tr>
-
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="namespace_gosu.html#fc543993017eada52ee25cbfaea7f53a">Transform</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#a1be2d8b47328ab7b82cf1e96b832d3a">translate</a> (double x, double y)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="namespace_gosu.html#fc543993017eada52ee25cbfaea7f53a">Transform</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#e3aab40f28c69f92e576451ce3552cf0">rotate</a> (double angle, double aroundX=0, double aroundY=0)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="namespace_gosu.html#fc543993017eada52ee25cbfaea7f53a">Transform</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#6fdc2603f200e0852cf8b6412b69c503">scale</a> (double factor)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="namespace_gosu.html#fc543993017eada52ee25cbfaea7f53a">Transform</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#0a54dc4f03ff4c6deff05ab6196a9437">scale</a> (double factorX, double factorY)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="namespace_gosu.html#fc543993017eada52ee25cbfaea7f53a">Transform</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#8f1691ebff350d1c0111b7d062096f20">scale</a> (double factorX, double factorY, double fromX=0, double fromY=0)</td></tr>
 
 <tr><td class="memTemplParams" nowrap colspan="2">template&lt;typename Container &gt; </td></tr>
 <tr><td class="memTemplItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#65c36c29f8305756011810c5a945fb6f">imagesFromTiledBitmap</a> (<a class="el" href="class_gosu_1_1_graphics.html">Graphics</a> &amp;graphics, const std::wstring &amp;filename, int tileWidth, int tileHeight, bool tileable, Container &amp;appendTo)</td></tr>
@@ -551,13 +521,6 @@ window.onload = initDynSections;
 <tr><td class="memTemplParams" nowrap colspan="2">template&lt;typename T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" nowrap align="right" valign="top">T&nbsp;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#0e48bf62ef4945d76f08d2907eb8404d">nativeToBig</a> (T t)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#f95982a20bba047a1d7a8accb82a7758">operator==</a> (<a class="el" href="class_gosu_1_1_rot_flip.html">RotFlip</a> a, <a class="el" href="class_gosu_1_1_rot_flip.html">RotFlip</a> b)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#d2860d74f086dc0ed96a25df359494ed">operator!=</a> (<a class="el" href="class_gosu_1_1_rot_flip.html">RotFlip</a> a, <a class="el" href="class_gosu_1_1_rot_flip.html">RotFlip</a> b)</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#621eb7d0e3c347461dcc298903fe18a4">applyToPoint</a> (<a class="el" href="class_gosu_1_1_rot_flip.html">RotFlip</a> rotFlip, int &amp;x, int &amp;y, int max)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Applies a <a class="el" href="class_gosu_1_1_rot_flip.html" title="Light-weight class that encodes a rotation by 0, 90, 180, or 270 degrees as well...">RotFlip</a> to a point x/y in a square of side length max.  <a href="#621eb7d0e3c347461dcc298903fe18a4"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="namespace_gosu.html#e32efd2c73c3884c91c05d5c136d5485">SocketAddress</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#c2c5b3cca9903139efbd2d601a631ee6">stringToAddress</a> (const std::string &amp;s)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Tries to convert a dotted IP4 string into an address suitable for socket functions.  <a href="#c2c5b3cca9903139efbd2d601a631ee6"></a><br></td></tr>
@@ -576,9 +539,9 @@ window.onload = initDynSections;
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="class_gosu_1_1_bitmap.html">Bitmap</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#66acd03b42a4902bf2aa2d2c0c526ee8">createText</a> (const std::wstring &amp;text, const std::wstring &amp;fontName, unsigned fontHeight, unsigned fontFlags=0)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Creates a bitmap that is filled with a line of formatted text given to the function.  <a href="#66acd03b42a4902bf2aa2d2c0c526ee8"></a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="class_gosu_1_1_bitmap.html">Bitmap</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#1d42aec491c8241f416e72ac8a39c7a4">createText</a> (const std::wstring &amp;text, const std::wstring &amp;fontName, unsigned fontHeight, unsigned lineSpacing, unsigned maxWidth, <a class="el" href="namespace_gosu.html#6dc1926b8de6c2fb6bde3aa79ca42c76">TextAlign</a> align, unsigned fontFlags=0)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="class_gosu_1_1_bitmap.html">Bitmap</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#f923b1b6ec1c7937a99bc91fde8a40f7">createText</a> (const std::wstring &amp;text, const std::wstring &amp;fontName, unsigned fontHeight, int lineSpacing, unsigned maxWidth, <a class="el" href="namespace_gosu.html#6dc1926b8de6c2fb6bde3aa79ca42c76">TextAlign</a> align, unsigned fontFlags=0)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Creates a bitmap that is filled with the formatted text given to the function.  <a href="#1d42aec491c8241f416e72ac8a39c7a4"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Creates a bitmap that is filled with the formatted text given to the function.  <a href="#f923b1b6ec1c7937a99bc91fde8a40f7"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#6c816ef80c16a19e14650f5cc8ca359e">registerEntity</a> (const std::wstring &amp;name, const <a class="el" href="class_gosu_1_1_bitmap.html">Bitmap</a> &amp;replacement)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Registers a new HTML-style entity that can subsequently be used with <a class="el" href="class_gosu_1_1_font.html" title="A font can be used to draw text on a Graphics object very flexibly.">Gosu::Font</a> and <a class="el" href="namespace_gosu.html#66acd03b42a4902bf2aa2d2c0c526ee8" title="Creates a bitmap that is filled with a line of formatted text given to the function...">Gosu::createText</a>.  <a href="#6c816ef80c16a19e14650f5cc8ca359e"></a><br></td></tr>
@@ -601,9 +564,12 @@ window.onload = initDynSections;
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Converts an std::wstring into an std::string using local encoding.  <a href="#66106eac9ffd4e4047e891c20196a5a2"></a><br></td></tr>
 <tr><td colspan="2"><br><h2>Variables</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">const double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#66e372da7f9b1ce440cc35da4b16b027">zImmediate</a> = -std::numeric_limits&lt;double&gt;::infinity()</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">unsigned const&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#ebd7b6d33c0a55fb6a43fb3a70e6cfda">MAX_TEXTURE_SIZE</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The lowest possible Z position.  <a href="#66e372da7f9b1ce440cc35da4b16b027"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Returns the maximum size of an texture that will be allocated internally by <a class="el" href="namespace_gosu.html" title="The library&#39;s main namespace.">Gosu</a>.  <a href="#ebd7b6d33c0a55fb6a43fb3a70e6cfda"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">GOSU_DEPRECATED const double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#490533ad6ef903baf2086c1d0046c2ec">zImmediate</a> = -std::numeric_limits&lt;double&gt;::infinity()</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The lowest possible Z position.  <a href="#490533ad6ef903baf2086c1d0046c2ec"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="namespace_gosu.html#d32d35b8da950cd315c2c655157be3a2">ByteOrder</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#ead4502f3e95077f5e128d1ff6bae819">nativeByteOrder</a> = boLittle</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="namespace_gosu.html#d32d35b8da950cd315c2c655157be3a2">ByteOrder</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gosu.html#b1ccccbaef42335e16689c5fc2f1f936">otherByteOrder</a> = boBig</td></tr>
@@ -670,7 +636,7 @@ Ports are returned from and given to <a class="el" href="namespace_gosu.html" ti
 
 <p>
 
-<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00065">65</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00080">80</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
 
 </div>
 </div><p>
@@ -687,7 +653,7 @@ Ports are returned from and given to <a class="el" href="namespace_gosu.html" ti
 
 <p>
 
-<p>Definition at line <a class="el" href="_graphics_8hpp_source.html#l00028">28</a> of file <a class="el" href="_graphics_8hpp_source.html">Graphics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_graphics_8hpp_source.html#l00027">27</a> of file <a class="el" href="_graphics_8hpp_source.html">Graphics.hpp</a>.</p>
 
 </div>
 </div><p>
@@ -706,7 +672,7 @@ Ports are returned from and given to <a class="el" href="namespace_gosu.html" ti
 Represents the Z position of something drawn with Gosu's graphics system. 
 <p>
 Draw calls with higher ZPos values will cover those with a lower ZPos value, that is, they are performed last. 
-<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00014">14</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00015">15</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
 
 </div>
 </div><p>
@@ -740,7 +706,7 @@ The color's channels will be multiplied with each other. </td></tr>
 </table>
 </dl>
 
-<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00023">23</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00028">28</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
 
 </div>
 </div><p>
@@ -775,7 +741,7 @@ Flags that affect the tileability of an image.
 </table>
 </dl>
 
-<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00053">53</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00058">58</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
 
 </div>
 </div><p>
@@ -1158,66 +1124,7 @@ Opens or creates a file with writing access, but does not clear existing content
 </table>
 </dl>
 
-<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00036">36</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
-
-</div>
-</div><p>
-<a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668"></a><!-- doxytag: member="Gosu::RotFlipName" ref="3e38c3caeab9b4ac1556d62237b32668" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespace_gosu.html#3e38c3caeab9b4ac1556d62237b32668">Gosu::RotFlipName</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Human-understandable descriptions of the variants of rotations and flips that can be constructed. 
-<p>
-<dl compact><dt><b>Enumerator: </b></dt><dd>
-<table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668cf4d5639ae78c456489b6e5b9dc2396f"></a><!-- doxytag: member="rfDefault" ref="3e38c3caeab9b4ac1556d62237b32668cf4d5639ae78c456489b6e5b9dc2396f" args="" -->rfDefault</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668fbcbc584e7851f717c4a70c5d229c418"></a><!-- doxytag: member="rfRotate90" ref="3e38c3caeab9b4ac1556d62237b32668fbcbc584e7851f717c4a70c5d229c418" args="" -->rfRotate90</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668c45c928f38e0a7551d5263dae4d0152a"></a><!-- doxytag: member="rfRotate180" ref="3e38c3caeab9b4ac1556d62237b32668c45c928f38e0a7551d5263dae4d0152a" args="" -->rfRotate180</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668beab954d390a904b3558bfc36cbb5c72"></a><!-- doxytag: member="rfRotate270" ref="3e38c3caeab9b4ac1556d62237b32668beab954d390a904b3558bfc36cbb5c72" args="" -->rfRotate270</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b3266830029e8e6f855502d3299887bbec218d"></a><!-- doxytag: member="rfFlipX" ref="3e38c3caeab9b4ac1556d62237b3266830029e8e6f855502d3299887bbec218d" args="" -->rfFlipX</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668a8725397ea4c8bf6e9b18284a9cb3007"></a><!-- doxytag: member="rfRotate90FlipX" ref="3e38c3caeab9b4ac1556d62237b32668a8725397ea4c8bf6e9b18284a9cb3007" args="" -->rfRotate90FlipX</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b326685fc90df8254501718e6cb570fa09fb69"></a><!-- doxytag: member="rfRotate180FlipX" ref="3e38c3caeab9b4ac1556d62237b326685fc90df8254501718e6cb570fa09fb69" args="" -->rfRotate180FlipX</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b3266828421018e513c29f544a09261ad5f1a9"></a><!-- doxytag: member="rfRotate270FlipX" ref="3e38c3caeab9b4ac1556d62237b3266828421018e513c29f544a09261ad5f1a9" args="" -->rfRotate270FlipX</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668d2084cbcf1c240e2363ba038114a2d2c"></a><!-- doxytag: member="rfFlipY" ref="3e38c3caeab9b4ac1556d62237b32668d2084cbcf1c240e2363ba038114a2d2c" args="" -->rfFlipY</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b326688c55ec082d5b2e99dfeba304a3042733"></a><!-- doxytag: member="rfRotate90FlipY" ref="3e38c3caeab9b4ac1556d62237b326688c55ec082d5b2e99dfeba304a3042733" args="" -->rfRotate90FlipY</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668a89e8b0726bf15acce3a827529d3c3df"></a><!-- doxytag: member="rfRotate180FlipY" ref="3e38c3caeab9b4ac1556d62237b32668a89e8b0726bf15acce3a827529d3c3df" args="" -->rfRotate180FlipY</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b326680bbe76f0975c728121f9053569ce2d31"></a><!-- doxytag: member="rfRotate270FlipY" ref="3e38c3caeab9b4ac1556d62237b326680bbe76f0975c728121f9053569ce2d31" args="" -->rfRotate270FlipY</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668d5bc273b1fca8df803d57c847156e4c2"></a><!-- doxytag: member="rfFlipXRotate90" ref="3e38c3caeab9b4ac1556d62237b32668d5bc273b1fca8df803d57c847156e4c2" args="" -->rfFlipXRotate90</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b326680bbb94f3594e30a591e8717b1de071fd"></a><!-- doxytag: member="rfFlipXRotate180" ref="3e38c3caeab9b4ac1556d62237b326680bbb94f3594e30a591e8717b1de071fd" args="" -->rfFlipXRotate180</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b326687994b9ebe1995cea43ad29e6cb322cce"></a><!-- doxytag: member="rfFlipXRotate270" ref="3e38c3caeab9b4ac1556d62237b326687994b9ebe1995cea43ad29e6cb322cce" args="" -->rfFlipXRotate270</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668883cde5aeda6eddc0ce28c189a69889f"></a><!-- doxytag: member="rfFlipYRotate90" ref="3e38c3caeab9b4ac1556d62237b32668883cde5aeda6eddc0ce28c189a69889f" args="" -->rfFlipYRotate90</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668ac5fd6e2abb727476d3e3bdf4c25c2bd"></a><!-- doxytag: member="rfFlipYRotate180" ref="3e38c3caeab9b4ac1556d62237b32668ac5fd6e2abb727476d3e3bdf4c25c2bd" args="" -->rfFlipYRotate180</em>&nbsp;</td><td>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" name="3e38c3caeab9b4ac1556d62237b32668239ab8e1a88233a52e3efde424313db1"></a><!-- doxytag: member="rfFlipYRotate270" ref="3e38c3caeab9b4ac1556d62237b32668239ab8e1a88233a52e3efde424313db1" args="" -->rfFlipYRotate270</em>&nbsp;</td><td>
-</td></tr>
-</table>
-</dl>
-
-<p>Definition at line <a class="el" href="_rot_flip_8hpp_source.html#l00011">11</a> of file <a class="el" href="_rot_flip_8hpp_source.html">RotFlip.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00041">41</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
 
 </div>
 </div><p>
@@ -1246,7 +1153,7 @@ Human-understandable descriptions of the variants of rotations and flips that ca
 </table>
 </dl>
 
-<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00044">44</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00049">49</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
 
 </div>
 </div><p>
@@ -1443,49 +1350,6 @@ Set the alpha value of all pixels which are equal to the color key to zero.
 <a class="el" href="class_gosu_1_1_color.html" title="Represents an ARGB color value with 8 bits for each channel.">Color</a> values are adjusted so that no borders show up when the image is stretched or rotated. 
 </div>
 </div><p>
-<a class="anchor" name="621eb7d0e3c347461dcc298903fe18a4"></a><!-- doxytag: member="Gosu::applyToPoint" ref="621eb7d0e3c347461dcc298903fe18a4" args="(RotFlip rotFlip, int &amp;x, int &amp;y, int max)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Gosu::applyToPoint           </td>
-          <td>(</td>
-          <td class="paramtype">RotFlip&nbsp;</td>
-          <td class="paramname"> <em>rotFlip</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;&nbsp;</td>
-          <td class="paramname"> <em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;&nbsp;</td>
-          <td class="paramname"> <em>y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&nbsp;</td>
-          <td class="paramname"> <em>max</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Applies a <a class="el" href="class_gosu_1_1_rot_flip.html" title="Light-weight class that encodes a rotation by 0, 90, 180, or 270 degrees as well...">RotFlip</a> to a point x/y in a square of side length max. 
-<p>
-
-</div>
-</div><p>
 <a class="anchor" name="ea01dc8abf1ecacce40ed0cece880e99"></a><!-- doxytag: member="Gosu::bigToNative" ref="ea01dc8abf1ecacce40ed0cece880e99" args="(T t)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1594,7 +1458,7 @@ Returns min if value is smaller than min, max if value is larger than max and va
 
 </div>
 </div><p>
-<a class="anchor" name="1d42aec491c8241f416e72ac8a39c7a4"></a><!-- doxytag: member="Gosu::createText" ref="1d42aec491c8241f416e72ac8a39c7a4" args="(const std::wstring &amp;text, const std::wstring &amp;fontName, unsigned fontHeight, unsigned lineSpacing, unsigned maxWidth, TextAlign align, unsigned fontFlags=0)" -->
+<a class="anchor" name="f923b1b6ec1c7937a99bc91fde8a40f7"></a><!-- doxytag: member="Gosu::createText" ref="f923b1b6ec1c7937a99bc91fde8a40f7" args="(const std::wstring &amp;text, const std::wstring &amp;fontName, unsigned fontHeight, int lineSpacing, unsigned maxWidth, TextAlign align, unsigned fontFlags=0)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1619,7 +1483,7 @@ Returns min if value is smaller than min, max if value is larger than max and va
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">unsigned&nbsp;</td>
+          <td class="paramtype">int&nbsp;</td>
           <td class="paramname"> <em>lineSpacing</em>, </td>
         </tr>
         <tr>
@@ -1655,9 +1519,9 @@ Creates a bitmap that is filled with the formatted text given to the function.
 The line can contain line breaks and HTML-like markup. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>text</em>&nbsp;</td><td>Formatted text. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fontName</em>&nbsp;</td><td>Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fontName</em>&nbsp;</td><td>Name of a system font, or a filename to a TTF file (must contain '/'). </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fontHeight</em>&nbsp;</td><td>Height of the font in pixels. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>lineSpacing</em>&nbsp;</td><td>Spacing between two lines of text in pixels. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>lineSpacing</em>&nbsp;</td><td>Spacing between two lines of text in pixels. Can be negative to make text stick together more closely. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>maxWidth</em>&nbsp;</td><td>Width of the bitmap that will be returned. Text will be split into multiple lines to avoid drawing over the right border. When a single word is too long, it will be truncated. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fontFlags</em>&nbsp;</td><td>Binary combination of members of the FontFlags enum. </td></tr>
   </table>
@@ -1708,7 +1572,7 @@ Creates a bitmap that is filled with a line of formatted text given to the funct
 The line can contain line breaks and HTML-like markup. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>text</em>&nbsp;</td><td>Formatted text. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fontName</em>&nbsp;</td><td>Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fontName</em>&nbsp;</td><td>Name of a system font, or a filename to a TTF file (must contain '/'). </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fontHeight</em>&nbsp;</td><td>Height of the font in pixels. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fontFlags</em>&nbsp;</td><td>Binary combination of members of the FontFlags enum. </td></tr>
   </table>
@@ -1920,7 +1784,7 @@ Draws a line of unformatted text on a bitmap.
 This is a very low-level function that does not understand any of Gosu's HTML-like markup. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>text</em>&nbsp;</td><td>Unformatted text. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fontName</em>&nbsp;</td><td>Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fontName</em>&nbsp;</td><td>Name of a system font, or a filename to a TTF file (must contain '/'). </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fontHeight</em>&nbsp;</td><td>Height, in pixels, of the text. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>fontFlags</em>&nbsp;</td><td>Binary combination of members of the FontFlags enum. </td></tr>
   </table>
@@ -2016,7 +1880,7 @@ Convenience function that splits a bitmap into an area of array rectangles and c
   </table>
 </dl>
 
-<p>Definition at line <a class="el" href="_image_8hpp_source.html#l00123">123</a> of file <a class="el" href="_image_8hpp_source.html">Image.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_image_8hpp_source.html#l00107">107</a> of file <a class="el" href="_image_8hpp_source.html">Image.hpp</a>.</p>
 
 <p>References <a class="el" href="_bitmap_8hpp_source.html#l00029">Gosu::Bitmap::height()</a>, and <a class="el" href="_bitmap_8hpp_source.html#l00028">Gosu::Bitmap::width()</a>.</p>
 
@@ -2084,7 +1948,7 @@ Convenience function that splits a BMP or PNG file into an array of small rectan
   </table>
 </dl>
 
-<p>Definition at line <a class="el" href="_image_8hpp_source.html#l00108">108</a> of file <a class="el" href="_image_8hpp_source.html">Image.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_image_8hpp_source.html#l00092">92</a> of file <a class="el" href="_image_8hpp_source.html">Image.hpp</a>.</p>
 
 <p>References <a class="el" href="namespace_gosu.html#263a114f352f439a3cbb0da9d52d18cb">quickLoadBitmap()</a>.</p>
 
@@ -2501,39 +2365,6 @@ Returns the vertical distance between the origin and the point to which you woul
 
 </div>
 </div><p>
-<a class="anchor" name="d2860d74f086dc0ed96a25df359494ed"></a><!-- doxytag: member="Gosu::operator!=" ref="d2860d74f086dc0ed96a25df359494ed" args="(RotFlip a, RotFlip b)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Gosu::operator!=           </td>
-          <td>(</td>
-          <td class="paramtype">RotFlip&nbsp;</td>
-          <td class="paramname"> <em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">RotFlip&nbsp;</td>
-          <td class="paramname"> <em>b</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-
-<p>Definition at line <a class="el" href="_rot_flip_8hpp_source.html#l00116">116</a> of file <a class="el" href="_rot_flip_8hpp_source.html">RotFlip.hpp</a>.</p>
-
-<p>References <a class="el" href="_rot_flip_8hpp_source.html#l00060">Gosu::RotFlip::name()</a>.</p>
-
-</div>
-</div><p>
 <a class="anchor" name="d6ebc33043d3f495cf4bfbea2184e6d6"></a><!-- doxytag: member="Gosu::operator!=" ref="d6ebc33043d3f495cf4bfbea2184e6d6" args="(Button lhs, Button rhs)" -->
 <div class="memitem">
 <div class="memproto">
@@ -2561,7 +2392,7 @@ Returns the vertical distance between the origin and the point to which you woul
 
 <p>
 
-<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00072">72</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00060">60</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
 
 </div>
 </div><p>
@@ -2625,9 +2456,9 @@ Returns the vertical distance between the origin and the point to which you woul
 
 <p>
 
-<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00076">76</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00064">64</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
 
-<p>References <a class="el" href="_input_8hpp_source.html#l00044">Gosu::Button::id()</a>.</p>
+<p>References <a class="el" href="_input_8hpp_source.html#l00046">Gosu::Button::id()</a>.</p>
 
 </div>
 </div><p>
@@ -2664,39 +2495,6 @@ Returns the vertical distance between the origin and the point to which you woul
 
 </div>
 </div><p>
-<a class="anchor" name="f95982a20bba047a1d7a8accb82a7758"></a><!-- doxytag: member="Gosu::operator==" ref="f95982a20bba047a1d7a8accb82a7758" args="(RotFlip a, RotFlip b)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Gosu::operator==           </td>
-          <td>(</td>
-          <td class="paramtype">RotFlip&nbsp;</td>
-          <td class="paramname"> <em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">RotFlip&nbsp;</td>
-          <td class="paramname"> <em>b</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-
-<p>Definition at line <a class="el" href="_rot_flip_8hpp_source.html#l00111">111</a> of file <a class="el" href="_rot_flip_8hpp_source.html">RotFlip.hpp</a>.</p>
-
-<p>References <a class="el" href="_rot_flip_8hpp_source.html#l00060">Gosu::RotFlip::name()</a>.</p>
-
-</div>
-</div><p>
 <a class="anchor" name="8abc916db977614382f04aef415c21c3"></a><!-- doxytag: member="Gosu::operator==" ref="8abc916db977614382f04aef415c21c3" args="(Button lhs, Button rhs)" -->
 <div class="memitem">
 <div class="memproto">
@@ -2726,9 +2524,9 @@ Returns the vertical distance between the origin and the point to which you woul
 Tests whether two Buttons identify the same physical button. 
 <p>
 
-<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00068">68</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00056">56</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
 
-<p>References <a class="el" href="_input_8hpp_source.html#l00044">Gosu::Button::id()</a>.</p>
+<p>References <a class="el" href="_input_8hpp_source.html#l00046">Gosu::Button::id()</a>.</p>
 
 </div>
 </div><p>
@@ -2783,7 +2581,7 @@ Tests whether two Buttons identify the same physical button.
 
 <p>
 
-<p>Referenced by <a class="el" href="_image_8hpp_source.html#l00108">imagesFromTiledBitmap()</a>.</p>
+<p>Referenced by <a class="el" href="_image_8hpp_source.html#l00092">imagesFromTiledBitmap()</a>.</p>
 
 </div>
 </div><p>
@@ -3074,7 +2872,7 @@ Saves the contents of the given bitmap into PNG file data, 24 bits.
 
 </div>
 </div><p>
-<a class="anchor" name="0a54dc4f03ff4c6deff05ab6196a9437"></a><!-- doxytag: member="Gosu::scale" ref="0a54dc4f03ff4c6deff05ab6196a9437" args="(double factorX, double factorY)" -->
+<a class="anchor" name="8f1691ebff350d1c0111b7d062096f20"></a><!-- doxytag: member="Gosu::scale" ref="8f1691ebff350d1c0111b7d062096f20" args="(double factorX, double factorY, double fromX=0, double fromY=0)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -3088,7 +2886,19 @@ Saves the contents of the given bitmap into PNG file data, 24 bits.
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&nbsp;</td>
-          <td class="paramname"> <em>factorY</em></td><td>&nbsp;</td>
+          <td class="paramname"> <em>factorY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fromX</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>fromY</em> = <code>0</code></td><td>&nbsp;</td>
         </tr>
         <tr>
           <td></td>
@@ -3301,7 +3111,7 @@ Returns the width an unformatted line of text would span on a bitmap if it were 
 This is a very low-level function that does not understand any of Gosu's HTML-like markup. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>text</em>&nbsp;</td><td>Unformatted text. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>fontName</em>&nbsp;</td><td>Name of a system font, or a filename to a TTF file (must contain '/', does not work on Linux). </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>fontName</em>&nbsp;</td><td>Name of a system font, or a filename to a TTF file (must contain '/'). </td></tr>
   </table>
 </dl>
 
@@ -3599,6 +3409,23 @@ when starting to listen.
 
 </div>
 </div><p>
+<a class="anchor" name="ebd7b6d33c0a55fb6a43fb3a70e6cfda"></a><!-- doxytag: member="Gosu::MAX_TEXTURE_SIZE" ref="ebd7b6d33c0a55fb6a43fb3a70e6cfda" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned const <a class="el" href="namespace_gosu.html#ebd7b6d33c0a55fb6a43fb3a70e6cfda">Gosu::MAX_TEXTURE_SIZE</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the maximum size of an texture that will be allocated internally by <a class="el" href="namespace_gosu.html" title="The library&#39;s main namespace.">Gosu</a>. 
+<p>
+Useful when extending <a class="el" href="namespace_gosu.html" title="The library&#39;s main namespace.">Gosu</a> using OpenGL. 
+</div>
+</div><p>
 <a class="anchor" name="ead4502f3e95077f5e128d1ff6bae819"></a><!-- doxytag: member="Gosu::nativeByteOrder" ref="ead4502f3e95077f5e128d1ff6bae819" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -3656,12 +3483,12 @@ Pi.
 
 </div>
 </div><p>
-<a class="anchor" name="66e372da7f9b1ce440cc35da4b16b027"></a><!-- doxytag: member="Gosu::zImmediate" ref="66e372da7f9b1ce440cc35da4b16b027" args="" -->
+<a class="anchor" name="490533ad6ef903baf2086c1d0046c2ec"></a><!-- doxytag: member="Gosu::zImmediate" ref="490533ad6ef903baf2086c1d0046c2ec" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const double <a class="el" href="namespace_gosu.html#66e372da7f9b1ce440cc35da4b16b027">Gosu::zImmediate</a> = -std::numeric_limits&lt;double&gt;::infinity()          </td>
+          <td class="memname">GOSU_DEPRECATED const double <a class="el" href="namespace_gosu.html#490533ad6ef903baf2086c1d0046c2ec">Gosu::zImmediate</a> = -std::numeric_limits&lt;double&gt;::infinity()          </td>
         </tr>
       </table>
 </div>
@@ -3670,8 +3497,8 @@ Pi.
 <p>
 The lowest possible Z position. 
 <p>
-By using this, you tell <a class="el" href="namespace_gosu.html" title="The library&#39;s main namespace.">Gosu</a> that your drawing operation does not need Z ordering and can be performed immediately. 
-<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00019">19</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
+By using this, you tell <a class="el" href="namespace_gosu.html" title="The library&#39;s main namespace.">Gosu</a> that your drawing operation does not need Z ordering and can be performed immediately. Deprecated because this turned out not be very useful in optimizing. 
+<p>Definition at line <a class="el" href="_graphics_base_8hpp_source.html#l00024">24</a> of file <a class="el" href="_graphics_base_8hpp_source.html">GraphicsBase.hpp</a>.</p>
 
 </div>
 </div><p>

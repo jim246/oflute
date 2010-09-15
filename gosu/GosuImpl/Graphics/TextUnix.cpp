@@ -226,11 +226,6 @@ namespace Gosu
             Gosu::Bitmap temp;
             temp.resize(surf.width(), surf.height());
             std::memcpy(temp.data(), surf.data(), temp.width() * temp.height() * 4);
-	    
-	    if(bmp.height() < temp.height()){
-		bmp.resize(bmp.width(), temp.height());
-	    }
-	    
             bmp.insert(temp, x, y);
         }
     };

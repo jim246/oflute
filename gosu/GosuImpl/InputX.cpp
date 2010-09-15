@@ -107,6 +107,27 @@ void Gosu::Input::setMouseFactors(double factorX, double factorY)
     pimpl->mouseFactorY = factorY;
 }
 
+const Gosu::Touches& Gosu::Input::currentTouches() const
+{
+    static Gosu::Touches none;
+    return none;
+}
+
+double Gosu::Input::accelerometerX() const
+{
+    return 0.0;
+}
+
+double Gosu::Input::accelerometerY() const
+{
+    return 0.0;
+}
+
+double Gosu::Input::accelerometerZ() const
+{
+    return 0.0;
+}
+
 void Gosu::Input::update()
 {
     for (unsigned int i = 0; i < pimpl->eventList.size(); i++)

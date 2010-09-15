@@ -86,7 +86,7 @@ struct Gosu::Font::Impl
         if (fs.entityAt(index))
             return 1;
         else
-            return 1;
+            return 0.5;
     }
 };
 
@@ -96,12 +96,8 @@ Gosu::Font::Font(Graphics& graphics, const wstring& fontName, unsigned fontHeigh
 {
     pimpl->graphics = &graphics;
     pimpl->name = fontName;
-    pimpl->height = fontHeight;
+    pimpl->height = fontHeight * 2;
     pimpl->flags = fontFlags;
-}
-
-Gosu::Font::~Font()
-{
 }
 
 std::wstring Gosu::Font::name() const
@@ -111,7 +107,7 @@ std::wstring Gosu::Font::name() const
 
 unsigned Gosu::Font::height() const
 {
-    return pimpl->height;
+    return pimpl->height / 2;
 }
 
 unsigned Gosu::Font::flags() const
@@ -163,7 +159,7 @@ void Gosu::Font::draw(const wstring& text, double x, double y, ZPos z,
         if (fs.entityAt(i))
             curFactor = 1.0, color = Gosu::Color(fs.colorAt(i).alpha() * c.alpha() / 255, 255, 255, 255);
         else
-            curFactor = 1.0, color = Gosu::multiply(fs.colorAt(i), c);
+            curFactor = 0.5, color = Gosu::multiply(fs.colorAt(i), c);
 
         //if (dir == LTR)
             curChar.draw(x, y, z, factorX * curFactor, factorY * curFactor, color, mode);

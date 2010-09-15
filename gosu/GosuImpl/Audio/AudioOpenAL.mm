@@ -12,6 +12,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <cassert>
 #include <cstdlib>
@@ -21,6 +22,10 @@
 
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
+
+#ifdef GOSU_IS_IPHONE
+#import <AVFoundation/AVFoundation.h>
+#endif
 
 using namespace std;
 
@@ -203,10 +208,6 @@ Gosu::Sample::Sample(Reader reader)
     }
 }
 
-Gosu::Sample::~Sample()
-{
-}
-
 Gosu::SampleInstance Gosu::Sample::play(double volume, double speed,
     bool looping) const
 {
@@ -245,7 +246,7 @@ protected:
 public:
     virtual ~BaseData() {}
     
-    virtual void play() = 0;
+    virtual void play(bool looping) = 0;
     virtual void pause() = 0;
     virtual void resume() = 0;
     virtual bool paused() const = 0;
@@ -265,6 +266,62 @@ public:
     }
 };
 
+#ifdef GOSU_IS_IPHONE
+// AVAudioPlayer impl
+class Gosu::Song::ModuleData : public BaseData
+{
+    ObjRef<AVAudioPlayer> player;
+    
+    void applyVolume()
+    {
+        player.obj().volume = volume();
+    }
+    
+public:
+    ModuleData(const std::wstring& filename)
+    {
+        std::string utf8Filename = Gosu::wstringToUTF8(filename);
+        ObjRef<NSString> nsFilename([[NSString alloc] initWithUTF8String: utf8Filename.c_str()]);
+        ObjRef<NSURL> url([[NSURL alloc] initFileURLWithPath: nsFilename.obj()]);
+        player.reset([[AVAudioPlayer alloc] initWithContentsOfURL: url.obj() error: NULL]);
+    }
+    
+    void play(bool looping)
+    {
+        if (paused())
+            stop();
+        player.obj().numberOfLoops = looping ? -1 : 0;
+        [player.obj() play];
+    }
+    
+    void pause()
+    {
+        [player.obj() pause];
+    }
+    
+    void resume()
+    {
+        [player.obj() play];
+    }
+    
+    bool paused() const
+    {
+        return !player.obj().playing;
+    };
+    
+    void stop()
+    {
+        [player.obj() stop];
+        player.obj().currentTime = 0;
+    }
+    
+    void update()
+    {
+    }
+};
+#endif
+
+// AudioToolbox impl
 class Gosu::Song::StreamData : public BaseData
 {
     boost::scoped_ptr<AudioFile> file;
@@ -327,7 +384,7 @@ public:
         }
     }
     
-    void play()
+    void play(bool looping)
     {
         int source = lookupSource();
         if (source != ALChannelManagement::NO_SOURCE)
@@ -401,7 +458,7 @@ public:
         int source = lookupSource();
 
         ALuint buffer;
-        int queued, processed;
+        int processed;
         bool active = true;
         
         alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
@@ -428,7 +485,7 @@ public:
 
             if (curSongLooping)
                 // Start anew.
-                play();
+                play(true);
             else
                 // Let the world know we're finished.
                 curSong = 0;
@@ -438,9 +495,15 @@ public:
 
 Gosu::Song::Song(const std::wstring& filename)
 {
-    CONSTRUCTOR_COMMON;
-
-    data.reset(new StreamData(filename));
+#ifdef GOSU_IS_IPHONE
+    if (boost::iends_with(filename, L".mp3") || boost::iends_with(filename, L".aac") || boost::iends_with(filename, L".m4a"))
+        data.reset(new ModuleData(filename));
+    else
+#endif
+    {
+        CONSTRUCTOR_COMMON;
+        data.reset(new StreamData(filename));
+    }
 }
 
 Gosu::Song::Song(Type type, Reader reader)
@@ -472,7 +535,7 @@ void Gosu::Song::play(bool looping)
     }
     
     if (curSong == 0)
-        data->play();
+        data->play(looping);
     
     curSong = this;
     curSongLooping = looping;

@@ -135,7 +135,9 @@ struct Gosu::Input::Impl
 	void updateMousePos()
 	{
 		POINT pos;
-		Win::check(::GetCursorPos(&pos));
+		if (!::GetCursorPos(&pos))
+			return;
+
 		Win::check(::ScreenToClient(window, &pos));
 
 		mouseX = pos.x;
@@ -353,6 +355,7 @@ Gosu::Input::Input(HWND window)
 
     // Get into a usable default state.
 
+	pimpl->mouseX = pimpl->mouseY = 0;
     pimpl->updateMousePos();
     buttons.assign(false);
 }
@@ -402,9 +405,9 @@ wchar_t Gosu::Input::idToChar(Gosu::Button btn)
 bool Gosu::Input::down(Button btn) const
 {
 	// The invalid button is never pressed (but can be passed to this function).
-	if (btn == noButton)
+	if (btn == noButton || btn.id() >= numButtons)
 		return false;
-
+    
     return buttons.at(btn.id());
 }
 
@@ -430,6 +433,27 @@ void Gosu::Input::setMouseFactors(double factorX, double factorY)
 {
 	pimpl->mouseFactorX = factorX;
 	pimpl->mouseFactorY = factorY;
+}
+
+const Gosu::Touches& Gosu::Input::currentTouches() const
+{
+    static Gosu::Touches none;
+    return none;
+}
+
+double Gosu::Input::accelerometerX() const
+{
+    return 0.0;
+}
+
+double Gosu::Input::accelerometerY() const
+{
+    return 0.0;
+}
+
+double Gosu::Input::accelerometerZ() const
+{
+    return 0.0;
 }
 
 void Gosu::Input::update()

@@ -109,10 +109,11 @@ namespace Gosu
                         fontName = customFonts[fontName];
                 }
                 
-                static std::map<std::pair<std::wstring, unsigned>, HFONT> loadedFonts;
+				static std::map<std::pair<std::wstring, unsigned>, HFONT> loadedFonts;
                 
                 HFONT font;
-                std::pair<std::wstring, unsigned> key = std::make_pair(fontName, fontHeight);
+				std::pair<std::wstring, unsigned> key =
+					std::make_pair(fontName, fontHeight | fontFlags << 16);
                 if (loadedFonts.count(key) == 0)
                 {
                     LOGFONT logfont = { fontHeight, 0, 0, 0,
@@ -174,6 +175,8 @@ void Gosu::drawText(Bitmap& bitmap, const std::wstring& text, int x, int y,
         {
             Color pixel = c;
             Color::Channel srcAlpha = GetPixel(helper.context(), relX, relY) & 0xff;
+            if (srcAlpha == 0)
+                continue;
             pixel = multiply(c, Color(srcAlpha, 255, 255, 255));
             if (pixel != 0 && x + relX >= 0 && x + relX < bitmap.width() &&
                 y + relY >= 0 && y + relY < bitmap.height())

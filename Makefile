@@ -6,7 +6,6 @@ DEPFILE := obj/dependencias.d
 CC       := g++
 CXXFLAGS += -I. -I$(INCDIR)
 CXXFLAGS += -Igosu `gosu/bin/gosu-config --cxxflags`
-CXXFLAGS += -Ipugixml -Ikissfft
 CXXFLAGS += -g -Wall
 CXXFLAGS += `pkg-config --cflags libpulse-simple`
 
@@ -18,10 +17,8 @@ LDLIBS += -lSDL_ttf
 LDLIBS += -lboost_filesystem
 LDLIBS += -lboost_regex
 LDLIBS += -lboost_thread
-LDLIBS += pugixml/pugixml.a
-LDLIBS += kissfft/kissfft.a
 
-OUTPUT += oflute
+OUTPUT += programa
 
 SRCS := $(notdir $(shell ls -t $(SRCDIR)/*.cpp))
 
@@ -35,10 +32,6 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 
 # $(DEPFILE)
 $(OUTPUT):  $(OBJS)	
-	@echo "Compiling pugixml..."
-	@make -C pugixml
-	@echo "Compiling kissfft..."
-	@make -C kissfft
 	@echo "Linking binary..."
 	@$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS) 
 	@echo "Done."
@@ -58,8 +51,6 @@ regosu:
 	make -C gosu/linux
 
 clean:
-	rm -rf $(OBJS) $(EXE) $(DEPFILE)
-	make -C pugixml clean
-	make -C kissfft clean
+	rm -rf $(OBJS) $(OUTPUT) $(DEPFILE)
 
 

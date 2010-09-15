@@ -33,6 +33,9 @@ public:
     virtual void update();
     virtual void draw();
     virtual bool needsRedraw() const;
+    virtual bool needsCursor() const;
+    virtual void loseFocus();
+    virtual void releaseMemory();
     virtual void buttonDown(Gosu::Button arg0);
     virtual void buttonUp(Gosu::Button arg0);
 };

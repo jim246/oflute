@@ -5,15 +5,11 @@
 #include <Gosu/Color.hpp>
 #include <GosuImpl/Graphics/Common.hpp>
 #include <GosuImpl/Graphics/TexChunk.hpp>
-#include <boost/bind.hpp>
+#include <GosuImpl/Graphics/RenderState.hpp>
 #include <boost/cstdint.hpp>
-#include <algorithm>
-#include <set>
 
 namespace Gosu
 {
-    const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
-
     struct ArrayVertex
     {
         GLfloat texCoords[2];
@@ -42,45 +38,68 @@ namespace Gosu
         const TexChunk* chunk;
         AlphaMode mode;
 
-        DrawOp(Gosu::Transform& transform) : transform(&transform) { clipWidth = 0xffffffff; usedVertices = 0; chunk = 0; }
-        
-#ifndef GOSU_IS_IPHONE
-        void perform(GLuint& currentTexName, Transform*& currentTransform, const void*) const
+        DrawOp(Gosu::Transform& transform)
+        :   transform(&transform), clipWidth(NO_CLIPPING),
+            usedVertices(0), chunk(0)
         {
-            if (clipWidth != 0xffffffff)
+        }
+        
+        void perform(RenderState& current, const DrawOp* next) const
+        {
+            #ifdef GOSU_IS_IPHONE
+            static const unsigned MAX_AUTOGROUP = 24;
+            
+            static int spriteCounter = 0;
+            static GLfloat spriteVertices[12 * MAX_AUTOGROUP];
+            static GLfloat spriteTexcoords[12 * MAX_AUTOGROUP];
+            static boost::uint32_t spriteColors[6 * MAX_AUTOGROUP];
+            
+            // iPhone specific setup
+            static bool isSetup = false;
+            if (!isSetup)
             {
-                glEnable(GL_SCISSOR_TEST);
-                glScissor(clipX, clipY, clipWidth, clipHeight);
+                // Sets up pointers and enables states needed for using vertex arrays and textures
+                glVertexPointer(2, GL_FLOAT, 0, spriteVertices);
+                glEnableClientState(GL_VERTEX_ARRAY);
+                glTexCoordPointer(2, GL_FLOAT, 0, spriteTexcoords);
+                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                glColorPointer(4, GL_UNSIGNED_BYTE, 0, spriteColors);
+                glEnableClientState(GL_COLOR_ARRAY);
+                
+                isSetup = true;
             }
+            #endif
             
-            if (transform != currentTransform) {
-                glPopMatrix();
-                glPushMatrix();
-                glMultMatrixd(transform->data());
-                currentTransform = transform;
-            }
+            current.setClipRect(clipX, clipY, clipWidth, clipHeight);
+            current.setTransform(transform);
+            current.setAlphaMode(mode);
             
-            if (mode == amAdditive)
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-            else if (mode == amMultiply)
-                glBlendFunc(GL_DST_COLOR, GL_ZERO);
-            else
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
             if (chunk)
             {
-                if (currentTexName == NO_TEXTURE)
-                    glEnable(GL_TEXTURE_2D);
-                if (chunk->texName() != currentTexName)
-                    glBindTexture(GL_TEXTURE_2D, chunk->texName());
-                currentTexName = chunk->texName();
+                current.setTexName(chunk->texName());
+                
+                #ifdef GOSU_IS_IPHONE
+                double left, top, right, bottom;
+                chunk->getCoords(left, top, right, bottom);
+                spriteTexcoords[spriteCounter*12 + 0] = left;
+                spriteTexcoords[spriteCounter*12 + 1] = top;
+                spriteTexcoords[spriteCounter*12 + 2] = right;
+                spriteTexcoords[spriteCounter*12 + 3] = top;
+                spriteTexcoords[spriteCounter*12 + 4] = left;
+                spriteTexcoords[spriteCounter*12 + 5] = bottom;
+                
+                spriteTexcoords[spriteCounter*12 + 6] = right;
+                spriteTexcoords[spriteCounter*12 + 7] = top;
+                spriteTexcoords[spriteCounter*12 + 8] = left;
+                spriteTexcoords[spriteCounter*12 + 9] = bottom;
+                spriteTexcoords[spriteCounter*12 + 10] = right;
+                spriteTexcoords[spriteCounter*12 + 11] = bottom;
+                #endif
             }
-            else if (currentTexName != NO_TEXTURE)
-            {
-                glDisable(GL_TEXTURE_2D);
-                currentTexName = NO_TEXTURE;
-            }
+            else
+                current.setTexName(NO_TEXTURE);
 
+            #ifndef GOSU_IS_IPHONE
             if (usedVertices == 2)
                 glBegin(GL_LINES);
             else if (usedVertices == 3)
@@ -116,91 +135,7 @@ namespace Gosu
             }
             
             glEnd();
-            
-            if (clipWidth != 0xffffffff)
-                glDisable(GL_SCISSOR_TEST);
-        }
-#else
-        void perform(unsigned& currentTexName, Transform*& currentTransform, const DrawOp* next) const
-        {
-            if (usedVertices != 4)
-                return; // No triangles, no lines on iPhone
-            
-            static const unsigned MAX_AUTOGROUP = 24;
-            
-            static int spriteCounter = 0;
-            static GLfloat spriteVertices[12 * MAX_AUTOGROUP];
-            static GLfloat spriteTexcoords[12 * MAX_AUTOGROUP];
-            static boost::uint32_t spriteColors[6 * MAX_AUTOGROUP];
-            
-            // iPhone specific setup
-            static bool isSetup = false;
-            if (!isSetup)
-            {
-                // Sets up pointers and enables states needed for using vertex arrays and textures
-                glVertexPointer(2, GL_FLOAT, 0, spriteVertices);
-                glEnableClientState(GL_VERTEX_ARRAY);
-                glTexCoordPointer(2, GL_FLOAT, 0, spriteTexcoords);
-                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-                glColorPointer(4, GL_UNSIGNED_BYTE, 0, spriteColors);
-                glEnableClientState(GL_COLOR_ARRAY);
-                
-                isSetup = true;
-            }
-            
-            if (transform != currentTransform) {
-                glPopMatrix();
-                glPushMatrix();
-                glMultMatrixd(transform->data());
-                currentTransform = transform;
-            }
-            
-            if (clipWidth != 0xffffffff)
-            {
-                glEnable(GL_SCISSOR_TEST);
-                glScissor(clipX, clipY, clipWidth, clipHeight);
-            }
-            
-            if (mode == amAdditive)
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-            else if (mode == amMultiply)
-                glBlendFunc(GL_DST_COLOR, GL_ZERO);
-            else
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            
-            if (chunk)
-            {
-                if (currentTexName == NO_TEXTURE)
-                    glEnable(GL_TEXTURE_2D);
-                if (chunk->texName() != currentTexName)
-                {
-                    glBindTexture(GL_TEXTURE_2D, chunk->texName());
-                }
-                
-                double left, top, right, bottom;
-                chunk->getCoords(left, top, right, bottom);
-                spriteTexcoords[spriteCounter*12 + 0] = left;
-                spriteTexcoords[spriteCounter*12 + 1] = top;
-                spriteTexcoords[spriteCounter*12 + 2] = right;
-                spriteTexcoords[spriteCounter*12 + 3] = top;
-                spriteTexcoords[spriteCounter*12 + 4] = left;
-                spriteTexcoords[spriteCounter*12 + 5] = bottom;
-                
-                spriteTexcoords[spriteCounter*12 + 6] = right;
-                spriteTexcoords[spriteCounter*12 + 7] = top;
-                spriteTexcoords[spriteCounter*12 + 8] = left;
-                spriteTexcoords[spriteCounter*12 + 9] = bottom;
-                spriteTexcoords[spriteCounter*12 + 10] = right;
-                spriteTexcoords[spriteCounter*12 + 11] = bottom;
-                
-                currentTexName = chunk->texName();
-            }
-            else if (currentTexName != NO_TEXTURE)
-            {
-                glDisable(GL_TEXTURE_2D);
-                currentTexName = NO_TEXTURE;
-            }
-            
+            #else
             for (int i = 0; i < 3; ++i)
             {
                 spriteVertices[spriteCounter*12 + i*2] = vertices[i].x;
@@ -216,25 +151,17 @@ namespace Gosu
             
             ++spriteCounter;
             if (spriteCounter == MAX_AUTOGROUP or next == 0 or
-                chunk == 0 or next->chunk == 0 or 
+                chunk == 0 or next->chunk == 0 or next->transform != transform or
                 next->chunk->texName() != chunk->texName() or next->mode != mode or
-                clipWidth != 0xffffffff or next->clipWidth != 0xffffffff)
+                clipWidth != NO_CLIPPING or next->clipWidth != NO_CLIPPING)
             {
                 glDrawArrays(GL_TRIANGLES, 0, 6 * spriteCounter);
                 //if (spriteCounter > 1)
                 //    printf("grouped %d quads\n", spriteCounter);
                 spriteCounter = 0;
             }
-            
-            if (clipWidth != 0xffffffff)
-                glDisable(GL_SCISSOR_TEST);
+            #endif
         }
-        
-        unsigned texName() const
-        {
-            return chunk ? chunk->texName() : NO_TEXTURE;
-        }
-#endif
         
         void compileTo(VertexArray& va) const
         {
@@ -261,101 +188,6 @@ namespace Gosu
         bool operator<(const DrawOp& other) const
         {
             return z < other.z;
-        }
-    };
-
-    class DrawOpQueue
-    {
-        int clipX, clipY;
-        unsigned clipWidth, clipHeight;
-        std::multiset<DrawOp> set;
-
-    public:
-        DrawOpQueue()
-        : clipWidth(0xffffffff)
-        {
-        }
-        
-        void swap(DrawOpQueue& other)
-        {
-            std::swap(clipX, other.clipX);
-            std::swap(clipY, other.clipY);
-            std::swap(clipWidth, other.clipWidth);
-            std::swap(clipHeight, other.clipHeight);
-            set.swap(other.set);
-        }
-        
-        void addDrawOp(DrawOp op, ZPos z)
-        {
-            if (clipWidth != 0xffffffff)
-            {
-                op.clipX = clipX;
-                op.clipY = clipY;
-                op.clipWidth = clipWidth;
-                op.clipHeight = clipHeight;
-            }
-            
-            if (z == zImmediate)
-            {
-                GLuint currentTexName = NO_TEXTURE;
-                Transform* currentTransform = 0;
-                glMatrixMode(GL_MODELVIEW);
-                glPushMatrix();
-                op.perform(currentTexName, currentTransform, 0);
-                glPopMatrix();
-                if (currentTexName != NO_TEXTURE)
-                    glDisable(GL_TEXTURE_2D);
-            }
-            
-            op.z = z;
-            set.insert(op);
-        }
-        
-        void beginClipping(int x, int y, unsigned width, unsigned height)
-        {
-            clipX = x;
-            clipY = y;
-            clipWidth = width;
-            clipHeight = height;
-        }
-        
-        void endClipping()
-        {
-            clipWidth = 0xffffffff;
-        }
-
-        void performDrawOps() const
-        {
-            GLuint currentTexName = NO_TEXTURE;
-            Transform* currentTransform = 0;
-            
-            glMatrixMode(GL_MODELVIEW);
-            glPushMatrix();
-            
-            std::multiset<DrawOp>::const_iterator last, cur = set.begin(), end = set.end();
-            while (cur != end)
-            {
-                last = cur;
-                ++cur;
-                last->perform(currentTexName, currentTransform, cur == end ? 0 : &*cur);
-            }
-            
-            glPopMatrix();
-            
-            if (currentTexName != NO_TEXTURE)
-                glDisable(GL_TEXTURE_2D);
-        }
-        
-        void clear()
-        {
-            set.clear();
-        }
-        
-        void compileTo(VertexArray& va) const
-        {
-            va.resize(set.size());
-            std::for_each(set.begin(), set.end(),
-                          boost::bind(&DrawOp::compileTo, _1, boost::ref(va)));
         }
     };
 }

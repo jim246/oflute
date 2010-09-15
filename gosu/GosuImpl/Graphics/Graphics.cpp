@@ -7,6 +7,7 @@
 #include <GosuImpl/Graphics/Macro.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Image.hpp>
+#include <Gosu/Platform.hpp>
 #include <boost/foreach.hpp>
 #if 0
 #include <boost/thread.hpp>
@@ -15,11 +16,15 @@
 #include <algorithm>
 #include <limits>
 
+#ifdef GOSU_IS_IPHONE
+#import <UIKit/UIKit.h>
+#include <GosuImpl/Orientation.hpp>
+#endif
+
 struct Gosu::Graphics::Impl
 {
-    unsigned physWidth, physHeight;
     unsigned virtWidth, virtHeight;
-    double factorX, factorY;
+    unsigned physWidth, physHeight;
     bool fullscreen;
     DrawOpQueueStack queues;
     typedef std::vector<boost::shared_ptr<Texture> > Textures;
@@ -30,47 +35,75 @@ struct Gosu::Graphics::Impl
 #if 0
     boost::mutex texMutex;
 #endif
-    
-    void calculateAbsoluteTransform()
+
+#ifdef GOSU_IS_IPHONE
+    Transform transformForOrientation(Orientation orientation)
     {
-        Transform result = scale(1);
-        BOOST_REVERSE_FOREACH (const Transform& tf, currentTransforms)
-            result = multiply(result, tf);
-        absoluteTransforms.push_back(result);
+        Transform result;
+        switch (orientation)
+        {
+        case orLandscapeLeft:
+            result = translate(physWidth, 0);
+            result = multiply(rotate(90), result);
+            result = multiply(scale(1.0 * physHeight / virtWidth, 1.0 * physWidth / virtHeight), result);
+            return result;
+        default:
+            result = translate(0, physHeight);
+            result = multiply(rotate(-90), result);
+            result = multiply(scale(1.0 * physHeight / virtWidth, 1.0 * physWidth / virtHeight), result);
+            return result;
+        }
+    } 
+    
+    Orientation orientation;
+    
+    Impl()
+    : orientation(currentOrientation())
+    {
     }
+    
+    void updateBaseTransform()
+    {
+        if (orientation != currentOrientation())
+        {
+            orientation = currentOrientation();
+            currentTransforms.front() = transformForOrientation(orientation);
+        }
+    }
+#endif
 };
 
 Gosu::Graphics::Graphics(unsigned physWidth, unsigned physHeight, bool fullscreen)
 : pimpl(new Impl)
 {
-    pimpl->virtWidth  = pimpl->physWidth  = physWidth;
-    pimpl->virtHeight = pimpl->physHeight = physHeight;
-    pimpl->factorX = pimpl->factorY = 1.0;
+    pimpl->physWidth  = physWidth;
+    pimpl->physHeight = physHeight;
+    pimpl->virtWidth  = physWidth;
+    pimpl->virtHeight = physHeight;
+    #ifdef GOSU_IS_IPHONE
+    std::swap(pimpl->virtWidth, pimpl->virtHeight);
+    #endif
     pimpl->fullscreen = fullscreen;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0, 0, pimpl->physWidth, pimpl->physHeight);
+    glViewport(0, 0, physWidth, physHeight);
     #ifdef GOSU_IS_IPHONE
-    glOrthof(0, pimpl->physWidth, pimpl->physHeight, 0, -1, 1);
+    glOrthof(0, physWidth, physHeight, 0, -1, 1);
     #else
-    glOrtho(0, pimpl->physWidth, pimpl->physHeight, 0, -1, 1);
+    glOrtho(0, physWidth, physHeight, 0, -1, 1);
     #endif
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    #ifdef GOSU_IS_IPHONE
-    glTranslatef(physWidth, 0, 0);
-    glRotatef(90, 0, 0, 1);
-    glScalef(3.0/2, 2.0/3, 0);
-    #endif
-
+    
     glEnable(GL_BLEND);
     
     // Create default draw-op queue.
     pimpl->queues.resize(1);
     
     // Push one identity matrix as the default transform.
+    pimpl->currentTransforms.push_back(scale(1));
     pimpl->absoluteTransforms.push_back(scale(1));
 }
 
@@ -80,12 +113,14 @@ Gosu::Graphics::~Graphics()
 
 unsigned Gosu::Graphics::width() const
 {
-    return pimpl->virtWidth;
+    double size[2] = { pimpl->virtWidth, pimpl->virtHeight };
+    return size[0];
 }
 
 unsigned Gosu::Graphics::height() const
 {
-    return pimpl->virtHeight;
+    double size[2] = { pimpl->virtWidth, pimpl->virtHeight };
+    return size[1];
 }
 
 bool Gosu::Graphics::fullscreen() const
@@ -93,30 +128,20 @@ bool Gosu::Graphics::fullscreen() const
     return pimpl->fullscreen;
 }
 
-double Gosu::Graphics::factorX() const
-{
-    return pimpl->factorX;
-}
-
-double Gosu::Graphics::factorY() const
-{
-    return pimpl->factorY;
-}
-
 void Gosu::Graphics::setResolution(unsigned virtualWidth, unsigned virtualHeight)
 {
-    if (virtualWidth * virtualHeight < 1)
+    if (virtualWidth == 0 || virtualHeight == 0)
         throw std::invalid_argument("Invalid virtual resolution.");
-
-    pimpl->virtWidth = virtualWidth;
-    pimpl->virtHeight = virtualHeight;
-    /*    
-    pimpl->factorX = pimpl->factorY =
-        std::min(1.0 / virtualWidth * pimpl->physWidth,
-                 1.0 / virtualHeight * pimpl->physHeight);
-    */
-    pimpl->factorX = 1.0 / virtualWidth * pimpl->physWidth;
-    pimpl->factorY = 1.0 / virtualHeight * pimpl->physHeight;
+    
+    pimpl->virtWidth = virtualWidth, pimpl->virtHeight = virtualHeight;
+    #ifdef GOSU_IS_IPHONE
+    pimpl->orientation = static_cast<Gosu::Orientation>(-1);
+    #else
+    Transform baseTransform;
+    baseTransform = scale(1.0 / virtualWidth  * pimpl->physWidth,
+                          1.0 / virtualHeight * pimpl->physHeight);
+    pimpl->currentTransforms.front() = pimpl->absoluteTransforms.front() = baseTransform;
+    #endif
 }
 
 bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
@@ -124,14 +149,15 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
     // If there is a recording in process, stop it.
     // TODO: Raise exception?
     pimpl->queues.resize(1);
+    // Clear leftover clippings.
+    pimpl->queues.front().clear();
     
-    // If there are transformations in progress, clear them.
-    pimpl->currentTransforms.resize(0);
-    pimpl->absoluteTransforms.resize(1);
-
-    // Flush leftover clippings
-    endClipping();
-
+    pimpl->currentTransforms.resize(1);
+    #ifdef GOSU_IS_IPHONE
+    pimpl->updateBaseTransform();
+    #endif
+    pimpl->absoluteTransforms = pimpl->currentTransforms;
+    
     glClearColor(clearWithColor.red()/255.0,
                  clearWithColor.green()/255.0,
                  clearWithColor.blue()/255.0,
@@ -143,29 +169,18 @@ bool Gosu::Graphics::begin(Gosu::Color clearWithColor)
 
 void Gosu::Graphics::end()
 {
-    /*double vBarWidth = pimpl->physWidth / factorX() - width();
-    if (vBarWidth > 0)
-    {
-        drawQuad(0, 0, 0x00000000, vBarWidth, 0, 0x00000000,
-                 0, height(), 0x00000000, vBarWidth, height(), 0x00000000,
-                 std::numeric_limits<double>::max());
-    }
-    
-    double hBarHeight = pimpl->physHeight / factorY() - height();
-    if (hBarHeight > 0)
-    {
-        drawQuad(0, 0, 0x00000000, width(), 0, 0x00000000,
-                 0, hBarHeight, 0x00000000, width(), hBarHeight, 0x00000000,
-                 std::numeric_limits<double>::max());
-    }*/
-    
-    // If there is a recording in process, stop it.
+    flush();
+
+    glFlush();
+}
+
+void Gosu::Graphics::flush()
+{
+    // If there is a recording in process, cancel it.
     pimpl->queues.resize(1);
     
     pimpl->queues.at(0).performDrawOps();
     pimpl->queues.at(0).clear();
-
-    glFlush();
 }
 
 void Gosu::Graphics::beginGL()
@@ -176,8 +191,7 @@ void Gosu::Graphics::beginGL()
 #ifdef GOSU_IS_IPHONE
     throw std::logic_error("Custom OpenGL is unsupported on the iPhone");
 #else
-    pimpl->queues.at(0).performDrawOps();
-    pimpl->queues.at(0).clear();
+    flush();
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_BLEND);
 #endif
@@ -195,7 +209,7 @@ void Gosu::Graphics::endGL()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glViewport(0, 0, pimpl->physWidth, pimpl->physHeight);
-    glOrtho(0, pimpl->virtWidth, pimpl->virtHeight, 0, -1, 1);
+    glOrtho(0, pimpl->physWidth, pimpl->physHeight, 0, -1, 1);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -203,26 +217,27 @@ void Gosu::Graphics::endGL()
 #endif
 }
 
-void Gosu::Graphics::beginClipping(int x, int y, unsigned width, unsigned height)
+void Gosu::Graphics::beginClipping(double x, double y, double width, double height)
 {
     if (pimpl->queues.size() > 1)
         throw std::logic_error("Clipping not allowed while creating a macro");
     
-    // In doubt, make the clipping region smaller than requested.
+    // Apply current transformation.
     
-#ifndef GOSU_IS_IPHONE
-    int physX = static_cast<int>(std::ceil(x * factorX()));
-    int physY = static_cast<int>(std::ceil((0.0 + this->height() - y - height) * factorY()));
-    unsigned physWidth  = static_cast<unsigned>(width  * factorX());
-    unsigned physHeight = static_cast<unsigned>(height * factorY());
-#else
-    // Make up for rotation
-    int physX = 320 - static_cast<int>(std::ceil(320.0 * (0.0 + y + height) / this->height()));
-    int physY = 480 - static_cast<int>(std::ceil(480.0 * (0.0 + x + width) / this->width()));
-    unsigned physWidth  = static_cast<unsigned>(320.0 * height / this->height());
-    unsigned physHeight = static_cast<unsigned>(480.0 * width / this->width());
-#endif
-
+    double left = x, right = x + width;
+    double top = y, bottom = y + height;
+    
+    applyTransform(pimpl->absoluteTransforms.back(), left, top);
+    applyTransform(pimpl->absoluteTransforms.back(), right, bottom);
+    
+    int physX = std::min(left, right);
+    int physY = std::min(top, bottom);
+    int physWidth = std::abs(left - right);
+    int physHeight = std::abs(top - bottom);
+    
+    // Apply OpenGL's counting from the wrong side ;)
+    physY = pimpl->physHeight - physY - physHeight;
+    
     pimpl->queues.back().beginClipping(physX, physY, physWidth, physHeight);
 }
 
@@ -249,16 +264,33 @@ std::auto_ptr<Gosu::ImageData> Gosu::Graphics::endRecording()
     return result;
 }
 
+namespace
+{
+    void ensureBackOfList(Gosu::Transforms& list, const Gosu::Transform& transform)
+    {
+        Gosu::Transforms::iterator oldPosition =
+            std::find(list.begin(), list.end(), transform);
+        if (oldPosition == list.end())
+            list.push_back(transform);
+        else
+            list.splice(list.end(), list, oldPosition);
+    }
+}
+
 void Gosu::Graphics::pushTransform(const Gosu::Transform& transform)
 {
     pimpl->currentTransforms.push_back(transform);
-    pimpl->calculateAbsoluteTransform();
+    Transform result = multiply(transform, pimpl->absoluteTransforms.back());
+    ensureBackOfList(pimpl->absoluteTransforms, result);
 }
 
 void Gosu::Graphics::popTransform()
 {
     pimpl->currentTransforms.pop_back();
-    pimpl->calculateAbsoluteTransform();
+    Transform result = scale(1);
+    BOOST_REVERSE_FOREACH (const Transform& tf, pimpl->currentTransforms)
+        result = multiply(result, tf);
+    ensureBackOfList(pimpl->absoluteTransforms, result);
 }
 
 void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
@@ -267,11 +299,6 @@ void Gosu::Graphics::drawLine(double x1, double y1, Color c1,
 {
     DrawOp op(pimpl->absoluteTransforms.back());
     
-    x1 *= factorX();
-    y1 *= factorY();
-    x2 *= factorX();
-    y2 *= factorY();
-
     op.mode = mode;
     op.usedVertices = 2;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
@@ -286,14 +313,7 @@ void Gosu::Graphics::drawTriangle(double x1, double y1, Color c1,
     ZPos z, AlphaMode mode)
 {
     DrawOp op(pimpl->absoluteTransforms.back());
-    
-    x1 *= factorX();
-    y1 *= factorY();
-    x2 *= factorX();
-    y2 *= factorY();
-    x3 *= factorX();
-    y3 *= factorY();
-    
+        
     op.mode = mode;
     op.usedVertices = 3;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);
@@ -316,16 +336,7 @@ void Gosu::Graphics::drawQuad(double x1, double y1, Color c1,
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
 
     DrawOp op(pimpl->absoluteTransforms.back());
-
-    x1 *= factorX();
-    y1 *= factorY();
-    x2 *= factorX();
-    y2 *= factorY();
-    x3 *= factorX();
-    y3 *= factorY();
-    x4 *= factorX();
-    y4 *= factorY();
-
+    
     op.mode = mode;
     op.usedVertices = 4;
     op.vertices[0] = DrawOp::Vertex(x1, y1, c1);

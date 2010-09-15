@@ -4,8 +4,6 @@
  * @author José Tomás Tocino García
  * @date 2010
  *
- * Fichero inicial de oFlute
- * 
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
  * 
  * This program is free software; you can redistribute it and/or
@@ -24,16 +22,11 @@
  * 02110-1301, USA.
  */
 
-#include "global.h"
-#include "juego.h"
+#include "ventanaDropShadow.h"
 
 int main(int argc, char *argv[]){
 
-	setlocale(LC_ALL, "");
-    bindtextdomain("oflute", "lang" );
-    textdomain("oflute");
-
-    Juego juego;
-    juego.show();
+    VentanaDropShadow V;
+    V.show();
     return 0;
 }

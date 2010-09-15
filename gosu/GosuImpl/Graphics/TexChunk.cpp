@@ -1,6 +1,6 @@
 #include <GosuImpl/Graphics/TexChunk.hpp>
 #include <GosuImpl/Graphics/Texture.hpp>
-#include <GosuImpl/Graphics/DrawOp.hpp>
+#include <GosuImpl/Graphics/DrawOpQueue.hpp>
 #include <Gosu/Bitmap.hpp>
 #include <Gosu/Graphics.hpp>
 
@@ -48,15 +48,6 @@ void Gosu::TexChunk::draw(double x1, double y1, Color c1,
     DrawOp newDrawOp(transforms->back());
     
     reorderCoordinatesIfNecessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4);
-    
-    x1 *= graphics->factorX();
-    y1 *= graphics->factorY();
-    x2 *= graphics->factorX();
-    y2 *= graphics->factorY();
-    x3 *= graphics->factorX();
-    y3 *= graphics->factorY();
-    x4 *= graphics->factorX();
-    y4 *= graphics->factorY();
     
     newDrawOp.usedVertices = 4;
     newDrawOp.vertices[0] = DrawOp::Vertex(x1, y1, c1);

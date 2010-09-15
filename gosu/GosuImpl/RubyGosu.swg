@@ -126,6 +126,7 @@
 #undef write
 #undef close
 #undef read
+#undef bind
 #undef sleep
 #undef Sleep
 #undef int8_t
@@ -158,11 +159,8 @@
 #include <Gosu/Version.hpp>
 #include <Gosu/Window.hpp>
 
-// For Ruby-only MAX_TEXTURE_SIZE
-#include <Gosu/../GosuImpl/Graphics/Texture.hpp>
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
-    unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
@@ -274,7 +272,6 @@ namespace Gosu
 // Graphics:
 
 // ZPos, AlphaMode, FontFlags, TextAlign
-%ignore Gosu::zImmediate;
 %ignore Gosu::AlphaMode;
 %ignore Gosu::FontFlags;
 %ignore Gosu::TextAlign;
@@ -284,16 +281,13 @@ namespace Gosu
 // For screenWidth/screenHeight
 %ignore Gosu::Graphics;
 %ignore Gosu::BorderFlags;
-//%ignore Gosu::MAX_TEXTURE_SIZE;
+%ignore Gosu::MAX_TEXTURE_SIZE;
 %include "../Gosu/Graphics.hpp"
 
-// More Ubuntu libgl initialization fail workarounds
-
-//%constant unsigned MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
+%constant unsigned MAX_TEXTURE_SIZE = Gosu::MAX_TEXTURE_SIZE;
 
 namespace Gosu {
     void enableUndocumentedRetrofication() { extern bool undocumentedRetrofication; undocumentedRetrofication = true; }
-    unsigned __maxTextureSize() { return Gosu::Texture::maxTextureSize(); }
     void register_entity(const std::wstring& name, Gosu::Image* image) { registerEntity(name, image->getData().toBitmap()); }
 }
 
@@ -426,7 +420,7 @@ namespace Gosu {
     %newobject fromText7;
     static Gosu::Image* fromText7(Gosu::Window& window, const std::wstring& text,
                                  const std::wstring& fontName, unsigned fontHeight,
-                                 unsigned lineSpacing, unsigned maxWidth, TextAlign align) {
+                                 int lineSpacing, unsigned maxWidth, TextAlign align) {
         Gosu::Bitmap bmp = Gosu::createText(text, fontName, fontHeight, lineSpacing, maxWidth, align);
         return new Gosu::Image(window.graphics(), bmp);
     }
@@ -506,6 +500,7 @@ namespace Gosu {
 %rename("text_input=") setTextInput;
 %rename("mouse_x=") setMouseX;
 %rename("mouse_y=") setMouseY;
+%rename("needs_cursor?") needsCursor;
 %rename("needs_redraw?") needsRedraw;
 %rename("fullscreen?") fullscreen;
 %markfunc Gosu::Window "markWindow";
@@ -541,6 +536,9 @@ namespace Gosu {
         $self->graphics().drawQuad(x1, y1, c1, x2, y2, c2,
                                    x3, y3, c3, x4, y4, c4,
                                    z, mode);
+    }
+    void flush() {
+        return $self->graphics().flush();
     }
     bool isButtonDown(Gosu::Button btn) const {
         return $self->input().down(btn);
@@ -591,7 +589,7 @@ namespace Gosu {
         rb_yield(Qnil);
         $self->graphics().endGL();
     }
-    void clipTo(int x, int y, unsigned width, unsigned height) {
+    void clipTo(double x, double y, double width, double height) {
         $self->graphics().beginClipping(x, y, width, height);
         rb_yield(Qnil);
         $self->graphics().endClipping();

@@ -6,7 +6,9 @@
 #include <Gosu/Platform.hpp>
 
 #if defined(GOSU_IS_WIN)
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include <windows.h>
 #include <GL/gl.h>
 #elif defined(GOSU_IS_IPHONE)
@@ -26,11 +28,15 @@ namespace Gosu
 {
     class Texture;
     class TexChunk;
+    class RenderState;
     struct DrawOp;
     class DrawOpQueue;
     typedef std::list<Transform> Transforms;
     typedef std::vector<DrawOpQueue> DrawOpQueueStack;
     class Macro;
+    
+    const GLuint NO_TEXTURE = static_cast<GLuint>(-1);
+    const unsigned NO_CLIPPING = 0xffffffff;
     
     template<typename T>
     bool isPToTheLeftOfAB(T xa, T ya,
@@ -38,7 +44,7 @@ namespace Gosu
     {
         return (xb - xa) * (yp - ya) - (xp - xa) * (yb - ya) > 0;
     }
-        
+    
     template<typename T, typename C>
     void reorderCoordinatesIfNecessary(T& x1, T& y1,
         T& x2, T& y2, T& x3, T& y3, C& c3, T& x4, T& y4, C& c4)
@@ -62,6 +68,17 @@ namespace Gosu
         return result;
     }
     
+    inline void applyTransform(const Transform& transform, double& x, double& y)
+    {
+        double in[4] = { x, y, 0, 1 };
+        double out[4] = { 0, 0, 0, 0 };
+        for (int i = 0; i < 4; ++i)
+            for (int j = 0; j < 4; ++j)
+                out[i] += in[j] * transform[j * 4 + i];
+        x = out[0] / out[3];
+        y = out[1] / out[3];
+    }
+    
     inline void multiplyBitmapAlpha(Bitmap& bmp, Color::Channel alpha)
     {
         for (int y = 0; y < bmp.height(); ++y)
@@ -73,6 +90,13 @@ namespace Gosu
             }
     }
     
+    #ifdef GOSU_IS_IPHONE
+    int clipRectBaseFactor();
+    #else
+    inline int clipRectBaseFactor() { return 1; }
+    #endif
+    
+    bool isEntity(const std::wstring& name);
     const Bitmap& entityBitmap(const std::wstring& name);
 }
 

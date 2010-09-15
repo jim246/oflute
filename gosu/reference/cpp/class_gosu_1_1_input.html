@@ -91,6 +91,16 @@ window.onload = initDynSections;
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Immediately moves the mouse as far towards the desired position as possible.  <a href="#df5d807bd1cbac95bd4bd86dc5588dea"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#26a8d3c2c0d46628bfd17183ac266ea3">setMouseFactors</a> (double factorX, double factorY)</td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">const <a class="el" href="namespace_gosu.html#fb6633385bb7471380c0e621bfe605fb">Touches</a> &amp;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#65df6af4639d5d56637c92c2d35c894e">currentTouches</a> () const </td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Currently known touches.  <a href="#65df6af4639d5d56637c92c2d35c894e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#31cead1ff4a931e8242372ebfaabb7fa">accelerometerX</a> () const </td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Accelerometer positions in all three dimensions (smoothened).  <a href="#31cead1ff4a931e8242372ebfaabb7fa"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#1567d0e4146fc964ff0341f5c05ba354">accelerometerY</a> () const </td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#97d7823dd1e62ee9e3a13a94babd4036">accelerometerZ</a> () const </td></tr>
+
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#904cd360ad96838a61b408d5aa6729aa">update</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Collects new information about which buttons are pressed, where the mouse is and calls onButtonUp/onButtonDown, if assigned.  <a href="#904cd360ad96838a61b408d5aa6729aa"></a><br></td></tr>
@@ -113,12 +123,19 @@ window.onload = initDynSections;
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Assignable events that are called by update.  <a href="#b8ea5dbbd08d812cb8d5efa399750e77"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">boost::function&lt; void(<a class="el" href="class_gosu_1_1_button.html">Button</a>)&gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#a9d9f7a57ebf1bae30be4ff568e223ba">onButtonUp</a></td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">boost::function&lt; void(<a class="el" href="struct_gosu_1_1_touch.html">Touch</a>)&gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#349b3d46f7174d704da0b670c4dc7625">onTouchBegan</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Assignable events that are called by update.  <a href="#349b3d46f7174d704da0b670c4dc7625"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">boost::function&lt; void(<a class="el" href="struct_gosu_1_1_touch.html">Touch</a>)&gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#cab6306caf77a894dd94e3d75a8b9724">onTouchMoved</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">boost::function&lt; void(<a class="el" href="struct_gosu_1_1_touch.html">Touch</a>)&gt;&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_gosu_1_1_input.html#68b02bac950908b4d3625cfc039f1e91">onTouchEnded</a></td></tr>
+
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Manages initialization and shutdown of the input system. 
 <p>
 Only one <a class="el" href="class_gosu_1_1_input.html" title="Manages initialization and shutdown of the input system.">Input</a> instance can exist per application. 
-<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00083">83</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00084">84</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
 <hr><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" name="377648a97961ab71084c29d72c3d9b87"></a><!-- doxytag: member="Gosu::Input::~Input" ref="377648a97961ab71084c29d72c3d9b87" args="()" -->
 <div class="memitem">
@@ -140,6 +157,65 @@ Only one <a class="el" href="class_gosu_1_1_input.html" title="Manages initializ
 </div>
 </div><p>
 <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="31cead1ff4a931e8242372ebfaabb7fa"></a><!-- doxytag: member="Gosu::Input::accelerometerX" ref="31cead1ff4a931e8242372ebfaabb7fa" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Gosu::Input::accelerometerX           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Accelerometer positions in all three dimensions (smoothened). 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="1567d0e4146fc964ff0341f5c05ba354"></a><!-- doxytag: member="Gosu::Input::accelerometerY" ref="1567d0e4146fc964ff0341f5c05ba354" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Gosu::Input::accelerometerY           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="97d7823dd1e62ee9e3a13a94babd4036"></a><!-- doxytag: member="Gosu::Input::accelerometerZ" ref="97d7823dd1e62ee9e3a13a94babd4036" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Gosu::Input::accelerometerZ           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+</div>
+</div><p>
 <a class="anchor" name="1cb42fd48c134fac5c2c8496b1e9f05a"></a><!-- doxytag: member="Gosu::Input::charToId" ref="1cb42fd48c134fac5c2c8496b1e9f05a" args="(wchar_t ch)" -->
 <div class="memitem">
 <div class="memproto">
@@ -158,6 +234,27 @@ Only one <a class="el" href="class_gosu_1_1_input.html" title="Manages initializ
 
 <p>
 Returns the button that has to be pressed to produce the given character, or noButton. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="65df6af4639d5d56637c92c2d35c894e"></a><!-- doxytag: member="Gosu::Input::currentTouches" ref="65df6af4639d5d56637c92c2d35c894e" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespace_gosu.html#fb6633385bb7471380c0e621bfe605fb">Touches</a>&amp; Gosu::Input::currentTouches           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Currently known touches. 
 <p>
 
 </div>
@@ -388,7 +485,7 @@ Collects new information about which buttons are pressed, where the mouse is and
 Assignable events that are called by update. 
 <p>
 You can bind these to your own functions. If you use the <a class="el" href="class_gosu_1_1_window.html" title="Convenient all-in-one class that serves as the foundation of a standard Gosu application...">Window</a> class, it will assign forward these to its own methods. 
-<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00139">139</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00149">149</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
 
 </div>
 </div><p>
@@ -405,7 +502,60 @@ You can bind these to your own functions. If you use the <a class="el" href="cla
 
 <p>
 
-<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00139">139</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00149">149</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+
+</div>
+</div><p>
+<a class="anchor" name="349b3d46f7174d704da0b670c4dc7625"></a><!-- doxytag: member="Gosu::Input::onTouchBegan" ref="349b3d46f7174d704da0b670c4dc7625" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::function&lt;void (<a class="el" href="struct_gosu_1_1_touch.html">Touch</a>)&gt; <a class="el" href="class_gosu_1_1_input.html#349b3d46f7174d704da0b670c4dc7625">Gosu::Input::onTouchBegan</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Assignable events that are called by update. 
+<p>
+You can bind these to your own functions. If you use the <a class="el" href="class_gosu_1_1_window.html" title="Convenient all-in-one class that serves as the foundation of a standard Gosu application...">Window</a> class, it will assign forward these to its own methods. 
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00153">153</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+
+</div>
+</div><p>
+<a class="anchor" name="68b02bac950908b4d3625cfc039f1e91"></a><!-- doxytag: member="Gosu::Input::onTouchEnded" ref="68b02bac950908b4d3625cfc039f1e91" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::function&lt;void (<a class="el" href="struct_gosu_1_1_touch.html">Touch</a>)&gt; <a class="el" href="class_gosu_1_1_input.html#68b02bac950908b4d3625cfc039f1e91">Gosu::Input::onTouchEnded</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00153">153</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
+
+</div>
+</div><p>
+<a class="anchor" name="cab6306caf77a894dd94e3d75a8b9724"></a><!-- doxytag: member="Gosu::Input::onTouchMoved" ref="cab6306caf77a894dd94e3d75a8b9724" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::function&lt;void (<a class="el" href="struct_gosu_1_1_touch.html">Touch</a>)&gt; <a class="el" href="class_gosu_1_1_input.html#cab6306caf77a894dd94e3d75a8b9724">Gosu::Input::onTouchMoved</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+
+<p>Definition at line <a class="el" href="_input_8hpp_source.html#l00153">153</a> of file <a class="el" href="_input_8hpp_source.html">Input.hpp</a>.</p>
 
 </div>
 </div><p>

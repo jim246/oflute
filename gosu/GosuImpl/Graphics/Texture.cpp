@@ -9,12 +9,17 @@
 #define GL_BGRA 0x80E1
 #endif
 
-// TODO: Not threadsafe.
+// TODO: Move from Texture:: to local namespace and use MAX_TEXTURE_SIZE instead.
 unsigned Gosu::Texture::maxTextureSize()
 {
 #if defined(GOSU_IS_MAC)
     // Includes the iPhone
     return 1024;
+#elif defined(GOSU_IS_UNIX)
+    // Since we cannot get the max. texture size until after context creation, we have to
+    // just be pessimistic about it until Gosu is restructured to create the context
+    // earlier. Otherwise, libGL will segfault left and right.
+    return 512;
 #else
     const static unsigned MIN_SIZE = 256, MAX_SIZE = 1024;
 
@@ -35,7 +40,7 @@ unsigned Gosu::Texture::maxTextureSize()
 #endif
 }
 
-//const unsigned Gosu::MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
+const unsigned Gosu::MAX_TEXTURE_SIZE = Gosu::Texture::maxTextureSize();
 
 namespace Gosu
 {
@@ -147,18 +152,13 @@ void Gosu::Texture::free(unsigned x, unsigned y)
 
 Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, unsigned height) const
 {
-#if defined(__BIG_ENDIAN__)
-    unsigned format = GL_RGBA;
-#elif defined(GOSU_IS_IPHONE)
-    unsigned format = GL_RGBA;
+#ifdef GOSU_IS_IPHONE
+    throw std::logic_error("Texture::toBitmap not supported on iOS");
 #else
-    unsigned format = GL_BGRA;
-#endif
-    
     Gosu::Bitmap fullTexture;
     fullTexture.resize(size(), size());
     glBindTexture(GL_TEXTURE_2D, name);
-    glGetTexImage(GL_TEXTURE_2D, 0, format, GL_UNSIGNED_BYTE, fullTexture.data());
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, fullTexture.data());
     Gosu::Bitmap bitmap;
     bitmap.resize(width, height);
     bitmap.insert(fullTexture, -int(x), -int(y));
@@ -174,4 +174,5 @@ Gosu::Bitmap Gosu::Texture::toBitmap(unsigned x, unsigned y, unsigned width, uns
 #endif
     
     return bitmap;
+#endif
 }
