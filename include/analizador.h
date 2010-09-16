@@ -25,7 +25,7 @@
 #ifndef _ANALIZADOR_H_
 #define _ANALIZADOR_H_
 
-#include <portaudiocpp/PortAudioCpp.hxx>
+//#include <portaudiocpp/PortAudioCpp.hxx>
 #include <map>
 
 #include "global.h"
