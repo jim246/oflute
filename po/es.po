@@ -18,88 +18,97 @@ msgstr ""
 
 #: src/estadoAnalizador.cpp:51 src/estadoMenu.cpp:52
 msgid "Analizador de notas"
-msgstr ""
+msgstr "Analizador de notas"
 
 #: src/estadoMenuLecciones.cpp:191
 msgid "Anterior lección"
-msgstr ""
+msgstr "Anterior lección"
 
 #: src/estadoCalibrarMicro.cpp:59
 msgid ""
 "Calibración completa.\n"
 "Pulse escape para volver al menú."
 msgstr ""
+"Calibración completa.\n"
+"Pulse escape para volver al menú."
 
 #: src/estadoCalibrarMicro.cpp:56
 msgid ""
 "Calibración errónea.\n"
 "Pulse espacio para repetir la calibración."
 msgstr ""
+"Calibración errónea.\n"
+"Pulse espacio para repetir la calibración."
 
 #: src/estadoCalibrarMicro.cpp:29
 msgid "Calibrando. Guarde silencio."
-msgstr ""
+msgstr "Calibrando. Guarde silencio."
 
 #: src/estadoMenu.cpp:56
 msgid "Calibrar micrófono"
-msgstr ""
+msgstr "Calibrar micrófono"
 
 #: src/estadoMenu.cpp:53
 msgid "Canciones"
-msgstr ""
+msgstr "Canciones"
 
 #: src/estadoMenuLecciones.cpp:162
 msgid "Comenzar lección"
-msgstr ""
+msgstr "Comenzar lección"
 
 #: src/estadoMenuLecciones.cpp:133
 msgid "Descripción:"
-msgstr ""
+msgstr "Descripción:"
 
 #: src/estadoMenu.cpp:55
 msgid "Lecciones"
-msgstr ""
+msgstr "Lecciones"
 
 #: src/estadoMenuLecciones.cpp:287
 msgid "Lección nº"
-msgstr ""
+msgstr "Lección nº"
 
 #: src/estadoMenuLecciones.cpp:112
 msgid "Lección nº1"
-msgstr ""
+msgstr "Lección nº1"
 
 #: src/estadoMenuLecciones.cpp:70
 msgid "Listado de lecciones"
-msgstr ""
+msgstr "Listado de lecciones"
 
 #: src/estadoCalibrarMicro.cpp:19
 msgid ""
 "Para calibrar el micrófono, \n"
 "pulse la tecla espacio y\n"
 msgstr ""
+"Para calibrar el micrófono, \n"
+"pulse la tecla espacio y\n"
 
 #: src/estadoMenu.cpp:57
 msgid "Salir"
-msgstr ""
+msgstr "Salir"
 
 #: src/estadoMenuCanciones.cpp:91
 msgid "Seleccione una canción"
-msgstr ""
+msgstr "Seleccione una canción"
 
 #: src/estadoMenuLecciones.cpp:177
 msgid "Siguiente lección"
-msgstr ""
+msgstr "Siguiente lección"
 
 #: src/estadoAnalizador.cpp:74 src/estadoMenuCanciones.cpp:111
 msgid "Volver"
-msgstr ""
+msgstr "Volver"
 
 #: src/estadoMenuLecciones.cpp:91
 msgid "Volver al menú"
-msgstr ""
+msgstr "Volver al menú"
 
 #: src/estadoCalibrarMicro.cpp:20
 msgid ""
 "guarde silencio durante\n"
 "2 segundos."
 msgstr ""
+"guarde silencio durante\n"
+"2 segundos."
+
