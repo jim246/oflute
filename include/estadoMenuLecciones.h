@@ -141,6 +141,8 @@ private:
 
 	/// Objeto función para ordenar las lecciones según su índice
 	struct ordenarLecciones{
+
+        /// Devuelve true si el índice de la lección a es anterior al de la lección b
 		bool operator()(InfoLeccion a, InfoLeccion b){
 			return b.indice > a.indice;
 		}

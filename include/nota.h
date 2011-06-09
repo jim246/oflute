@@ -54,21 +54,43 @@ struct Nota{
     /// @name Imágenes compartidas
     /// Se utilizan atributos estáticos para evitar que cada nota cargue su propia imagen
 
+    /// Imagen para el puntillo
     static boost::shared_ptr<Gosu::Image> imgPuntillo;
+
+    /// Imagen para el símbolo que indica el final
     static boost::shared_ptr<Gosu::Image> imgFinal;
 
+    /// Imagen para el silencio de redonda
     static boost::shared_ptr<Gosu::Image> silRedonda;
+
+    /// Imagen para el silencio de redonda de blanca
     static boost::shared_ptr<Gosu::Image> silBlanca;
+
+    /// Imagen para el silencio de redonda de negra
     static boost::shared_ptr<Gosu::Image> silNegra;
+
+    /// Imagen para el silencio de redonda de corchea
     static boost::shared_ptr<Gosu::Image> silCorchea;
 
+    /// Imagen para la figura redonda
     static boost::shared_ptr<Gosu::Image> figRedonda;
+
+    /// Imagen para la figura blanca
     static boost::shared_ptr<Gosu::Image> figBlanca;
+
+    /// Imagen para la figura negra
     static boost::shared_ptr<Gosu::Image> figNegra;
+
+    /// Imagen para la figura corchea
     static boost::shared_ptr<Gosu::Image> figCorchea;
 
+    /// Imagen para la figura blanca invertida
     static boost::shared_ptr<Gosu::Image> figBlancaInv;
+
+    /// Imagen para la figura negra invertida
     static boost::shared_ptr<Gosu::Image> figNegraInv;
+
+    /// Imagen para la figura corchea invertida
     static boost::shared_ptr<Gosu::Image> figCorcheaInv;
 
     //@}
@@ -104,8 +126,12 @@ struct Nota{
     virtual void draw();
 };
 
+/// Representa el cierre del pentagrama
 struct NotaFinal : public Nota{
+    /// Crea un nuevo indicador de final de pentagrama
     NotaFinal(Gosu::Graphics & g, float tiempos);
+
+    /// Pinta la imagen de final de pentagrama
     void draw();
 };
 
