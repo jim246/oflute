@@ -37,7 +37,7 @@ final de la aplicación y sobre la experiencia de desarrollo de la misma.
 \item Crear una aplicación de usuario que identifique y muestre en
   pantalla las notas que toca el usuario en cada momento.
 \item Reutilizar el módulo de análisis en un juego en el que el
-  usuario debe tocar correctamente las nota que aparecen en pantalla
+  usuario debe tocar correctamente las notas que aparecen en pantalla
   siguiendo un pentagrama.
 \item Incluir un sistema de lecciones multimedia individuales que
   sirvan al alumno de referencia y fuente de aprendizaje.
@@ -90,32 +90,37 @@ posible definir imágenes y texto para formar una pantalla
 de información. En un futuro se ampliará para incluir otros elementos
 multimedia así como lecciones con varias pantallas consecutivas.
 
-Los sistemas de audio son una de las áreas en las que menos consenso
-hay entre plataformas informáticas, por lo que la portabilidad de las
-aplicaciones suele ser compleja. El presente proyecto utiliza la API
-Simple de PulseAudio como subsistema de sonido, que es en teoría
-compatible con plataformas Win32, pero en la práctica su complejidad
-hace prácticamente inviable la portabilidad de la aplicación.
+Los sistemas de audio son una de las áreas en las que menos consenso hay entre
+plataformas informáticas, por lo que la transportabilidad de las aplicaciones
+suele ser compleja. El presente proyecto utiliza la API Simple de PulseAudio
+como subsistema de sonido, que es en teoría compatible con plataformas Win32,
+pero en la práctica su complejidad hace prácticamente inviable la portabilidad
+de la aplicación.
 
 \subsection{Licencia}
 El proyecto está publicado como software libre bajo la licencia
 \ac{GPL} versión 2. El conjunto de bibliotecas y módulos utilizados
 tienen las siguientes licencias:
 \begin{itemize}
-\item \textbf{Gosu}~\cite{gosu}, la biblioteca de desarrollo de
-  videojuegos que ha proporcionado el subsistema gráfico, utiliza la
-  licencia \ac{MIT}. Cuando se compila en sistemas Windows, utiliza la
-  biblioteca FMOD que es gratuita pero de código cerrado; en sistemas
-  GNU/Linux, utiliza SDL\_mixer, que utiliza la licencia \ac{LGPL}.
-\item \textbf{Kiss FFT}~\cite{kissfft}, la biblioteca utilizada para
-  hacer el análisis de frecuencias, utiliza una licencia \ac{BSD}.
-\item \textbf{PugiXML}~\cite{pugixml}, biblioteca de procesamiento de
-  ficheros XML, se distribuye bajo al licencia MIT.
+
 \item A lo largo del proyecto se utilizan diferentes partes de las
   bibliotecas \textbf{Boost}~\cite{boost}, que utilizan la licencia
   \textit{Boost Software License}~\footnote{\url{http://www.boost.org/LICENSE_1_0.txt}}.
   Se trata de una licencia de software libre, compatible con la GPL, y
   comparable en permisividad a las licencias BSD y MIT.
+
+\item \textbf{Gosu}~\cite{gosu}, la biblioteca de desarrollo de
+  videojuegos que ha proporcionado el subsistema gráfico, utiliza la
+  licencia \ac{MIT}. Cuando se compila en sistemas Windows, utiliza la
+  biblioteca FMOD que es gratuita pero de código cerrado; en sistemas
+  GNU/Linux, utiliza SDL\_mixer, que utiliza la licencia \ac{LGPL}.
+
+\item \textbf{Kiss FFT}~\cite{kissfft}, la biblioteca utilizada para
+  hacer el análisis de frecuencias, utiliza una licencia \ac{BSD}.
+
+\item \textbf{PugiXML}~\cite{pugixml}, biblioteca de procesamiento de
+  ficheros XML, se distribuye bajo al licencia MIT.
+
 \item \textbf{PulseAudio}~\cite{pulseaudio} utiliza una licencia LGPL 2.1.
 \end{itemize}
 
