@@ -45,11 +45,10 @@ using namespace std;
  * @author José Tomás Tocino García <theom3ga@gmail.com> 
  *
  */
-
-
 class Texto{
 
 public:
+    /// Alineación del texto
     enum tAlign{ alignIzq = 1, alignCentro, alignDer };
 
     /**
@@ -74,47 +73,42 @@ public:
 	  unsigned alineacion = 1, 
 	  bool sombra = false, unsigned opSombra = 80, float x = 0, float y = 0, float z = 0);
 
+    /// Método de conveniencia, realmente no hace nada.
     void update();
 
-    /**
-     * @brief Pinta el texto con la opacidad al máximo por defecto.
-     *
-     */
-
-    void draw();
-
+    /// Cambia la cadena asignada al texto
     void setText(string s);
 
+    /// Devuelve la cadena asignada al texto
     string getText();
+
+    /// Pinta el texto con la opacidad al máximo por defecto.
+    void draw();
 
     /**
      * @brief Pinta el texto con la opacidad indicada.
      *
      * @param a La opacidad (alpha) con la que pintar el texto.
-     *
      */
-
     void drawAlpha(int a);
 
     /**
      * @brief Pinta el texto en la profundidad indicada.
      *
      * @param z_ La profundidad en la que pintae l texto.
-     *
      */
-
     void draw(float z_);
 
     /**
-     * @brief Pinta el texto en la posición indicada
+     * @brief Pinta el texto en la posición y con los parámetros indicados
      *
      */
     void draw(float x_, float y_, float z_, int a_ = 255);
 
+    /// Devuelve la alineación del texto
     unsigned getAlineacion() { return alineacion; }
 
 private:
-
 
     /// Objeto que será el destino gráfico.
     Gosu::Graphics& graphics;
@@ -143,16 +137,15 @@ private:
     /// Opacidad de la sombra
     unsigned opacidadSombra;
 
-    //@{
-    /** @name Posición del texto.
+    /** Posición horizontal del texto. 	Para el texto justificado a la
+     *	izquierda, es la esquina sup izq. Para el texto justif. a la
+     *	derecha, es la esquina sup der. Para el texto centrado, es la
+     *	posición central superior
+     **/
+    float x;
 
-	Para el texto justificado a la
-	izquierda, es la esquina sup izq. Para el texto justif. a la
-	derecha, es la esquina sup der. Para el texto centrado, es la
-	posición central superior
-    **/
-    float x, y;
-    //@}
+    /// Posición vertical 
+    float y;
     
     /// Profundidad
     double z;

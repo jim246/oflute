@@ -45,21 +45,21 @@ void EstadoMenuCanciones::EntradaMenuCanciones::draw(){
     Gosu::Color colorDesc(0xff6a8800);
 
     if(pos != 0){
-	colorTitulo.setAlpha(100);
-	colorDesc.setAlpha(100);
+        colorTitulo.setAlpha(100);
+        colorDesc.setAlpha(100);
     }
 
 
     y_actual += (y_final - y_actual) / pasos;
 
     txtTitulo -> draw(Gosu::utf8ToWstring(titulo), 
-		      440, 
-		      y_actual, 5, 1, 1, colorTitulo);
+                      440, 
+                      y_actual, 5, 1, 1, colorTitulo);
 
     txtDescripcion -> draw(Gosu::utf8ToWstring(descripcion), 
-			   440,
-			   y_actual + 50, 
-			   5, 1, 1, colorDesc);
+                           440,
+                           y_actual + 50, 
+                           5, 1, 1, colorDesc);
 }
 
 void EstadoMenuCanciones::EntradaMenuCanciones::mover(int a){

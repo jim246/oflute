@@ -33,7 +33,6 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "Compiling..." $(notdir $<)
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# $(DEPFILE)
 $(OUTPUT):  $(OBJS)	
 	@echo "Compiling pugixml..."
 	@make -C pugixml
