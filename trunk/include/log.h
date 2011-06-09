@@ -58,10 +58,21 @@ enum TLogLevel {logERROR, logWARNING, logINFO, logDEBUG};
  * no se diferencian en nada más que en el nombre.
  *
  * Para usar el log, la sintaxis es la siguiente:
+ *
  * \code
  * Log().Get(logDEBUG) << "Mensaje";
  * \endcode
- * No es necesario añadir un salto de línea al final, el manejador del log lo inserta automáticamente.
+ *
+ * No es necesario añadir un salto de línea al final, el manejador del log lo
+ * inserta automáticamente.
+ *
+ * Es posible utilizar las macros <em>lDEBUG</em> y <em>lERROR</em> para reducir
+ * la cantidad de código escrito:
+ * 
+ * @code
+ * lDEBUG << "Mensaje de debug";
+ * lERROR << "Mensaje de error";
+ * @endcode
  *
  * @author José Tomás Tocino García <theom3ga@gmail.com> 
  *
@@ -114,10 +125,13 @@ public:
      * @brief Vuelca el flujo con los mensajes de log en el destino indicado, por ahora la salida estándar.
      */
     ~Log();
+
     //@{
     ///@name Constantes de colores
     /// Constantes de cadena con códigos de colores para terminales UNIX. No se ha probado en otros sistemas.
+
     static string cRojo, cVerde, cAzul, cAmar, cDef;
+
     //@}
 
 protected:
@@ -125,8 +139,6 @@ protected:
     std::ostringstream os;
 
 };
-
-
 
 #define lDEBUG Log().Get(logDEBUG)
 #define lERROR Log().Get(logERROR)
