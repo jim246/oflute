@@ -99,33 +99,68 @@ private:
     /// Botón volver
     boost::scoped_ptr<ElementoCombinado> btnVolver;
 
+    /// Representa un elemento en el menú de selección de canciones
     class EntradaMenuCanciones{
     public:
-	EntradaMenuCanciones(Gosu::Graphics & g, string titulo, 
-			     string descripcion, string ruta, int pos);
+        /**
+         * @brief Crea una nueva entrada del menú de canciones
+         *
+         * @param g Destino gráfico
+         * @param titulo Título de la canción
+         * @param descripcion Descripción de la canción
+         * @param ruta Ruta al fichero de la canción que representa la entrada
+         * @param pos Posición del elemento en el menú
+         */
 
-	void draw();
-	void mover(int a);
-	string getRuta();
+        EntradaMenuCanciones(Gosu::Graphics & g, string titulo, 
+                             string descripcion, string ruta, int pos);
+
+        /// Pinta la entrada del menú en la posición indicada
+        void draw();
+
+        /// Desplaza el elemento en el menú el nńumero de posiciones indicado
+        void mover(int a);
+
+        /// Devuelve la ruta al fichero con la información de la canción
+        string getRuta();
 
     private:
-	Gosu::Graphics & g;
 
-	string titulo;
+        // Destino gráfico
+        Gosu::Graphics & g;
 
-	string descripcion;
+        /// Cadena con el título de la canción
+        string titulo;
 
-	string ruta;
+        /// Cadena con la descripción de la canción
+        string descripcion;
 
-	int pos;
+        /// Cadena con la ruta al fichero de la canción
+        string ruta;
 
-	float y_final, y_actual, pasos;
+        /// Posición de la entrada en el menú de las canciones
+        int pos;
 
-	int posInicial;
+        /// Posición vertical de destino
+        float y_final;
 
-	int saltoEntreEntradas;
+        /// Posición vertical en un instante dado
+        float y_actual;
 
-	boost::scoped_ptr<Gosu::Font> txtTitulo, txtDescripcion;
+        /// Número de pasos que tendrá la animación
+        float pasos;
+
+        /// Posición inicial
+        int posInicial;
+
+        /// Separación entre las entradas del menú
+        int saltoEntreEntradas;
+
+        /// Referencia a la fuente para pintar el título
+        boost::scoped_ptr<Gosu::Font> txtTitulo;
+
+        /// Referencia a la fuente para pintar la descripción
+        boost::scoped_ptr<Gosu::Font> txtDescripcion;
     };
 
     /// Conjunto de canciones listadas

@@ -202,31 +202,75 @@ public:
 };
 
 
-
-
-
-
+/**
+ * Representa una imagen de la interfaz a partir de la clase base Elemento.
+ */
 
 class ElementoImagen : public Elemento
 {
+    /// Referencia a la imagen
     boost::scoped_ptr <Gosu::Image> imagen;
+
+    /// Ruta a la imagen cargada
     string ruta;
 public:
+
+    /**
+     * @brief Crea un nuevo ElementoImagen con los atributos indicados
+     *
+     * @param g Destino gráfico donde se pintará el elemento
+     * @param ruta Ruta a la imagen cargada
+     * @param z Profundidad de pintado de la imagen
+     * @param animar Forma de animar el elemento
+     *
+     */
+
     ElementoImagen (Gosu::Graphics & g, string ruta, double z, Animacion::atribAnim animar);
 
+    /**
+     * @brief Pinta la imagen en las coordenadas indicadas
+     *
+     * @param x Coordenada horizontal
+     * @param y Coordenada vertical
+     * @param z Coordenada de profundidad
+     * @param a Opacidad
+     *
+     */
     void drawEnd (float x, float y, double z, int a);
+
+    /// Devuelve el ancho de la imagen
     int getWidth ();
+
+    /// Devuelve el alto de la imagen
     int getHeight ();
 };
 
 
 
-
+/**
+ * Representa un elemento que modela un marco de texto a partir de la base Elemento.
+ */
 
 class ElementoTexto : public Elemento
 {
+    /// Referencia al texto que se pintará.
     boost::scoped_ptr <Texto> texto;
 public:
+
+    /**
+     * @brief Crea un nuevo elemento de texto con los parámetros indicados.
+     *
+     * @param g Destino gráfico
+     * @param str Cadena de texto a pintar
+     * @param rutaFuente Ruta de la tipografía a utilizar
+     * @param tam Tamaño de la fuente
+     * @param color Color de la fuente
+     * @param alineacion Alineación del texto
+     * @param sombra Flag que indica si hay que utilizar sombra o no.
+     * @param opacidadSombra Indica la opacidad de la sombra
+     * @param z Indica la profundidad de pintado del texto
+     * @param animar Opciones de animación del texto
+     **/
 
     ElementoTexto (Gosu::Graphics & g,
 		   string str, string rutaFuente,
@@ -235,26 +279,62 @@ public:
 		   double z,
 		   Animacion::atribAnim animar);
 
+    /// Pinta el texto en la posición indicada
     void drawEnd (float x, float y, double z, int a);
+
+    /// Cambia la cadena de texto a pintar
     void setText (string s);
+
+    /// Devuelve el ancho del texto
     int getWidth ();
+
+    /// Devuelve el alto del texto
     int getHeight ();
 };
 
 
 
-
 //////////////////////////////////////////////
+
+/**
+ * Representa una combinación de un texto sobre una imagen, modelados a partir
+ * de la clase base Elemento.
+ */
 
 class ElementoCombinado : public Elemento
 {
+    /// Elemento de texto a pintar
     boost::scoped_ptr <Texto> texto;
+
+    /// Posición horizontal del texto con respecto a la imagen
     int textoX;
+
+    /// Posición vertical del texto con respecto a la imagen
     int textoY;
+
+    /// Referencia a la imagen
     boost::scoped_ptr <Gosu::Image> imagen;
+
+    /// Referencia al destino gráfico
     Gosu::Graphics & g;
 public:
+    /// Crea un nuevo elemento combinado, aunque es necesario utilizar los otros de métodos para 
+    /// inicializar el resto de valores.
     ElementoCombinado (Gosu::Graphics & g, Animacion::atribAnim animar, double z);
+
+    /**
+     * @brief Inicializa los valores de la parte de texto del elemento.
+     *
+     * @param str Cadena de texto a pintar
+     * @param rutaFuente Ruta de la tipografía a utilizar
+     * @param tam Tamaño de la fuente
+     * @param color Color de la fuente
+     * @param alineacion Alineación del texto
+     * @param sombra Flag que indica si hay que utilizar sombra o no.
+     * @param opacidadSombra Indica la opacidad de la sombra
+     * @param tX Indica la posición horizontal del texto con respecto a la imagen
+     * @param tY Indica la posición vertical del texto con respecto a la imagen
+     */
 
     void setTexto (string str, string rutaFuente, 
 		   unsigned int tam, Gosu::Color color, 
@@ -262,12 +342,44 @@ public:
 		   bool sombra, int opacidadSombra, 
 		   int tX, int tY);
 
+    /**
+     * @brief Inicializa los valores del texto, pero encapsulando la configuración
+     *
+     * @param t Objeto que encapsula la configuración del texto
+     * @param x Posición horizontal del texto
+     * @param y Posición vertical del texto
+     */
     void setTexto (tConfTexto t, int x, int y);
+
+    /**
+     * @brief Modifica la posición del texto respecto a la imagen. 
+     *
+     * @param x Nueva posición horizontal
+     * @param y Nueva posición vertical
+     */
     void setTextoXY (int x, int y);
+
+    /**
+     * @brief Asigna la imagen al elemento, indicando la ruta.
+     *
+     * @param ruta Ruta al fichero de imagen a cargar
+     */
     void setImagen (string ruta);
+
+    /**
+     * @brief Asigna la cadena de texto a pintar sobre la imagen
+     *
+     * @param s Cadena de texto a pintar
+     */
     void setText(string s);
+
+    /// Pinta el elemento combinado en las coordenadas y con la opacidad indicada
     void drawEnd (float x, float y, double z, int a);
+
+    /// Devuelve el ancho del elemento combinado
     int getWidth ();
+
+    /// Devuelve el alto del elemento combinado
     int getHeight ();
 };
 #endif /* _ELEMENTOSINTERFAZ_H_ */
