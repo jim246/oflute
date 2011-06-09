@@ -69,61 +69,61 @@ Nota::Nota(Gosu::Graphics & g, t_altura altura, t_figura figura, float tiempos) 
 
 
     if(figura & Redonda){
-	if(altura == Silencio){
-	    imagen = silRedonda;
-	}else{
-	    imagen = figRedonda;
-	}
+        if(altura == Silencio){
+            imagen = silRedonda;
+        }else{
+            imagen = figRedonda;
+        }
     }
 
     else if(figura & Blanca){
-	if(altura == Silencio){
-	    imagen = silBlanca;
-	}else if(altura <= Si5){
-	    imagen = figBlanca;
-	}else{
-	    imagen = figBlancaInv;
-	}
+        if(altura == Silencio){
+            imagen = silBlanca;
+        }else if(altura <= Si5){
+            imagen = figBlanca;
+        }else{
+            imagen = figBlancaInv;
+        }
     }
 
     else if(figura & Corchea){
-	if(altura == Silencio){
-	    imagen = silCorchea;
-	}else if(altura <= Si5){
-	    imagen = figCorchea;
-	}else{
-	    imagen = figCorcheaInv;
-	}
+        if(altura == Silencio){
+            imagen = silCorchea;
+        }else if(altura <= Si5){
+            imagen = figCorchea;
+        }else{
+            imagen = figCorcheaInv;
+        }
     }
 
     else if(figura & Negra){
-	if(altura == Silencio){
-	    imagen = silNegra;
-	}else if(altura <= Si5){
-	    imagen = figNegra;
-	}else{
-	    imagen = figNegraInv;
-	}
+        if(altura == Silencio){
+            imagen = silNegra;
+        }else if(altura <= Si5){
+            imagen = figNegra;
+        }else{
+            imagen = figNegraInv;
+        }
     }
 
     lDEBUG << Log::CON("Nota") 
-	   << boost::format(" %i %i %f") % altura % figura % tiempos;
+           << boost::format(" %i %i %f") % altura % figura % tiempos;
 }
     
 float Nota::devolverDuracion(t_figura f){
     float dur = 0;
     if(f & Redonda){
-	dur = 4;
+        dur = 4;
     }else if(f & Blanca){
-	dur = 2;
+        dur = 2;
     }else if(f & Negra){
-	dur = 1;
+        dur = 1;
     }else if(f & Corchea){
-	dur = 0.5;
+        dur = 0.5;
     }
 	
     if(f & Puntillo){
-	dur += (dur / 2);
+        dur += (dur / 2);
     }
 
     return dur;
@@ -133,22 +133,22 @@ float Nota::devolverDuracion(t_figura f){
 float Nota::devolverAltura(t_altura t, t_figura fig){
 	
     if(t != Silencio){
-	return (9 - t) * 18.6;
+        return (9 - t) * 18.6;
     }
     // Para los diferentes tipos de silencio
     else{
-	if(fig == Redonda ){
-	    return 18;
-	}
+        if(fig == Redonda ){
+            return 18;
+        }
 
-	else if(fig == Blanca){
-	    return 19;
-	}
+        else if(fig == Blanca){
+            return 19;
+        }
 
-	else if(fig == Negra || fig == Corchea){
-	    return 18.6 * 5;
-	}
-	return 0;
+        else if(fig == Negra || fig == Corchea){
+            return 18.6 * 5;
+        }
+        return 0;
     }
 }
 
@@ -158,16 +158,16 @@ void Nota::updatePos(float x_){
 
 void Nota::draw(){
     if(x > -100){
-	imagen -> draw(x, 162 + Nota::devolverAltura(altura, figura), 5);
+        imagen -> draw(x, 162 + Nota::devolverAltura(altura, figura), 5);
 
-	if(figura & Puntillo){
-	    imgPuntillo -> draw(x, 156 + Nota::devolverAltura(altura, figura), 5);
-	}
+        if(figura & Puntillo){
+            imgPuntillo -> draw(x, 156 + Nota::devolverAltura(altura, figura), 5);
+        }
     }
 }
 
 NotaFinal::NotaFinal(Gosu::Graphics & g, float tiempos) 
-  : Nota(g, Do5, Nulo, tiempos){
+    : Nota(g, Do5, Nulo, tiempos){
 }
 
 void NotaFinal::draw(){
