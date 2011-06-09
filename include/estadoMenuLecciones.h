@@ -168,7 +168,7 @@ private:
 
 	/** Inicia las animaciones para esconder los botones
 	 *
-	 * @param dir Dirección, dirMOSTRAR o dirOCULTAr
+	 * @param dir Dirección, dirMOSTRAR o dirOCULTAR
 	 * @param saltarBarraInferior Indica si la barra de abajo debe ocultarse o no.
 	 **/
 
