@@ -174,7 +174,7 @@ conocida.
 
 \subsection{Digitalización de sonidos}
 
-Antes de poder aplicar ninguna técnica sobre los sonidos, es necesario utilizar
+Antes de poder aplicar ninguna técnica sobre los sonidos, es necesario
 transformarlos de forma que el ordenador pueda trabajar con ellos.
 
 \subsubsection{Captación de sonidos}
@@ -223,5 +223,153 @@ como base de muestreo en la mayoría de tarjetas de sonido, amplía la tasa un
 10\% con objeto de contemplar el uso de filtros no ideales, quedando la
 frecuencia de muestreo en 44,1 kHz.
 
+\subsubsection{Cuantificación de las muestras}
 
+Una vez decidida la frecuencia de muestreo de la señal, será necesario acordar
+qué utilizaremos para representar sus niveles de amplitud de forma digital. Este
+proceso se conoce como \textbf{cuantificación}, y de él se desprenderá el número
+de bits de cada muestra. Cabe notar que tanto el muestreo como la cuantificación
+son procesos con \textbf{pérdidas}, ya que es imposible discretizar con total
+fidelidad un rango continuo de tensiones.
 
+Existen diferentes métodos para decidir los niveles a los que se ajustarán las
+muestras. El más utilizado es el \textbf{PCM - modulación por impulsos
+  codificados} en su variante \textit{uniforme}, que utiliza una escala uniforme
+para digitalizar los valores de amplitud, a diferencia de la versión \textit{no
+  uniforme}, que utiliza escalas como la logarítmica.
+
+La \textbf{resolución de cuantificación} (o \textit{resolución digital}) más
+habitual es de 16 bits, que es la utilizada en los CDs de audio. Esto nos
+permite tener $2^{16} = 65536$ niveles distintos con los que cuantizar cada
+muestra.
+
+\subsubsection{Codificación de las muestras}
+
+El último paso antes de tener los datos listos para el procesamiento es la
+\textbf{codificación} en forma de bits. Aunque podría parecer un proceso trivial
+-- convertir los valores digitales de las muestras en binario -- existen
+multitud de parámetros que influyen a la hora de representar estas señales:
+\begin{itemize}
+\item \textbf{Tamaño de la muestra}: decidido en la cuantificación, la muestra
+  puede tener tamaños desde los 8 a los 64 bits.
+\item \textbf{Orden de los bytes}: para muestras de más de un byte, es
+  importante decidir el orden de los mismos --
+  \textbf{\textit{endianness}}. Popularmente, la mayoría de computadoras basadas
+  en procesadores Intel utilizan \textit{little endian} -- esto es, se almacena
+  primero los bytes de menos relevancia.
+\item \textbf{Signo}: cualquier señal en forma de ondas pasa constantemente por
+  el origen, de forma que la amplitud toma valores positivos y negativos a cada
+  momento. Puede parecer intuitivo usar un entero con signo para la
+  representación, pero también es posible utilizar uno sin signo, de forma que
+  el origen se represente como la mitad del rango, ahorrándonos así posibles
+  complicaciones en la representación de números negativos.
+\item \textbf{Canales}: la mayoría de micrófonos de baja calidad producen sonido
+  monoaural, de forma que solo es necesario utilizar un canal para su
+  reproducción, a diferencia de los micrófonos estereofónicos que utilizan dos o
+  más canales. En este aspecto, el flujo que se genera durante la digitalización
+  de una señal estéreo es más complejo de procesar en tanto en cuanto los datos
+  de cada canal vienen entrelazados en el flujo y, a veces, es difícil
+  distinguirlos.
+\end{itemize}
+
+\section{Estudio del software disponible}
+
+Existen algunas soluciones de software, juegos en la amplia mayoría de los
+casos, que explotan la idea del análisis de sonido en tiempo real como principal
+modo de interactuar con el usuario. En esta sección vamos a conocer algunas de
+estas soluciones y las ideas que adquirimos de su estudio.
+
+\subsection{Aplicaciones comerciales}
+
+\subsubsection{SingStar}
+\textbf{SingStar} fue el primer videojuego en explotar el uso de un micrófono
+para que el usuario cantase y la aplicación reconociese el sonido. Apareció por
+primera vez en mayo de 2004 para sistemas PlayStation 2, y desde entonces han
+aparecido nada menos que 23 ediciones para este sistema y otras 6 para
+PlayStation 3.
+
+La ventaja de SingStar es la que da ser el primero en explotar una idea
+atractiva, que rápidamente consiguió adeptos, principalmente entre el público
+más joven. Este éxito se vio fortalecido por la firma de una gran cantidad de
+contratos con discográficas a lo largo del tiempo, que permitió el lanzamiento
+de ediciones regulares con los \textit{singles} más populares.
+
+Las últimas ediciones de SingStar incluyen algoritmos avanzados que permiten,
+entre otras opciones, añadir efectos a las voces de los usuarios ó
+automáticamente limpiar las pista vocales de las canciones que los jugadores
+carguen mediante almacenamiento externo.
+
+\subsubsection{Lips}
+\textbf{Lips} fue la respuesta de Microsoft a SingStar para sus sistemas
+\textbf{Xbox 360}. El planteamiento es similar al de la versión de PlayStation,
+aunque incluye una serie de mejoras bastante atractivas.
+
+Los micrófonos utilizados en Lips son inalámbricos e incluyen un sistema de
+detección de movimientos, de forma que es posible utilizarlos en secciones sin
+pista vocal pero con percusión, siguiendo el ritmo a modo de maracas, o imitando
+movimientos que aparecen en pantalla.
+
+Desde el principio, Lips ha permitido utilizar canciones de terceros mediante la
+conexión de un reproductor MP3. Esta opción solo estuvo disponible en sus
+competidores después de la aparición de Lips. 
+
+Además, Lips introdujo un sistema de juego colaborativo en forma de duetos, y
+competitivo, en el que los jugadores cantaban secciones consecutivas de una
+canción en busca de conseguir la mejor interpretación.
+
+\subsubsection{Apariciones menores en otros títulos}
+Aunque Lips y SingStar han sido los dos principales juegos del género, muchos
+otros juegos musicales han incluido pequeñas pruebas y minijuegos que han hecho
+uso de micrófonos. Por ejemplo, \textbf{DJ Hero}, \textbf{Guitar Hero },
+\textbf{Band Hero} y \textbf{Def Jam Rapstar} permiten utilizar el micrófono
+para añadir acompañamiento vocal al juego. La ventaja es que en la mayoría de
+los casos, es posible utilizar los micrófonos de Lips y SingStar con estos
+juegos de terceros, evitando tener que adquirir más dispositivos.
+
+\subsection{Aplicaciones libres}
+
+\subsubsection{UltraStar}
+\textbf{UltraStar} fue el primer clon libre de SingStar. Fue desarrollado por
+Patryk Cebula en 2007 y ha servido como base para diferentes forks
+posteriores. El juego permite a varias personas jugar a la vez mediante la
+conexión de varios micrófonos a una tarjeta de sonido, así como la adición de
+nuevas canciones de forma sencilla mediante ficheros de configuración en formato
+texto.
+
+Aunque las versiones iniciales se liberaron bajo una licencia GNU GPL,
+desgraciadamente en la actualidad UltraStar se encuentra con licencia
+\textit{freeware}, utilizando como excusa inválida que así \textit{``[...] se
+  protegen los datos privados de los usuarios al ser enviados al servidor
+  mediante SSL''}. Realmente no existe razón para no utilizar software de código
+abierto con SSL.
+
+\subsubsection{UltraStar Deluxe}
+
+\textbf{UltraStar Deluxe} nació como una modificación básica de UltraStar, pero
+consiguió atraer la atención de muchos usuarios y desarrolladores, y finalmente
+se constituyó como un producto indepèndiente. Los desarrolladores de UltraStar
+Deluxe decidieron trabajar en varios aspectos que vieron mejorables respecto al
+UltraStar original. Primero, mejorar la fiabilidad del programa, arreglando
+numerosos bugs y aumentando el rendimiento. Segundo, trabajar la apariencia
+visual, basándose en gran medida en los efectos del SingStar de PlayStation
+3. Finalmente, facilitar la expansibilidad del sistema, permitiendo un gran
+número de formatos para los ficheros de vídeo y audio, y creando un sistema de
+scripting basado en Lua para los modos de juego colaborativos.
+
+\subsubsection{Performous}
+
+\textbf{Performous} es uno de los juegos musicales open source más
+populares. Nació como una reescritura del UltraStar original, aunque
+posteriormente lo superó con creces. La fortaleza de Performous reside en su
+capacidad de reconocimento de voces, basado en la \textit{transformada rápida de
+  Fourier (FFT)} y en una serie de algoritmos de post-procesamiento. 
+
+Performous ha evolucionado con el tiempo, naciendo como un juego de cante pero
+añadiendo características colectivas como Guitar Hero o Rock Band, permitiendo
+el uso de controladores adicionales, como guitarras o baterías
+electrónicas. Además, en las últimas versiones Performous incluye un modo de
+baile, muy similar a los clásicos \textbf{DDR} o \textbf{StepMania}.
+
+\section{Desarrollo con audio en GNU/Linux}
+
+El desarrollo de sistemas relacionados con el sonido es uno de los que menos 
