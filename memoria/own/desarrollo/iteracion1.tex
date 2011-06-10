@@ -1,0 +1,227 @@
+\section{Adquisición de conocimientos}
+Para poder enfrentarnos con garantías al desarrollo del proyecto fue necesario
+adquirir una base de conocimientos que nos permitiera entender los conceptos
+que se iban a usar y las herramientas para trabajar con ellos. Así, fuimos
+guiándonos por la intuición y, sobre todo, por las necesidades que iban
+surgiendo. Los conceptos que se presentan a continuación son básicos para
+comprender cómo funciona el módulo de análisis del proyecto.
+
+\subsection{El sonido}
+Un \textbf{sonido} es una vibración que se propaga por un medio
+elástico en forma de onda. Estas vibraciones se transmiten de forma
+longitudinal, esto es, en la misma dirección en la que se propaga la
+onda. El medio más común para la transmisión del sonido es el
+\textbf{aire}. 
+
+El sonido, en su forma más simple, se compone de una sola onda
+sinusoidal básica, con las características tradicionales: amplitud,
+frecuencia y fase. Una \textbf{onda sinusoidal} es aquella cuyos
+valores se calculan utilizando funciones seno.
+
+\subsubsection{Frecuencia y tono}
+La \textbf{frecuencia} mide el número de oscilaciones de la onda por
+unidad de tiempo. Por regla general, se utiliza el \textbf{hercio}
+como unidad de medida de frecuencia, que indica la cantidad de
+repeticiones por segundo. La frecuencia determinará la \textbf{altura}
+del sonido, es decir, cómo de grave o agudo es. Los sonidos graves
+tienen una frecuencia baja, mientras que los sonidos agudos tienen una
+frecuencia alta.
+
+A lo largo de los años se ha establecido un estándar de referencia que
+establece que la nota \textit{la} que se encuentra encima del
+\textit{do} central del piano debe sonar a 440 hercios de
+frecuencia. Esta medida se utiliza a la hora de afinar los
+instrumentos, de modo que si al tocar la nota \textit{la} se detecta
+un tono con una frecuencia de 440 hercios, entonces el instrumento
+estará bien afinado.
+
+El espectro audible por las personas lo conforman las
+\textbf{audiofrecuencias}, esto es, el conjunto de frecuencias que
+pueden ser percibidas por el oído humano. 
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.8]{desarrollo/rango_freq}
+  \caption{Rango de frecuencias de sonido}
+\end{figure}
+
+
+Un oído sano y joven es capaz de detectar sonidos a partir de los 20
+hercios. Los sonidos por debajo de esa frecuencia se conocen como
+\textbf{infrasonidos}. Por otro lado, el límite auditivo en
+frecuencias altas varía mucho con la edad: un adolescente puede oir
+sonidos con frecuencias hasta los 18kHz, mientras que un adulto de
+edad media solo suele llegar a captar sonidos de hasta 13kHz. El
+límite genérico superior se establece en 20kHz, por encima de los
+cuales los sonidos se denominan \textbf{ultrasonidos}.
+
+
+\subsubsection{Amplitud}
+La \textbf{amplitud} representa la energía que transporta la
+onda. Cuando un instrumento u otro objeto genera una vibración, la
+amplitud es la cantidad de movimiento que esa vibración genera.
+Podría equipararse (de forma no estricta) a la intensidad del sonido:
+cuanto mayor sea la amplitud, más fuerte se oirá el sonido.
+
+\subsubsection{Fase}
+Por último, la \textbf{fase} ($\varphi$) indica el desplazamiento
+horizontal de la onda respecto del origen. Si la fase de una onda no
+es cero, entonces parecerá que está \textit{desplazada} hacia la
+derecha, si la fase es positiva, y hacia la izquierda si la fase es
+negativa.
+\begin{figure}[h]\centering
+    \includegraphics[scale=0.7]{desarrollo/onda}
+    \caption{Componentes de una señal senoidal básica}
+\end{figure}
+\subsection{Descomposición de sonidos}
+Para desarrollar oFlute nos interesa conocer la altura de la nota que
+está tocando la flauta en un instante concreto. Para un tono puro,
+podríamos conocer la altura fijándonos en su frecuencia. El problema
+es que, en la naturaleza, \textbf{no existen} los tonos puros, sino
+que los sonidos se componen de multitud de tonos de diferentes
+amplitudes, frecuencias y fases. 
+
+Afortunadamente, la teoría dicta que cualquier tono complejo puede
+descomponerse como suma de tonos puros de distintas amplitudes, fases
+y frecuencias, llamados \textbf{parciales}. La menor de todas las
+frecuencias de los parciales se conoce como \textbf{frecuencia
+  fundamental}, y es la que que dicta la altura general del sonido --
+\textit{general}, ya que aunque el resto de frecuencias puede
+corresponder a otras notas, es la altura de la frecuencia fundamental
+la que mayor relevancia tiene en el sonido.
+
+Un subconjunto de esos parciales, conocidos como \textbf{armónicos},
+tienen frecuencias múltiplos de la frecuencia fundamental. Estos
+armónicos sirven para enriquecer el sonido y, sobre todo, determinar
+el \textbf{timbre musical} del origen del sonido: dos instrumentos (o
+personas) pueden estar tocando la misma nota y emitir la misma
+frecuencia fundamental, pero será el conjunto total de armónicos el
+que nos ayude a distinguir qué instrumento está emitiendo el sonido.
+
+Así pues, el objetivo es encontrar una forma de descomponer una señal
+(el sonido) en sus componentes y analizar sus frecuencias, buscando la
+frecuencia fundamental, que nos informará de la nota que se está tocando. 
+
+\subsubsection{Representación gráfica de sonidos}
+
+Las representación habitual de las señales se hace en el
+\textbf{dominio del tiempo}, es decir, podemos observar cómo la señal
+cambia a lo largo del tiempo, viendo el valor de su \textbf{amplitud}
+en cada instante. Por otro lado, la representación en el
+\textbf{dominio de la frecuencia} nos permite analizar una señal
+respecto a las frecuencias que la componen, dividiendo la señal en sus
+componentes.
+
+En la figura \ref{fig:wavespectral} podemos comparar la representación de
+un sonido en el dominio del tiempo, en \textbf{forma de ondas}, tal y
+como aparecería en un osciloscopio, frente a su representación en
+\textbf{forma espectral}, en la que el eje vertical indica la
+frecuencia, y la intensidad del color indica la intensidad de esa
+componente frecuencial en el sonido.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.8]{desarrollo/wave_spectral}
+  \caption{Forma de ondas vs representación espectral}
+  \label{fig:wavespectral}
+\end{figure}
+
+\subsubsection{Herramientas de descomposición de señales}
+
+La herramienta fundamental a la hora de descomponer una señal periódica, como
+puede ser un sonido, en sus parciales o armónicos es el \textbf{análisis
+  armónico} o \textbf{análisis de Fourier}. Esta rama del análisis matemático
+estudia la representación de funciones o señales como superposición de ondas
+básicas, y hoy en día se aplica en innumerables campos de la ciencia, desde el
+procesamiento de señales para el reconocimiento de patrones, como es nuestro
+caso, a la neurociencia.
+
+Una de las herramientas más conocidas de este área es la \textbf{transformada de
+  Fourier}. Se trata de una aplicación matemática que descompone una función en
+su espectro de frecuencias a lo largo del dominio. Al aplicarla sobre una
+función $f$, se define de la siguiente manera:
+
+\[
+g(\xi ) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{+\infty} f(x)e^{-i\xi\,x} dx
+\]
+
+De cualquier modo, al estar tratando con un sistema digital como es una
+computadora, no es viable aplicar esta definición de la transformada de Fourier,
+ya que se basa en funciones continuas y derivables, y en nuestro caso
+dispondremos de datos discretos.
+
+De ahí, aparece la \textbf{transformada discreta de Fourier} o \textbf{DFT}, que
+tiene el mismo uso que la transformada tradicional pero requiere que la función
+de entrada sea una secuencia discreta y de duración finita.
+
+Existe un gran número de aproximaciones al cálculo de la transformada de
+Fourier, pero claramente el algoritmo más utilizado y eficiente es el
+\textbf{FFT}, \textbf{Fast Fourier Transform}. A pesar de imponer algunas
+limitaciones para mantener la eficiencia, el algoritmo FFT es la implementación
+que más habitualmente se encuentra en los chips DSP. Por regla general, computar
+la transformada de Fourier para $N$ puntos usando FFT tardaría un tiempo $O(N
+\cdot log(N))$, mientras que hacerlo utilizando la definición estándar de la DFT
+llevaría un tiempo $O(N^2)$.
+
+A pesar de que fue el \textbf{DFT} el algoritmo que se utilizó finalmente en el
+proyecto, se estudiaron otras posibles herramientas para la detección de la
+frecuencia fundamental, como por ejemplo la \textbf{función de autocorelación},
+que también suele utilizarse en análisis de señales para encontrar patrones
+repetitivos, como señales enmascaradas por ruido. A pesar de ello, dada la poca
+bibliografía encontrada sobre estas técnicas secundarias y la conocida
+eficiencia de la transformada de Fourier, se decidió optar por la técnica más
+conocida.
+
+\subsection{Digitalización de sonidos}
+
+Antes de poder aplicar ninguna técnica sobre los sonidos, es necesario utilizar
+transformarlos de forma que el ordenador pueda trabajar con ellos.
+
+\subsubsection{Captación de sonidos}
+Lo más habitual a la hora de digitalizar un sonido es, primeramente, utilizar
+algún dispositivo que transforme las ondas sonoras en algo que pueda
+transmitirse al computador en forma de ondas eléctricas. Este dispositivo es el
+\textbf{micrófono}, en nuestro caso de tipo \textbf{electret}, que es el más
+utilizado en ordenadores personales, teléfonos móviles y demás dispositivos de
+consumo con requisitos de audio de media o baja fidelidad.
+
+Estos micrófonos constan de una membrana que vibra libremente cuando capta
+cualquier onda acústica o de sonido, ya sea voz, música o ruidos, convirtiéndola
+en una señal eléctrica de baja frecuencia y de muy poca tensión o voltaje,
+semejante a la del sonido captado. Una vez que esta señal eléctrica llega a la
+tarjeta de sonido, comienza la siguiente parte del proceso.
+
+Curiosamente, el proceso es el inverso del que ocurre en un altavoz. Es por eso
+que en el caso de algunos auriculares intrauditivos, como los que habitualmente
+acompañan a los reproductores MP3 de bolsillo, es posible utilizarlos como
+micrófonos de baja fidelidad. También es posible, aunque bastante más difícil,
+utilizar ciertos micrófonos de escritorio como altavoces improvisados, limitados
+a la reproducción de altas frecuencias.
+
+\subsubsection{Muestreo de la señal}
+
+El siguiente paso es el \textbf{muestreo} (o \textit{sampling}) de la señal. El
+proceso consiste en medir la amplitud de la señal analógica en diferentes
+puntos, uniformemente espaciados, a lo largo del tiempo. El número de veces que
+se muestrea la señal por unidad de tiempo es conocido como \textbf{frecuencia de
+  muestreo}, e influye directamente en la calidad de la digitalización del sonido.
+
+La elección de la frecuencia de muestreo no suele ser trivial y tiene un impacto
+importante en el rendimiento y calidad del sistema, ya que el número de
+elementos a procesar es directamente proporcional a la frecuencia. 
+
+Otro factor importante es la clase de sonidos que vamos a digitalizar. Por regla
+general, los sonidos que se captan son los audibles por el oído humano. Tal y
+como se comentó en la sección anterior, estos sonido son aquellos cuyas
+frecuencias se encuentran por debajo de los 20 kHz. Existe un teorema dictado
+por el ingeniero sueco \textbf{Harry Nyquist} que defiende que \textit{``la
+  frecuencia de muestreo mínima requerida para muestrear una señal debe ser
+  igual al doble de la máxima frecuencia contenida en la señal''}. En nuestro
+caso, como la máxima frecuencia audible es de 20 kHz, lo normal será utiliar una
+frecuencia de muestreo de 40 kHz. El estándar de CD, que normalmente se utiliza
+como base de muestreo en la mayoría de tarjetas de sonido, amplía la tasa un
+10\% con objeto de contemplar el uso de filtros no ideales, quedando la
+frecuencia de muestreo en 44,1 kHz.
+
+
+
