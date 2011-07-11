@@ -18,7 +18,6 @@ Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, REFRESCO), cambiandoEsta
     lDEBUG << Log::CON("Juego");
     setCaption(L"oFlute .:.");
 
-
     cursor.reset( new Gosu::Image(graphics(), L"media/pointerCursor.png"));
 
     fondoComun.reset( new Gosu::Image(graphics(), L"media/fondoGenerico.png"));
@@ -26,7 +25,6 @@ Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, REFRESCO), cambiandoEsta
     animacionFondo -> set(0, 0, 255);
 
     cambiarEstado("estadoAutor");
-
 }
 
 void Juego::update(){
