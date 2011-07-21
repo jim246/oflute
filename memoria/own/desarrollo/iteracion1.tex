@@ -373,7 +373,7 @@ baile, muy similar a los clásicos \textbf{DDR} o \textbf{StepMania}.
 \section{Desarrollo con audio en GNU/Linux}
 
 El desarrollo de aplicaciones que realicen tareas de sonido en sistemas
-GNU/Linux es uno de los casos en los que más dificultades se
+GNU/Linux es uno de los casos en los que más \textbf{dificultades} se
 encuentran. Tradicionalmente, el soporte del hardware de sonido en estos
 sistemas siempre ha sido de lo más básico, incluso limitándose, en ciertas
 ocasiones, a la reproducción de sonido, ignorando por completo la
@@ -395,6 +395,10 @@ en el que el desarrollador de Adobe, Mike Melanson, hace un repaso sobre la
 \textit{jungla} que supone la programación de audio en Linux. El artículo es
 antiguo y las cosas han mejorado desde entonces, pero aún así es muy fácil que
 los no iniciados se sientan abrumados por la cantidad de opciones disponibles.
+
+La organización de las capas de software se asemeja al siguiente diagrama.
+
+\textbf{PONER DIAGRAMA!!!!}
 
 \subsection{Interfaces de bajo nivel, OSS y ALSA}
 El elemento de menor nivel en esta \textit{escala} de componentes son las
@@ -441,4 +445,48 @@ sonido.
 
 Curiosamente, tanto ALSA como OSS han incluído una capa de emulación del otro
 módulo, por lo que en un sistema con ALSA, los programas basados en OSS pueden
-funcionar.
+funcionar, aunque la calidad varíe enormemente de un caso a otro.
+
+\subsection{Servidores de sonido}
+
+Como se comentó previamente, uno de los problemas principales de OSS es que no
+tenía mezclador, por lo que era imposible que varias aplicaciones emitieran
+sonido a la vez. Para arreglar este problema surgieron los \textbf{servidores de
+  sonido}. La principal tarea de estos servidores es la de gestionar el acceso a
+los subsistemas de sonido, mezclando los flujos de sonido de las diferentes
+aplicaciones en uno solo, de forma que sea posible escuchar el sonido de varios
+programas al mismo tiempo.
+
+Por otro lado, los servidores de sonido ofrecen una API más amigable, siendo más
+sencillo programar a través de ellos. Aunque existen multitud de servidores de
+sonido, los más conocidos son JACK y PulseAudio.
+
+Aunque actualmente tanto ALSA como OSSv4 ofrece mezcla de audio, los servidores
+de sonido siguen usándose por sus otras características, aunque varios autores
+han declarado que en la mayoría de los casos son inútiles y solo empeoran el
+rendimiento en general y la latencia en particular.
+
+\subsubsection{JACK}
+
+\textbf{JACK} es un servidor de sonido de uso profesional que proporciona
+servicios de audio en tiempo real, consiguiendo latencias muy pequeñas. 
+
+Su nombre (\textit{enchufe} en inglés) se debe a su arquitectura en forma de
+conexiones, subtitulándose a menudo \textit{``Connection kit''}. Así, es posible
+hacer conexiones de flujo de audio entre aplicaciones y la interfaz de audio de
+igual forma que entre dos clientes, o con servidores de streaming online,
+etcétera.
+
+Hay gran cantidad de aplicaciones que ofrecen JACK como forma de comunicación de
+audio, aunque su uso no está lo suficientemente extendido como para formar parte
+por defecto de ninguna distribución mayoritaria.
+
+\subsubsection{PulseAudio}
+\textbf{PulseAudio} es otro servidor de sonido, multi-plataforma, que ha ganado
+mucha popularidad en los últimos tiempos. Ofrece funcionalidades avanzadas, como
+audio por red, control de volumen independiente por aplicación, ecualización del
+sonido a nivel global, etcétera.
+
+Se utiliza de forma oficial en muchas distribuciones, como Ubuntu o Fedora, e
+incluso en dispositivos móviles de Nokia. 
+
