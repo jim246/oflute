@@ -95,8 +95,8 @@ private:
     /// Imagen del texto inferior
     boost::scoped_ptr<ElementoTexto> txtSubtitulo;
 
-    /// Imagen de la figura
-    boost::scoped_ptr<Gosu::Image> imgFigura;
+    /// Imágenes de las figuras
+    boost::shared_ptr<Gosu::Image> imgDo5, imgRe5, imgMi5, imgFa5, imgSol5, imgLa5, imgSi5, imgDo6, imgRe6;
 
     /// Botón volver
     boost::scoped_ptr<ElementoCombinado> btnVolver;
