@@ -372,4 +372,73 @@ baile, muy similar a los clásicos \textbf{DDR} o \textbf{StepMania}.
 
 \section{Desarrollo con audio en GNU/Linux}
 
-El desarrollo de sistemas relacionados con el sonido es uno de los que menos 
+El desarrollo de aplicaciones que realicen tareas de sonido en sistemas
+GNU/Linux es uno de los casos en los que más dificultades se
+encuentran. Tradicionalmente, el soporte del hardware de sonido en estos
+sistemas siempre ha sido de lo más básico, incluso limitándose, en ciertas
+ocasiones, a la reproducción de sonido, ignorando por completo la
+grabación. Afortunadamente, con el paso de los años el soporte ha ido mejorando
+gracias a la colaboración de los fabricantes y a la proliferación del sonido
+integrado en placa base.
+
+A nivel de software, existen bastantes componentes diferentes, algunos
+alternativos y otros complementarios entre sí, que pueden conducir a
+confusiones. En otros sistemas operativos, como Windows o Mac OS, el programador
+cuenta con una interfaz de sonido común, que se encarga de la mezcla y de la
+comunicación de bajo nivel con la tarjeta de sonido. En GNU/Linux, dada su
+naturaleza modular, esa misma tarea se descompone en diferentes sistemas, por lo
+que una misma tarea puede realizarse de muchas formas distintas.
+
+Buena muestra de ello es el artículo \textit{Welcome To The Jungle}
+\footnote{\url{http://blogs.adobe.com/penguinswf/2007/05/welcome_to_the_jungle.html}},
+en el que el desarrollador de Adobe, Mike Melanson, hace un repaso sobre la
+\textit{jungla} que supone la programación de audio en Linux. El artículo es
+antiguo y las cosas han mejorado desde entonces, pero aún así es muy fácil que
+los no iniciados se sientan abrumados por la cantidad de opciones disponibles.
+
+\subsection{Interfaces de bajo nivel, OSS y ALSA}
+El elemento de menor nivel en esta \textit{escala} de componentes son las
+interfaces de hardware, que podrían equipararse al \textit{driver de audio} de
+Windows. En ambos casos se encuentran como módulos del kernel de Linux.
+
+\subsubsection{OSS}
+\textbf{Open Sound System} (OSS) fue durante muchos años la interfaz de audio
+por defecto en todos los sistemas GNU/Linux. Está basada en el stándard UNIX
+para la comunicación con dispositivos mediante las funciones POSIX habituales
+(\texttt{open}, \texttt{read}, etc), lo que la hace relativamente sencilla de
+utilizar.
+
+Antiguamente, la mayor parte de los ordenadores personales con capacidades
+multimedia utilizaban tarjetas de sonido basadas en la Creative Sound Blaster
+16. De hecho, las tarjetas de la competencia incluían modos de emulación de esta
+tarjeta. Su popularidad hizo que todos los esfuerzos en el desarrollo de audio
+en Linux se concentraran en dar soporte a esta tarjeta, surgiendo unos drivers
+de buena calidad. Finalmente, a la API generada se le dió el nombre de
+\textit{Linux Sound API} y posteriormente, junto a los controladores de otras
+tarjetas, se empaquetó en lo que hoy es conoce por OSS.
+
+Por desgracia, los desarrolladores de OSS decidieron privatizar el
+código. Aunque finalmente, en 2008, se volvió a liberar todo el código, para
+entonces su mayor rival, ALSA, ya había tomado su lugar como API predeterminada
+en el kernel de Linux.
+
+\subsubsection{ALSA}
+Como alternativa a OSS surgió \textbf{Advanced Linux Sound Architecture} (ALSA),
+que acabó colocándose como la alternativa por defecto en todos los sistemas
+GNU/Linux a partir de la versión 2.6 del kernel.
+
+Entre sus características, ALSA permite la síntesis de sonidos MIDI mediante
+hardware, soporte multiprocesador, configuración automática de tarjetas de
+sonido, etcétera. En gran parte, los objetivos de ALSA fueron las deficiencias
+de OSS en aquella época.
+
+ALSA está estructurada en tres componente. La primera parte son los
+controladores en el kernel. La segunda parte es una API para los
+desarrolladores. Esta API es de muy bajo nivel, y es utilizada principalmente
+por middlewares y frameworks en lugar de por aplicaciones de usuario. Por
+último, el tercer componente es un mezclador que permite el multiplexado del
+sonido.
+
+Curiosamente, tanto ALSA como OSS han incluído una capa de emulación del otro
+módulo, por lo que en un sistema con ALSA, los programas basados en OSS pueden
+funcionar.
