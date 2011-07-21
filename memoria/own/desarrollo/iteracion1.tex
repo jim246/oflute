@@ -1,10 +1,12 @@
 \section{Adquisición de conocimientos}
 Para poder enfrentarnos con garantías al desarrollo del proyecto fue necesario
-adquirir una base de conocimientos que nos permitiera entender los conceptos
-que se iban a usar y las herramientas para trabajar con ellos. Así, fuimos
-guiándonos por la intuición y, sobre todo, por las necesidades que iban
-surgiendo. Los conceptos que se presentan a continuación son básicos para
-comprender cómo funciona el módulo de análisis del proyecto.
+adquirir una \textbf{base de conocimientos} que nos permitiera entender los
+conceptos que se iban a usar y las herramientas para trabajar con ellos. Así,
+fuimos guiándonos por la intuición y, sobre todo, por las necesidades que iban
+surgiendo. 
+
+Los conceptos que se presentan a continuación son básicos para comprender cómo
+funciona el módulo de análisis del proyecto.
 
 \subsection{El sonido}
 Un \textbf{sonido} es una vibración que se propaga por un medio
@@ -398,7 +400,7 @@ los no iniciados se sientan abrumados por la cantidad de opciones disponibles.
 
 La organización de las capas de software se asemeja al siguiente diagrama.
 
-\textbf{PONER DIAGRAMA!!!!}
+\marginpar{PONER DIAGRAMA}
 
 \subsection{Interfaces de bajo nivel, OSS y ALSA}
 El elemento de menor nivel en esta \textit{escala} de componentes son las
@@ -488,5 +490,55 @@ audio por red, control de volumen independiente por aplicación, ecualización d
 sonido a nivel global, etcétera.
 
 Se utiliza de forma oficial en muchas distribuciones, como Ubuntu o Fedora, e
-incluso en dispositivos móviles de Nokia. 
+incluso en dispositivos móviles de Nokia. Es de uso muy sencillo y se integra
+fácilmente con muchos back-ends, tanto ALSA y OSS, ya comentados previamente,
+como túneles RTP para la emisión por red.
 
+PulseAudio permite también servir como reemplazo transparente de OSS, emulando
+el acceso directo a los dispositivos (como \texttt{/dev/dsp}) mediante la
+utilidad \texttt{padsp}. Además, existen muchas otras utilidades de línea de
+comandos para controlar PulseAudio. Por ejemplo, \texttt{pacmd} nos permite
+enviar comandos al demonio para 
+
+PulseAudio fue la opción que finalmente se ha utilizado en este proyecto,
+comentaremos los detalles más adelante.
+
+\subsection{Otras APIs}
+
+A los anteriores elementos, que en la mayoría de los casos son suficientes, hay
+que sumarles una serie de APIs y frameworks independientes que, en mayor o menor
+medida, han ido estableciéndose en distintos ámbitos: 
+
+\begin{itemize}
+\item \textbf{GStreamer} es un framework basado en GObject muy ligado al
+  proyecto GNOME. Su funcionamiento se basa en complementos cuyas salidas y
+  entradas es posible conectar, de modo que podemos comenzar con un módulo de
+  lectura de ficheros, pasar a un decodificador, luego a un módulo de efectos y
+  finalmente a la salida (o \textit{sink}). 
+
+  La herramienta \texttt{gst-launch} permite probar el funcionamiento de estos
+  módulos desde la línea de comandos. Por ejemplo, podemos hacer un
+  \textit{loopback} (esto es, escuchar por los altavoces la entrada de audio,
+  como el micrófono) mediante el siguiente comando:
+
+\begin{verbatim}
+gst-launch-0.10 alsasource ! alsasink
+\end{verbatim}
+
+\item \textbf{SDL Mixer} es una biblioteca que forma parte de SDL
+  (\textit{Simple DirectMedia Layer}, un framework multimedia muy
+  popular). Provee una API básica de reproducción de sonidos, y es muy utilizada
+  en videojuegos por su facilidad de uso. El principal inconveniente es,
+  precisamente, que su facilidad de uso se basa en un muy limitado rango de
+  funciones. SDL Mixer no presenta ninguna capacidad de grabación o lectura de
+  flujos de entrada, por lo que es imposible trabajar con micrófonos.
+
+\item \textbf{RtAudio, PortAudio}. Ambas bibliotecas de entrada y salida de
+  audio, escritas en C/C++, multi-plataforma pero con algunos
+  fallos. Inicialmente, el proyecto se basó en RtAudio, pero se encontraron
+  bastantes problemas con la biblioteca. A partir de ahí, se empezó a utilizar
+  PortAudio, que funcionó bastante bien en las pruebas
+  iniciales. Desafortunadamente, al comienzo del trabajo en el resto del
+  proyecto se descubrieron problemas de estabilidad y finalmente se desechó.
+
+\end{itemize}
