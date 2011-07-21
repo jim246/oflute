@@ -61,10 +61,10 @@ t_altura Analizador::asociarNota(double frecuencia){
     std::map<double, t_altura>::iterator iter;
 
     for(iter = notas.begin();
-	iter != notas.end();
-	++iter)
+        iter != notas.end();
+        ++iter)
     {
-	diferencias[abs(frecuencia - iter -> first)] = iter -> second;
+        diferencias[abs(frecuencia - iter -> first)] = iter -> second;
     }
     
     iter = min_element(diferencias.begin(), diferencias.end());
@@ -84,23 +84,23 @@ void Analizador::iniciar(){
 
 void Analizador::detener(){
     if(!detenido){
-	detenido = true;
-	lDEBUG << "Analizador::detener...";
-	proxy . detener();
-	hilo -> join();
+        detenido = true;
+        lDEBUG << "Analizador::detener...";
+        proxy . detener();
+        hilo -> join();
     }
 }
 
 t_altura Analizador::notaActual(){
     if(lectorConfig.sonidoLimite() <= volumenActual()){
-	float f = proxy . notaActual();
-	if(f == 0){
-	    return Silencio;
-	}else{
-	    return asociarNota(f);
-	}
+        float f = proxy . notaActual();
+        if(f == 0){
+            return Silencio;
+        }else{
+            return asociarNota(f);
+        }
     }else{
-	return Silencio;
+        return Silencio;
     }
 }
 
