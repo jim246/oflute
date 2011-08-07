@@ -526,3 +526,70 @@ notación \textit{UML}, siguiendo los siguientes pasos:
 El modelo conceptual de datos representa, de forma esquemática, las clases que
 modelan el sistema y las relaciones que existen entre ellas, además de una
 pequeña introducción a su utilidad. 
+
+\begin{description}
+\item[Juego] Clase de control general. Gestiona el flujo de ejecución principal,
+  así como de la gestión de estados, que permite pasar de una sección a otra del
+  juego.
+\item[Estado] Clase base para los diferentes estados del juego. Las clases
+  correspondientes a las secciones se basarán en esta clase para interactuar con
+  el gestor de estados y poder pasar de una parte del juego a otra.
+\item[EstadoMenú] Representa el estado de juego para el menú principal, desde el
+  que se accede al resto de opciones del juego. 
+\item[EstadoAnalizador] Representa el estado del analizador básico de
+  notas. Contendrá los elementos necesarios para iniciar el análisis del audio,
+  así como los elementos de la interfaz.
+\item[EstadoCalibrarMicro] Representa el estado en el que se calibra el
+  micrófono. Al igual que la clase \textit{EstadoAnalizador}, deberá ser capaz
+  de acceder al sistema de audio para poder leer el volumen ambiente y así
+  calibrar el micrófono.
+\item[EstadoImagenFija] Modela una imagen fija a modo de pantalla de créditos,
+  de forma que sea sencillo añadir imágenes al inicio del juego, como firmas de
+  desarrolladores, logotipos de patrocinadores, etcétera.
+\item[EstadoMenúCanciones] Comprende el menú de selección de canciones, que se
+  encargará de leer los ficheros de canciones disponibles. Además, también se
+  encargará de lanzar las canciones en forma de estados secundarios.
+\item[EstadoMenúLecciones] Corresponde al menú de elección de lecciones, que
+  leerá y listará los ficheros de lección disponibles, y se encargará de lanzar
+  la lección elegida.
+\item[Analizador] Controla la gestión del subsistema de audio y el análisis de
+  la entrada. Deberá proporcionar información sobre el volumen de la entrada
+  (para la calibración del micrófono) así como de la nota detectada en cada
+  instante.
+\item[Animación] Se encargará de facilitar la creación de animaciones en forma
+  de interpolación de valores, válidas para cambios de posición, opacidad,
+  etcétera.
+\item[Elemento] Esta clase de ayuda facilitará la carga y dibujado de elementos
+  para la interfaz, además de servir de capa de abstracción para las
+  animaciones.
+\item[ElementoImagen] Especialización de la clase \textit{Elemento} para
+  imágenes.
+\item[ElementoTexto] Especialización de la clase \textit{Elemento} para textos.
+\item[ElementoCombinado] Especialización de la clase \textit{Elemento} que
+  combina imagen y texto, a usar en casos como los botones del menú.
+\item[SistemaPartículas] Representa un sistema de partículas simple, para
+  generar efectos de destellos y fuegos artificiales.
+\item[Canción] Corresponde a la canción que se va a interpretar, lanzada desde
+  el estado \textit{EstadoMenuCanciones}.
+\item[Nota] Simboliza cada una de las notas cargadas que componen una canción.
+
+\bigskip
+
+\marginpar{DIAGRAMA de clases conceptuales}
+
+\section{Modelo de comportamiento del sistema}
+En esta sección vamos a especificar cómo se comporta el sistema en forma de dos
+elementos fundamentales.
+\begin{itemize}
+\item En primer lugar, los \textbf{diagramas de secuencia} mostrarán el flujo de
+  eventos entre los actores que participan en la aplicación.
+\item En segundo lugar, los \textbf{contratos de las operaciones} detallarán las
+  condiciones y efectos que tendrán lugar al ejecutarse las operaciones en el
+  sistema.
+\end{itemize}
+
+
+
+
+
+\end{description}

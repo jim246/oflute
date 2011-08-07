@@ -1,0 +1,46 @@
+Un análisis claro y un diseño conciso no garantizan que, a la hora de
+implementar el sistema planteado, no se encuentre ninguna dificultad o
+imprevisto. Así pues, en este capítulo comentaremos los retos y detalles que más
+relevancia o complejidad han presentado durante la fase de la implementación del
+proyecto.
+
+De igual modo, durante el desarrollo de la aplicacíon se mantuvo actualizada una
+bitácora, accesible en línea\footnote{\url{http://oflute.wordpress.com}},
+en la que se fueron detallando, a medida que aparecían, muchas de estas
+dificultades. 
+
+Como complemento a la lectura de este capítulo se recomienda tener una copia
+local del repositorio del proyecto, disponible para su libre descarga desde la
+forja oficial\footnote{\url{http://oflute.googlecode.com}}. En él se encuentra
+todo el código fuente original, así como la documentación en formato
+\textit{Doxygen}.
+
+\section{Carga y uso de fuentes TrueType en Gosu}
+
+Como se ha comentado previamente, \textbf{oFlute} hace uso de la biblioteca
+\textit{Gosu}, que proporciona una API sencilla para el acceso al sistema
+gráfico, entre otras características. Este framework funciona en sistemas
+Windows, GNU/Linux y Mac OS, aunque dada la dificultad de conseguir la
+compatibilidad con todos ellos, la calidad y el rendimiento es bastante
+desigual.
+
+Una de estas desigualdades se presentaba a la hora de cargar fuentes para
+mostrar textos. En su versión para GNU/Linux, Gosu \textbf{no permitía} utilizar
+fuentes que no estuviesen instaladas en el sistema, esto es, era imposible
+adjuntar un fichero con una fuente en formato \texttt{TrueType}
+\marginpar{REFERENCIA} para su carga en el juego. Sin embargo, tanto en
+Windows como en Mac OS esta carga sí era posible. Esto supuso un grave problema
+en el planteamiento del proyecto.
+
+Inicialmente se investigaron las razones de esta limitación. Las conclusiones
+que se sacaron fueron que Gosu, bajo GNU/Linux, implementaba el renderizado de
+fuentes mediante una biblioteca llamada Pango \marginpar{REFERENCIA}, de
+bastante bajo nivel, y que por diseño está limitada al uso de fuentes de
+sistema, ya que su uso se orienta a herramientas del sistema operativo, no a
+aplicativos de terceros. 
+
+Así pues, era necesario buscar una alternativa. Basándonos en la experiencia
+previa con otras bibliotecas de desarrollo, se pensó en \texttt{SDL\_ttf}, una de
+las partes de la conocida biblioteca SDL \marginpar{REFERENCIA}, ampliamente
+utilizada en el desarrollo de aplicaciones multimedia en toda clases de
+sistemas.
