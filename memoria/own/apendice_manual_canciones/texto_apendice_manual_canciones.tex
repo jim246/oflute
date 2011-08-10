@@ -58,3 +58,57 @@ como raíz el elemento \texttt{Song}. Este es un ejemplo de un fichero completo:
 El título de la canción se indicará mediante la etiqueta \texttt{<Title>}, por ejemplo:
 
 \inputminted{xml}{apendice_manual_canciones/snippet_1}
+
+\subsubsection{Descripción de la canción}
+
+La descripción de la canción sirve como subtítulo de la misma. Se definirá con
+la etiqueta \texttt{<Desc>}, por ejemplo:
+
+\inputminted{xml}{apendice_manual_canciones/snippet_2}
+
+\subsubsection{Ritmo}
+
+El ritmo de la canción se define como el número de pulsos por minuto -- en
+inglés, \textbf{bpm}, \textit{beats per minute}. Podemos definir este atributo
+con la etiqueta \texttt{<BPM>}, por ejemplo:
+
+\inputminted{xml}{apendice_manual_canciones/snippet_3}
+
+\subsection{Definición de las notas}
+
+Ésta es la parte más importante del fichero de definición de canciones. Aquí se
+indicarán las notas que queremos que aparezcan en el pentagrama y,
+consecuentemente, que el jugador interprete.
+
+Las notas se escribirán dentro de la etiqueta \texttt{<Notes>}, en orden
+consecutivo y separadas por un espacio.
+
+\inputminted{xml}{apendice_manual_canciones/snippet_4}
+
+Cada una de las notas deberá representarse según la siguiente expresión
+regular:
+\begin{verbatim}
+(do|re|mi|fa|sol|la|si|xx)(5|6|0)(r|b|n|c)(p)?
+\end{verbatim}
+
+La descomposición de esta sintaxis es la que sigue:
+\begin{description}
+\item[Altura] Se indicará con el texto de la nota (\textit{do}, \textit{re},
+  \textit{mi}...) o, en el caso de querer incluir un silencio, con el texto
+  \textit{xx}.
+\item[Octava] La flauta dulce habitualmente solo cubre desde el Do en la quinta
+  octava hasta el Re en la sexta octava. Ésta se indicará con un número, 5 ó 6,
+  ó un 0 si estamos incluyendo un silencio.
+\item[Duración] Las posibles duraciones son la redonda (4 tiempos), la blanca (2
+  tiempos), la negra (1 tiempo) y la corchea (medio tiempo). Para indicar el
+  mismo, se usarán las iniciales de los nombres, esto es, \textit{``r''},
+  \textit{``b''}, \textit{``n''} o \textit{``c''}.
+\item[Puntillo] Es posible añadir puntillo a las notas, incrementando su
+  duración en la mitad de su tiempo original. Para ello, incluiremos la letra
+  \textit{``p''} al final.
+\end{description}
+
+Una vez escritas las notas, ya tendremos el fichero de nuestra canción listo
+para ser incluido en oFlute.
+
+
