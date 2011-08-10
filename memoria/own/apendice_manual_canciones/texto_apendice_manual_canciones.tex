@@ -1,0 +1,60 @@
+En \textbf{oFlute} existe la posibilidad de añadir nuevas canciones al juego, de
+forma que los usuarios puedan ampliar el juego y que éste se convierta en una
+herramienta lúdica prácticamente ilímitada.
+
+Así, en un futuro podrán existir, por ejemplo, packs temáticos de canciones
+descargables desde internet, con los que seguir practicando nuestra pericia con
+la flauta dulce.
+
+\section{Ficheros necesarios}
+
+Cada una de las canciones presentes en el juego necesitará un fichero donde se
+definirán las características y notas de la canción. El nombre de estos ficheros
+sigue la estructura \texttt{songN.xml}, donde \textit{N} es el número de canción
+a añadir.
+
+Los ficheros de las canciones se encuentran en la carpeta \texttt{canciones},
+ubicada en el directorio raíz de la instalación de oFlute. 
+
+\section{Estructura del fichero de canciones}
+
+\subsection{Lenguaje XML}
+
+Cada fichero de canción es un archivo \textit{XML}. \marginpar{REFERENCIA} XML
+son las siglas, en inglés, de \textit{eXtensible Markup Language} -- lenguaje de
+marcado extensible. La tecnología XML busca dar solución al problema de expresar
+información estructurada de la manera más abstracta y reutilizable posible. 
+
+Para ello, utiliza una serie de \textit{etiquetas}, organizadas de forma
+jerárquica, que siguen la forma \texttt{<nombre>}, donde \textit{nombre} es la
+identificación del elemento que se está representando. Las etiquetas deben
+cerrarse utilizando la sintaxis \texttt{</nombre>}. Entre las etiquetas de
+apertura y cierre pueden anidarse otras etiquetas, así como información en
+formato texto.
+
+Todo documento XML tiene una etiqueta \textit{raíz}, de la cual cuelgan todas
+las demás. En nuestro caso, los ficheros que representan las canciones tendrán
+como raíz el elemento \texttt{Song}. Este es un ejemplo de un fichero completo:
+
+
+
+\begin{minted}{xml}
+<?xml version="1.0" ?>
+<Song>
+  <Title>Los pajaritos</Title>
+  <Desc>Van por el aire</Desc>
+  <BPM>60</BPM>
+  <Notes>do5n mi5c fa5c sol5n sol5c sol5c la5n la5c la5c sol5n 
+   sol5n fa5n fa5n mi5n mi5n re5c mi5c fa5c re5c do5n do5n</Notes>
+</Song>
+\end{minted}
+
+\subsection{Campos iniciales}
+
+\subsubsection{Título de la canción}
+
+%\usestyle{default}
+
+El título de la canción se indicará mediante la etiqueta \texttt{<Title>}, por ejemplo:
+
+\inputminted{xml}{apendice_manual_canciones/snippet_1}
