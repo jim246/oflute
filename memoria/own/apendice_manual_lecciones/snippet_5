@@ -1,0 +1,4 @@
+<texto x="580" y="80" z="2" tam="60" 
+  ca="255" cr="34" cg="139" cb="114" 
+  align="2" sombra="1" opacSombra="23" 
+  fuente="media/fLight.ttf" wait="45">Éste es el texto</texto>

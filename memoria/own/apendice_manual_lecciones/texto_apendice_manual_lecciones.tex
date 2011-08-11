@@ -1,0 +1,127 @@
+\textbf{oFlute} fue diseñado de forma que se pudiera expandir de manera
+sencilla. Además de poder añadir canciones nuevas tal y como se explicó en el
+apéndice \textit{\nameref{chap:manual_canciones}}, también es posible añadir
+nuevas lecciones a la aplicación.
+
+\section{Ficheros necesarios}
+
+Las lecciones necesitan de más ficheros que las canciones, ya que se basan en
+elementos multimedia para mejorar la experiencia de usuario. Así, una lección
+dispondrá de un fichero base en formato XML y de una serie de archivos
+auxiliares de recursos. Por ahora, \textbf{oFlute} acepta recursos en formato
+imagen PNG \marginpar{REFERENCIA} y fuentes TTF, pero en un futuro será posible
+añadir otros tipos de elementos.
+
+\subsection{Fichero de lección}
+El fichero base deberá alojarse en el directorio \texttt{lecciones}, dentro de
+la carpeta raíz de la instalación de oFlute. Además, su nombre debe seguir la
+estructura \texttt{lecN.xml}, donde \textit{N} es el número de la lección a
+añadir.
+
+\subsection{Ficheros de recursos}
+Los ficheros de recursos podrán guardarse en cualquier lugar dentro de la
+carpeta de instalación de oFlute. De cualquier modo, se recomienda guardar las
+imágenes en la carpeta \texttt{media/lecciones} y las fuentes en la carpeta
+\texttt{media}, ya que es ahí donde están los recursos de las otras lecciones,
+facilitando la reutilización.
+
+\section{Estructura del fichero de lección}
+
+Como se comentó en la sección \ref{sec:lenguaje-xml}, todos los documentos XML
+necesitan un elemento raíz. En este caso, usaremos la etiqueta \texttt{<Lec>}
+como raíz del fichero de lección.
+
+
+\subsection{Campos iniciales}
+
+\subsubsection{Índice}
+Es posible añadir el índice de la lección, de forma que podamos decidir
+fácilmente el orden en que aparecerá dentro de la lista de lecciones del sistema.
+
+Para ello, utilizaremos la etiqueta \texttt{<index>}, tal que así:
+
+\inputminted{xml}{apendice_manual_lecciones/snippet_1}
+
+\subsubsection{Nombre}
+El nombre de la lección lo añadiremos utilizando la etiqueta
+\texttt{<nombre>}. Éste se utilizará en la pantalla de selección de lecciones.
+
+\inputminted{xml}{apendice_manual_lecciones/snippet_2}
+
+\subsubsection{Descripción}
+
+La descripción de la lección nos permitirá conocer brevemente su contenido sin
+tener que acceder directamente a la misma. Se empleará la etiqueta
+\texttt{<descrip>} para identificar la descripción.
+
+\inputminted{xml}{apendice_manual_lecciones/snippet_3}
+
+\subsection{Elementos multimedia}
+Tras los campos iniciales, se indicarán los elementos multimedia. Podremos
+encontrar dos tipos: imágenes, cargadas a partir de los ficheros de recursos
+previamente comentados, y textos, que se dibujan de forma dinámica. Para ello,
+marcaremos una sección con la etiqueta \texttt{<elementos>}.
+
+\begin{minted}{xml}
+<elementos>
+...
+</elementos>  
+\end{minted}
+
+Cabe notar que todos los elementos multimedia aparecerán en pantalla mediante
+una animación de desvanecimiento o \textit{fade-in}. Para indicar el orden en
+que éstos aparecerán, las etiquetas de los elementos multimedia tendrán un
+atributo \texttt{wait}, que indica el retraso en el inicio de la animación.
+
+\subsubsection{Imágenes}
+Las imágenes se indicarán mediante la etiqueta simple \texttt{<img/>} --
+\textit{simple}, porque se cerrará a sí misma, desapareciendo la etiqueta de
+cierre posterior.
+
+Esta etiqueta tendrá los siguientes atributos:
+\begin{description}
+\item[src] Indica la ruta al fichero de imagen, relativa al directorio raíz de
+  oFlute.
+\item[x, y, z] Posición horizontal, vertical y profundidad del elemento en
+  pantalla, en píxeles.
+\item[wait] Como se ha comentado, es el retraso en la animación de aparición.
+\end{description}
+
+Un ejemplo de definición de elemento multimedia en formato imagen podría ser el
+siguiente:
+
+\inputminted{xml}{apendice_manual_lecciones/snippet_4}
+
+\subsubsection{Textos}
+Los textos utilizan la etiqueta \texttt{<texto>}. Dentro de la etiqueta, esto
+es, entre la etiqueta de apertura \texttt{<texto>} y la de cierre
+\texttt{</texto>}, se habrá de escribir el texto que queremos que se
+muestre. Hay que tener en cuenta que los saltos de línea que insertemos
+aparecerán tal cual posteriormente en pantalla.
+
+Además, la etiqueta consta con numerosos atributos obligatorios:
+\begin{description}
+\item[tam] Indica el tamaño de la fuente en pantalla.
+\item[ca, cr, cg, cb] Para definir el color del texto utilizamos su definición
+  RGBA (\textit{Red, Green, Blue, Alpha})\marginpar{REFERENCIA}, esto es, los
+  valores individuales de los canales rojo, verde, azul y alfa (opacidad). Así,
+  cada uno de los atributos indica el valor de un canal:
+  \begin{description}
+  \item[ca] Canal alfa.
+  \item[cr] Canal rojo.
+  \item[cg] Canal verde.
+  \item[cb] Canal azul.
+  \end{description}
+\item[x, y, z] Definen la posición horizontal, vertical y profundidad del texto
+  en pantalla.
+\item[align] Indica la alineación del bloque de texto. Valdrá 1 para alineación
+  a la izquierda, 2 para alineación centrada y 3 para alineación a la derecha.
+\item[sombra] Indica si el texto tendrá sombra o no, con un valor 0 ó 1. En el
+  caso de que valga 1, habrá que indicar un atributo adicional,
+  \textbf{opacSombra}, que indicará la opacidad de la sombra.
+\item[wait] Retraso en la animación de aparición.
+\end{description}
+
+Como ejemplo de bloque de texto, podemos poner el siguiente fragmento:
+
+\inputminted{xml}{apendice_manual_lecciones/snippet_5}

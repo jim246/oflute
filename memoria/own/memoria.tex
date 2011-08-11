@@ -48,40 +48,39 @@
 \usepackage{graphicx}
 
 % Extensión para el entorno enumerate ¿?
-\usepackage{enumerate}
+%\usepackage{enumerate}
 
 % Paquete para cosas rotatorias ¿?¿?
-\usepackage{rotating}
+%\usepackage{rotating}
 
 % Paquete de matemáticas
-\usepackage{amstext}
+%\usepackage{amstext}
 
 % Define el entorno altt, como un verbatim pero se pueden utilizar fórmulas matemáticas
-\usepackage{alltt}
+%\usepackage{alltt}
 
 % Listados de código
-\usepackage{listings}
+%\usepackage{listings}
 
 % Herramientas para alinear las comas decimales en columnas en un entorno tabular o array
-\usepackage{dcolumn}
-\usepackage{array}
+%\usepackage{dcolumn}
+%\usepackage{array}
 
 % Extensión para el entorno tabular
-\usepackage{tabularx}
+%\usepackage{tabularx}
 
 % Entornos wrapfigure y wraptable para poner texto alrededor de figuras
-\usepackage{wrapfig}
-
-\usepackage{minted}
-%\usepackage{xspace}
+%\usepackage{wrapfig}
 
 % Inclusión de pequeñas figuras ¿?¿?¿
-\usepackage{subfigure}
+%\usepackage{subfigure}
+
+% Automatiza el resaltado de sintaxis usando pygments
+\usepackage{minted}
 
 \makeindex
 
 \begin{document}
-
 
 \input{ordenes.tex}
 
@@ -172,10 +171,11 @@ A Julian Raschke por crear y mantener Gosu.
 \chapter{Manual de usuario}
 
 \chapter{Manual para añadir nuevas canciones}
+\label{chap:manual_canciones}
 \input{apendice_manual_canciones/texto_apendice_manual_canciones.tex}
 
 \chapter{Manual para añadir nuevas lecciones}
-
+\input{apendice_manual_lecciones/texto_apendice_manual_lecciones.tex}
 
 
 
