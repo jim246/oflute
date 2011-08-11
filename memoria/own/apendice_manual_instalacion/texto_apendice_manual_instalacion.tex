@@ -1,0 +1,91 @@
+A continuación se presentan las instrucciones de instalación de \textbf{oFlute}
+en sistemas GNU/Linux basados en paquetería Debian \marginpar{Referencia}, por
+ser los que más auge están teniendo en la actualidad. Tomaremos como referencia
+la distribución Ubuntu 10.04.3 LTS.
+
+\section{Instalación de dependencias}
+
+El primer paso a la hora de instalar oFlute es hacernos con las dependencias del
+proyecto. Para ello, utilizaremos el gestor \texttt{apt-get}, pero para otros
+sistemas el procedimiento será similar.
+
+La instalación de las dependencias se hará con el siguiente comando:
+
+\marginpar{Desactualizadas}
+\begin{minted}{bash}
+  sudo apt-get install subversion g++ libgl1-mesa-dev libpango1.0-dev \
+libboost1.40-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev \
+libboost-serialization1.40-dev libpulse-dev libboost-regex1.40-dev \
+libboost-filesystem-dev libboost-thread-dev 
+\end{minted}
+
+Aunque pueda parecer que son numerosas, realmente casi todas las dependencias
+forman parte de la instalación de Gosu, la biblioteca de desarrollo de
+videojuegos 2D. Al no ser una biblioteca lo suficientemente popular, aún no se
+encuentra empaquetada en los repositorios de las principales distribuciones, por
+lo que se hace necesario instalarla a partir del código fuente.
+
+\section{Descarga del código fuente}
+
+Seguidamente, hemos de hacernos con una copia local del repositorio, que
+contiene el código fuente. Al tratarse de un proyecto libre, el repositorio es
+de acceso público\footnote{\url{http://oflute.googlecode.com}}.
+
+Haciendo uso del comando \texttt{svn}, haremos una copia local del repositorio
+Subversion \marginpar{Referencia} en nuestro sistema con la siguiente orden:
+
+\begin{minted}{bash}
+  svn checkout http://oflute.googlecode.com/svn/trunk oflute
+\end{minted}
+
+Con ello, se creará una carpeta llamada \texttt{oflute} en la que se encontrarán
+los ficheros de la rama principal (\texttt{trunk}) del proyecto.
+
+\section{Compilación}
+
+Como se ha comentado previamente, será necesario compilar la biblioteca Gosu
+previamente. Para ello, se ha facilitado un objetivo en el script de compilación
+\marginpar{¿Referencia a algún tutorial de Makefiles?} que automatiza el proceso.
+
+Así, el primer paso será, estando en la carpeta recién creada, utilizar el
+siguiente comando:
+
+\begin{minted}{bash}
+  make libgosu
+\end{minted}
+
+Una vez concluida la compilación de Gosu, pasaremos a compilar el propio
+proyecto mediante la siguiente orden:
+
+\begin{minted}{bash}
+  make
+\end{minted}
+
+\section{Configuración del micrófono}
+Antes de poder lanzar el juego, será necesario configurar las opciones de audio
+del sistema operativo. Por defecto, la entrada de audio suele estar mutada, por
+lo que será imposible que la aplicación tenga acceso al sonido proveniente del
+micrófono.
+
+Siguiendo con la referencia de Ubuntu, iremos al menú \textit{Sistema}, luego a
+\textit{Preferencias} y, finalmente, elegiremos \textit{Sonido}. Una vez ahí,
+pasaremos a la pestaña \textit{Entrada} y, en caso de que estuviera marcada,
+desmarcaremos la opción \textit{Silenciar}, tal y como muestra la imagen.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{apendice_manual_instalacion/imagen_captura_1}
+  \caption{Panel de configuración del micrófono}
+\end{figure}
+
+
+\section{Ejecución}
+
+Al término de las anteriores etapas, se habrá generado un ejecutable de nombre
+\texttt{oflute}, por lo que será posible lanzar la aplicación a través del
+siguiente comando:
+
+\begin{minted}{bash}
+  ./oflute
+\end{minted}
+
