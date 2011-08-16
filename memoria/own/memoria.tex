@@ -11,7 +11,7 @@
 %\usepackage[pdftex, breaklinks=false]{hyperref}
 \usepackage[pdftex, breaklinks=false, colorlinks=true, linkcolor=black, anchorcolor=black, urlcolor=blue, citecolor=red]{hyperref}
 
-%\usepackage[T1]{fontenc}
+\usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 
@@ -78,6 +78,10 @@
 % Automatiza el resaltado de sintaxis usando pygments
 \usepackage{minted}
 
+\addto\captionsspanish{
+\renewcommand\bibname{Bibliografía y referencias}
+}
+
 \makeindex
 
 \begin{document}
@@ -126,59 +130,59 @@ A Julian Raschke por crear y mantener Gosu.
 
 \setlength{\parskip}{1.2ex plus 0.4ex minus 0.1ex}
 
-\chapter{Introducción}
-\input{1_introduccion/introduccion.tex}
+% \chapter{Introducción}
+% \input{1_introduccion/introduccion.tex}
 
-\chapter{Desarrollo del calendario}
-\input{2_calendario/calendario.tex}
+% \chapter{Desarrollo del calendario}
+% \input{2_calendario/calendario.tex}
  
-%\chapter{Descripción general del proyecto}
-%\input{descripcion/descripcion.tex}
+% %\chapter{Descripción general del proyecto}
+% %\input{descripcion/descripcion.tex}
  
-\chapter{Investigación preliminar}
-\input{3_investigacion/texto_investigacion.tex}
+% \chapter{Investigación preliminar}
+% \input{3_investigacion/texto_investigacion.tex}
 
-\chapter{Análisis}
-\input{4_analisis/texto_analisis.tex}
+% \chapter{Análisis}
+% \input{4_analisis/texto_analisis.tex}
 
-\chapter{Diseño}
-\input{5_diseno/texto_diseno.tex}
+% \chapter{Diseño}
+% \input{5_diseno/texto_diseno.tex}
 
-\chapter{Implementación}
-\input{6_implementacion/texto_implementacion.tex}
+% \chapter{Implementación}
+% \input{6_implementacion/texto_implementacion.tex}
 
-\chapter{Pruebas}
-\input{7_pruebas/texto_pruebas.tex}
+% \chapter{Pruebas}
+% \input{7_pruebas/texto_pruebas.tex}
 
-\chapter{Conclusiones}
-\input{8_conclusiones/texto_conclusiones.tex}
+% \chapter{Conclusiones}
+% \input{8_conclusiones/texto_conclusiones.tex}
 
-\appendix
+% \appendix
 
-\chapter{Herramientas utilizadas}
-\input{apendice_herramientas/texto_apendice_herramientas.tex}
+% \chapter{Herramientas utilizadas}
+% \input{apendice_herramientas/texto_apendice_herramientas.tex}
 
-\chapter{Manual de instalación}
-\label{sec:maninstalacion}
-\input{apendice_manual_instalacion/texto_apendice_manual_instalacion.tex}
+% \chapter{Manual de instalación}
+% \label{sec:maninstalacion}
+% \input{apendice_manual_instalacion/texto_apendice_manual_instalacion.tex}
 
 \chapter{Manual de usuario}
 \input{apendice_manual_usuario/texto_apendice_manual_usuario.tex}
 
-\chapter{Manual para añadir nuevas canciones}
-\label{chap:manual_canciones}
-\input{apendice_manual_canciones/texto_apendice_manual_canciones.tex}
+% \chapter{Manual para añadir nuevas canciones}
+% \label{chap:manual_canciones}
+% \input{apendice_manual_canciones/texto_apendice_manual_canciones.tex}
 
-\chapter{Manual para añadir nuevas lecciones}
-\input{apendice_manual_lecciones/texto_apendice_manual_lecciones.tex}
+% \chapter{Manual para añadir nuevas lecciones}
+% \input{apendice_manual_lecciones/texto_apendice_manual_lecciones.tex}
 
-\chapter{Manual de traducción de proyectos con GNU Gettext}
-\label{sec:gettext}
-\input{apendice_manual_gettext/texto.tex}
+% \chapter{Manual de traducción de proyectos con GNU Gettext}
+% \label{sec:gettext}
+% \input{apendice_manual_gettext/texto.tex}
 
-\chapter{GNU Free Documentation License}
-\label{sec:fdl}
-\input{fdl.tex}
+% \chapter{GNU Free Documentation License}
+% \label{sec:fdl}
+% \input{fdl.tex}
 
 \bibliographystyle{hispa-annote}
 \bibliography{bibliografia}
