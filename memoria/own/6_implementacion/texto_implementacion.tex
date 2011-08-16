@@ -5,15 +5,13 @@ relevancia o complejidad han presentado durante la fase de la implementación de
 proyecto.
 
 De igual modo, durante el desarrollo de la aplicacíon se mantuvo actualizada una
-bitácora, accesible en línea\footnote{\url{http://oflute.wordpress.com}},
-en la que se fueron detallando, a medida que aparecían, muchas de estas
-dificultades. 
+bitácora, accesible en línea~\cite{ofluteblog}, en la que se fueron detallando,
+a medida que aparecían, muchas de estas dificultades.
 
 Como complemento a la lectura de este capítulo se recomienda tener una copia
 local del repositorio del proyecto, disponible para su libre descarga desde la
-forja oficial\footnote{\url{http://oflute.googlecode.com}}. En él se encuentra
-todo el código fuente original, así como la documentación en formato
-\textit{Doxygen}.
+forja oficial~\cite{ofluteforja}. En él se encuentra todo el código fuente
+original, así como la documentación en formato \textit{Doxygen}.
 
 \section{Carga y uso de fuentes TrueType en Gosu}
 
@@ -22,25 +20,335 @@ Como se ha comentado previamente, \textbf{oFlute} hace uso de la biblioteca
 gráfico, entre otras características. Este framework funciona en sistemas
 Windows, GNU/Linux y Mac OS, aunque dada la dificultad de conseguir la
 compatibilidad con todos ellos, la calidad y el rendimiento es bastante
-desigual.
+desigual de un sistema a otro.
 
-Una de estas desigualdades se presentaba a la hora de cargar fuentes para
-mostrar textos. En su versión para GNU/Linux, Gosu \textbf{no permitía} utilizar
-fuentes que no estuviesen instaladas en el sistema, esto es, era imposible
-adjuntar un fichero con una fuente en formato \texttt{TrueType}
-\marginpar{REFERENCIA} para su carga en el juego. Sin embargo, tanto en
-Windows como en Mac OS esta carga sí era posible. Esto supuso un grave problema
-en el planteamiento del proyecto.
+Una de estas desigualdades se presentaba a la hora de \textbf{cargar fuentes}
+para mostrar textos. En su versión para GNU/Linux, el módulo para el pintado de
+textos de Gosu (que comprende la clase \texttt{Gosu::Font} y las funciones
+\texttt{Gosu::drawText} y \texttt{Gosu::createText}) solo permitía
+utilizar fuentes que estuvieran ya instaladas en el sistema de forma global, de
+modo que era imposible adjuntar un fichero con una fuente en formato
+\texttt{TrueType}~\cite{reftruetype} para su carga en el juego. 
 
-Inicialmente se investigaron las razones de esta limitación. Las conclusiones
-que se sacaron fueron que Gosu, bajo GNU/Linux, implementaba el renderizado de
-fuentes mediante una biblioteca llamada Pango \marginpar{REFERENCIA}, de
+La instalación de fuentes en sistemas GNU/Linux siempre ha sido una operación
+engorrosa que ha requerido permisos de administrador. Esto, unido a que tanto en
+Windows como en Mac OS la opción de cargar fuentes desde un fichero sí estaba
+disponible, supuso un grave problema en el planteamiento del proyecto.
+
+Inicialmente se investigaron las razones de esta limitación. Al ser un proyecto
+libre y abierto, revisamos el código de Gosu, concretamente la implementación
+de la clase \texttt{Gosu::Font} previamente citada, de la que dependían todas
+las otras funciones relacionadas con fuentes.
+
+Las conclusiones que se sacaron fueron que Gosu, bajo GNU/Linux, implementaba el
+renderizado de fuentes mediante una biblioteca llamada Pango~\cite{Pango}, de
 bastante bajo nivel, y que por diseño está limitada al uso de fuentes de
-sistema, ya que su uso se orienta a herramientas del sistema operativo, no a
-aplicativos de terceros. 
+sistema, ya que se orienta a herramientas del sistema operativo, no a
+aplicativos de terceros.
 
-Así pues, era necesario buscar una alternativa. Basándonos en la experiencia
-previa con otras bibliotecas de desarrollo, se pensó en \texttt{SDL\_ttf}, una de
-las partes de la conocida biblioteca SDL \marginpar{REFERENCIA}, ampliamente
-utilizada en el desarrollo de aplicaciones multimedia en toda clases de
-sistemas.
+Así pues, era necesario buscar una alternativa. En numerosos proyectos
+previos~\cite{robinson} se había utilizado la biblioteca
+\textbf{SDL}~\cite{refsdl}, un framework multimedia muy utilizado en
+aplicaciones de audio, vídeo y juegos. Uno de los subsistemas que proporciona
+SDL es \textbf{SDL\_ttf}~\cite{refsdlttf}, una biblioteca para el renderizado de
+fuentes basadas en ficheros \texttt{truetype}. Esto, unido a que la propia SDL
+ya era una dependencia de Gosu, propició que se iniciara la implementación de
+una solución basada en este medio.
+
+\subsection{Funcionamiento de \texttt{SDL\_ttf}}
+
+Para comprender cómo se implementó la solución al problema citado, el primer
+paso es entender cómo funciona la biblioteca \texttt{SDL\_ttf} para poder ver
+cómo se corresponde luego con Gosu.
+
+\subsubsection{Tipos de datos utilizados}
+
+En común con cualquier otra parte del conjunto de partes de SDL, SDL\_ttf se basa
+en un tipo de datos conocido como \textit{superficies}
+(\texttt{SDL\_Surface}). Estas superficies representan mapas de bits cargados en
+memoria, y se utilizan para guardar las imágenes que se cargan de los ficheros,
+así como para representar otros destinos gráficos intermedios, como la propia
+pantalla.
+
+Para representar el color del texto que vamos a pintar, SDL\_ttf utiliza la
+estructura \texttt{SDL\_Color}, que guardará los valores de color de 8 bits para
+cada uno de los canales.
+
+Además, SDL\_ttf define un tipo de datos propio, de nombre \texttt{TTF\_Font}, que
+representa una fuente cargada a partir de un fichero, con un tamaño determinado.
+
+\subsubsection{Funciones utilizadas}
+
+SDL\_ttf precisa de una \textbf{inicialización} previa, que se lleva a cabo mediante la
+llamada a \texttt{TTF\_Init()}. Igualmente, liberaremos los recursos ocupados
+mediante \texttt{TTF\_Quit()}.
+
+Para \textbf{cargar la fuente} a partir de los ficheros TrueType (con extensión
+\texttt{.ttf}), se utiliza la función \texttt{TTF\_OpenFont(const char * fichero,
+  int tamaño)}. Esta función recibe una cadena con el nombre del fichero y el
+tamaño de letra a utilizar, y devuelve un puntero al tipo \texttt{TTF\_Font}.
+
+\begin{minted}{cpp}
+  TTF_Font * fuente = TTF_OpenFont("fichero_fuente.ttf", 25);
+\end{minted}
+
+Una vez cargada la fuente de nuestro interés, tendremos que \textbf{generar una
+  superficie} con el texto que queramos. Para ello, SDL\_ttf ofrece una gran
+variedad de funciones, según el suavizado del texto y el tipo de caracteres que
+estemos utilizando. En nuestro caso, queríamos que la superficie tuviera fondo
+transparente, así como usar caracteres en UTF-8\cite{refutf8}, por lo que la
+función que se eligió fue 
+\begin{minted}{cpp}
+  SDL_Surface * TTF_RenderUTF8_Blended (TTF_Font * fuente,
+                                        const char * texto,
+                                        SDL_Color color);
+\end{minted}
+
+Esta función devolverá un puntero a una superficie que se integrará
+(\textit{blends}) sobre cualquier imagen, al tener el fondo transparente.
+
+
+\subsection{Representación de imágenes en Gosu}
+
+Una vez conocidos los tipos de datos y funciones que ofrece SDL\_ttf, es
+necesario conocer cuáles son los tipos de datos equivalentes en Gosu, de forma
+que pueda haber una \textit{conversión} de un tipo a otro.
+
+\subsubsection{Mapas de bits de bajo nivel: Gosu::Bitmap}
+La clase \texttt{Gosu::Bitmap} representa, en Gosu, un mapa de bits de bajo
+nivel. Éste no contará con aceleración por hardware ni podrá mostrarse en
+pantalla, pero podremos acceder directamente a los datos de los píxeles y
+trabajar con ellos.
+
+\texttt{Gosu::Bitmap} nos servirá de paso intermedio entre la superficie de SDL y las
+imágenes habituales de Gosu.
+
+\subsubsection{Imágenes de uso común: Gosu::Image}
+En Gosu las imágenes y assets gráficos se manejan habitualmente con la clase
+\texttt{Gosu::Image}, que representa un contenedor de más alto nivel que
+\texttt{Gosu::Bitmap}, además de estar optimizado y poder pintarse en pantalla.
+
+Podremos crear un objeto de esta clase a partir de un \texttt{Gosu::Bitmap}, consiguiendo
+finalmente un objeto \textit{pintable}.
+
+
+\subsection{Implementación final}
+
+Conocidas las representaciones internas de ambas bibliotecas, la implementación
+final fue una clase con una interfaz similar a \texttt{Gosu::Font}, de modo que
+la transición pudiera ser lo más transparente posible, de nombre
+\texttt{CustomFont}.
+
+En el constructor de la se inicializa (de forma única, mediante una variable
+estática) el subsistema \texttt{SDL\_ttf} utilizando la llamada
+\texttt{TTF\_Init()}. Después, se carga la fuente indicada por los parámetros
+del constructor. En ambos casos, se comprueba que el procedimiento ha sido
+correcto, lanzando una excepción en caso contrario.
+
+\begin{minted}{cpp}
+static int initResult = TTF_Init();
+if (initResult < 0)
+   throw std::runtime_error("Could not initialize SDL_TTF");
+
+font = TTF_OpenFont(fontName, fontHeight);
+if (!font)
+   throw std::runtime_error("Could not open TTF file " + fontName);
+
+\end{minted}
+
+Seguidamente, en el método de pintado (\texttt{draw}) se genera la superficie
+con el texto que se indique, pasando el contenido de los píxeles a un contenedor
+\texttt{Gosu::Bitmap} y finalmente generando un objeto \texttt{Gosu::Image} a
+partir del mismo.
+
+\begin{minted}{cpp}
+SDL_Surface * surf = TTF_RenderUTF8_Blended(font, text, color);
+if (!surface)
+   throw std::runtime_error("Could not generate the surface");
+
+Gosu::Bitmap temp;
+temp.resize(surf.width(), surf.height());
+std::memcpy(temp.data(), surf.data(), temp.width() * temp.height() * 4);
+
+Gosu::Image image (graphic_target, temp);
+image.draw(x, y, z);
+\end{minted}
+
+\subsection{Recepción}
+
+Una vez contamos con una implementación funcional de la clase, se presentó el
+parche en el foro oficial de Gosu~\cite{foroGosu}. En poco tiempo, el
+desarrollador principal verificó el código propuesto e hizo una adaptación al
+propio código original de la clase \texttt{Gosu::Font} para añadir la
+propuesta. 
+
+Por ende, desde la versión \textbf{RELLÉNAME}, el \textit{parche} forma parte
+oficial de Gosu, y así se hace indicar en el fichero \texttt{TextUnix.cpp} de la
+distribución oficial:
+
+\begin{minted}{cpp}
+// [...]
+
+// Used for custom TTF files
+// Adapted from customFont class by Jose Tomas Tocino Garcia (TheOm3ga)
+class SDLTTFRenderer : boost::noncopyable
+
+// [...]
+\end{minted}
+
+Así pues, dado que la solucíon propuesta se integró en la distribución oficial,
+nos deshicimos de la clase \texttt{customFont} a favor de la actualización de
+\texttt{Gosu::Font}, dado que al fin y al cabo el funcionamiento interno es
+el mismo.
+
+\section{Animaciones dinámicas}
+
+Una de las decisiones iniciales de diseño fue la de hacer la interfaz gráfica de
+usuario lo más atractiva posible, intentando utilizar gráficos amigables y, en
+la medida de lo posible, animaciones y efectos dinámicos.
+
+Con esto, se tornaba necesario crear un sistema de animaciones lo más versátil
+posible, de forma que dotar a los elementos de la interfaz de movimiento fuera
+un proceso sencillo. 
+
+\subsection{Antecedentes: animaciones en Flash}
+Para evitar reinventar la rueda y tener una base estable con la que empezar, se
+investigaron sistemas de animaciones ya existentes, evaluando diferentes
+enfoques y aproximaciones, sobre todo en sistemas altamente relacionados con las
+animaciones. En particular, nos centramos en Adobe Flash (\textit{anteriormente
+  Macromedia Flash}) y la gran cantidad de código disponible relacionado con la
+generación de animaciones dinámicas.
+
+Especialmente interesante es el trabajo de Robert Penner, un programador
+americano muy interesado en la programación matemática, que ideó un sistema de
+animaciones dinámicas para ActionScript~\cite{actionscript} 1.0 y 2.0. Penner,
+en su libro \textit{Programming Macromedia Flash MX}~\cite{libropenner} incluyó
+un capítulo llamado \textit{Motion, Tweening and Easing} (que dada su
+popularidad acabó ofreciendo de forma gratuita~\cite{capitulopenner}), en el que
+por primera vez presentó y explicó con detalle su sistema de animaciones.
+
+En el citado capítulo se desgranan las animaciones como ecuaciones dependientes
+del tiempo y de las posiciones inicial y final, de forma que fuera fácil generar
+una serie de funciones para determinar la posición de un objeto en cada
+instante. Una vez presentados los conceptos iniciales, Penner desvela una serie
+de ecuaciones de movimiento (que acabaron siendo bautizadas y mundialmente
+conocidas como las \textit{Penner's Easing Equations}). Estas ecuaciones modelan
+un gran número de movimientos, en función de cómo varía la posición respecto del
+tiempo (y perceptualmente la aceleración/deceleración del objeto animado).
+
+Además, por cada tipo de ecuación, Robert Penner generó tres tipos de
+movimientos: de aceleración (\textit{ease in}), de deceleración o frenada
+(\textit{ease out}), y de aceleración-deceleración (\textit{ease in-out}). Con
+esto, quedaban cubiertas la práctica totalidad de los tipos de animaciones posibles.
+
+Así, un ejemplo de ecuación podrían ser las cúbicas, que hacen que la posición
+del movimiento se rija por una función cúbica del tiempo. Si graficamos la
+relación del tiempo por la posición, ambos de 0 a 1, el resultado sería el
+siguiente:
+
+{\Large\textbf{GRÁFICA x*x*x}}
+
+Tras estudiar bien el código original, se decidió hacer una adaptación en C++,
+de forma que se adaptara a las necesidades del proyecto.
+
+\subsection{Adaptación en C++}
+El primer paso fue portar las ecuaciones propiamente dichas -- esto es, las
+funciones que generaban las posiciones intermedias. Dado que el lenguaje
+original, ActionScript, es un derivado de EcmaScript~\cite{Ecmascript}, la
+sintaxis es prácticamente idéntica a C++ en cuanto a asignaciones y operadores
+se refiere, por lo que este paso fue prácticamente transparente.
+
+Seguidamente, se ideó un \textit{wrapper} para estas ecuaciones, de forma que
+fuera un objeto independiente el que se encargara de calcular las posiciones
+intermedias de la animación, en lugar de tener que hacerlo los propios objetos
+animados. Para ello, se creó la clase \texttt{Animación}, con las siguientes
+características:
+\begin{itemize}
+\item Para cada instancia, permite animar un número arbitrario de valores, de
+  forma que con un solo objeto \textit{Animacion} podamos animar la posición
+  horizontal y vertical de un objeto, por ejemplo.
+\item Permite elegir entre tres tipos de movimiento (\textit{ease in},
+  \textit{ease out} y \textit{ease in-out}) para tres ecuaciones distintas
+  (cuadrática, cúbica y cuártica), además de una ecuación especial con
+  movimiento de ida y vuelta, y, lógicamente, movimiento uniforme. En total, 11
+  posibles movimientos.
+\item Capacidad para atrasar las animaciones, de forma que sea sencillo generar
+  animaciones escalonadas de varios elementos sin tener que recurrir a
+  \textit{callbacks}.
+\end{itemize}
+
+\subsection{Ejemplo de uso}
+
+Supongamos que tenemos una pelota que queremos mover diagonalmente con un
+movimiento de aceleración, desde la posición 0,0 hasta la posición 150, 300, en
+30 pasos. Además, tenemos un cuadrado que habrá de moverse de la posición 0, 150
+hasta la posición 150,150 cuando la pelota vaya por la mitad de su camino, y que
+llegue a la vez que aquella.
+
+Para cumplir este objetivo, crearemos dos objetos \texttt{Animación}, uno para
+la pelota y otro para el cuadrado. En el caso de la pelota estaremos animando
+dos parámetros, la posición horizontal y la vertical, y la duración será de 30
+pasos. El tipo de movimiento será de aceleración, y la ecuación que elegiremos
+será la cuadrática. Al no indicarse nada, no habrá espera inicial.
+
+\begin{minted}{cpp}
+// Creamos la instancia
+Animacion animPelota (2, 30, Animacion::tEaseInQuad, 0);
+
+// Asignamos la pos inicial y final de la coordenada horizontal
+animPelota.set(0, 0, 150);  
+
+// Coordenada vertical
+animPelota.set(1, 0, 300);
+\end{minted}
+
+En el caso del cuadrado el movimiento sólo será horizontal, por lo que
+animaremos un parámetro. Además, el movimiento comenzará cuando la anterior
+animación vaya por la mitad (esto es, en el paso 15), y deberá llegar a la vez,
+por lo que la duración será de 15 pasos.
+
+\begin{minted}{cpp}
+// Creamos la instancia de la clase
+Animacion animCuadrado (1, 15, Animacion::tEaseInQuad, 15);
+
+// Asignamos las posiciones inicial y final
+animCuadrado.set(0, 0, 150);
+\end{minted}
+
+Una vez inicializados los objetos \texttt{Animación}, tendremos que hacer que,
+en cada iteración del bucle de juego, las animaciones se actualicen. Para ello,
+la clase \texttt{Animación} dispone de un método \texttt{update}. Además,
+haremos uso del método \texttt{get} para obtener las posiciones intermedias y
+así actualizar el objeto
+
+\begin{minted}{cpp}
+// ...
+// En la fase update del bucle de juego
+animPelota.update();
+animCuadrado.update();
+
+imagenPelota -> draw(animPelota.get(0), animPelota.get(1));
+imagenCuadrado -> draw(animCuadrado.get(0), 150);
+\end{minted}
+
+Con esto, ya estará lista la animación de ambos objetos. De cualquier modo, la
+clase \texttt{Animación} provee otros métodos que pueden resultar de interés,
+como el método \texttt{finished}, que comprueba si las animaciones han
+concluído. 
+
+Además, las ecuaciones de los movimientos han sido implementadas en forma de
+funciones estáticas, por lo que es posible acceder a las mismas para hacer
+cálculos puntuales si fuera necesario. En tal caso, hay que tener en cuenta que
+todas las ecuaciones reciben cuatro parámetros, estos son, en orden:
+
+\begin{itemize}
+\item Tiempo transcurrido.
+\item Valor inicial del atributo a animar.
+\item \textit{Delta} del atributo en la animación (final - inicial).
+\item Duración de la animación en pasos.
+\end{itemize}
+
+Con esto, será posible controlar las animaciones de forma independiente, sin
+necesidad de crear una instancia de la clase.
+
+

@@ -1,0 +1,414 @@
+%\lstset{style=C++}
+
+%\setlength{\parskip}{0.3cm plus 3mm}
+\setlength{\parindent}{0.3cm}
+\section{Antecedentes}
+Durante el desarrolllo del proyecto surgió la necesidad de preparar el proyecto
+para su traducción. Inicialmente se optó por utilizar un sistema propio de
+traducción, basado en un script en Python y en una pequeña clase que generaba un
+diccionario según el idioma elegido. Sin embargo, esta opción resultó
+ineficiente y, sobre todo, alejada del resto de soluciones estándar a la hora de
+traducción de proyectos. 
+
+Por ello, se decidió investigar sobre las tecnologías de traducción más
+utilizadas en el panorama del software libre, y finalmente se optó por \textbf{GNU
+Gettext}~\cite{refgettext}. Para afianzar los conocimientos y facilitar el aprendizaje a 
+otros desarrolladores, se editó el presente documento.
+
+La primera edición del manual se presentó en el I
+Hackathón~\cite{refhackathonUCA} organizado por la Oficina de Software Libre y
+Conocimiento Abierto de la Universidad de Cádiz, acompañada de un pequeño taller
+con una demostración en vivo. Se encuentra disponible para su descarga en el
+repositorio Rodin de la UCA~\cite{refmanualgettext} y se puede difundir
+bajo los términos de la licencia \textit{Creative Commons - Reconocimiento,
+  Compartir igual 3.0}~\cite{commonsbysa}
+
+\section{Introducción}
+
+\textbf{GNU Gettext} es un conjunto de herramientas libres de
+internacionalización que permite traducir nuestros proyectos de una manera
+sencilla. Es el sistema de i18n\footnote{\textit{``i18n''} es una alternativa a
+  escribir \textit{internacionalización}, el 18 simboliza los 18 caracteres
+  entre la \textit{i} inicial y la \textit{n} final} más utilizado, pudiendo
+encontrarse en una gran cantidad de proyectos.
+
+Las ventajas de usar un sistema como \textit{Gettext} en lugar del
+típico menú de elección de idiomas dentro de la aplicación son
+muchas. Por ejemplo, con Gettext el ajuste del idioma es transparente
+al usuario. Además, ofrece todas las ventajas de usar un sistema
+establecido y prácticamente estándar.
+
+\subsection{Internacionalización vs localización}
+
+La \textit{internacionalización} de un proyecto consiste en prepararlo de forma
+que sea capaz de trabajar y presentarse en una multitud de idiomas y
+configuraciones regionales. Por otro lado, la \textit{localización} trata de
+coger un programa internacionalizado y darle la suficiente información para que
+se adapte al idioma y configuración del usuario actual.
+
+\subsection{El paquete de herramientas de GNU Gettext}
+
+GNU Gettext está compuesto de un conjunto de elementos que forman un
+\textit{framework} de trabajo común. En particular, esto incluye:
+\begin{itemize}
+\item Una serie de directivas y convenciones a la hora de escribir el código
+  fuente de nuestro proyecto.
+\item Un esquema estándar de organización de ficheros y directorios para guardar
+  los ficheros relacionados con la traducción.
+\item Una biblioteca que provee funciones relacionadas con las cadenas
+  traducidas.
+\item Algunas utilidades para la creación y edición de los ficheros con las
+  cadenas de traducción.
+\item Un modo de edición para \textbf{Emacs}.
+\end{itemize}
+
+\section{Pasos en el proceso de traducción}
+
+A la hora de adaptar un proyecto para internacionalizarlo hay que seguir una
+serie de pasos bastante mecánicos que se repiten cada vez que añadamos o
+modifiquemos las cadenas de nuestro proyecto.
+
+\subsection{Adaptación del código fuente}
+
+Primero, necesitamos adaptar el código de nuestro programa, marcando de alguna
+forma las cadenas que queremos que queden traducidas. Podría pensarse que este
+paso podría ser automático, pero hay cadenas que a buen seguro no queremos que
+sean traducidas, como por ejemplo parámetros de funciones o mensajes con campos
+variables, como los que se utilizan con la función \texttt{printf}.
+
+Para ello, añadiremos las siguientes líneas al inicio de nuestro fichero fuente:
+\begin{minted}{cpp}
+#include <libintl.h>
+#include <locale.h>
+#define _(x) gettext(x)
+\end{minted}
+
+La biblioteca \texttt{libintl} será la encargada de la internacionalización de
+nuestro proyecto, siendo de especial interés su función \texttt{char *
+  \textbf{gettext} (const char *)}, a la que le pasaremos las cadenas originales
+y nos devolverá la cadena traducida dependiendo del \textit{locale} del
+sistema. Para hacer menos evidente su uso, utilizamos la macro definida arriba.
+
+\begin{nota} Habitualmente, es una buena práctica en el desarrollo de un
+  proyecto libre el usar el inglés como idioma por defecto para los mensajes de
+  interacción con el usuario. Gettext supone que se usará el inglés como
+  lenguaje principal, por lo que nos acogerémos a esta práctica.
+\end{nota}
+
+El siguiente paso será cambiar todas las cadenas que queramos traducir en
+nuestro proyecto, de forma que en realidad sean siempre llamadas a la función
+\texttt{gettext}, o preferiblemente a su macro \texttt{\_()}.
+\begin{minted}{cpp}
+  string mensaje = "Hello world";
+\end{minted}
+Pasará a ser:
+\begin{minted}{cpp}
+  string mensaje = _("Hello world");
+\end{minted}
+
+\medskip
+
+Algo a tener en cuenta es que es necesario elegir un nombre para el
+\textit{dominio} de la internacionalización, que por regla general coincidirá
+con el proyecto. En nuestro ejemplo, este nombre será \textbf{oflute}.
+
+\medskip
+
+En las primeras líneas de nuestro proyecto añadiremos las siguientes
+instrucciones de inicialización:
+
+\begin{minted}{cpp}
+bind_textdomain_codeset ("oflute", "UTF-8");
+setlocale(LC_ALL, "");
+bindtextdomain("oflute", "lang" );
+textdomain("oflute");
+\end{minted}
+
+Eso le indicará a la biblioteca de i18n cuál es el dominio de la
+traducción, así como el directorio de las traducciones
+(\texttt{lang}), y pondrá el locale por defecto.
+
+\medskip
+
+Así pues, un posible fichero \texttt{main.cpp }de ejemplo podría ser:
+
+\begin{minted}{cpp}
+#include <iostream>
+#include <libintl.h>
+#include <locale.h>
+
+#define _(x) gettext(x)
+
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+    bind_textdomain_codeset ("oflute", "UTF-8");
+    setlocale(LC_ALL, "");
+    bindtextdomain("oflute", "lang" );
+    textdomain("oflute");
+
+    cout << _("Hello world") << endl;
+    return 0;
+}
+
+\end{minted}
+
+\subsection{Generando los ficheros de traducción}
+
+Una vez que tengamos todas las cadenas a traducir apropiadamente
+adaptadas como se ha comentado antes, pasaremos a crear los ficheros
+con los que realizaremos las traducciones. Hay varios tipos de estos
+ficheros:
+
+\begin{description}
+\item[.POT] \textit{(Portable Object Template)} Es el primer fichero
+  que se genera, y contiene todas las cadenas extraídas del código
+  fuente, que servirá luego como plantilla para los ficheros
+  \texttt{.po}.
+
+\item[.PO] \textit{(Portable Object)} Son los ficheros principales de
+  traducción, los que se editan con las cadenas traducidas. Hay uno
+  por cada \textit{locale} que queramos incluir.
+
+\item[.MO] \textit{(Machine Object)} Son la versión binaria de los
+  ficheros \texttt{.po}, los que nuestra aplicación usará para leer
+  las cadenas traducidas.
+\end{description}
+
+\medskip
+
+La forma de organizar los diferentes ficheros está bastante
+estandarizada, de forma que lo más recomendado es seguirla -- de no
+hacerlo podemos tener problemas a la hora de que el programa encuentre
+los ficheros de traducción.
+
+\begin{itemize}
+\item En la raíz de nuestro proyecto tendremos una carpeta \textbf{po}
+  que albergará el fichero de plantilla \texttt{.pot}, en nuestro caso
+  \texttt{oflute.pot}, así como los ficheros \texttt{.po} de cada
+  \textit{locale}: \texttt{en.po}, \texttt{es.po}, etc.
+\item Además, también en la raíz tendremos otra carpeta llamada
+  \textbf{lang}. Dentro de ella habrá una carpeta por cada fichero
+  \texttt{.po} en la carpeta antes mencionada, y dentro de cada una de
+  ellas, una carpeta \texttt{LC\_MESSAGES}, que albergará el fichero
+  \texttt{.mo} correspondiente, todos con el nombre del dominio, en
+  nuestro caso \texttt{oflute.mo}
+\end{itemize}
+
+La estructura de directorios que obtendremos será algo así:
+
+\begin{verbatim}
+lang
+|-- en
+|   `-- LC_MESSAGES
+|       `-- oflute.mo
+`-- es
+    `-- LC_MESSAGES
+        `-- oflute.mo
+po
+|-- en.po
+|-- es.po
+`-- oflute.pot
+
+\end{verbatim}
+
+\subsubsection{Creando la plantilla .pot}
+
+Así pues, el primer paso será generar el fichero \texttt{.pot}. Para ello
+utilizaremos la utilidad \texttt{xgettext}. Así pues, creamos los directorios
+antes comentados y usamos la siguiente expresión:
+
+\begin{minted}{bash}
+xgettext \
+   --package-name oflute \
+   --package-version 0.1 \
+   --default-domain oflute \
+   --output po/oflute.pot \
+   --from-code=utf-8 \
+   --copyright-holder="Tu nombre" \
+   --msgid-bugs-address="tu@mail.com" \
+   -s -k_ -C main.cpp
+\end{minted}
+
+La mayoría de las opciones son autoexplicativas, pero es interesante
+conocer el significado de las que no lo son:
+
+\begin{description}
+\item[-s] Salida ordenada, ordena las cadenas en el fichero de
+  plantilla, útil cuando tenemos muchos ficheros fuente y queremos
+  tener las cadenas organizadas.
+\item[-k\_] Indica que también busque cadenas marcadas con
+  \texttt{\_(cadena)} además de \texttt{gettext(cadena)}.
+\item[-C] Indica que el lenguaje es C++.
+\end{description}
+
+Con esto tendremos el fichero en \texttt{po/oflute.pot}. Es necesario editarlo y
+cambiar el valor de \texttt{CHARSET} (en la línea \texttt{Content-Type: ...})
+por \texttt{UTF-8}, \texttt{xgettext} aún no ofrece ninguna opción para
+autorrellenar este campo.
+
+\subsubsection{Creando los ficheros de traducción .po}
+
+El siguiente paso será el de crear un fichero \texttt{.po} para cada uno de los
+idiomas a los que queramos traducir nuestro proyecto. Para ello utilizaremos la
+utilidad \texttt{msginit} de la siguiente manera, suponiendo los idiomas inglés
+y español:
+
+\begin{minted}{bash}
+msginit -l es -o po/es.po -i po/oflute.pot
+msginit -l en -o po/en.po -i po/oflute.pot
+\end{minted}
+
+Al ejecutar los comandos nos pedirán nuestro email, de forma que sea posible
+recibir feedback sobre la traducción que hagamos.
+
+\medskip
+
+Si le echamos un vistazo al fichero \texttt{po/es.po}, después de todas las
+cabeceras iniciales, nos encontraremos con las cadenas de nuestro programa de la
+siguiente manera:
+
+\begin{minted}{po}
+#: main.cpp:15
+msgid "Hello world"
+msgstr ""
+\end{minted}
+
+El formato es muy sencillo: la primera línea indica la situación de la
+cadena en el código fuente, la segunda es la cadena original, y la
+tercera es la cadena traducida. Para el fichero en español, quedaría:
+
+\begin{minted}{po}
+#: main.cpp:15
+msgid "Hello world"
+msgstr "Hola mundo"
+\end{minted}
+
+Cabe notar que, como el lenguaje original es el inglés, podemos dejar el fichero
+\texttt{en.po} intacto, ya que por defecto utilizará las cadenas originales.
+
+\subsubsection{Creando los binarios .mo}
+
+Una vez terminado el apartado anterior, nos queda el último paso, que es generar
+los ficheros binarios con las traducciones. Para ello, utilizaremos la utilidad
+\texttt{msgfmt}, que convertirá los \texttt{.po} en \texttt{.mo}, de la
+siguiente manera:
+
+\begin{minted}{bash}
+mkdir lang/{es,en}/LC_MESSAGES
+msgfmt -c -v -o lang/es/LC_MESSAGES/oflute.mo po/es.po 
+msgfmt -c -v -o lang/en/LC_MESSAGES/oflute.mo po/en.po
+\end{minted}
+
+La opción \textbf{-c} indica que se hagan chequeos ante errores, y la opción
+\textbf{-v} muestra una salida extendida (\textit{verbose}). Con esto, ya
+tendremos todos los ficheros necesarios.
+
+\subsection{Compilación y ejecución}
+
+Para compilar nuestro proyecto, si utlizamos GCC no será necesario enlazar a
+ninguna librería especial, puesto que \texttt{libintl} ya viene en la biblioteca
+estándar. Así pues, solo tendremos que compilar de la manera habitual.
+
+\begin{minted}{bash}
+g++ -o oflute main.cpp  
+\end{minted}
+
+Tras esto, podremos probar nuestro programa:
+\begin{minted}{bash}
+jose@jose-desktop:~$ ./oflute 
+Hola mundo
+jose@jose-desktop:~$ LANG=en_UK.utf8 ./oflute 
+Hello world
+\end{minted}
+
+\subsection{Mantenimiento}
+
+Supongamos ahora que añadimos una línea más a nuestro código, en la que se
+utiliza una cadena nueva. Si seguimos el proceso anterior perderemos todas las
+traducciones que ya teníamos, ya que los ficheros se crearían de cero. Para
+evitar esto, GNU Gettext ofrece una utilidad llamada \texttt{msgmerge} que nos
+permitirá actualizar los ficheros \texttt{.po} con las nuevas cadenas
+manteniendo las traducciones ya realizadas.
+
+\medskip
+
+Así pues, supongamos que añadimos esta línea al final fichero:
+
+\begin{minted}{cpp}
+cout << _("Bye bye, dear user") << endl;
+\end{minted}
+
+Generamos el fichero de plantilla \texttt{.pot} igual que lo hicimos antes, pero
+a la hora de generar los ficheros \texttt{.po} utilizaremos el nuevo comando.
+
+\begin{minted}{bash}
+xgettext --package-name oflute --package-version 0.1 \
+--default-domain oflute --output po/oflute.pot --from-code=utf-8 \
+--copyright-holder="Tu nombre" --msgid-bugs-address="tu@mail.com" \
+-s -k_ -C main.cpp
+
+msgmerge -s -U po/es.po po/oflute.pot
+msgmerge -s -U po/en.po po/oflute.pot 
+\end{minted}
+
+La opción \textbf{-s} genera una salida ordenada, y \textbf{-U} indica que la
+operación es de actualización (\textit{update}). Con esto, ya tendremos el
+fichero \texttt{.po} con las nuevas cadenas añadidas y las cadenas antiguas sin
+cambios, podremos proceder a añadir las traducciones y generar los ficheros
+\texttt{.mo} tal y como se ha explicado previamente.
+
+\begin{minted}{bash}
+msgfmt -c -v -o lang/es/LC_MESSAGES/oflute.mo po/es.po 
+msgfmt -c -v -o lang/en/LC_MESSAGES/oflute.mo po/en.po
+
+./oflute 
+Hola mundo
+Nos vemos, querido usuario
+
+LANG=en_UK ./oflute 
+Hello world
+Bye bye, dear user
+\end{minted}
+
+\section{Addendum}
+
+\subsection{PO-mode en Emacs}
+
+Como se comentó al principio, existe un modo de Emacs~\cite{refemacs} para la
+edición eficiente de archivos \texttt{.po}. Puede instalarse manualmente de la
+manera habitual o en sistemas basados en paquetería Debian~\cite{refdebian} con
+el siguiente comando:
+
+\begin{minted}{bash}
+sudo apt-get install gettext-el
+\end{minted}
+
+Una vez hecho esto, al abrir un fichero \texttt{.po} en Emacs se activará el
+\textit{modo PO} (podemos forzarlo con \texttt{M-x po-mode}). Hay gran cantidad
+de comandos para editar los ficheros PO, pero los más útiles son los siguientes:
+
+\begin{itemize}
+\item Con \textbf{n} y \textbf{p} iremos al siguiente o anterior mensaje de
+  traducción.
+\item Para saltar entre los mensajes traducidos usaremos \textbf{t} y
+  \textbf{T}. Para los no traducidos, \textbf{u} y \textbf{U}.
+\item Para editar la traducción, pulsamos \textbf{Intro}, que abrirá un marco
+  con el mensaje a editar. Tras modificarlo, podemos confirmar los cambios con
+  \textbf{C-c C-c} o cancelarlos con \textbf{C-c C-k}
+\item Podemos acceder a la ayuda en cualquier momento pulsando \textbf{h}.
+\end{itemize}
+
+Una vez acostumbrados, la edición de estos ficheros se hará mucho más liviana y
+rápida. Existen, de cualquier modo, editores íntegramente dedicados a la edición
+de ficheros \texttt{.po}.
+
+\subsection{Referencia}
+Para ampliar conocimientos sobre GNU Gettext, lo mejor es dirigirse a la
+referencia oficial \cite{refrefgettext} que, aunque bastante extensa, resulta
+muy interesante y amena de leer, explicando toda clase de casos especiales de
+traducción, como aquellos en los que aparecen cadenas de formato relacionadas
+con sentencias al estilo de \texttt{printf} y otros casos particulares.
+
+

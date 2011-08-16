@@ -14,6 +14,9 @@ pdf-bib:
 pdf:
 	$(PDF) $(DOC) && $(PDF) $(DOC)
 
+single:
+	$(PDF) $(DOC)
+
 latex-bib: 
 	$(LATEX) $(DOC) && $(BIB) $(NOM) | make latex
 
