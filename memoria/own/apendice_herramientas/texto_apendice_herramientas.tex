@@ -31,15 +31,15 @@ usuarios cada vez mayor, en parte gracias a su relativa popularidad entre los
 desarrolladores indie y en los eventos de programación rápida de videojuegos.
 
 \subsection{PulseAudio}
-\textbf{PulseAudio} (mencionado previamente en la sección \ref{sec:pulseaudio1})
-es un servidor de sonido multiplataforma, muy popular en distribuciones
-GNU/Linux actuales. Se decidió su uso por lo intuitiva y sencilla de utilizar
-que resultaba su API, así como su estabilidad, en comparaciones con otras
-opciones previamente probadas.
+\textbf{PulseAudio}~\cite{pulseaudio} (mencionado previamente en la sección
+\ref{sec:pulseaudio1}) es un servidor de sonido multiplataforma, muy popular en
+distribuciones GNU/Linux actuales. Se decidió su uso por lo intuitiva y sencilla
+de utilizar que resultaba su API, así como su estabilidad, en comparaciones con
+otras opciones previamente probadas.
 
 \subsection{GNU Gettext}
 
-\textbf{GNU Gettext} es un conjunto de herramientas de internacionalización de
+\textbf{GNU Gettext}~\cite{refgettext} es un conjunto de herramientas de internacionalización de
 proyectos muy sencilla y popular. Se utilizó porque es la solución más eficaz y
 aceptada a la hora de traducir un proyecto. Se puede encontrar un manual
 introductorio en el apéndice \textit{\nameref{sec:gettext}}.
@@ -115,9 +115,10 @@ páginas wiki, que permite gestionar documentación online utilizando una sintax
 sencilla y potente.
 
 \subsection{Doxygen}
-\textbf{Doxygen} es una herramienta de generación automática de documentación de
-código fuente. Basándose en unos comentarios con una sintaxis especial, Doxygen
-genera documentación en un gran número de formatos: HTML, PDF, RTF, \LaTeX...
+\textbf{Doxygen}~\cite{doxygen} es una herramienta de generación automática de
+documentación de código fuente. Basándose en unos comentarios con una sintaxis
+especial, Doxygen genera documentación en un gran número de formatos: HTML, PDF,
+RTF, \LaTeX...
 
 Esta herramienta se utilizó para generar toda la documentación del código del
 proyecto en formato HTML.
@@ -126,7 +127,7 @@ proyecto en formato HTML.
 \section{Herramientas de diseño y diagramas}
 
 \subsection{Adobe Photoshop}
-\textbf{Adobe Photoshop} es la herramienta de edición gráfica de mapa de bits
+\textbf{Adobe Photoshop}~\cite{photoshop} es la herramienta de edición gráfica de mapa de bits
 más popular y utilizada en el mundo. Su longeva historia y profuso desarrollo ha
 hecho que se convierta en la herramienta estándar a la hora de trabajar con
 imágenes no vectoriales.
@@ -137,7 +138,7 @@ diseñadas con esta herramienta, obteniendo un apartado gráfico atractivo y
 minimalista.
 
 \subsection{Inkscape}
-\textbf{Inkscape} es una herramienta libre de edición de gráficos vectoriales. A
+\textbf{Inkscape}~\cite{inkscape} es una herramienta libre de edición de gráficos vectoriales. A
 diferencia de Adobe Photoshop, Inkscape trabaja con formas definidas
 matemáticamente, que es posible escalar y distorsionar sin causar pérdida de
 datos. Esto hace que sea la herramienta perfecta para trabajar con logotipos y
@@ -147,7 +148,7 @@ Esta aplicación ayudó al diseño del logotipo oficial de oFlute, así como al
 ajuste de ciertos diagramas pertenecientes a la documentación.
 
 \subsection{Dia}
-\textbf{Dia} es un editor de diagramas libre, parte de la suite ofimática de
+\textbf{Dia}~\cite{dia} es un editor de diagramas libre, parte de la suite ofimática de
 GNOME. Tiene un diseño modular que le permite abordar una gran variedad de
 diagramas distintos, desde diagramas de flujo hasta modelos entidad-relación,
 UML, etcétera.
@@ -157,7 +158,7 @@ presentes en esta memoria.
 
 \subsection{BoUML}
 
-\textbf{BOUML} es una herramienta libre para diseñar diagramas siguiendo la
+\textbf{BOUML}~\cite{bouml} es una herramienta libre para diseñar diagramas siguiendo la
 notación UML. Cuenta con utilidades de generación automática de código a partir
 de diagramas en lenguajes C++, Java, PHP,Python e IDL. Es multiplataforma y
 permite la generación de varios tipos de diagramass: diagramas de clases, de
@@ -165,12 +166,33 @@ interacción, de secuencia, de casos de uso, etc
 
 \subsection{ImageMagick}
 
-\textbf{ImageMagick} es un conjunto de utilidades de línea de comandos para
+\textbf{ImageMagick}~\cite{imagemagick} es un conjunto de utilidades de línea de comandos para
 mostrar, editar y convertir ficheros de imagen. Resultan especialmente útil a la
 hora de procesar un gran número de imágenes de forma automática, como por
 ejemplo cuando es necesario convertir varias imágenes de un formato a otro, o
 cambiar el tamaño de numerosos ficheros.
 
+\section{Edición de textos}
 
-LaTeX
-Emacs
+\subsection{GNU Emacs}
+\textbf{GNU Emacs}~\cite{refemacs} es un potente editor multiplataforma. Su propio manual lo
+describe como \textit{``un editor extensible, personalizable, auto-documentado y
+  de tiempo real''}. Emacs es tan potente que a menudo los usuarios
+experimentados no tienen que salir de su interfaz para realizar cualquier
+operación, ya que desde el propio editor se puede, desde navegar por la red,
+hasta revisar el correo electrónico.
+
+Emacs ha sido el editor utilizado para escribir todo el código fuente del
+proyecto, así como toda la documentación en \LaTeX. Sus diversos \textit{modos}
+se ajustan a cada tipo de documento, proporcionando funciones que faciliten y
+aceleren la edición de los textos.
+
+\subsection{\LaTeX}
+\textbf{\LaTeX}~\cite{latex} es un sistema de composición de textos, orientado especialmente
+a la creación de libros, documentos científicos y técnicos que contengan
+fórmulas matemáticas. Es muy utilizado para la composición de artículos
+académicos, tesis y libros técnicos, dado que la calidad tipográfica de los
+documentos realizados con LaTeX es comparable a la de una editorial científica
+de primera línea.
+
+La presente memoria ha sido escrita y maquetada con \LaTeX.
