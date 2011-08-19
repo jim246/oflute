@@ -355,7 +355,139 @@ necesidad de crear una instancia de la clase.
 
 \section{Implementación del analizador básico}
 \label{sec:implementacion_analizador}
+Como se comentó en la planificación (\textit{\nameref{chap:calendario}}), la
+viabilidad del proyecto dependía de conseguir una implementación temprana y
+correcta del analizador de notas, pues es el núcleo de la aplicación y sin él,
+ésta no tendría ningún sentido.
+
+La implementación del analizador se dividió en dos partes. Por un lado, había
+que iniciar la captura de audio, lanzando el subsistema de sonido y empezando a
+capturar datos. Por otro lado, se tenía que hacer el análisis de los datos
+leídos para determinar qué nota se estaba tocando.
+
+\subsection{Lanzando el subsistema de audio}
+A lo largo del proyecto se han utilizado distintas bibliotecas de sonido, aunque
+en general la filosofía de todas era la misma, así que nos centraremos en los
+detalles de la que finalmente se dio por definitiva, PulseAudio. Dentro de
+PulseAudio, nos decantamos por la \textit{Simple API}~\cite{pulseaudiosimple},
+que cubría todas las necesidades del proyecto sin añadir excesiva complejidad.
+
+El principal concepto en una API de sonido de bajo o medio nivel es el flujo de
+sonido o \textit{stream}. Los flujos pueden ser de entrada, de salida o dúplex,
+y tienen una serie de características según las necesidades de la aplicación. En
+PulseAudio, al tratarse de un servidor de sonido y no de una simple biblioteca,
+exiten algunos parámetros necesarios más. Se utiliza la función
+\texttt{pa\_simple\_new}, con bastantes parámetros, entre los que se pueden
+encontrar:
+\begin{description}
+\item[Servidor] Normalmente será el servidor de sonido por defecto.
+\item[Nombre del cliente y de flujo] Identifica la aplicación (\textit{oFlute})
+  y el flujo (\textit{record}) frente al servidor de audio. Este nombre podrá
+  verse, por ejemplo, en la aplicación de control de volumen
+  (\texttt{pavucontrol}).
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{6_implementacion/imagen_pavucontrol}
+    \caption{Control de volumen, mostrando el cliente \textit{oFlute}}
+  \end{figure}
+\item[Tipo de flujo] En nuestro caso será de entrada, por lo que se utilizó la
+  macro \nohyphens{\texttt{PA\_STREAM\_RECORD}}.
+\item[Tipo de \textit{sample}] Definirá el tipo de datos que se usará para
+  representar los sonidos.
+\item[Opciones de búffering] Según busquemos rendimiento, fiabilidad, poca
+  latencia... tendremos que variar las opciones de búffering.
+\end{description}
+
+Una vez hayamos creado un flujo, que correrá en segundo plano, tendremos que
+leer los datos que arroja. Para ello, la API simple de PulseAudio provee la
+función \texttt{pa\_simple\_read}, que nos permitirá volcar en un búffer
+temporal un fragmento de audio. La elección del \textbf{tamaño del búffer} es
+otro de los valores que repercutirá enormemente en el rendimiento del sistema.
+
+Finalmente, una vez hayamos terminado de leer datos, podremos liberar el flujo
+utilizando \texttt{pa\_simple\_free}. Con esto, ya podremos abrir, leer y cerrar
+el flujo de sonido del micrófono. 
+
+\subsection{Análisis del audio capturado}
+
+La segunda parte del proceso consiste en procesar y analizar el audio capturado
+en cada momento, de forma que podamos conocer qué nota se está tocando con la
+flauta a través del micrófono.
+
+Como se ha comentado previamente, el alma del procesamiento en este caso es la
+aplicación de la \textbf{transformada rápida de Fourier}
+(\ref{sec:fourier}). Esta herramienta será capaz de descomponer los fragmentos
+de sonido en sus componentes de frecuencia. La biblioteca usada en este caso es
+KissFFT~\cite{kissfft}, que da unos resultados muy buenos en cuanto a
+rendimiento y precisión. 
+
+En el caso que nos concierne, un procesamiento básico de la señal será
+suficiente para poder discernir la nota, por lo que podremos trabajar con
+transformadas de fourier reales (no complejas). Para ello, KissFFT ofrece
+variantes de sus funciones, muy optimizadas.
+
+El primer paso es inicializar la biblioteca. KissFFT es capaz de utilizar el
+mismo búffer entre distintas iteraciones de un cálculo, por lo que ahorramos el
+tiempo de guardar y liberar memoria. Esta inicialización se guarda en un objeto
+de configuración.
+
+\begin{minted}{cpp}
+  kiss_fftr_cfg configFFT = kiss_fftr_alloc (BUFSIZE, 0, NULL, NULL);
+\end{minted}
+
+El siguiente paso será realizar el cálculo sobre el búffer de sonido.  La forma
+en que el algoritmo FFT almacena sus resultados depende de dos parámetros
+principalmente: la frecuencia de muestreo y el tamaño del búffer de entrada. En
+el caso de la FFT real, KissFFT devuelve el espectro positivo, que contendrá
+tantos valores (en forma de números complejos) como el búffer de entrada más
+uno. Cada uno de estos elementos representará la intensidad (y fase) de una
+componente de frecuencia en la muestra inicial.
+
+Pero, ¿cómo asociamos cada componente a la frecuencia apropiada? Ahí es donde
+entra la frecuencia de muestreo. En el vector que arroja el cálculo del FFT,
+haremos una simple regla de tres: el primer elemento corresponderá a la menor
+frecuencia (0Hz), y el mayor elemento a la mayor frecuencia audible (en nuestro
+caso será 22050Hz, ya que la frecuencia de muestreo es de 44.1kHz, por el
+teorema de Nyquist -- sección~\ref{sec:nyquist}).
+$$
+   \begin{array}{ccc}
+       \textrm{Pos. final}  & \longrightarrow & 22050Hz\\
+       \textrm{Pos. X} & \longrightarrow & \textrm{Frecuencia Y}
+   \end{array}
+$$
+
+Una vez identificadas las frecuencias en el resultado de la operación, es
+necesario computar la \textbf{magnitud} de cada una de ellas, hallando el módulo
+del número complejo. Tras esto, la \textbf{frecuencia fundamental} (que
+\textit{debería} representará la nota que está tocando la flauta) será la que
+mayor magnitud tenga.
+
+\subsection{Acotando el resultado}
+El siguiente paso fue analizar las frecuencias que proveía la flauta dulce para
+las nueve notas que puede emitir utilizando técnicas básicas -- esto es, sin
+contar las notas que se pueden emitir utilizando técnicas avanzadas, como tapar
+a medias ciertos orificios. De este estudio se extrajeron los siguientes resultados.
+
+\begin{table}[ht!]
+  \centering
+  \begin{tabular}[h]{|c|c|}
+        523.25 & Do5;
+        592.163 & Re5;
+        656.763 & Mi5;
+        699.829 & Fa5;
+        785.692 & Sol5;
+        893.628 & La5;
+        1001.29 & Si5;
+        1076.66 & Do6;
+        1195.09 & Re6;
+  \end{tabular}
+  \caption{Frecuencias aproximadas de las notas de la flauta dulce}
+\end{table}
+
+Para evitar devolver resultados incorrectos, y com
+
 
 \section{Gestión de estados}
 \label{sec:implementacion_estados}
 
+\label{sec:resolucion_problema_estados}
