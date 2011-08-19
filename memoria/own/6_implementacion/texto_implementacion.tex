@@ -554,4 +554,54 @@ boost::thread hilo(boost::ref(objeto));
 \section{Gestión de estados}
 \label{sec:implementacion_estados}
 
+La gestión de estados es uno de los retos principales a la hora de desarrollar
+un videojuego. Es necesario contar un sistema de gestión de estados robusto, que
+permita pasar de un estado a otro de forma sencilla, sin errores, y manteniendo
+información entre transiciones si fuera necesario.
+
+En el caso de \textbf{oFlute}, el gestor de estados no necesitaba funciones
+avanzadas; las secciones son consecutivas, por lo que no hay necesidad de
+incluir concurrencia. Así pues, se editó el gestor de estados en base a la clase
+\texttt{Gosu::Window}. Esta clase modela, mediante métodos, las diferentes fases
+del \textit{game loop}, a saber:
+\begin{enumerate}
+\item Gestión de la entrada del usuario, mediante los métodos
+  \texttt{buttonDown} y \texttt{buttonUp}.
+\item Procesamiento de la lógica, en el método \texttt{update}.
+\item Dibujado de los gráficos, en el método \texttt{draw}.
+\end{enumerate}
+
+Así, se creó una clase \texttt{Estado} con los mismos métodos, y una clase
+\texttt{Juego} (heredera de \texttt{Gosu::Window}), que sirviese de controlador
+de estados. Inicialmente, el gestor tenía un método \texttt{cambiarEstado}, que
+descargaba de memoria el estado actual y cargaba el siguiente. Durante un tiempo
+funcionó bien, pero llegó un momento en que empezaron a aparecer fallos de
+memoria difíciles de acotar.
+
+Tras bastantes días de depuración, finalmente el problema se encontró en el
+\textit{momento} en el que se hacía la carga y descarga de estados. El conflicto
+surgía porque se hacían llamadas para cambiar de estado \textit{en cualquier
+  momento}, ya fuera en la etapa de lógica, de dibujado, o de gestión de la
+entrada. En el instante de la llamada, se descargaba el estado actual y se
+cargaba el siguiente. Esto originaba que las tareas que se habían lanzado, como
+por ejemplo las imágenes pendientes de dibujar, se ejecutasen sobre objetos que
+habían sido reemplazados en memoria. A menudo las imágenes se encontraban en
+búferes de Gosu y no había problema, pero una vez se integró el analizador de
+notas, el sistema empezó a fallar.
+
 \label{sec:resolucion_problema_estados}
+
+La solución fue bastante trivial. Se creó un sistema con una pequeña cola de un
+elemento en el gestor de estados (la clase \texttt{Juego}). En el momento en que
+alguien quisiese cambiar de estado, se añadía a la cola el nuevo estado a
+cargar, y se activaba una bandera. Tras completar esa iteración del \textit{game
+  loop}, al principio de la siguiente se hacía la carga y descarga de estados.
+
+Este sistema de gestión de estados se extendió para incluir estados concurrentes
+(por ejemplo, para mostrar menús de pausa), y aunque no se incluyó en oFlute,
+está previsto su integración en la próxima versión de Freegemas~\cite{freegemas}.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../memoria"
+%%% End: 
