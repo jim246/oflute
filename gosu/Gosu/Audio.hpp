@@ -20,7 +20,7 @@
 namespace Gosu
 {
     // Deprecated.
-    #ifndef SWIG
+    #ifdef SWIG_OMEGA
     GOSU_DEPRECATED class Audio;
     #endif
 
@@ -96,7 +96,7 @@ namespace Gosu
         SampleInstance playPan(double pan, double volume = 1, double speed = 1,
             bool looping = false) const;
 
-        #ifndef SWIG
+        #ifdef SWIG_OMEGA
         GOSU_DEPRECATED Sample(Audio& audio, const std::wstring& filename);
         GOSU_DEPRECATED Sample(Audio& audio, Reader reader);
         #endif
@@ -152,7 +152,7 @@ namespace Gosu
         //! Called every tick by Window for management purposes.
         static void update();
 
-        #ifndef SWIG
+        #ifdef SWIG_OMEGA
         enum Type { stStream, stModule };
         GOSU_DEPRECATED Song(Audio&, const std::wstring& filename);
         GOSU_DEPRECATED Song(Audio&, Type type, Reader reader);
