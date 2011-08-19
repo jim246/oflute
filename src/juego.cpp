@@ -29,13 +29,13 @@ Juego::Juego() : Gosu::Window (ANCHO, ALTO, FULLSCREEN, REFRESCO), cambiandoEsta
 
 void Juego::update(){
     if(cambiandoEstado){
-	realizarCambioEstado();
+        realizarCambioEstado();
     }else{
-	estadoActual -> update();
+        estadoActual -> update();
     
-	if(estadoCadena != "estadoAutor" && estadoCadena != "estadoIntro"){
-	    animacionFondo -> update();
-	}
+        if(estadoCadena != "estadoAutor" && estadoCadena != "estadoIntro"){
+            animacionFondo -> update();
+        }
     }
 }
 
@@ -46,7 +46,7 @@ void Juego::draw(){
     cursor -> draw(input().mouseX(), input().mouseY(), 999);
     estadoActual -> draw();
     if(estadoCadena != "estadoAutor" && estadoCadena != "estadoIntro"){
-	fondoComun -> draw(0,0,1, 1,1, Gosu::Color(animacionFondo -> get(0), 255, 255, 255));
+        fondoComun -> draw(0,0,1, 1,1, Gosu::Color(animacionFondo -> get(0), 255, 255, 255));
     }
 }
 
@@ -65,54 +65,54 @@ void Juego::realizarCambioEstado(){
     siguienteEstado = "";
     
     if (estadoCadena == "estadoAutor"){
-	estadoActual.reset( 
-	    new EstadoImagenFija(this, L"media/estadoAutor.png", "estadoIntro"));
-	estadoActual -> lanzar();	
+        estadoActual.reset( 
+            new EstadoImagenFija(this, L"media/estadoAutor.png", "estadoIntro"));
+        estadoActual -> lanzar();	
     }
 
     else if(estadoCadena == "estadoIntro"){
-	estadoActual.reset(
-	    new EstadoImagenFija(this, L"media/estadoIntro.png", "estadoMenu"));
-	estadoActual -> lanzar();
+        estadoActual.reset(
+            new EstadoImagenFija(this, L"media/estadoIntro.png", "estadoMenu"));
+        estadoActual -> lanzar();
     }
 	
     else if(estadoCadena == "estadoMenu"){
-	estadoActual.reset(new EstadoMenu(this));
-	estadoActual -> lanzar();
+        estadoActual.reset(new EstadoMenu(this));
+        estadoActual -> lanzar();
     }
     
     else if(estadoCadena == "estadoMenuSinFondo"){
-	estadoActual.reset(new EstadoMenu(this));
-	static_cast<EstadoMenu * >(estadoActual . get()) -> quitarDemoraInicial();
-	estadoActual -> lanzar();
+        estadoActual.reset(new EstadoMenu(this));
+        static_cast<EstadoMenu * >(estadoActual . get()) -> quitarDemoraInicial();
+        estadoActual -> lanzar();
     }
 
     else if(estadoCadena == "estadoAnalizador"){
-	estadoActual.reset(new EstadoAnalizador(this));
-	estadoActual -> lanzar();
+        estadoActual.reset(new EstadoAnalizador(this));
+        estadoActual -> lanzar();
     }
 
     else if(estadoCadena == "estadoMenuLecciones"){
-	estadoActual.reset(new EstadoMenuLecciones(this));
+        estadoActual.reset(new EstadoMenuLecciones(this));
     }
 
     else if(estadoCadena == "estadoMenuCanciones"){
-	estadoActual.reset(new EstadoMenuCanciones(this));
-	estadoActual -> lanzar();
+        estadoActual.reset(new EstadoMenuCanciones(this));
+        estadoActual -> lanzar();
     }
 
     else if(estadoCadena == "estadoCalibrar"){
-	estadoActual.reset(new EstadoCalibrarMicro(this));
+        estadoActual.reset(new EstadoCalibrarMicro(this));
     }
 	
     else if(estadoCadena == "salir"){
-	close();
+        close();
     }
 }
     
 void Juego::buttonDown(Gosu::Button boton){
     if(estadoCadena != "estadoAutor" && estadoCadena != "estadoIntro" && boton == Gosu::kbEscape){
-	animacionFondo -> end();
+        animacionFondo -> end();
     }
     estadoActual -> buttonDown(boton);
 }    
