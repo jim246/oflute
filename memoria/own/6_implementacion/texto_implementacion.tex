@@ -247,7 +247,15 @@ del movimiento se rija por una función cúbica del tiempo. Si graficamos la
 relación del tiempo por la posición, ambos de 0 a 1, el resultado sería el
 siguiente:
 
-{\Large\textbf{GRÁFICA x*x*x}}
+\begin{gnuplot}
+set xrange [0:1]
+set yrange [0:1]
+set size square
+set nokey
+set xlabel "tiempo"
+set ylabel "posición"
+plot x*x*x
+\end{gnuplot}
 
 Tras estudiar bien el código original, se decidió hacer una adaptación en C++,
 de forma que se adaptara a las necesidades del proyecto.
@@ -408,6 +416,13 @@ Finalmente, una vez hayamos terminado de leer datos, podremos liberar el flujo
 utilizando \texttt{pa\_simple\_free}. Con esto, ya podremos abrir, leer y cerrar
 el flujo de sonido del micrófono. 
 
+La parte más compleja a la hora de tratar con flujos es la de elegir los
+parámetros apropiados. Son muchísimos los valores que hay que configurar:
+frecuencia de muestreo, tamaño del búffer, número de canales, longitud del
+búffer intermedio, latencia deseada\ldots Si no sabemos exactamente en qué
+influye cada uno, acabamos en un proceso de prueba de error que puede resultar
+muy tedioso.
+
 \subsection{Análisis del audio capturado}
 
 La segunda parte del proceso consiste en procesar y analizar el audio capturado
@@ -466,26 +481,75 @@ mayor magnitud tenga.
 El siguiente paso fue analizar las frecuencias que proveía la flauta dulce para
 las nueve notas que puede emitir utilizando técnicas básicas -- esto es, sin
 contar las notas que se pueden emitir utilizando técnicas avanzadas, como tapar
-a medias ciertos orificios. De este estudio se extrajeron los siguientes resultados.
+a medias ciertos orificios. De este estudio se extrajeron los siguientes
+resultados (tabla \ref{tab:frecuencias}).
 
 \begin{table}[ht!]
   \centering
   \begin{tabular}[h]{|c|c|}
-        523.25 & Do5;
-        592.163 & Re5;
-        656.763 & Mi5;
-        699.829 & Fa5;
-        785.692 & Sol5;
-        893.628 & La5;
-        1001.29 & Si5;
-        1076.66 & Do6;
-        1195.09 & Re6;
+    \hline
+    \textbf{Frecuencia aproximada} & \textbf{Nota} \\ \hline
+    523.25 Hz & Do, octava 5\\ \hline
+    592.163 Hz & Re, octava 5\\ \hline
+    656.763 Hz & Mi, octava 5\\ \hline
+    699.829 Hz & Fa, octava 5\\ \hline
+    785.692 Hz & Sol, octava 5\\ \hline
+    893.628 Hz & La, octava 5\\ \hline
+    1001.29 Hz & Si, octava 5\\ \hline
+    1076.66 Hz & Do, octava 6 \\ \hline
+    1195.09 Hz & Re, octava 6 \\ \hline
   \end{tabular}
   \caption{Frecuencias aproximadas de las notas de la flauta dulce}
+  \label{tab:frecuencias}
 \end{table}
 
-Para evitar devolver resultados incorrectos, y com
+Redondeamos el rango de frecuencias a $[450, 1500]$, cualquier sonido fuera de
+ese rango no se considera una nota válida. En el resto de casos, se compara la
+frecuencia fundamental obtenida con los valores en la tabla, y se devuelve la
+nota apropiada.
 
+\subsection{Ejecución concurrente}
+
+Uno de los problemas que se encontraron fue que, inicialmente, el proceso de
+análisis se incluyó dentro de la fase de cálculo de la lógica dentro del
+\textit{game loop}. El resultado fue bastante poco satisfactorio, ya que el
+cálculo de la FFT ralentizaba mucho el hilo, que tenía que esperar a que
+concluyera para seguir renderizando el siguiente fotograma.
+
+Así, se decidió, como suele ser habitual en el desarrollo de videojuegos, mover
+el control y análisis del audio a un hilo aparte. Para ello, se hizo uso de la
+biblioteca de hilos de Boost, que resulta mucho más amigable y sencilla de usar
+que otras alternativas como los \textit{POSIX Threads}. 
+
+A nivel de implementación, el uso de hilos en Boost es muy sencillo. Es
+necesario tener una clase con el operador de función -- esto es,
+\texttt{operator()} -- sobrecargado. Creamos un objeto de esa clase y se lo
+pasamos al constructor de \texttt{boost::thread}, que llamará al anteriormente
+citado operador en una copia del objeto pasado.
+
+\begin{minted}{cpp}
+// Instancia de la clase
+ClaseCallable objeto;
+
+// Hilo, crea una copia de objeto y llama al operador ()
+boost::thread hilo(objeto);
+
+// [...]
+
+// Esperamos a que termine el hilo
+hilo.join();
+\end{minted}
+
+Uno de los problemas que rápidamente se encontraron fue que, al lanzar el hilo,
+se hace una copia del objeto referenciado. Esto resultaba un problema, ya que el
+analizador hace cierta inicialización previa, y al duplicarse el objeto ocurrían
+problemas. El resultado fue utilizar \texttt{boost::ref}, que permite pasar
+referencias por copia.
+
+\begin{minted}{cpp}
+// Hilo sobre el propio objeto, no se hace copia
+boost::thread hilo(boost::ref(objeto));
+\end{minted}
 
 \section{Gestión de estados}
 \label{sec:implementacion_estados}
