@@ -4,7 +4,7 @@ INCDIR   := include
 DEPFILE  := obj/dependencias.d
 
 CXX      := g++
-CXXFLAGS += -I. -I$(INCDIR) 
+CXXFLAGS += -I. -I$(INCDIR) -DSWIG_OMEGA
 CXXFLAGS += -Igosu `gosu/bin/gosu-config --cxxflags`
 CXXFLAGS += -Ipugixml -Ikissfft
 CXXFLAGS += -g -Wall
