@@ -1,25 +1,25 @@
-OBJDIR := obj
-SRCDIR := src
-INCDIR := include
-DEPFILE := obj/dependencias.d
+OBJDIR   := obj
+SRCDIR   := src
+INCDIR   := include
+DEPFILE  := obj/dependencias.d
 
-CC       := g++
-CXXFLAGS += -I. -I$(INCDIR)
+CXX      := g++
+CXXFLAGS += -I. -I$(INCDIR) -DSWIG
 CXXFLAGS += -Igosu `gosu/bin/gosu-config --cxxflags`
 CXXFLAGS += -Ipugixml -Ikissfft
 CXXFLAGS += -g -Wall
 CXXFLAGS += `pkg-config --cflags libpulse-simple`
 
-LDFLAGS += `gosu/bin/gosu-config --libs --cxxflags` 
-LDFLAGS += `pkg-config --libs libpulse-simple`
+LDFLAGS  += `gosu/bin/gosu-config --libs --cxxflags` 
+LDFLAGS  += `pkg-config --libs libpulse-simple`
 
-LDLIBS += gosu/lib/libgosu.a
-LDLIBS += -lSDL_ttf
-LDLIBS += -lboost_filesystem
-LDLIBS += -lboost_regex
-LDLIBS += -lboost_thread
-LDLIBS += pugixml/pugixml.a
-LDLIBS += kissfft/kissfft.a
+LDLIBS   += gosu/lib/libgosu.a
+LDLIBS   += -lSDL_ttf
+LDLIBS   += -lboost_filesystem
+LDLIBS   += -lboost_regex
+LDLIBS   += -lboost_thread
+LDLIBS   += pugixml/pugixml.a
+LDLIBS   += kissfft/kissfft.a
 
 OUTPUT += oflute
 
