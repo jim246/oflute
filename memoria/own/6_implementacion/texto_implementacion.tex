@@ -4,14 +4,14 @@ imprevisto. Así pues, en este capítulo comentaremos los retos y detalles que m
 relevancia o complejidad han presentado durante la fase de la implementación del
 proyecto.
 
-De igual modo, durante el desarrollo de la aplicacíon se mantuvo actualizada una
+De igual modo, durante el desarrollo de la aplicación se mantuvo actualizada una
 bitácora, accesible en línea~\cite{ofluteblog}, en la que se fueron detallando,
 a medida que aparecían, muchas de estas dificultades.
 
 Como complemento a la lectura de este capítulo se recomienda tener una copia
 local del repositorio del proyecto, disponible para su libre descarga desde la
 forja oficial~\cite{ofluteforja}. En él se encuentra todo el código fuente
-original, así como la documentación en formato \textit{Doxygen}.
+original, así como la documentación en formato \textit{Doxygen}~\cite{doxygen}.
 
 \section{Carga y uso de fuentes TrueType en Gosu}
 
@@ -51,7 +51,7 @@ previos~\cite{robinson} se había utilizado la biblioteca
 \textbf{SDL}~\cite{refsdl}, un framework multimedia muy utilizado en
 aplicaciones de audio, vídeo y juegos. Uno de los subsistemas que proporciona
 SDL es \textbf{SDL\_ttf}~\cite{refsdlttf}, una biblioteca para el renderizado de
-fuentes basadas en ficheros \texttt{truetype}. Esto, unido a que la propia SDL
+fuentes basadas en ficheros \texttt{TrueType}. Esto, unido a que la propia SDL
 ya era una dependencia de Gosu, propició que se iniciara la implementación de
 una solución basada en este medio.
 
@@ -63,16 +63,15 @@ cómo se corresponde luego con Gosu.
 
 \subsubsection{Tipos de datos utilizados}
 
-En común con cualquier otra parte del conjunto de partes de SDL, SDL\_ttf se basa
-en un tipo de datos conocido como \textit{superficies}
-(\texttt{SDL\_Surface}). Estas superficies representan mapas de bits cargados en
-memoria, y se utilizan para guardar las imágenes que se cargan de los ficheros,
-así como para representar otros destinos gráficos intermedios, como la propia
-pantalla.
+En común con el resto de módulos de SDL, SDL\_ttf se basa en un tipo de datos
+conocido como \textit{superficies} (\texttt{SDL\_Surface}). Estas superficies
+representan mapas de bits cargados en memoria, y se utilizan para guardar las
+imágenes que se cargan de los ficheros, así como para representar otros destinos
+gráficos intermedios, como la propia pantalla.
 
 Para representar el color del texto que vamos a pintar, SDL\_ttf utiliza la
 estructura \texttt{SDL\_Color}, que guardará los valores de color de 8 bits para
-cada uno de los canales.
+los tres canales de color primario (rojo, verde y azul).
 
 Además, SDL\_ttf define un tipo de datos propio, de nombre \texttt{TTF\_Font}, que
 representa una fuente cargada a partir de un fichero, con un tamaño determinado.
@@ -139,8 +138,8 @@ final fue una clase con una interfaz similar a \texttt{Gosu::Font}, de modo que
 la transición pudiera ser lo más transparente posible, de nombre
 \texttt{CustomFont}.
 
-En el constructor de la se inicializa (de forma única, mediante una variable
-estática) el subsistema \texttt{SDL\_ttf} utilizando la llamada
+En el constructor se inicializa (de forma única, mediante una variable estática)
+el subsistema \texttt{SDL\_ttf} utilizando la llamada
 \texttt{TTF\_Init()}. Después, se carga la fuente indicada por los parámetros
 del constructor. En ambos casos, se comprueba que el procedimiento ha sido
 correcto, lanzando una excepción en caso contrario.
@@ -182,7 +181,7 @@ desarrollador principal verificó el código propuesto e hizo una adaptación al
 propio código original de la clase \texttt{Gosu::Font} para añadir la
 propuesta. 
 
-Por ende, desde la versión \textbf{RELLÉNAME}, el \textit{parche} forma parte
+Por ende, desde la versión 0.7.20, el \textit{parche} forma parte
 oficial de Gosu, y así se hace indicar en el fichero \texttt{TextUnix.cpp} de la
 distribución oficial:
 
@@ -196,7 +195,7 @@ class SDLTTFRenderer : boost::noncopyable
 // [...]
 \end{minted}
 
-Así pues, dado que la solucíon propuesta se integró en la distribución oficial,
+Así pues, dado que la solución propuesta se integró en la distribución oficial,
 nos deshicimos de la clase \texttt{customFont} a favor de la actualización de
 \texttt{Gosu::Font}, dado que al fin y al cabo el funcionamiento interno es
 el mismo.
@@ -363,7 +362,7 @@ necesidad de crear una instancia de la clase.
 
 \section{Implementación del analizador básico}
 \label{sec:implementacion_analizador}
-Como se comentó en la planificación (\textit{\nameref{chap:calendario}}), la
+Como se comentó en la planificación (ver \textit{\nameref{chap:calendario}}), la
 viabilidad del proyecto dependía de conseguir una implementación temprana y
 correcta del analizador de notas, pues es el núcleo de la aplicación y sin él,
 ésta no tendría ningún sentido.
@@ -380,13 +379,13 @@ detalles de la que finalmente se dio por definitiva, PulseAudio. Dentro de
 PulseAudio, nos decantamos por la \textit{Simple API}~\cite{pulseaudiosimple},
 que cubría todas las necesidades del proyecto sin añadir excesiva complejidad.
 
-El principal concepto en una API de sonido de bajo o medio nivel es el flujo de
-sonido o \textit{stream}. Los flujos pueden ser de entrada, de salida o dúplex,
-y tienen una serie de características según las necesidades de la aplicación. En
-PulseAudio, al tratarse de un servidor de sonido y no de una simple biblioteca,
-exiten algunos parámetros necesarios más. Se utiliza la función
-\texttt{pa\_simple\_new}, con bastantes parámetros, entre los que se pueden
-encontrar:
+El principal concepto en una API de sonido de bajo o medio nivel es el
+\textbf{flujo de sonido} o \textit{stream}. Los flujos pueden ser de entrada, de
+salida o dúplex, y tienen una serie de características según las necesidades de
+la aplicación. En PulseAudio, al tratarse de un servidor de sonido y no de una
+simple biblioteca, exiten algunos parámetros necesarios más. Se utiliza la
+función \texttt{pa\_simple\_new}, con bastantes parámetros, entre los que se
+pueden encontrar:
 \begin{description}
 \item[Servidor] Normalmente será el servidor de sonido por defecto.
 \item[Nombre del cliente y de flujo] Identifica la aplicación (\textit{oFlute})
@@ -399,7 +398,7 @@ encontrar:
     \caption{Control de volumen, mostrando el cliente \textit{oFlute}}
   \end{figure}
 \item[Tipo de flujo] En nuestro caso será de entrada, por lo que se utilizó la
-  macro \nohyphens{\texttt{PA\_STREAM\_RECORD}}.
+  macro \texttt{\nohyphens{kPA\_STREAM\_RECORD}}.
 \item[Tipo de \textit{sample}] Definirá el tipo de datos que se usará para
   representar los sonidos.
 \item[Opciones de búffering] Según busquemos rendimiento, fiabilidad, poca
@@ -420,7 +419,7 @@ La parte más compleja a la hora de tratar con flujos es la de elegir los
 parámetros apropiados. Son muchísimos los valores que hay que configurar:
 frecuencia de muestreo, tamaño del búffer, número de canales, longitud del
 búffer intermedio, latencia deseada\ldots Si no sabemos exactamente en qué
-influye cada uno, acabamos en un proceso de prueba de error que puede resultar
+influye cada uno, acabamos en un proceso de prueba y error que puede resultar
 muy tedioso.
 
 \subsection{Análisis del audio capturado}
@@ -474,7 +473,7 @@ $$
 Una vez identificadas las frecuencias en el resultado de la operación, es
 necesario computar la \textbf{magnitud} de cada una de ellas, hallando el módulo
 del número complejo. Tras esto, la \textbf{frecuencia fundamental} (que
-\textit{debería} representará la nota que está tocando la flauta) será la que
+representará la nota que está tocando la flauta) \textit{debería} ser la que
 mayor magnitud tenga.
 
 \subsection{Acotando el resultado}
