@@ -581,11 +581,13 @@ pequeña introducción a su utilidad.
 \item[Nota] Simboliza cada una de las notas cargadas que componen una canción.
 \end{description}
 
-\begin{figure}[h!]
+\begin{figure}[htp!]
   \centering
   \includegraphics[angle=90]{4_analisis/imagen_diagrama_clases_conceptuales}
   \caption{Diagrama de clases conceptuales}
 \end{figure}
+
+\pagebreak
 
 \section{Modelo de comportamiento del sistema}
 En esta sección vamos a especificar cómo se comporta el sistema en forma de dos
@@ -597,6 +599,268 @@ elementos fundamentales.
   condiciones y efectos que tendrán lugar al ejecutarse las operaciones en el
   sistema.
 \end{itemize}
+
+\begin{nota}
+  No se han reflejado, por triviales, los escenarios alternativos en los que el
+  usuario cierra la ventana, correspondientes a los flujos \textit{*a} definidos
+  en la sección anterior.
+\end{nota}
+
+\begin{description}
+\item[Operación] 
+\item[Actores]
+\item[Responsabilidades]
+\item[Precondiciones]
+\item[Postcondiciones]
+\end{description}
+
+\subsection{Caso de uso: inicio del juego}
+
+\subsubsection{Escenario principal}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[trim=0cm 10cm 0cm 0cm, clip=true, width=0.5\textwidth]{4_analisis/diagsec_caso1_esc1}
+  \caption{Diagrama de secuencia, incio del juego, escenario principal}
+\end{figure}
+
+\begin{description}
+\item[Operación] IniciarJuego()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Cargar y lanzar la aplicación, mostrar los títulos de
+  crédito y el menú principal.
+\item[Precondiciones] Ninguna.
+\item[Postcondiciones] $\quad$
+
+  \begin{itemize}
+  \item Se crea una instancia de la clase \textit{Juego}, que gestiona la
+    creación y destrucción de los estados.
+  \item Se crean y posteriormente destruyen dos estados
+    \textit{EstadoImagenFija} para mostrar los títulos de crédito.
+  \item Se crea y permanece un estado \textit{EstadoMenú}, que representa el
+    menú principal de la aplicación.
+  \end{itemize}
+
+\end{description}
+
+\begin{description}
+\item[Operación] SeleccionarSeccionCanciones()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Esconder el menú principal y cargar el menú de
+  selección de canciones.
+\item[Precondiciones] $\quad$
+
+  \begin{itemize}
+  \item El estado actual es una instancia de \textit{EstadoMenú}.
+  \end{itemize}
+
+\item[Postcondiciones] Se destruye el estado \textit{EstadoMenú} y se carga
+  \textit{EstadoMenúCanciones}.
+\end{description}
+
+\subsubsection{Escenario alternativo 4a}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[trim=0cm 10cm 0cm 0cm, clip=true, width=0.5\textwidth]{4_analisis/diagsec_caso1_esc2}
+  \caption{Diagrama de secuencia, incio del juego, escenario alternativo 4a}
+\end{figure}
+
+\begin{description}
+\item[Operación] SeleccionarSeccionAnalizador()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Esconder el menú principal y cargar la sección de
+  análisis de notas.
+\item[Precondiciones] $\quad$
+  \begin{itemize}
+  \item El estado actual es una instancia de \textit{EstadoMenú}.
+  \end{itemize}
+\item[Postcondiciones] Se destruye el estado \textit{EstadoMenú} y se carga
+  \textit{EstadoAnalizador}.
+\end{description}
+
+\subsubsection{Escenario alternativo 4b}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[trim=0cm 10cm 0cm 0cm, clip=true, width=0.5\textwidth]{4_analisis/diagsec_caso1_esc3}
+  \caption{Diagrama de secuencia, incio del juego, escenario alternativo 4b}
+\end{figure}
+
+\begin{description}
+\item[Operación] SeleccionarSeccionLecciones()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Esconder el menú principal y cargar la menú de
+  selección de lecciones.
+\item[Precondiciones] $\quad$
+  \begin{itemize}
+  \item El estado actual es una instancia de \textit{EstadoMenú}.
+  \end{itemize}
+\item[Postcondiciones] Se destruye el estado \textit{EstadoMenú} y se carga
+  \textit{EstadoMenúLecciones}.
+\end{description}
+
+\subsubsection{Escenario alternativo 4c}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[trim=0cm 10cm 0cm 0cm, clip=true, width=0.5\textwidth]{4_analisis/diagsec_caso1_esc4}
+  \caption{Diagrama de secuencia, incio del juego, escenario alternativo 4c}
+\end{figure}
+
+\begin{description}
+\item[Operación] SeleccionarSeccionCalibracion()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Esconder el menú principal y cargar la sección de
+  calibración de micrófono.
+\item[Precondiciones] $\quad$
+  \begin{itemize}
+  \item El estado actual es una instancia de \textit{EstadoMenú}.
+  \end{itemize}
+\item[Postcondiciones] Se destruye el estado \textit{EstadoMenú} y se carga
+  \textit{EstadoCalibrarMicro}.
+\end{description}
+
+\subsubsection{Escenario alternativo 4d}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[trim=0cm 10cm 0cm 0cm, clip=true, width=0.5\textwidth]{4_analisis/diagsec_caso1_esc5}
+  \caption{Diagrama de secuencia, incio del juego, escenario alternativo 4d}
+\end{figure}
+
+\begin{description}
+\item[Operación] SeleccionarSalir()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Esconder el menú principal, descargar los recursos y
+  cerrar la aplicación.
+\item[Precondiciones] $\quad$
+  \begin{itemize}
+  \item El estado actual es una instancia de \textit{EstadoMenú}.
+  \end{itemize}
+\item[Postcondiciones] Se destruye el estado \textit{EstadoMenú}, se destruye la
+  instancia de la clase \textit{Juego} y termina la ejecución de la aplicación.
+\end{description}
+
+\subsection{Selección de canción}
+
+\subsubsection{Escenario principal}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[trim=0cm 10cm 0cm 0cm, clip=true, width=0.5\textwidth]{4_analisis/diagsec_caso2_esc1}
+  \caption{Diagrama de secuencia, selección de canción, escenario principal}
+\end{figure}
+
+\begin{description}
+\item[Operación] ListarCanciones()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Cargar y mostrar la lista de canciones cargadas en el
+  sistema.
+\item[Precondiciones] Se ordenó la carga del estado \textit{EstadoMenuCanción}
+\item[Postcondiciones] $\quad$
+  \begin{itemize}
+  \item El estado actual es una instancia de \textit{EstadoMenuCanción}.
+  \item Se ha cargado la lista de canciones y se muestra en pantalla.
+  \end{itemize}
+\end{description}
+
+\begin{description}
+\item[Operación] ElegirCanción()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Indicar la canción a cargar para ser interpretada.
+\item[Precondiciones] Existe una lista de canciones cargada de entre las que el
+  usuario ha elegido una.
+\item[Postcondiciones] $\quad$
+  \begin{itemize}
+  \item La canción queda indicada como pendiente de carga.
+  \end{itemize}
+\end{description}
+
+
+\begin{description}
+\item[Operación] CargarCanciónElegida()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Iniciar la carga de la canción elegida por el usuario.
+\item[Precondiciones] El usuario ha elegido una canción para ser interpretada.
+\item[Postcondiciones] $\quad$
+  \begin{itemize}
+  \item Se carga la canción indicada.
+  \item Se oculta la lista de canciones.
+  \item Se pasa a un sub-estado de interpretación de canción.
+  \end{itemize}
+\end{description}
+
+\subsubsection{Escenario alternativo 3a}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[trim=0cm 10cm 0cm 0cm, clip=true, width=0.5\textwidth]{4_analisis/diagsec_caso2_esc2}
+  \caption{Diagrama de secuencia, selección de canción, escenario alternativo 3a}
+\end{figure}
+\begin{description}
+\item[Operación] ElegirVolver()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Indicar al sistema que el \jugador quiere volver al
+  menú anterior.
+\item[Precondiciones] El estado actual es una instancia de \textit{EstadoMenuCanción}.
+\item[Postcondiciones] El sistema comienza el proceso para volver al menú anterior.
+\end{description}
+
+\begin{description}
+\item[Operación] Volver()
+\item[Actores] \jugador, \sistema
+\item[Responsabilidades] Descargar la sección actual y volver al menú anterior.
+\item[Precondiciones] El usuario ha pulsado en el botón \textit{volver}.
+\item[Postcondiciones] $\quad$
+  \begin{itemize}
+  \item El estado instancia de \textit{EstadoMenuCanción} queda descargado.
+  \item Se carga y se muestra \textit{EstadoMenú}.
+  \end{itemize}
+\end{description}
+
+\subsection{Interpretación de canción}
+
+\subsubsection{Escenario principal}
+
+\begin{description}
+\item[Operación] 
+\item[Actores]
+\item[Responsabilidades]
+\item[Precondiciones]
+\item[Postcondiciones]
+\end{description}
+
+\subsection{Resultados de interpretación}
+\begin{description}
+\item[Operación] 
+\item[Actores]
+\item[Responsabilidades]
+\item[Precondiciones]
+\item[Postcondiciones]
+\end{description}
+
+\subsection{Analizador de notas}
+\begin{description}
+\item[Operación] 
+\item[Actores]
+\item[Responsabilidades]
+\item[Precondiciones]
+\item[Postcondiciones]
+\end{description}
+
+\subsection{Calibración de micrófono}
+\begin{description}
+\item[Operación] 
+\item[Actores]
+\item[Responsabilidades]
+\item[Precondiciones]
+\item[Postcondiciones]
+\end{description}
+
+\subsection{Selección de lecciones}
+\begin{description}
+\item[Operación] 
+\item[Actores]
+\item[Responsabilidades]
+\item[Precondiciones]
+\item[Postcondiciones]
+\end{description}
+
 
 %%% Local Variables: 
 %%% mode: latex
