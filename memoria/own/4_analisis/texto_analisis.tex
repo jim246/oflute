@@ -554,9 +554,13 @@ pequeña introducción a su utilidad.
 \item[EstadoMenúCanciones] Comprende el menú de selección de canciones, que se
   encargará de leer los ficheros de canciones disponibles. Además, también se
   encargará de lanzar las canciones en forma de estados secundarios.
+\item[EstadoCanción] Corresponde a la canción que se va a interpretar, lanzada desde
+  el estado \textit{EstadoMenuCanciones}.
 \item[EstadoMenúLecciones] Corresponde al menú de elección de lecciones, que
   leerá y listará los ficheros de lección disponibles, y se encargará de lanzar
   la lección elegida.
+\item[EstadoLección] Corresponde a la canción elegida desde el menú
+  \textit{EstadoMenúLecciones}.
 \item[Analizador] Controla la gestión del subsistema de audio y el análisis de
   la entrada. Deberá proporcionar información sobre el volumen de la entrada
   (para la calibración del micrófono) así como de la nota detectada en cada
@@ -574,14 +578,14 @@ pequeña introducción a su utilidad.
   combina imagen y texto, a usar en casos como los botones del menú.
 \item[SistemaPartículas] Representa un sistema de partículas simple, para
   generar efectos de destellos y fuegos artificiales.
-\item[Canción] Corresponde a la canción que se va a interpretar, lanzada desde
-  el estado \textit{EstadoMenuCanciones}.
 \item[Nota] Simboliza cada una de las notas cargadas que componen una canción.
 \end{description}
 
-\bigskip
-
-\marginpar{DIAGRAMA de clases conceptuales}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[angle=90]{4_analisis/imagen_diagrama_clases_conceptuales}
+  \caption{Diagrama de clases conceptuales}
+\end{figure}
 
 \section{Modelo de comportamiento del sistema}
 En esta sección vamos a especificar cómo se comporta el sistema en forma de dos
