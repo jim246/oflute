@@ -21,23 +21,14 @@ ubicada en el directorio raíz de la instalación de oFlute.
 \subsection{Lenguaje XML}
 \label{sec:lenguaje-xml}
 
-Cada fichero de canción es un archivo \textit{XML}~\cite{XMLSpec}. XML
-son las siglas, en inglés, de \textit{eXtensible Markup Language} -- lenguaje de
-marcado extensible. La tecnología XML busca dar solución al problema de expresar
-información estructurada de la manera más abstracta y reutilizable posible. 
-
-Para ello, utiliza una serie de \textit{etiquetas}, organizadas de forma
-jerárquica, que siguen la forma \texttt{<nombre>}, donde \textit{nombre} es la
-identificación del elemento que se está representando. Las etiquetas deben
-cerrarse utilizando la sintaxis \texttt{</nombre>}. Entre las etiquetas de
-apertura y cierre pueden anidarse otras etiquetas, así como información en
-formato texto.
+Cada fichero de canción es un archivo \textit{XML}~\cite{XMLSpec}. Como se
+comentó en la sección~\ref{sec:diseno_xml}, XML es un lenguaje de marcado
+extensible. La tecnología XML busca dar solución al problema de expresar
+información estructurada de la manera más abstracta y reutilizable posible.
 
 Todo documento XML tiene una etiqueta \textit{raíz}, de la cual cuelgan todas
 las demás. En nuestro caso, los ficheros que representan las canciones tendrán
 como raíz el elemento \texttt{Song}. Este es un ejemplo de un fichero completo:
-
-
 
 \begin{minted}{xml}
 <?xml version="1.0" ?>
