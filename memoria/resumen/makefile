@@ -1,4 +1,5 @@
-DOC = resumen.tex
+NOM = resumen
+DOC = $(NOM).tex
 
 PDF = pdflatex
 BIB = bibtex

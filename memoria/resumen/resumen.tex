@@ -5,6 +5,9 @@
 \usepackage{bera}
 \usepackage{comandos}
 
+\addto\captionsspanish{
+\renewcommand\bibname{Bibliografía y referencias}
+}
 
 \def \titulo{oFlute: blablablá título largo}
 \def \autor{Alumno: José Tomás Tocino García\\Tutores: Manuel Palomo Duarte, Antonio García Domínguez}
@@ -47,6 +50,7 @@
 
 %\setlength{\parskip}{0.3cm plus 3mm}
 \setlength{\parindent}{0.3cm}
+\setlength{\parskip}{1.2ex plus 0.4ex minus 0.2ex}
 
 \section{Introducción}
 
@@ -194,6 +198,29 @@ de implementación. A continuación se presenta una selección de las que más
 interés han generado. En la memoria del proyecto se desarrollan en mayor
 extensión.
 
+\subsection{Implementación del analizador básico}
+La creación del analizador básico de notas era crucial para el buen transcurso
+del resto del proyecto, por lo que fue uno de los objetivos que antes se
+abordaron. El desarrollo se dividió en dos partes. Por un lado, había que
+iniciar la captura de audio, lanzando el subsistema de sonido y empezando a
+capturar datos. Por otro lado, se tenía que hacer el análisis de los datos
+leídos para determinar qué nota se estaba tocando.
+
+La gestión del subsistema de audio se hizo mediante la \textit{Simple API} de
+PulseAudio, la biblioteca de audio que se empleó en oFlute. Se utilizó para la
+configuración y creación de un flujo de audio de entrada que permitiera captar,
+muestrear y samplear el sonido del micrófono, ofreciéndolo en forma de datos en
+punto flotante en un búffer.
+
+El siguiente paso fue el análisis del audio capturado. Mediante el uso de la
+Transformada Rápida de Fourier y la biblioteca KissFFT, de forma iterativa se
+iba analizando el búffer de sonido cada vez que éste se llenaba, dando lugar a
+una aproximación de la frecuencia fundamental capturada y, por ende, la nota que
+se estaba interpretando con la flauta.
+
+Una vez implementado y probado el sistema, se dió por bueno el analizador y se
+siguió construyendo el resto de la aplicación
+
 \subsection{Carga y uso de fuentes TrueType en Gosu}
 La biblioteca principal utilizada en la implementación del proyecto es Gosu, una
 librería de desarrollo de videojuegos 2D, multi-plataforma y con numerosas
@@ -214,10 +241,174 @@ Con esto, se tornaba necesario crear un sistema de animaciones lo más versátil
 posible, de forma que dotar a los elementos de la interfaz de movimiento fuera
 un proceso sencillo. 
 
+Para satisfacer este objetivo se ideó una serie de clases de animación que
+permiten animar las propiedades de los objetos de manera muy sencilla. Mediante
+el uso de las ecuaciones de animación de Robert Penner, el sistema creado cuenta
+con un gran número de opciones y diferentes formas de movimiento, según el tipo
+de función utilizada para calcular los valores: cuadrático, cúbico, etcétera.
+
+Gracias a este sistema, la interfaz de usuario de oFlute cuenta con un gran
+dinamismo y vistosidad.
+
+\subsection{Gestión de estados}
+La gestión de estados es uno de los retos principales a la hora de desarrollar
+un videojuego. Es necesario contar un sistema de gestión de estados robusto, que
+permita pasar de un estado a otro de forma sencilla, sin errores, y manteniendo
+información entre transiciones si fuera necesario.
+
+En el caso de oFlute, se creó un gestor de estados que permitió modularizar
+fácilmente el programa, haciendo una clara división entre secciones y
+facilitando la transición entre ellas. Además, mediante pruebas exhaustivas y el
+uso de herramientas de depuración, el gestor está implementado de forma que la
+carga y descarga de estados sea limpia y sin errores, evitando fugas de memoria.
+
+\subsection{Internacionalización}
+Durante el desarrolllo del proyecto surgió la necesidad de preparar el proyecto
+para su traducción. Inicialmente se optó por utilizar un sistema propio de
+traducción, basado en un script en Python y en una pequeña clase que generaba un
+diccionario según el idioma elegido. Sin embargo, esta opción resultó
+ineficiente y, sobre todo, alejada del resto de soluciones estándar a la hora de
+traducción de proyectos. 
+
+Por ello, se decidió investigar sobre las tecnologías de traducción más
+utilizadas en el panorama del software libre, y finalmente se optó por
+\textbf{GNU Gettext}~\cite{refgettext}. Para afianzar los conocimientos y
+facilitar el aprendizaje a otros desarrolladores, se editó un conciso manual
+sobre internacionalización de proyectos, presente como apéndice en la memoria del proyecto fin de
+
 
 
 \section{Conclusiones y difusión}
+Durante el transcurso del desarrollo de oFlute, y sobre todo al término del
+mismo, se han obtenido unas conclusiones y unos resultados, tanto de forma
+personal como para con la comunidad, que se resumen en esta sección y se tratan
+más en profundidad en el capítulo dedicado a tal efecto en la memoria principal.
+
+\subsection{Objetivos}
+Al término del desarrollo del proyecto, el proyecto ha completado todos los
+objetivos a cumplir, detallados en el planteamiento inicial. En particular:
+
+\begin{itemize}
+\item Se llevó a cabo la creación del módulo de análisis de sonido, consiguiendo
+  una efectividad en la detección de las notas muy alta.
+\item Se hizo uso del módulo en una sección de análisis de notas y en el propio
+  juego de interpretación de canciones, con resultados muy satisfactorios y
+  funcionamiento correcto.
+\item Además, el sistema de lecciones planteado se llevó a cabo correctamente,
+  consiguiendo un motor dinámico bastante potente y fácilmente ampliable, con
+  opción a añadir nuevas lecciones al sistema.
+\item Finalmente, todos los objetivos se llevaron a cabo respetando la premisa
+  de mantener una interfaz de usuario amigable y fluida, agradable a la vista y
+  sencilla de usar.
+\end{itemize}
+
+\subsection{Posibles mejoras}
+Hay un gran número de posibles mejoras y extensiones de la funcionalidad de
+oFlute, en unos casos descubiertas de forma personal y en otros casos aportadas
+por terceras personas. Algunas de las más interesantes son las siguientes:
+\begin{itemize}
+\item Extensión del sistema de lecciones para permitir lecciones de varios
+  pasos, así como integrar las lecciones con el analizador de audio para
+  comprobar los conocimientos in-situ.
+\item Mejora de la jugabilidad del sistema de canciones, añadiendo bonus y
+  puntos extra.
+\item Intentar extender el sistema a otros instrumentos o a la voz humana.
+\item Portar el videojuego a la plataforma Windows.
+\end{itemize}
+
+\subsection{Conclusiones personales}
+
+oFlute ha sido el proyecto más longevo al que me he enfrentado hasta ahora. A
+pesar de tener conciencia de la envergadura del mismo desde el principio, el
+tiempo para completarlo ha superado todas mis expectativas, sobre todo en lo que
+a documentación se refiere. 
+
+\subsubsection{Conocimiento adquirido}
+
+Gracias a oFlute he aprendido las técnicas básicas de la programación de audio,
+sobre todo en la parte técnica más que teórica. Es esta parte teórica, sobre
+todo la de análisis, la que me gustaría reforzar en un futuro, ahora que cuento
+con las bases para conseguirlo. Los videojuegos relacionados con el audio
+son un nicho aún poco explorado y que puede dar muchas satisfacciones, sobre
+todo cuando el producto se orienta a un público joven.
+
+Por otro lado, oFlute también me ha ayudado a aprender a usar bastantes
+tecnologías auxiliares, en algunos casos meras herramientas que han facilitado
+el trabajo y, en otros casos, elementos que resultaron ser de inestimable ayuda
+e imprescindible uso al término del proyecto.
+
+Una de estas tecnologías es \textbf{Boost}~\cite{boost}, un conjunto de
+bibliotecas para C++ que amplían en gran medida la biblioteca estándar del
+lenguaje. Un amplio número de componentes de Boost formarán parte del nuevo
+estándar C++0x, por lo que me ha servido para ponerme al día en las novedades
+que están por llegar.
+
+Al tratarse de la principal biblioteca utilizada durante el desarrollo, oFlute
+me ha provisto de un profundo conocimiento de \textbf{Gosu}~\cite{gosu},
+permitiéndome implementar videojuegos con mucha más fluidez y labrándome un
+pequeño \textit{framework} personal que utilizar de base en próximos
+proyectos. 
+
+Otra de las tecnologías que he aprendido ha sido \textbf{GNU Gettext}, que ha
+servido para internacionalizar el proyecto. Aunque inicialmente se pensó en
+utilizar una solución propia para la internacionalización el proyecto,
+posteriormente se decidió usar esta tecnología, ampliamente conocida y
+utilizada.
+
+\subsection{Difusión}
+
+\subsubsection{Conocimiento generado}
+
+Además de servir como recurso para el correcto transcurso del proyecto, los
+conocimientos adquiridos me permitieron, en numerosos casos, generar
+documentación adicional e impartir talleres relacionados las tecnologías
+previamente mencionadas.
+
+En cuanto a Boost, se llevó a cabo un taller durante los \textit{Cursos de
+  Verano de la OSLUCA}~\cite{cursosverano}, en el que se explicaron las partes
+más importantes de esta colección de bibliotecas, con numerosos ejemplos de
+muchas de ellas. Toda la documentación es libre~\cite{materialesCursoBoost}.
+
+Por otro lado, impartí un taller~\cite{tallergosu} sobre la biblioteca Gosu en
+colaboración con la ADVUCA~\cite{advuca}, cuya afluencia superó las 50
+personas. Los materiales pueden descargarse
+libremente~\cite{tallergosumateriales}.
+
+Por último, tras la aplicación de GNU Gettext en oFlute, escribí una guía
+concisa sobre traducción de proyectos con esta herramienta, que se puede
+encontrar en uno de los apéndices de la memoria, así como de forma online en la
+url \url{http://hdl.handle.net/10498/10772}.
 
 
+\subsubsection{Freegemas}
+
+Uno de los proyectos \textit{``hijos''} de oFlute ha sido
+\textbf{Freegemas}~\cite{freegemas}, un clon libre del popular juego tipo puzzle
+\textit{Bejeweled}. Freegemas es multiplataforma, funciona tanto en GNU/Linux
+como en Windows, y además forma parte oficial de Guadalinex~\cite{guadalinex},
+por lo que es posible encontrarlo en los repositorios oficiales.
+
+Además, Freegemas sirvió como base para una serie de tres artículos que
+publiqué, junto al director del presente PFC, en la revista Linux
+Magazine~\cite{linuxmagazine} sobre desarrollo de videojuegos en C++. Es posible
+encontrar estos artículos en el archivo de la
+revista~\cite{refarticulo1}~\cite{refarticulo2}~\cite{refarticulo3} bajo una
+licencia Creative Commons.
+
+\subsubsection{IV Concurso Universitario de Software Libre}
+
+Por otro lado, gracias a oFlute tuve la oportunidad de participar en el IV
+Concurso Universitario de Software Libre~\cite{cusl}. En el transcurso del
+concurso formé parte de una comunidad muy unida, en la que reinó el apoyo y la
+ayuda entre los concursantes. La final del concurso se celebró en la Escuela
+Superior de Ingeniería de Cádiz, en la que oFlute obtuvo una mención
+especial~\cite{cusl2}.
+
+Previa a la final nacional tuvo lugar la fase local del concurso, en el que el
+proyecto también recibió un accésit al mejor proyecto de
+innovación~\cite{cusllocal}.
+
+\bibliographystyle{hispa-annote}
+\bibliography{bibliografia}
 
 \end{document}
