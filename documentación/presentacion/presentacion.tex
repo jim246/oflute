@@ -1,27 +1,110 @@
-
-% ===================================================================
-% Presentación con Latex Beamer -> EN proceso de modificación -> CCF
-% ===================================================================
 \documentclass[9pt,xcolor=svgnames]{beamer}
-%\documentclass[handout,xcolor=svgnames]{beamer} %Version imprimible
-% -------------------------------------------------------------------
-\usepackage{paquetes}
-% -------------------------------------------------------------------
-\usepackage{modo}
-% -------------------------------------------------------------------
+
+\usepackage{amsfonts}
+
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+
+
+% Paquetes específicos de Beamer
+%\usepackage{beamerthemeshadow}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\usepackage{charter}
+\usepackage{inconsolata}
+\usepackage{helvet}
+
+\usetikzlibrary{arrows,shapes,snakes}
+
+\usepackage{colores}
+
+\usetheme{umbc2}
+%\usefonttheme{serif}
+\usefonttheme{structurebold}
+\usecolortheme[named=Gray]{structure}
+
+\title{oFlute: reconocimiento de señales aplicado al aprendizaje de la flauta
+  dulce} 
+
+\author[José Tomás Tocino García]{José Tomás Tocino García}
+
+% \institute[UCA]{Universidad de Cádiz}
+% \subject{JOSLUCA 4} 
+
+\date[Sept 2011]{Septiembre de 2011}
+
+%\usepackage{modo}
+
+\defbeamertemplate*{titlea page}{customized}[1][]
+{
+  \begin{center}
+    \usebeamerfont{title}\inserttitle\par
+    \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
+    \bigskip \usebeamerfont{author}\insertauthor\par
+    \usebeamerfont{institute}\insertinstitute\par
+    \usebeamerfont{date}\insertdate\par
+    \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+  \end{center}
+
+}
+
+\defbeamertemplate*{title page}{customized}[1][]
+{
+  % \begin{center}
+  %   \usebeamerfont{title}\inserttitle\par
+  %   \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par
+  %   \bigskip \usebeamerfont{author}\insertauthor\par
+  %   \usebeamerfont{institute}\insertinstitute\par
+  %   \usebeamerfont{date}\insertdate\par
+  %   \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+  % \end{center}
+
+  \vbox{}
+  \vfill
+  \begin{centering}
+    \vspace{0.3cm}
+    \includegraphics[width=0.25\textwidth]{imagenes/logotipo} 
+
+    \begin{beamercolorbox}[sep=8pt,center,#1]{title}
+      \usebeamerfont{title}\inserttitle\par%
+    \end{beamercolorbox}%
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor\\
+      \texttt{<josetomas.tocino@uca.es>}
+    \end{beamercolorbox}
+
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{date}
+      \begin{small}
+        \insertdate
+      \end{small}
+    \end{beamercolorbox}\vskip0.5em
+
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \end{centering}
+  \vfill
+
+}
+
 
 % Comienza el documento
 \begin{document}
 % Tikz -> Imágenes
-\tikzstyle{every picture}+=[remember picture]
+%\tikzstyle{every picture}+=[remember picture]
+
 % Entorno matemático
-\everymath{\displaystyle}
+%\everymath{\displaystyle}
 
 % Transparencia de Inicio -> Título
 \begin{frame}
- \titlepage
+  \titlepage
 \end{frame}
 
+%\logo{\includegraphics[height=2.5cm]{imagenes/logotipo}}
+\setbeamertemplate{background}{\includegraphics[width=\paperwidth,height=\paperheight]{imagenes/fondo.pdf}}
 \normalsize
 
 % Transparencia de índice
@@ -59,195 +142,195 @@
    
  \end{frame}
 
- \section{¿Qué podemos hacer con \LaTeX?}
+%  \section{¿Qué podemos hacer con \LaTeX?}
  
- \begin{frame}[fragile=singleslide]{Fórmulas matemáticas facilmente}
-   \begin{block}{Media aritmética}
-     \[
-     \overline{x} = \frac{\sum_{i = 1}^{n} x_i \cdot{} n_i}{n}
-    \]
+%  \begin{frame}[fragile=singleslide]{Fórmulas matemáticas facilmente}
+%    \begin{block}{Media aritmética}
+%      \[
+%      \overline{x} = \frac{\sum_{i = 1}^{n} x_i \cdot{} n_i}{n}
+%     \]
 
-     \noindent El código simplemente sería
+%      \noindent El código simplemente sería
      
-     \begin{lstlisting}[style=LaTeX]
- \overline{x} = \frac{\sum_{i = 1}^{n} x_i \cdot{} n_i}{n}      
-     \end{lstlisting}
-      \end{block}
+%      \begin{lstlisting}[style=LaTeX]
+%  \overline{x} = \frac{\sum_{i = 1}^{n} x_i \cdot{} n_i}{n}      
+%      \end{lstlisting}
+%       \end{block}
       
-      \begin{block}{Orden $O$}
-        \[
-        O(f) = \{ t:\mathbb{N} \rightarrow{} \mathbb{R}_0^+ | \exists
-        c \in{} \mathbb{R}^+, \exists n_0 \in{} \mathbb{N}, \forall n
-        \geq{} n_0\cdot t(n) \leq{} c\cdot f(n) \}
-        \]
+%       \begin{block}{Orden $O$}
+%         \[
+%         O(f) = \{ t:\mathbb{N} \rightarrow{} \mathbb{R}_0^+ | \exists
+%         c \in{} \mathbb{R}^+, \exists n_0 \in{} \mathbb{N}, \forall n
+%         \geq{} n_0\cdot t(n) \leq{} c\cdot f(n) \}
+%         \]
 
-        \noindent Y en el documento \LaTeX{} se vería:
+%         \noindent Y en el documento \LaTeX{} se vería:
 
-        \begin{lstlisting}[style=LaTeX]
+%         \begin{lstlisting}[style=LaTeX]
           
- O(f) = \{ t:\mathbb{N} \rightarrow{} \mathbb{R}_0^+ | \exists
- c \in{} \mathbb{R}^+, \exists n_0 \in{} \mathbb{N}, \forall n
- \geq{} n_0\cdot t(n) \leq{} c\cdot f(n) \}
+%  O(f) = \{ t:\mathbb{N} \rightarrow{} \mathbb{R}_0^+ | \exists
+%  c \in{} \mathbb{R}^+, \exists n_0 \in{} \mathbb{N}, \forall n
+%  \geq{} n_0\cdot t(n) \leq{} c\cdot f(n) \}
         
-        \end{lstlisting}
+%         \end{lstlisting}
      
-      \end{block}
+%       \end{block}
       
- \end{frame}
+%  \end{frame}
 
- \begin{frame}{Muy bonito, pero...}
-   \begin{block}{¿Esto se usa?}
-     \noindent Se utiliza bastante, sobre todo en el entorno
-     universitario, en especial en facultades de ciencias.
-   \end{block}
-   \pause
-   \begin{block}{No me lo creo}
-     \noindent Si no lo sabes, muchas asignaturas de Ingeniería
-     Técnica en Informática (ambas especialidades), utilizan \LaTeX:
-     \begin{itemize}
-     \item Apuntes de Álgebra, Matemáticas Discretas, Cálculo, Métodos Numéricos...
-     \item Relaciones de problemas de ADA1, ADA2, POO, ...
-     \item Apuntes de teoría y prácticas de Sistemas Operativos 1 y 2,
-       así como las transparencias.
-     \item Y muchas más.
-     \end{itemize}
-   \end{block}
- \end{frame}
+%  \begin{frame}{Muy bonito, pero...}
+%    \begin{block}{¿Esto se usa?}
+%      \noindent Se utiliza bastante, sobre todo en el entorno
+%      universitario, en especial en facultades de ciencias.
+%    \end{block}
+%    \pause
+%    \begin{block}{No me lo creo}
+%      \noindent Si no lo sabes, muchas asignaturas de Ingeniería
+%      Técnica en Informática (ambas especialidades), utilizan \LaTeX:
+%      \begin{itemize}
+%      \item Apuntes de Álgebra, Matemáticas Discretas, Cálculo, Métodos Numéricos...
+%      \item Relaciones de problemas de ADA1, ADA2, POO, ...
+%      \item Apuntes de teoría y prácticas de Sistemas Operativos 1 y 2,
+%        así como las transparencias.
+%      \item Y muchas más.
+%      \end{itemize}
+%    \end{block}
+%  \end{frame}
  
- \begin{frame}
-   \begin{block}{¿No es más facil el OOo Writer?}
-     \noindent A primera vista, puede parecer que un procesador de
-     textos tipo OOo Writer y alternativas comerciales son más fáciles
-     de utilizar que algo como \LaTeX{}, donde no ves que vas
-     haciendo. Sin embargo, una vez que te habituas descubres que tiene
-     muchas ventajas
-   \end{block}
- \end{frame}
+%  \begin{frame}
+%    \begin{block}{¿No es más facil el OOo Writer?}
+%      \noindent A primera vista, puede parecer que un procesador de
+%      textos tipo OOo Writer y alternativas comerciales son más fáciles
+%      de utilizar que algo como \LaTeX{}, donde no ves que vas
+%      haciendo. Sin embargo, una vez que te habituas descubres que tiene
+%      muchas ventajas
+%    \end{block}
+%  \end{frame}
 
- \subsection{Ventajas de usar \LaTeX}
+%  \subsection{Ventajas de usar \LaTeX}
 
- \begin{frame}
-   \begin{block}{Algunas ventajitas}
-   \noindent La verdad que la lista puede ser interminable, pero a
-   grandes rasgos:
-   \begin{itemize}
-   \item Más facilidad para utilizar fórmulas matemáticas.
-   \item Generación automática de índices, apéndices, bibliografias...
-   \item Gestión de referencias dentro del documento.
-   \item Al ser texto plano, podemos usar herramientas colaborativas
-     tipo \textbf{SVN}.
-   \item Existen herramientas para generar código \LaTeX{} automáticamente.
-   \item Infinidad de paquetes para múltiples funciones
-   \item Y mejor paro ya...
-   \end{itemize}
- \end{block}
+%  \begin{frame}
+%    \begin{block}{Algunas ventajitas}
+%    \noindent La verdad que la lista puede ser interminable, pero a
+%    grandes rasgos:
+%    \begin{itemize}
+%    \item Más facilidad para utilizar fórmulas matemáticas.
+%    \item Generación automática de índices, apéndices, bibliografias...
+%    \item Gestión de referencias dentro del documento.
+%    \item Al ser texto plano, podemos usar herramientas colaborativas
+%      tipo \textbf{SVN}.
+%    \item Existen herramientas para generar código \LaTeX{} automáticamente.
+%    \item Infinidad de paquetes para múltiples funciones
+%    \item Y mejor paro ya...
+%    \end{itemize}
+%  \end{block}
 
- \pause
+%  \pause
 
- \begin{block}{Pocas desventajas (haberlas haylas)}
-   \noindent No todo van a ser piropos a \LaTeX:
-   \begin{itemize}
-   \item Muy áspero si no se ha programado nunca.
-   \item Cuando no compila el documento, los errores no son nada explicativos.
-   \item Algo frustrante al principio.
-   \end{itemize}
- \end{block}
+%  \begin{block}{Pocas desventajas (haberlas haylas)}
+%    \noindent No todo van a ser piropos a \LaTeX:
+%    \begin{itemize}
+%    \item Muy áspero si no se ha programado nunca.
+%    \item Cuando no compila el documento, los errores no son nada explicativos.
+%    \item Algo frustrante al principio.
+%    \end{itemize}
+%  \end{block}
 
-\end{frame}
+% \end{frame}
 
-\section{¡No puedo esperar!}
+% \section{¡No puedo esperar!}
 
   
-  \begin{frame}[fragile=singleslide]
-\begin{block}
-  \noindent El siguiente código, no es más que la arquitectura básica
-  de todo documento \LaTeX{}, aunque luego veremos un par de ejemplos
-  más reales.
-\end{block}
+%   \begin{frame}[fragile=singleslide]
+% \begin{block}
+%   \noindent El siguiente código, no es más que la arquitectura básica
+%   de todo documento \LaTeX{}, aunque luego veremos un par de ejemplos
+%   más reales.
+% \end{block}
     
-      \begin{block}{Documento base}
+%       \begin{block}{Documento base}
         
-        \begin{lstlisting}[style=LaTeX]
- % ------ Preambulo -------
-\documentclass{article}
+%         \begin{lstlisting}[style=LaTeX]
+%  % ------ Preambulo -------
+% \documentclass{article}
           
-\usepackage[spanish]{babel}
+% \usepackage[spanish]{babel}
           
-\title{Titulo}
-\author{Autor}
-\date{\today}
+% \title{Titulo}
+% \author{Autor}
+% \date{\today}
 
-% ----- Cuerpo del documento ----
-\begin{document}
-\maketitle
-% ----- Contenido
+% % ----- Cuerpo del documento ----
+% \begin{document}
+% \maketitle
+% % ----- Contenido
 
-\end{document}
+% \end{document}
         
-\end{lstlisting}
+% \end{lstlisting}
 
-\end{block}
+% \end{block}
 
-\end{frame}
+% \end{frame}
 
-\section{Y ahora...}
+% \section{Y ahora...}
 
-\begin{frame}
-  \begin{center}
-    \Huge ¡A trabajar!
-  \end{center}
-\end{frame}
+% \begin{frame}
+%   \begin{center}
+%     \Huge ¡A trabajar!
+%   \end{center}
+% \end{frame}
 
-\section{Y cuando sea mayor, ¿qué puedo hacer?}
+% \section{Y cuando sea mayor, ¿qué puedo hacer?}
 
-\begin{frame}
-  \begin{block}
-    \noindent Esto que hemos visto no es más que la punta del
-    iceberg. Con \LaTeX, podemos hacer muchísimas más cosas:
-  \end{block}
+% \begin{frame}
+%   \begin{block}
+%     \noindent Esto que hemos visto no es más que la punta del
+%     iceberg. Con \LaTeX, podemos hacer muchísimas más cosas:
+%   \end{block}
 
-  \pause
+%   \pause
   
-  \begin{block}
+%   \begin{block}
     
-    \begin{itemize}
-    \item Podemos usar \texttt{GNU Plot} para generar gráficas.
+%     \begin{itemize}
+%     \item Podemos usar \texttt{GNU Plot} para generar gráficas.
       
-    \item Añadir nuestro código \LaTeX{} a código generado
-      automáticamente por \texttt{Doxygen}
+%     \item Añadir nuestro código \LaTeX{} a código generado
+%       automáticamente por \texttt{Doxygen}
       
-    \item Y más cosas...
+%     \item Y más cosas...
       
-    \end{itemize}
-  \end{block}
-\end{frame}
+%     \end{itemize}
+%   \end{block}
+% \end{frame}
 
-\begin{frame}{Conjuntos}
-  \begin{center}
-    \includegraphics[scale=0.5]{imagenes/sets.pdf}
-  \end{center}
-\end{frame}
+% \begin{frame}{Conjuntos}
+%   \begin{center}
+%     \includegraphics[scale=0.5]{imagenes/sets.pdf}
+%   \end{center}
+% \end{frame}
 
-\begin{frame}{Red mental}
-  \begin{center}
-    \includegraphics[scale=0.5]{imagenes/red_mental.pdf}
-  \end{center}
-\end{frame}
+% \begin{frame}{Red mental}
+%   \begin{center}
+%     \includegraphics[scale=0.5]{imagenes/red_mental.pdf}
+%   \end{center}
+% \end{frame}
 
-\begin{frame}{Partidas de go}
-  \begin{center}
-    \includegraphics[scale=0.5]{imagenes/go.pdf}
-  \end{center}
-\end{frame}
+% \begin{frame}{Partidas de go}
+%   \begin{center}
+%     \includegraphics[scale=0.5]{imagenes/go.pdf}
+%   \end{center}
+% \end{frame}
 
-\section{Y para terminar...}
+% \section{Y para terminar...}
 
-\begin{frame}
-\begin{center}
-\Huge ¡Gracias por asistir!\\
-Espero que hayais aprendido y disfrutado.
-\end{center}
-\end{frame}
+% \begin{frame}
+% \begin{center}
+% \Huge ¡Gracias por asistir!\\
+% Espero que hayais aprendido y disfrutado.
+% \end{center}
+% \end{frame}
 
 \end{document}
   
