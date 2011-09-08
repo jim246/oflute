@@ -1,4 +1,4 @@
-\documentclass[9pt,xcolor=svgnames]{beamer}
+\documentclass[11pt,xcolor=svgnames]{beamer}
 
 \usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
@@ -16,7 +16,7 @@
 \usepackage{colores}
 
 \usetheme{umbc2}
-%\usefonttheme{serif}
+% \usefonttheme{serif}
 \usefonttheme{structurebold}
 \usecolortheme[named=Gray]{structure}
 
@@ -43,18 +43,18 @@
     \end{beamercolorbox}%
     \vskip1em\par
     \begin{beamercolorbox}[sep=0pt,center,#1]{author}
-      \usebeamerfont{author}\insertauthor\\
+      \usebeamerfont{author}\small\insertauthor\\
       \texttt{<josetomas.tocino@uca.es>}
     \end{beamercolorbox}
     \vspace{0.2cm}
     \begin{beamercolorbox}[sep=0pt,center,#1]{date}
       \usebeamerfont{date}
-     {\footnotesize \insertdate }
+      {\scriptsize \insertdate }
     \end{beamercolorbox}%\vskip0.5em
 
-   \includegraphics[width=0.15\textwidth]{imagenes/logo_uca} 
+    \includegraphics[width=0.12\textwidth]{imagenes/logo_uca} 
 
-%    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+    % {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
   \end{centering}
   \vfill
 
@@ -66,27 +66,27 @@
 
 % Transparencia de Inicio -> Título
 {
-\setbeamertemplate{footline}{}
-\begin{frame}
-  \titlepage
-\end{frame}
+  \setbeamertemplate{footline}{}
+  \begin{frame}
+    \titlepage
+  \end{frame}
 }
-%\logo{\includegraphics[height=2.5cm]{imagenes/logotipo}}
+% \logo{\includegraphics[height=2.5cm]{imagenes/logotipo}}
 \setbeamertemplate{background}{\includegraphics[width=\paperwidth,height=\paperheight]{imagenes/fondo1.pdf}}
 \normalsize
 
 % Transparencia de índice
 
 \begin{frame}{Índice}
- \tableofcontents
+  \tableofcontents
 \end{frame}
-  
+
 
 \section{Introducción}
 
 \begin{frame}{Contexto social}
   \begin{center}
-    \LARGE
+    \Large
 
     Jóvenes en plena simbiosis con las nuevas tecnologías.
 
@@ -107,14 +107,25 @@
 
 \begin{frame}{Concepción del proyecto}
   \begin{block}{Idea}
-    \begin{itemize}
-    \item Hacer un juego educativo.
-    \item 
-    \end{itemize}
+    Hacer un juego educativo.
   \end{block}
+
+  \pause
+
+  \begin{block}{Primera cuestión}
+    ¿Sobre qué aspecto educativo? ¿Qué asignatura se beneficia?
+  \end{block}
+
+  \vspace{0.5cm}
+  \pause
+
   \begin{center}
-    \LARGE
-  \end{center}  
+    \LARGE Música \\[0.5cm]
+
+    \pause
+
+    \LARGE Aprendizaje de la flauta dulce
+  \end{center}
 \end{frame}
 
 % \begin{frame}{Contexto}
@@ -133,13 +144,13 @@
 %   \end{block}
 
 %   \pause
-  
+
 %   \begin{block}{\textbf{¡IMPORTANTE!}}
 %     \noindent Los documentos \LaTeX{} usan extensión \texttt{.tex}, y
 %     son ficheros de texto plano, que luego se compilan, del tipo
 %     \textbf{WYSINWYG}.
 %   \end{block}
-  
+
 % \end{frame}
 
 \end{document}
