@@ -26,7 +26,6 @@
 \author{José Tomás Tocino García}
 
 \institute[Universidad de Cádiz]{Universidad de Cádiz}
-% \subject{JOSLUCA 4} 
 
 \date[Sept 2011]{Septiembre de 2011}
 
@@ -93,201 +92,31 @@
 
 
 \section{Introducción}
-
-\begin{frame}{Contexto social}
-  \begin{center}
-    \Large
-
-    Jóvenes en plena simbiosis con las nuevas tecnologías.
-
-    \bigskip
-    \pause
-    \bigskip
-
-    Las TIC están llegando a los centros educativos.
-
-    \bigskip
-    \pause
-    \bigskip
-
-    Técnicas docentes basadas en recursos multimedia e informáticos.
-
-  \end{center}
-\end{frame}
-
-\begin{frame}{Concepción del proyecto}
-  \begin{block}{Idea}
-    Hacer un juego educativo.
-  \end{block}
-
-  \pause
-
-  \begin{block}{Primera cuestión}
-    ¿Sobre qué aspecto educativo? ¿Qué asignatura se beneficia?
-  \end{block}
-
-  \vspace{0.5cm}
-  \pause
-
-  \begin{center}
-    \LARGE Música \\[0.5cm]
-
-    \pause
-
-    \LARGE Aprendizaje de la flauta dulce
-  \end{center}
-\end{frame}
-
-\begin{frame}{Objetivos}
-  \Large
-  \begin{itemize}
-  \item Adquisición de base de conocimientos. \pause
-  \item Módulo de análisis de sonido. \pause
-  \item Sistema de interpretación de canciones. \pause
-  \item Sistema de lecciones ampliable. \pause
-  \item Interfaz de usuario amigable y fluida.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Motivaciones personales}
-  \begin{itemize}
-  \item Representación digital del sonido.
-  \item Programación de audio.\pause
-
-  \item Bases del DSP.
-  \item Técnicas básicas de análisis de audio.\pause
-
-  \item Ampliar conocimientos sobre desarrollo de videojuegos.
-  \item Aprender nuevas tecnologías.
-  \item Aportar al software libre.
-  \end{itemize}
-\end{frame}
+\input{contenidos/introduccion.tex}
 
 \section{Descripción}
-{
-\setbeamertemplate{background}{\includegraphics[width=\paperwidth,height=\paperheight]{imagenes/fondo_simple.pdf}}
-
-\begin{frame}{oFlute}
-  \begin{columns}
-    \column{0.6\textwidth}
-
-    \begin{block}{}
-      \begin{center}
-        \Large
-        Herramienta lúdico-educativa para el aprendizaje de la flauta dulce.
-
-        \medskip
-        \medskip
-
-        Interacción del alumno con la flauta en tiempo real.
-      \end{center}
-    \end{block}
-
-    \column{0.4\textwidth}
-    \begin{block}{}
-      \begin{center}
-        \vspace{-1.5cm}
-        \includegraphics[width=0.6\textwidth]{imagenes/logotipo}
-
-        \bigskip
-        \bigskip
-
-        \includegraphics[width=\textwidth]{imagenes/imagen_menuPrincipal}
-      \end{center}
-    \end{block}   
-  \end{columns}
-\end{frame}
-
-
-\begin{frame}{Analizador de notas}
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{imagenes/imagen_seccionAnalizador}
-
-  Analiza las notas en tiempo real, de forma individual.
-  \end{center}
-\end{frame}
-
-\begin{frame}{Motor de lecciones}
-
-  \begin{center}
-    \includegraphics[width=0.49\textwidth]{imagenes/imagen_seccionLecciones1}\hspace{0.1cm}
-    \includegraphics[width=0.49\textwidth]{imagenes/imagen_seccionLecciones2}
-
-    \medskip
-
-    Motor de lecciones con recursos multimedia, totalmente ampliable y personalizable.
-  \end{center}
-
-\end{frame}
-
-\begin{frame}{Motor de canciones}
-
-  \begin{center}
-    \includegraphics[width=0.49\textwidth]{imagenes/imagen_seccionCanciones1}\hspace{0.1cm}
-    \includegraphics[width=0.49\textwidth]{imagenes/imagen_seccionCanciones2}
-
-    \medskip
-
-    Motor de canciones ampliable, permite la interpretación interactiva de canciones.
-  \end{center}
-
-\end{frame}
-}
-
+\input{contenidos/descripcion.tex}
 
 \section{Calendario}
+\input{contenidos/calendario.tex}
 
-\begin{frame}{Planificación}
-\textbf{Desarrollo iterativo.} \pause
-\begin{enumerate}
-\item Adquisición de base de conocimientos. \pause
-\item Desarrollo de analizador básico. \pause
-\item Interfaz gráfica de usuario. \pause
-\item Motor de lecciones. \pause
-\item Motor de canciones. \pause
-\end{enumerate}
-\end{frame}
-
-{
-\setbeamertemplate{background}{\includegraphics[width=\paperwidth,height=\paperheight]{imagenes/fondo_simple.pdf}}
-\begin{frame}{Diagrama de Gantt}
-\includegraphics[angle=270, width=\textwidth]{imagenes/imagen_diagrama_gantt}
-\end{frame}
-}
+\section{Fundamentos teóricos}
+\input{contenidos/fundamentos.tex}
 
 \section{Desarrollo}
-\begin{frame}{Analizador básico}
-  \begin{block}{Objetivo}
-    Desarrollar un módulo que capture el sonido del micrófono, lo analice y
-    detecte la nota que se está tocando.
-  \end{block}
-
-  \pause
-
-  \begin{block}{Primer paso: capturar el audio}
-    \begin{itemize}
-    \item Se utilizó la API de PulseAudio.
-    \item Abrimos un flujo de entrada.
-    \item Creamos un búffer para recoger los datos.
-    \item Procesamos los datos cada cierto tiempo.
-    \item Se repite el proceso.
-    \end{itemize}
-    
-  \end{block}
-\end{frame}
-
-\begin{frame}{Analizador básico}
-  \begin{block}{Segundo paso: analizar el sonido}
-    
-  \end{block}  
-\end{frame}
+\input{contenidos/desarrollo.tex}
 
 \section{Herramientas}
+
 
 \section{Conclusiones y difusión}
 
 \section{Bibliografía}
-
+\input{contenidos/bibliografia.tex}
 
 \end{document}
 
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
