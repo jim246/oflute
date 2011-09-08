@@ -1,5 +1,5 @@
 #set term postscript eps
-set terminal pdf size 5,8;
+set terminal pdf size 5.5,8;
 set output "imagen_senosEspectro.pdf";
 
 set size 1,1;
