@@ -30,6 +30,16 @@
 
 \date[Sept 2011]{Septiembre de 2011}
 
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Índice}
+   \transboxin
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+
+}
+
 \defbeamertemplate*{title page}{customized}[1][]
 {
   \vbox{}
@@ -244,5 +254,40 @@
 \includegraphics[angle=270, width=\textwidth]{imagenes/imagen_diagrama_gantt}
 \end{frame}
 }
+
+\section{Desarrollo}
+\begin{frame}{Analizador básico}
+  \begin{block}{Objetivo}
+    Desarrollar un módulo que capture el sonido del micrófono, lo analice y
+    detecte la nota que se está tocando.
+  \end{block}
+
+  \pause
+
+  \begin{block}{Primer paso: capturar el audio}
+    \begin{itemize}
+    \item Se utilizó la API de PulseAudio.
+    \item Abrimos un flujo de entrada.
+    \item Creamos un búffer para recoger los datos.
+    \item Procesamos los datos cada cierto tiempo.
+    \item Se repite el proceso.
+    \end{itemize}
+    
+  \end{block}
+\end{frame}
+
+\begin{frame}{Analizador básico}
+  \begin{block}{Segundo paso: analizar el sonido}
+    
+  \end{block}  
+\end{frame}
+
+\section{Herramientas}
+
+\section{Conclusiones y difusión}
+
+\section{Bibliografía}
+
+
 \end{document}
 
