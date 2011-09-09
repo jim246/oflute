@@ -168,6 +168,24 @@ la transformada de Fourier para $N$ puntos usando FFT tardaría un tiempo $O(N
 \cdot log(N))$, mientras que hacerlo utilizando la definición estándar de la DFT
 llevaría un tiempo $O(N^2)$.
 
+En la figura \ref{fig:senosEspectro} (\pageref{fig:senosEspectro}) se puede
+observar una aplicación práctica de la transformada de Fourier. En el ejemplo,
+se genera una señal compleja formada por dos señales senoidales, una de amplitud
+5 y 10 hercios de frecuencia, y otra de amplitud 2.5 y 30 hercios de frecuencia.
+
+En el último recuadro se puede ver la representación gráfica (en el dominio de
+la frecuencia) de aplicar DFT, con dos picos a la altura de los 10 y los 30
+hercios, con una intensidad de 5 y 2.5 respectivamente. Con estos datos, en
+circunstancias ideales, sería posible aislar perfectamente las componentes
+parciales de la señal compuesta.
+
+\begin{figure}[htp!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{3_investigacion/otros/imagen_senosEspectro}
+  \caption{Ejemplo de suma de senos y aplicación de FFT para la descomposición de la señal.}
+  \label{fig:senosEspectro}
+\end{figure}
+
 A pesar de que fue el \textbf{DFT} el algoritmo que se utilizó finalmente en el
 proyecto, se estudiaron otras posibles herramientas para la detección de la
 frecuencia fundamental, como por ejemplo la \textbf{función de autocorelación},

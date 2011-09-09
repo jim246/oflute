@@ -15,7 +15,7 @@ unset xtics;
 ## Primer Seno (10Hz)
 
 set title "Seno, Frecuencia = 10Hz, Amplitud = 5";
-plot [0:200] "seno1.mat" with lines;
+plot [0:200] "seno1.mat" with lines lw 2;
 
 ###################################
 ## Segundo Seno (30Hz)
@@ -24,7 +24,7 @@ plot [0:200] "seno1.mat" with lines;
 #set origin 0,1.55;
 
 set title "Seno, Frecuencia = 30Hz, Amplitud = 2.5";
-plot [0:200] "seno2.mat" with lines;
+plot [0:200] "seno2.mat" with lines lw 2;
 
 
 ###################################
@@ -33,7 +33,7 @@ plot [0:200] "seno2.mat" with lines;
 #set origin 0,1.1;
 
 set title "Seno 10Hz + Seno 30Hz";
-plot [0:200] "seno3.mat" with lines;
+plot [0:200] "seno3.mat" with lines lw 2;
 
 
 ###################################
@@ -47,6 +47,6 @@ set ytics auto;
 set xlabel "Frecuencia";
 set ylabel "Intensidad";
 set title "Espectro de frecuencias";
-plot [0:100]"espectro.mat" with lines;
+plot [0:100]"espectro.mat" with lines lw 2;
 
 unset multiplot;
