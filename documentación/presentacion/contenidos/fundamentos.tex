@@ -10,8 +10,7 @@
     \bigskip
 
     \begin{description}
-    \item[Frecuencia] Oscilaciones por unidad de tiempo. Se relaciona con la
-      altura de un sonido.
+    \item[Frecuencia] Oscilaciones por unidad de tiempo. 
     \item[Amplitud] Energía que transporta la onda.
     \item[Fase] Desplazamiento respecto del origen.
     \end{description}
@@ -19,17 +18,49 @@
 \end{frame}
 
 \begin{frame}{Descomposición de sonidos}
-  Los sonidos no son ondas puras, se componen de \textbf{parciales}.
+  \begin{center}
+    Los sonidos no suelen ser ondas puras, \\se componen de \textbf{parciales}.
 
-  \pause
-  \bigskip
+    \pause \bigskip
   
-  La \textbf{frecuencia fundamental} es el menor de esos parciales.
+    La \textbf{frecuencia fundamental} es el menor de esos parciales. Dicta la
+    \textbf{altura} general del sonido.
 
-  \pause
-  \bigskip
+    \pause \bigskip
 
+    Los \textbf{armónicos} son parciales múltiplos de la frecuencia fundamental,
+    enriquecen el sonido.
 
+    \pause \bigskip
+  
+    {\large
+    \textcolor{red}{\textbf{Objetivo:}} Descomponer el sonido para obtener la \\
+    \textbf{frecuencia fundamental}.}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Herramientas de análisis armónico}
+  \begin{center}
+    Trabajan en el \textbf{dominio de la frecuencia}: se representa una señal
+    respecto a su espectro de frecuencias.
+
+    \pause \bigskip
+
+    La \textbf{transformada de Fourier} es la herramienta más conocida:
+    descompone una señal en sus componentes senoidales.
+
+    \pause \bigskip
+
+    Algoritmo más habitual: \textbf{FFT - Fast Fourier Transform}. \\En nuestro
+    caso usamos la versión discreta, \\\textbf{DFT - Discrete Fourier Transform}.
+
+  \end{center}
+\end{frame}
+
+\begin{frame}{Ejemplo de aplicación de FFT}
+  \begin{center}
+    \includegraphics[width=\textwidth]{scripts_octave/imagen_senosEspectro}
+  \end{center}
 \end{frame}
 
 
