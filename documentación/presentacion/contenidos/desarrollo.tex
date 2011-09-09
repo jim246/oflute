@@ -11,8 +11,7 @@
     \item Se utilizó la API de PulseAudio.
     \item Abrimos un flujo de entrada.
     \item Creamos un búffer para recoger los datos.
-    \item Procesamos los datos cada cierto tiempo.
-    \item Se repite el proceso.
+    \item Procesamos los datos cuando se llena el búffer.
     \end{itemize}
     
   \end{block}
@@ -20,8 +19,61 @@
 
 \begin{frame}{Analizador básico}
   \begin{block}{Segundo paso: analizar el sonido}
-    
+    \begin{itemize}
+    \item Trabajamos con el contenido del búffer.
+    \item Aplicamos el algoritmo DFT.
+    \item Aislamos la frecuencia fundamental.
+    \item Comparamos la frecuencia fundamental con una tabla de frecuencias para
+      la flauta dulce.
+    \item Devolvemos la nota detectada.
+    \end{itemize}
   \end{block}  
+\end{frame}
+
+\begin{frame}[fragile]{Carga de fuentes TrueType}
+  \begin{center}
+    oFlute utiliza \textbf{Gosu} como sistema gráfico.
+    
+    \pause
+    \medskip
+    
+    \textcolor{red}{\textbf{Problema:}} Gosu no permite cargar fuentes TrueType
+    en GNU/Linux.
+
+    \pause
+    \medskip
+    
+    \textcolor{dgreen}{\textbf{Solución:}} se implementa un módulo propio para
+    carga y pintado de fuentes TrueType. \pause\\[1em]Este módulo se liberó y pasó a
+    formar \textbf{parte oficial} de Gosu.
+  \end{center}
+  \begin{minted}{cpp}
+// Used for custom TTF files
+// Adapted from customFont class by Jose Tomas Tocino Garcia (TheOm3ga)
+class SDLTTFRenderer : boost::noncopyable
+  \end{minted}
+\end{frame}
+
+\begin{frame}{Animaciones dinámicas}
+  \begin{center}
+    \textcolor{red}{\textbf{Problema:}} uno de los objetivos era tener
+    interfaces amigables, fluidas y minimalistas.
+
+    \pause \medskip
+
+    \textcolor{dgreen}{\textbf{Solución:}} se desarrolla un sistema de
+    animaciones mediante interpolaciones de movimiento.
+
+    \pause\medskip
+
+    Permite movimientos de aceleración, deceleración, uniformes, etcétera. Es
+    extensible a un número arbitrario de atributos.
+
+    \pause\medskip
+
+    Se basó en las ecuaciones de Robert Penner, \\liberadas bajo licencia BSD.
+    
+  \end{center}  
 \end{frame}
 
 %%% Local Variables: 
