@@ -41,9 +41,19 @@
   \begin{center}
     oFlute utiliza \textbf{Gosu} como sistema gráfico.
     
-    \pause
-    \medskip
-    
+    \begin{itemize}
+    \item Open Source.
+    \item Ofrece renderizado 2D con aceleración por hardware.
+    \item Acceso a la entrada del usuario.
+    \item Multiplataforma: Windows, Linux, Mac.
+    \item API muy sencilla, orientada a objetos.
+    \item Desarrollo ágil.
+    \end{itemize}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{Carga de fuentes TrueType}
+  \begin{center}
     \textcolor{red}{\textbf{Problema:}} Gosu no permite cargar fuentes TrueType
     en GNU/Linux.
 
@@ -90,8 +100,13 @@ class SDLTTFRenderer : boost::noncopyable
 
     \pause \medskip
 
-    \textcolor{dgreen}{\textbf{Solución:}} se utilizó \textbf{GNU Gettext} como
-    sistema estándar de internacionalización. 
+    \textcolor{dgreen}{\textbf{Solución:}} \textbf{GNU Gettext} como sistema de
+    internacionalización. 
+
+    \medskip
+
+    Es el sistema de i18n más popular, con multitud de herramientas y
+    comunidades de traducción colaborativa, como Launchpad.
     
     \pause\medskip
 
