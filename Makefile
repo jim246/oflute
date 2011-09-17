@@ -7,11 +7,15 @@ CXX      := g++
 CXXFLAGS += -I. -I$(INCDIR) -DSWIG_OMEGA
 CXXFLAGS += -Igosu `gosu/bin/gosu-config --cxxflags`
 CXXFLAGS += -Ipugixml -Ikissfft
-CXXFLAGS += -g -Wall
+CXXFLAGS += -O3#-g -Wall
 CXXFLAGS += `pkg-config --cflags libpulse-simple`
 
-LDFLAGS  += `gosu/bin/gosu-config --libs --cxxflags` 
+#LDFLAGS  += `gosu/bin/gosu-config --libs --cxxflags` 
 LDFLAGS  += `pkg-config --libs libpulse-simple`
+LDFLAGS  += -lX11 -pthread -lpangoft2-1.0 -lpango-1.0 -lfreetype 
+LDFLAGS  += -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt 
+LDFLAGS  += -lglib-2.0 -lsndfile -lvorbisfile -lvorbis -logg -lm -lopenal -lpng -lstdc++ 
+LDFLAGS  += -lGL -lSDL_ttf -lfreeimage
 
 LDLIBS   += gosu/lib/libgosu.a
 LDLIBS   += -lSDL_ttf
