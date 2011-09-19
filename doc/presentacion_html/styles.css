@@ -618,3 +618,7 @@ div.build, div.builda{
 .prettyprint .var { /* a declaration; a variable name */
   color: rgb(127, 0, 127);
 }  
+
+ul.sep1 li{
+    margin-bottom: 1em;
+}
