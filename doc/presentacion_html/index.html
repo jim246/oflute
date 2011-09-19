@@ -79,18 +79,18 @@
       </article>
 
       <!-- ############################################################# -->      
-      <article>
+      <!-- <article>
         <h3>Contexto social</h3>
         <ul class="build">
           <li>Jóvenes en plena simbiosis con las nuevas tecnologías.</li>
           <li>Las TIC están llegando a los centros educativos.</li>
           <li>Técnicas docentes basadas en recursos multimedia.</li>
         </ul>
-      </article>
+      </article> -->
 
       <!-- ############################################################# -->            
       <article class='fill'>
-        <h3>Escuela TIC 2.0 - Junta de Andalucía</h3>
+        <h3>Contexto social - Escuela TIC 2.0</h3>
         <p>
           <img src='images/aulatic_2.jpg'>
         </p>
@@ -111,30 +111,23 @@
 
       <!-- ############################################################# -->            
       <article>
-        <h3>Objetivos</h3>
-        <ul class="build">
-          <li>Base de <b>conocimientos</b>.</li>
-          <li>Módulo de <b>análisis de sonido</b>.</li>
-          <li>Sistema de interpretación de <b>canciones</b>.</li>
-          <li>Sistema de <b>lecciones</b> ampliable.</li>
-          <li>Interfaz de usuario <b>amigable y fluida.</b></li>            
-        </ul>
+        <div class="build">
+            <h3>Objetivos</h3>
+            <ul style="margin-top: 10px">
+              <li>Módulo de <b>análisis de sonido</b>.</li>
+              <li>Sistema de interpretación de <b>canciones</b>.</li>
+              <li>Sistema de <b>lecciones</b> ampliable.</li>
+              <li>Interfaz de usuario <b>amigable y fluida.</b></li>            
+            </ul>        
+            <h3>Motivaciones</h3>
+            <ul style="margin-top: 10px">
+              <li>Aprender sobre programación de audio y DSP (procesamiento digital de señales).</li>
+              <li>Ampliar conocimientos sobre <b>desarrollo de videojuegos</b>.</li>
+              <li>Aportar al <b>software libre</b>.</li>         
+            </ul>
+        </div>
       </article>
 
-      <!-- ############################################################# -->            
-      <article>
-        <h3>Motivaciones personales</h3>
-        
-        <ul>
-          <li><b>Representación digital</b> y <b>programación</b> de audio.</li>
-          <li>Bases de <b>DSP</b> (<i>Procesamiento digital de señales</i>).</li>
-          <li>Técnicas básicas de <b>análisis de audio</b>.</li>
-          <li>Ampliar conocimientos sobre <b>desarrollo de videojuegos</b>.</li>
-          <li>Aprender <b>nuevas tecnologías</b>.</li>
-          <li>Aportar al <b>software libre</b>.</li>
-        </ul>
-      </article>
-      
       <!-- ############################################################# -->            
       <article>
         <h2>Descripción</h2>
@@ -237,6 +230,11 @@
       </article>
       
       <!-- ############################################################# -->      
+      <article class="nobackground">
+        <img src="images/descompo.png" style="margin-left: -25px; width: 835px; margin-top: -10px">
+      </article>
+      
+      <!-- ############################################################# -->      
       <article>
         <h3>Herramientas de análisis armónico</h3>
         
@@ -246,14 +244,7 @@
             una señal en sus componentes senoidales.</p>
           <p>Algoritmo más habitual: <b>FFT - Fast Fourier Transform</b>.</p>
           <p>Datos discretos: <b>DFT - Discrete Fourier Transform</b>.</p>
-          <p style="font-size: 40px; line-height: 50px"><b>Veamos
-              un <span class="green">ejemplo</span>.</b></p>
         </div>
-      </article>
-      
-      <!-- ############################################################# -->      
-      <article class="nobackground">
-        <img src="images/descompo.png" style="margin-left: -25px; width: 835px; margin-top: -10px">
       </article>
       
       <!-- ############################################################# -->      
@@ -274,59 +265,42 @@
       </article>
       
       <!-- ############################################################# -->      
-      <article>
-        <h3>Primer paso: capturar el audio</h3>
-        
-        <ul>
-          <li>API de <b>PulseAudio</b>.</li>
-          <li>Abrimos un <b>flujo de entrada</b>.</li>
-          <li><b>Búffer de datos</b> de sonido.</li>
-          <li><b>Procesamiento</b> de los datos recogidos.</li>
-        </ul>            
+      <article>        
+        <h1>Objetivo:</h1>
+        <h3 style="margin-top: 20px">Cargar y usar fuentes TrueType en oFlute</h3>
       </article>
-
+      
       <!-- ############################################################# -->      
       <article>
-        <h3>Segundo paso: analizar el sonido</h3>
-
-        <ul>
-          <li>Procesamos el <b>búffer</b>.</li>
-          <li>Aplicamos el <b>algoritmo DFT</b>.</li>
-          <li>Aislamos la <b>frecuencia fundamental</b>.</li>
-          <li>Comparación con <b>tabla de frecuencias</b>.</li>
-          <li>Se devuelve la <b>nota detectada</b>.</li>
+        <h3>TrueType</h3>
+        <img class="centered" src="images/diagrama_fuentes.png" style="width: 600px;">
+        <ul style="margin-top: 20px">
+          <li>Formato <b>estándar para fuentes</b>.</li>
+          <li>Escalado sin pérdida.</li>
         </ul>
       </article>
 
       <!-- ############################################################# -->      
-      <article>        
-        <h1>Objetivo:</h1>
-        <h3 style="margin-top: 20px">Cargar y usar fuentes TrueType en Gosu</h3>
-      </article>
-
-      <!-- ############################################################# -->      
       <article>
-        <h3>TrueType en Gosu</h3>
+        <h3>Gosu</h3>
         <p class="centered" style="font-size: 35px">oFlute utiliza <b>Gosu</b>
           como sistema gráfico.</p>
-        <img class="centered" src="images/logo_gosu.png" style="width: 250px; margin-top: 20px">
+        <img class="centered" src="images/logo_gosu.png" style="width: 350px; margin-top: 20px">
         <ul style="margin-top: 20px">
           <li><b>Open Source</b>.</li>
-          <li>Ofrece <b>renderizado 2D</b> con aceleración por hardware.</li>
-          <li>Acceso a la <b>entrada</b> del usuario.</li>
-          <li><b>Multiplataforma</b>: Windows, Linux, Mac.</li>
-          <li><b>API muy sencilla</b>, orientada a objetos.</li>
+          <li>Aceleración por hardware.</li>
           <li>Desarrollo <b>ágil</b>.</li>
         </ul>
       </article>
+      
+      
 
       <!-- ############################################################# -->      
       <article>
         <h3>TrueType en Gosu</h3>
 
         <div class="build">
-          <p><b class="red">Problema:</b> Gosu no permite cargar fuentes <b>TrueType</b>
-            en GNU/Linux.</p>
+          <p><b class="blue">Objetivo:</b> cargar y usar fuentes <b>TrueType</b> en Gosu</p>
 
           <p><b class="green">Solución:</b> implementar un <b>módulo propio</b>
             para fuentes TrueType.</p>
@@ -351,14 +325,15 @@ class SDLTTFRenderer : boost::noncopyable
         <h3>Interfaces con animaciones dinámicas</h3>
         
         <div class="build">
-          <p><b class="red">Problema:</b> conseguir interfaces amigables, dinámicas,
-            fluidas y minimalistas.</p>
+          <p><b class="blue">Objetivo:</b> conseguir interfaces amigables y fluidas.</p>
 
-          <p><b class="green">Solución:</b> desarrollo de un <b>sistema de
-              animaciones</b> de movimiento dinámicas.</p>
+          <p><b class="green">Solución:</b> diseño de <b>sistema de
+              animaciones dinámicas</b></p>
 
           <p>Movimientos de <b>aceleración, deceleración, uniformes</b>, etc. sobre un
-            número arbitrario de <b>atributos</b>.</p>
+            número arbitrario de <b>atributos</b>.
+            
+            <img src="images/animacion.png" class="centered" style="margin-top: 40px"></p>
 
           <!--<p>Basadas en las ecuaciones de Robert Penner, liberadas bajo licencia
             BSD.</p>-->
@@ -376,15 +351,13 @@ class SDLTTFRenderer : boost::noncopyable
         <h3>Internacionalización de Gosu</h3>
 
         <div class="build">
-          <p><b class="red">Problema:</b> internacionalizar el proyecto, con miras a
-            otros países/culturas.</p>
+          <p><b class="blue">Objetivo:</b> internacionalizar el proyecto de manera fácil.</p>
 
-          <p><b class="green">Solución:</b> <b>GNU Gettext</b> como sistema de
-            internacionalización.</p>
+          <p><b class="green">Solución:</b> utilizar un sistema estándar, <b>GNU Gettext</b>, 
+          el más usado en proyectos libres.</p>
 
-          <p>Es el sistema de i18n más <b>popular</b>: multitud de herramientas, gran soporte
-            y comunidades de <b>traducción colaborativa</b>, como Launchpad.</p>
-
+          <p>Cualquiera puede traducir oFlute.</p>
+          <p class="centered" style="font-size: 40px; margin: 50px auto;">Analizador de notas ⇔ ノートアナライザ</p>
           <p>Publicación de <i>Traducción de proyectos con GNU Gettext en 15
               minutos</i>.</p>
         </div>
@@ -397,58 +370,39 @@ class SDLTTFRenderer : boost::noncopyable
 
       <!-- ############################################################# -->      
       <article>
-        <h3>Herramientas</h3>
+        <!-- <h3>Herramientas</h3> -->
 
-        <h3 style="margin-top: 20px; font-size: 40px">Lenguaje de programación: C++</h3>
+        <h3 style="margin-top: 20px; font-size: 40px">Lenguaje de programación: <span class="blue">C++</span></h3>
         
-        <p><b class="green">Pros:</b></p>
-        <ul style="margin-top: 10px">
+        <ul style="margin-top: 20px">
           <li> Mayor familiaridad.</li>
           <li>Muy eficiente.</li>
           <li>Gran cantidad de herramientas y soporte.</li>
         </ul>
 
-        <p><b class="red">Contras:</b></p>
-        <ul style="margin-top: 10px">
-          <li>Desarrollo más lento que en lenguajes de script.</li>
-          <li>Gestión de memoria manual.</li>
-        </ul>
-      </article>
-
-      <!-- ############################################################# -->      
-      <article>
-        <h3>Herramientas</h3>
-
-        <h3 style="margin-top: 20px; font-size: 40px">Sistema gráfico: Gosu</h3>
-        
-        <p><b class="green">Pros:</b></p>
-        <ul style="margin-top: 10px">
+        <h3 style="margin-top: 70px; font-size: 40px">Sistema gráfico: <span class="blue">Gosu</span></h3>
+        <img src="images/logo_gosu.png" style="width: 250px; position: absolute; left: 570px; top: 380px">
+        <ul style="margin-top: 20px">
           <li>Multiplataforma.</li>
           <li>Orientada a objetos.</li>
           <li>Aceleración gráfica por hardware.</li>
         </ul>
 
-        <p><b class="red">Contras:</b></p>
-        <ul style="margin-top: 10px">
-          <li>Alcance limitado: solo gráficos y E/S.</li>
-          <li>Inconsistencias entre sistemas.</li>
-          <li>Soporte limitado.</li>
-        </ul>
       </article>
 
       <!-- ############################################################# -->      
       <article>
         <h3>Herramientas</h3>
 
-        <h3 style="margin-top: 20px; font-size: 40px">Propósito general: Boost</h3>
+        <h3 style="margin-top: 20px; font-size: 40px">Propósito general: <span class="blue">Boost</span></h3>
         
-        <p>Conjunto de <b class="blue">bibliotecas para C++</b>, libres,
-          multiplataforma, muy famosas y utilizadas.</p>
-
-        <p>Gran madurez. 12 de estas bibliotecas fueron incluidas en el C++ Technical
-          Report 1, y forman parte del recién aprobado <b class="blue">estándar
+        <p><b class="blue">Bibliotecas para C++</b>, libres,
+          muy populares y con gran madurez. Varias forman parte del nuevo <b class="blue">estándar
             C++11.</b></p>
 
+        <img src="images/boost.png" class="centered" style="margin: 30px auto">
+            
+            
         <div style="float: left; width: 50%">
           <ul style="margin-top: 20px">
             <li>Punteros inteligentes.</li>
@@ -468,7 +422,7 @@ class SDLTTFRenderer : boost::noncopyable
       <!-- ############################################################# -->      
       <article>
         <h3>Otras herramientas</h3>
-
+        <img src="images/nube_herramientas.png" style="position:absolute; left: 350px">
         <ul>    
           <li>PulseAudio</li>
           <li>PugiXML</li>
@@ -489,29 +443,22 @@ class SDLTTFRenderer : boost::noncopyable
 
       <!-- ############################################################# -->      
       <article>
-        <h3>Conclusiones</h3>
+        <h3>Conclusiones del proyecto</h3>
 
-        <h3 style="margin-top: 20px; font-size: 40px">A nivel de proyecto</h3>
-        <p>Se completaron todos los <b>objetivos propuestos</b>.</p>
-        <ul>
-          <li>Se creó un <b>módulo de análisis</b> de notas eficiente.</li>
-          <li>El sistema de canciones integró el módulo de análisis <b>de forma
-              efectiva</b>.</li>
-          <li>Desarrollamos un <b>sistema de lecciones muy completo</b>.</li>
-          <li>Se mantuvo en todo momento una <b>interfaz agradable y fluida</b>.</li>
+        <!-- <h3 style="margin-top: 20px; font-size: 40px">A nivel de proyecto</h3> -->
+        <p>Todos los <b>objetivos <span class="blue">completados</span></b>:</p>
+        <ul style="margin-top: 10px">
+          <li><b class="blue">Módulo de análisis</b> de notas eficiente.</li>
+          <li>Sistema de <b class="blue">canciones</b> efectivo.</li>
+          <li>Sistema de lecciones <b class="blue">muy completo</b>.</li>
+          <li>Interfaz <b class="blue">agradable y fluida</b>.</li>
         </ul>
-      </article>
 
-      <!-- ############################################################# -->      
-      <article>
-        <h3>Conclusiones</h3>
-
-        <h3 style="margin-top: 20px; font-size: 40px">A nivel de proyecto</h3>
         <p><b>Posibles mejoras</b>.</p>
-        <ul>
-          <li><b>Extender</b> el sistema de lecciones.</li>
-          <li>Mejorar <b>jugabilidad</b> de las canciones.</li>
-          <li>Portar el juego a <b>otras plataformas</b>.</li>
+        <ul style="margin-top: 10px">
+          <li><b class="green">Extender</b> el sistema de lecciones.</li>
+          <li>Mejorar <b class="green">jugabilidad</b> de las canciones.</li>
+          <li>Portar el juego a <b class="green">otras plataformas</b>.</li>
         </ul>
       </article>
 
