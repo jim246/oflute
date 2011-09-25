@@ -55,7 +55,7 @@ Leccion::Leccion(Gosu::Graphics& g, string ruta) : g(g){
 		}
 
 		if((atributo = elemento.attribute("duracion")) == atributoVacio){
-			duracion = 20;
+			duracion = 40;
 		}else{
 			duracion = atributo.as_int();
 		}	    
